@@ -1,0 +1,9 @@
+archive
+node_modules
+.idea/
+.jscsrc
+.jshintrc
+.travis.yml
+CHANGELOG.md
+CONTRIBUTING.md
+gulpfile.js
