@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
+<style>
+.tdGame
+{
+	width: 20px;
+	height:20px;
+}
+
+.site
+{
+	width: 330px;
+	padding:0px;
+	border: 0px solid black;
+	margin-left : auto;
+	margin-right : auto;
+	text-align:center;
+}
+
+.inSite
+{
+	padding:20px;
+	border: 1px solid black;
+}
+
+#board table, tr, td
+{
+	padding:0px;
+	margin:0px;
+	border:1px solid white;
+	border-collapse: collapse;
+}
+</style>
+
+<script src="js/christopherreeve.js"></script>
+
+</head>
+
+<body bgcolor="#F5F5F5" onload="go()">
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+
+<h1 style="color:#EEEEEE"
+    style="font-family:Helvetica"><p align="center">
+    SORCERER</p></h1>
+<div>
+    <p style="color:#616161" align="center"><br>Vous êtes face à un jeu d'adresse. En appuyant sur la touche ESPACE de votre clavier, vous devez arrêter le curseur sur une cible.
+        <br>Vous disposez d'un nombre de tours limités. Si le curseur touche la cible, vous gagnez. Pour chaque tour, vous pouvez miser 1 à 7 chatons sur vos chances de gagner.
+        <br>Votre objectif est de sauver le plus de chatons possibles. Sinon, ils finissent en pudding.
+        <br>A la fin d'un tour de jeu, de nouveaux chatons vous sont présentés. Sauvez les tous !<br></p>
+</div>
+
+<p style="color:#757575" align="center"><i>Choisissez votre mise, puis appuyez sur "Entrée" :</i></p>
+<p style="color:#757575" align="center">
+    <input type="radio" name="mises" id="mise1" value="1" checked />1 &nbsp
+    <input type="radio" name="mises" id="mise2" value="2"/>2 &nbsp
+    <input type="radio" name="mises" id="mise3" value="3"/>3 &nbsp
+    <input type="radio" name="mises" id="mise4" value="4"/>4 &nbsp
+    <input type="radio" name="mises" id="mise5" value="5"/>5 &nbsp
+    <input type="radio" name="mises" id="mise6" value="6"/>6 &nbsp
+    <input type="radio" name="mises" id="mise7" value="7"/>7
+</p>
+<p style="text-align: center;"><button type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p>
+<p id="retourProto"></p>
+
+
+<div class="site">
+<h2>Le jeu ou tu vois rien !</h2>
+<div class="inSite">
+<div id="board"></div>
+<div id="res">Score</div>
+
+<table id="tableMise">
+        <tr><td style="text-align:center">Tours</td><td style="text-align:center">Mise</td><td style="text-align:center">Chaton(s)</td></tr>
+        <tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+</table>
+<br>
+
+</div>
+
+
+<a href="tomcruise.html">doigt</a>::
+<a href="christopherreeve.html">yeux</a>::
+<a href="test3.html">tete</a>
+</div>
+
+</body>
+
+</html>

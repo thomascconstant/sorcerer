@@ -17,7 +17,7 @@ function donnerID () {
 // liens vers les jeux
 var liensJeux = [
     "tomcruise.html",
-    "test2.html",
+    "christopherreeve.html",
     "test3.html"];
 
 function lancerJeu () {
