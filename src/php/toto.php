@@ -15,11 +15,11 @@ function enregister ($data) {
     fwrite($handle, $data);
 }
 
-if (isset($_GET['joueur'])) {
-    enregisterJoueur($_GET['joueur']);
-} else if (isset($_GET['data'])) {
-    enregister($_GET['data']);
-} else if (isset($_GET['score'])) {
-    enregister($_GET['score']);
+if (isset($_REQUEST['joueur'])) {
+    enregisterJoueur($_REQUEST['joueur']);
+} else if (isset($_REQUEST['data'])) {
+    enregister($_REQUEST['data']);
+} else if (isset($_REQUEST['score'])) {
+    enregister($_REQUEST['score']);
 }
 ?>

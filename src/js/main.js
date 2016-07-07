@@ -8,7 +8,6 @@ function donnerID () {
     var IDjoueur = Math.random().toString(36).substr(2, 9);
     console.log(IDjoueur);
 
-    //enregistrer nom dans csv
     enregistrerDonnees(0, IDjoueur);
     
 };
@@ -34,13 +33,21 @@ function lancerJeu () {
 // enregistrer données du joueur dans fichier csv
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
-    //xhttp.addEventListener("load", reqListener);
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log(xhttp.response);
+        }
+    };
+
     if (type == 0) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?joueur=" + data + "");
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("joueur=" + data);
     } else if (type == 1) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?data=" + data + "");
-    } else if (type == 2) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?fin=1");
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("data=" + data);
     }
 
 
@@ -49,9 +56,7 @@ function enregistrerDonnees (type, data) {
     //xhttp.send("data=\"" + donneesJoueur + "\"");
     //xhttp.send("data=15");
 
-    xhttp.send();
-
-    console.log("Sent data");
+    console.log("Sent data " + data);
 }
 
 
