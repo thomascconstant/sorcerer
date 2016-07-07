@@ -36,6 +36,13 @@
 	border: 1px solid black;
 }
 
+.big
+{
+    font-size:40pt;
+    width:100px;
+    text-align:center;
+}
+
 #board table, tr, td
 {
 	padding:0px;
@@ -50,12 +57,10 @@
 </head>
 
 <body bgcolor="#F5F5F5" onload="go()">
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-<!--[if lt IE 8]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
-
-<!-- Add your site or application content here -->
 
 <h1 style="color:#EEEEEE"
     style="font-family:Helvetica"><p align="center">
@@ -82,8 +87,9 @@
 
 
 <div class="site">
-<h2>Le jeu ou tu vois rien !</h2>
+    <!-- <h2>Le jeu ou tu vois rien !</h2> -->
 <div class="inSite">
+
 <div id="board"></div>
 <div id="res">Score</div>
 

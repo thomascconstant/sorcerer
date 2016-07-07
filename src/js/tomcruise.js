@@ -137,12 +137,12 @@ function stop() {
     //On met a jour le score, etc...
     if(res == 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "GAGNE OUEEEE ! ";
+        document.getElementById("res").innerHTML = "Miaoulove !";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "PERDU OOOOOH ! ";
+        document.getElementById("res").innerHTML = "Miaoudeg...";
         //feedbackNegatif;
     }
 
@@ -181,7 +181,7 @@ function run() {
     if(miseValide == true && tours > 0){
         running = true;
 
-        document.getElementById("res").innerHTML = "SUSPEEEEEEEENSE ! "
+        document.getElementById("res").innerHTML = "ESPACE pour arrêter"
         document.getElementById("slider").style.left = "0px";
     }
     
