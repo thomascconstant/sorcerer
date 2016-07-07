@@ -8,7 +8,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 
 var hideTarget = false; //Si on doit cacher la target a chaque tour
 
@@ -20,6 +20,9 @@ function init(){
     diffModel.setStepInCurve(0);
     diffModel.setParams(3,-0.4);
     diffModel.setMode(1);
+
+    var diff = diffModel.currentDiff;
+    gameSpeed = diffModel.getChallengeFromDiff(diff);
 
     //tours = 20;
     //mise = 0;
@@ -132,7 +135,8 @@ function stop() {
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
     //On sauve le resultat pour cet essai
-    saveToFile('guillaume', 'speed', gameSpeed, res, mise);
+    //saveToFile('guillaume', 'speed', gameSpeed, res, mise);
+    enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
     //On met a jour le score, etc...
     if(res == 1) {
@@ -146,12 +150,14 @@ function stop() {
         //feedbackNegatif;
     }
 
+
+
     //mise a jour de la difficulte selon le modele
     var nextDiff = diffModel.nextDifficulty(res);
     gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
 
-    //récupérer données joueur
-    enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score);
+    console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+
 
     //Un tour de moins, reset de la mise
     tours--;
@@ -192,9 +198,13 @@ function run() {
     //On calcule la frequence d'update de l'anim et le nombre de pixel de deplacement par frame
     //pour avoir l'anim la plus fluide possible tout en atteignant des hautes vitesses
     //sinon le max c'est un pixel par milliseconde, c'est pas tant que ca
+    console.log("new speed :" + gameSpeed);
     if(miseValide == true && tours > 0) {
-        var pixelsPerSec = 40 * (gameSpeed + 0.5);
+
+        var pixelsPerSec = 40 * (gameSpeed + 0.5) + 0.001;
         var framelength = Math.floor(1000.0 / pixelsPerSec);
+
+        console.log("new framelength :" + framelength);
         barSpeed = 1;
         while (framelength <= 2) {
             barSpeed *= 2;
@@ -243,9 +253,6 @@ function feedbackNegatif() {
 
 function finDePartie() {
     if (tours == 0){
-        // bloquer bouton tapis et mise
-        //document.getElementById("boutonTapis").disabled = true;
-        //document.getElementById("boutonMiser").disabled = true;
         //créer le bouton
         var boutton = document.createElement("input");
         boutton.type = "button";
@@ -273,11 +280,11 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
     //xhttp.addEventListener("load", reqListener);
     if (type == 0) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?joueur=" + data + "");
+        xhttp.open("GET", "http://localhost:63342/sorcerer/src/php/toto.php?joueur=" + data + "");
     } else if (type == 1) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?data=" + data + "");
+        xhttp.open("GET", "http://localhost:63342/sorcerer/src/php/toto.php?data=" + data + "");
     } else if (type == 2) {
-        xhttp.open("GET", "http://localhost:63342/confiance_diff/src/php/toto.php?fin=1");
+        xhttp.open("GET", "http://localhost:63342/sorcerer/src/php/toto.php?fin=1");
     }
 
 

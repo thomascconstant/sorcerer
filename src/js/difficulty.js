@@ -3,14 +3,17 @@
 var diffModel = {
 
   //utils
-  normal: function(x){
-    return x;
+  normal: function(moy, et){
+    var A = Math.sqrt(-2*Math.log(Math.random()+1e-15)) * Math.cos(2*Math.PI*Math.random());
+    return (A*et+moy);
   },
 
 
   //Paramètres du logit
   beta0 :3,
   beta1 :-0.4,
+  minChallenge: 0.001,
+  maxChallenge: 100,
 
   setParams: function(b0, b1) {
     this.beta0 = b0;
@@ -20,13 +23,16 @@ var diffModel = {
   //Challenge c'est la variable qui genere la difficulte (vitesse du slider, etc...)
   //Retourne la diff, donc 1-p(win)
   getDiffFromChallenge: function(challenge) {
-  	return 1-(1/(1+Math.exp(-(this.beta0+this.beta1*challenge))))
+    return 1-(1/(1+Math.exp(-(this.beta0+this.beta1*challenge))))
   },
 
   //Donner la difficulte (1-p(win)) pour avoir le param du challenge
   getChallengeFromDiff: function(diff){
     diff = 1-diff;
-    return - (Math.log((1/diff) - 1) + this.beta0)/this.beta1;
+    var challenge = - (Math.log((1/diff) - 1) + this.beta0)/this.beta1;
+    challenge = Math.max(this.minChallenge,challenge);
+    challenge = Math.min(this.maxChallenge,challenge);
+    return challenge;
   },
 
 
@@ -34,13 +40,12 @@ var diffModel = {
   currentStep: 0,
   mode:0, ///0:courbe,1:dda,2:random
   currentDiff: 0.2,
-
-  setCurrentDiff(d){this.currentDiff = d},
-  setMode(m){this.mode = m},
-  setStepInCurve(s){this.currentStep=s},
+  setCurrentDiff: function(d) {this.currentDiff = d},
+  setMode:function(m){this.mode = m},
+  setStepInCurve:function(s){this.currentStep=s},
 
   //win : resultat du dernier coup win / loss
-  nextDifficulty(win){
+  nextDifficulty:function(win){
 
     //Si mode follow curve
     if(this.mode == 0){
@@ -54,9 +59,15 @@ var diffModel = {
     }
 
     if(this.mode == 2){
-      this.currentDiff = Math.random();
+      this.currentDiff = normal(0.4,0.5);
     }
+
+    this.currentDiff = Math.max(0,this.currentDiff);
+    this.currentDiff = Math.min(1,this.currentDiff);
 
     return this.currentDiff;
   }
+
+
+
 }

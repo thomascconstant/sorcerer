@@ -30,16 +30,23 @@ function animate(){
     }
 }
 
+function init() {
+    afficherJeu(width,nbCells);
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
+}
+
 function go() {
     makeGame(width,nbCells,1-difficulty);
     anim = setInterval(animate,10);
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-    if(hideTarget) {
+    /*if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
     }
-    document.getElementById("tableMise").style.visibility = "hidden";
+    document.getElementById("tableMise").style.visibility = "hidden";*/
 }
 
 //récupérer mise
@@ -74,19 +81,30 @@ function recupMise () {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
+    go();
 
 }
 
 function showMise(){
     document.getElementById("tableMise").style.visibility = "visible";
-    //hideTarget = true; à décommenter pour cacher la cible lors du lancement du jeu
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
 }
 
 function win(){
     nbCasesToFind--;
     if(nbCasesToFind <= 0) {
-        score ++;
+        score += mise;
         document.getElementById("res").innerHTML = "Pas mal... "+score+'pt';
+
+        //Un tour de moins, reset de la mise
+        tours--;
+        mise = "?";
+        document.getElementById("tours").innerHTML = tours;
+        document.getElementById("score").innerHTML = score;
+        document.getElementById("mise").innerHTML = mise;
+
         //if(Math.random() < 0.7) {
         if(difficulty >= 0.95) {
             difficulty = Math.min(0.99,difficulty + 0.01);
@@ -97,6 +115,7 @@ function win(){
         //	nbCells = Math.min(6, nbCells+1);
         //}
         makeGame(width,nbCells,1-difficulty);
+
         
     }
 
@@ -105,8 +124,15 @@ function win(){
 }
 
 function fail(){
-    score = Math.max(0,score -1);
+    score -= mise;
     document.getElementById("res").innerHTML = "Oups ! " +score+'pt';
+
+    //Un tour de moins, reset de la mise
+    tours--;
+    mise = "?";
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
 
     //if(Math.random() < 0.7) {
     if(difficulty > 0.95) {
@@ -177,6 +203,80 @@ function makeGame(width,nbCellsX,diffColor) {
     var iDecoy = Math.floor(Math.random() * nbCellsX);
     var jDecoy = Math.floor(Math.random() * nbCellsX);
 
+    var strHtml = '';
+    strHtml += '<table>';
+    for(var i=0;i<nbCellsX;i++) {
+        strHtml += '<tr>';
+        for(var j=0;j<nbCellsX;j++) {
+            var color = colorBaseHex;
+            var clickFun = "fail()";
+            var name = "cellFail";
+
+            var ijFind = i + j * nbCellsX;
+
+            if(cases.indexOf(ijFind) >= 0) {
+                color = colorFindHex;
+                clickFun = "win()";
+                name = "cellWin";
+            }
+
+
+            strHtml += '<td name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="'+clickFun+'">&nbsp;';
+            strHtml += '</td>';
+        }
+        strHtml += '</tr>';
+    }
+    strHtml += '</table>';
+
+    document.getElementById("board").innerHTML = strHtml;
+}
+
+function afficherJeu(width,nbCellsX,diffColor) {
+    nbCellsX = 5;
+
+    //Calc des props
+    var widthCell = width / nbCellsX;
+    var colorBaseR = Math.floor(Math.random() * 128 + 64);
+    var colorBaseV = Math.floor(Math.random() * 128 + 64);
+    var colorBaseB = Math.floor(Math.random() * 128 + 64);
+
+    colorBaseR = 128;
+    colorBaseV = colorBaseR;
+    colorBaseB = colorBaseR;
+
+
+    colorBase = colorBaseR;
+
+    var colorFindR = Math.floor(colorBaseR + 64 * diffColor);
+    var colorFindV = Math.floor(colorBaseV + 64 * diffColor);
+    var colorFindB = Math.floor(colorBaseB + 64 * diffColor);
+
+    colorTarget = colorFindB;
+    colorCurrent = colorTarget;
+
+    var colorBaseHex = toHexColor(colorBaseR,colorBaseV,colorBaseB);
+    var colorFindHex = toHexColor(colorFindR,colorFindV,colorFindB);
+
+    console.log(colorBaseHex);
+    console.log(colorFindHex);
+
+    var cases = [];
+    /*
+    var nbCells = 0;
+    nbCasesToFind = 4;
+    for(var i=0;i<nbCells;i++)	{
+        var ijFind = 0;
+        while(cases.indexOf(ijFind) >= 0)
+            ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+        cases.push(ijFind);
+    }
+
+    var iFind = Math.floor(Math.random() * nbCellsX);
+    var jFind = Math.floor(Math.random() * nbCellsX);
+
+    var iDecoy = Math.floor(Math.random() * nbCellsX);
+    var jDecoy = Math.floor(Math.random() * nbCellsX);
+     */
     var strHtml = '';
     strHtml += '<table>';
     for(var i=0;i<nbCellsX;i++) {
