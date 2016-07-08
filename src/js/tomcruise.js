@@ -8,7 +8,8 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
+var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
@@ -79,9 +80,6 @@ function recupMise () {
     document.getElementById("res").innerHTML = "Appuyez sur ESPACE pour arrêter le curseur.";
     //document.getElementById("boutonMiser").addEventListener("keydown", keypressed, false);
 
-    //enregistrer mise dans csv
-    //enregistrerDonnees(0, mise);
-
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
     hideTarget = false;
@@ -148,9 +146,10 @@ function stop() {
 
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
-    //On sauve le resultat pour cet essai
-    //saveToFile('guillaume', 'speed', gameSpeed, res, mise);
-    enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
+    //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res;
+    console.log(resultatJoueur);
+    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
     //On met a jour le score, etc...
     if(res == 1) {
@@ -278,6 +277,7 @@ function finDePartie() {
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie==true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
+                enregistrerDonnees(1,resultatJoueur);
             } else {
                 x = "Ah, d'accord.";
             }
