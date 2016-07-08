@@ -149,7 +149,7 @@ function stop() {
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res;
+    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res + "\n";
     console.log(resultatJoueur);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
@@ -279,7 +279,7 @@ function finDePartie() {
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie==true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur + ";");
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
             } else {
                 x = "Ah, d'accord.";
             }

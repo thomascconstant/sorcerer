@@ -8,7 +8,8 @@ function donnerID () {
     var IDjoueur = Math.random().toString(36).substr(2, 9);
     console.log(IDjoueur);
 
-    enregistrerDonnees(0, IDjoueur);
+    enregistrerDonnees(0, IDjoueur + ";");
+    lancerJeu();
     
 };
 
@@ -25,7 +26,8 @@ function lancerJeu () {
     // round it, so it can be used as array index
     randIdx = parseInt(randIdx, 10);
     // construct the link to be opened
-    var lien = liensJeux[randIdx];
+    // var lien = liensJeux[randIdx]; à décommenter pour avoir un lancement aléatoire des jeux
+    var lien = "tomcruise.html"; //à commenter pour ne pas lancer uniquement ce jeu
     // open it in a new window / tab (depends on browser setting)
     window.open(lien,'_self',false);
 };
