@@ -10,7 +10,7 @@ var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
 var tours = 20; //Nombre de tours restants
 
-var hideTarget = false; //Si on doit cacher la target a chaque tour
+var hideTarget = true; //Si on doit cacher la target a chaque tour
 
 var chatonContent = '../src/img/happyKitten.jpg';
 var chatonTriste = '../src/img/sadKitten.jpg';
@@ -43,27 +43,40 @@ function recupMise () {
         //boutton de mise 1 est validé
         mise = 1;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise2').checked) {
         mise = 2;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise3').checked) {
         mise = 3;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise4').checked) {
         mise = 4;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise5').checked) {
         mise = 5;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise6').checked) {
         mise = 6;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise7').checked) {
         mise = 7;
         document.getElementById("boutonMiser").disabled = true;
+        document.getElementById("mise").innerHTML = mise;
     }
     //afficher mise
     showMise();
+    
+    //afficher le target
+    if(hideTarget) {
+        document.getElementById("target").style.visibility = "visible";
+    }
+    document.getElementById("res").innerHTML = "Appuyez sur ESPACE pour arrêter le curseur.";
     //document.getElementById("boutonMiser").addEventListener("keydown", keypressed, false);
 
     //enregistrer mise dans csv
@@ -71,12 +84,13 @@ function recupMise () {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
+    hideTarget = false;
 
 }
 
 function showMise(){
     document.getElementById("tableMise").style.visibility = "visible";
-    //hideTarget = true; à décommenter pour cacher la cible lors du lancement du jeu
+    
 }
 
 /**
@@ -141,12 +155,12 @@ function stop() {
     //On met a jour le score, etc...
     if(res == 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "Miaoulove !";
+        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "chaton(s). Appuyez sur ESPACE pour relancer le curseur.";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "Miaoudeg...";
+        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "chaton(s). Appuyez sur ESPACE pour relancer le curseur.";
         //feedbackNegatif;
     }
 
@@ -169,6 +183,7 @@ function stop() {
     //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
     if (tours > 0) {
     miseValide = false;
+    hideTarget = true;
     document.getElementById("boutonMiser").disabled = false;
     } else {
         finDePartie();
@@ -184,10 +199,10 @@ function run() {
         return;
     }
     
-    if(miseValide == true && tours > 0){
+    if(tours > 0){
         running = true;
 
-        document.getElementById("res").innerHTML = "ESPACE pour arrêter"
+        document.getElementById("res").innerHTML = "Choisissez votre mise.";
         document.getElementById("slider").style.left = "0px";
     }
     
@@ -199,7 +214,7 @@ function run() {
     //pour avoir l'anim la plus fluide possible tout en atteignant des hautes vitesses
     //sinon le max c'est un pixel par milliseconde, c'est pas tant que ca
     console.log("new speed :" + gameSpeed);
-    if(miseValide == true && tours > 0) {
+    if(tours > 0) {
 
         var pixelsPerSec = 40 * (gameSpeed + 0.5) + 0.001;
         var framelength = Math.floor(1000.0 / pixelsPerSec);
@@ -213,7 +228,7 @@ function run() {
         console.log('Speed: '+gameSpeed.toFixed(1)+' Diff: '+diffModel.getDiffFromChallenge(gameSpeed).toFixed(2)+' Frame Length: '+framelength+ ' Bar Speed: '+barSpeed);
     }
     //On lance l'anim
-    if(miseValide == true && tours > 0) {
+    if(tours > 0) {
         anim = setInterval(animBar, framelength);
     }
 }
@@ -232,11 +247,12 @@ function keypressed(event) {
     }
 
     if(key == 32){
-        if(running)
+        if(running && miseValide)
             stop();
-        else
+        else 
             run();
-    }
+    
+}
 }
 
 function feedbackPositif() {
