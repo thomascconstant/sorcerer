@@ -1,4 +1,6 @@
 //Variables du jeu
+var nomDuJeu = "Motrice";
+
 var barSpeed = 1; //Vitesse de la barre : pixels par frame
 var direction = 1; //direction actuelle du deplacement de la barre
 var anim = 0; //Handle du timer d'anim de la barre
@@ -277,7 +279,7 @@ function finDePartie() {
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie==true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
-                enregistrerDonnees(1,resultatJoueur);
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur + ";");
             } else {
                 x = "Ah, d'accord.";
             }
