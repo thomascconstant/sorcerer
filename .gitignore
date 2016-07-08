@@ -8,3 +8,4 @@ nbproject
 CHANGELOG.md
 CONTRIBUTING.md
 gulpfile.js
+/nbproject/private/
