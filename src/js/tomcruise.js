@@ -10,7 +10,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -149,7 +149,7 @@ function stop() {
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res + "\n";
+    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res;
     console.log(resultatJoueur);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
