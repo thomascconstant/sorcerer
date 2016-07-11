@@ -7,30 +7,71 @@ function donnerID () {
     // after the decimal.
     var IDjoueur = Math.random().toString(36).substr(2, 9);
     console.log(IDjoueur);
+    localStorage.setItem("joueur",IDjoueur);
 
     enregistrerDonnees(0, IDjoueur + ";");
     lancerJeu();
     
 };
 
-//lancer de manière aléatoire le prochain jeu dans une nouvelle fenêtre
-// liens vers les jeux
-var liensJeux = [
-    "tomcruise.html",
-    "christopherreeve.html",
-    "test3.html"];
-
+//lancer de manière aléatoire ou selon progression le prochain jeu dans une nouvelle fenêtre
 function lancerJeu () {
-    // get a random number between 0 and the number of links
-    var randIdx = Math.random() * liensJeux.length;
-    // round it, so it can be used as array index
-    randIdx = parseInt(randIdx, 10);
-    // construct the link to be opened
-    // var lien = liensJeux[randIdx]; à décommenter pour avoir un lancement aléatoire des jeux
-    var lien = "tomcruise.html"; //à commenter pour ne pas lancer uniquement ce jeu
-    // open it in a new window / tab (depends on browser setting)
-    window.open(lien,'_self',false);
-};
+    //récupérer boleen des jeux déjà terminés
+    var jeuMotriceTermine = localStorage.getItem("tomcruise");
+    var jeuSensoTermine = localStorage.getItem("christopherreeve");
+    var jeuLogicTermine = localStorage.getItem("test3");
+    console.log(jeuMotriceTermine);
+    //lancement selon progression
+    if (jeuMotriceTermine) {
+        var liensJeux = [
+            "christopherreeve.html",
+            "test3.html"
+        ];
+        var randIdx = Math.random() * liensJeux.length;
+        // round it, so it can be used as array index
+        randIdx = parseInt(randIdx, 10);
+        // construct the link to be opened
+        // open it in a new window / tab (depends on browser setting)
+        window.open(lien,'_self',false);
+    } else if (jeuSensoTermine) {
+        var liensJeux = [
+            "tomcuise.html",
+            "test3.html"
+        ];
+        var randIdx = Math.random() * liensJeux.length;
+        // round it, so it can be used as array index
+        randIdx = parseInt(randIdx, 10);
+        // construct the link to be opened
+        // open it in a new window / tab (depends on browser setting)
+        window.open(lien,'_self',false);
+    } else if (jeuLogicTermine) {
+        var liensJeux = [
+            "tomcruise.html",
+            "christopherreeve.html"
+        ];
+        var randIdx = Math.random() * liensJeux.length;
+        // round it, so it can be used as array index
+        randIdx = parseInt(randIdx, 10);
+        // construct the link to be opened
+        // open it in a new window / tab (depends on browser setting)
+        window.open(lien,'_self',false);
+    } else {
+        // liens vers les jeux
+        var liensJeux = [
+            "tomcruise.html",
+            "christopherreeve.html",
+            "test3.html"];
+        // get a random number between 0 and the number of links
+        var randIdx = Math.random() * liensJeux.length;
+        // round it, so it can be used as array index
+        randIdx = parseInt(randIdx, 10);
+        // construct the link to be opened
+        // var lien = liensJeux[randIdx]; à décommenter pour avoir un lancement aléatoire des jeux
+        var lien = "tomcruise.html"; //à commenter pour ne pas lancer uniquement ce jeu
+        // open it in a new window / tab (depends on browser setting)
+        window.open(lien,'_self',false);
+    }  
+}
 
 // enregistrer données du joueur dans fichier csv
 function enregistrerDonnees (type, data) {

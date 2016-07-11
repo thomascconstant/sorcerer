@@ -1,5 +1,6 @@
 //Variables du jeu
 var nomDuJeu = "Motrice";
+var IDjoueur = localStorage.getItem("joueur");
 
 var barSpeed = 1; //Vitesse de la barre : pixels par frame
 var direction = 1; //direction actuelle du deplacement de la barre
@@ -149,7 +150,7 @@ function stop() {
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res;
+    resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res + "\n";
     console.log(resultatJoueur);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
@@ -280,6 +281,9 @@ function finDePartie() {
             if (messageFinPartie==true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuMotriceTermine = true;
+                localStorage.getItem("tomcruise", jeuMotriceTermine);
+           
             } else {
                 x = "Ah, d'accord.";
             }
