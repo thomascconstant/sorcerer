@@ -1,3 +1,5 @@
+var nomDuJeu = "Logique";
+var IDjoueur = localStorage.getItem("joueur");
 
 var figures = [
     "../src/img/cool.svg",
@@ -10,8 +12,72 @@ var figures = [
 var order = [0,1,2,3,4,5,6];
 var me;
 var him;
-var score = 0;
+
+var score = 0; //Score actuel
+var mise = 0; //Combien le joueur a misé
+var tours = 2; //Nombre de tours restants
+
 var difficulte = 0; //de 0 à order.length - 2
+
+function init() {
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
+}
+
+//récupérer mise
+function recupMise () {
+    if(document.getElementById('mise1').checked) {
+        //boutton de mise 1 est validé
+        mise = 1;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise2').checked) {
+        mise = 2;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise3').checked) {
+        mise = 3;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise4').checked) {
+        mise = 4;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise5').checked) {
+        mise = 5;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise6').checked) {
+        mise = 6;
+        document.getElementById("boutonMiser").disabled = true;
+    }else if(document.getElementById('mise7').checked) {
+        mise = 7;
+        document.getElementById("boutonMiser").disabled = true;
+    }
+    //afficher mise
+    showMise();
+    
+    //verrouiller boutons de mise
+    document.getElementById("mise1").disabled = true;
+    document.getElementById("mise2").disabled = true;
+    document.getElementById("mise3").disabled = true;
+    document.getElementById("mise4").disabled = true;
+    document.getElementById("mise5").disabled = true;
+    document.getElementById("mise6").disabled = true;
+    document.getElementById("mise7").disabled = true;
+    
+    
+    //enregistrer mise dans csv
+    //enregistrerDonnees(0, mise);
+
+    //acter la mise du joueur pour déverouiller jeu
+    miseValide = true;
+    go();
+
+}
+
+function showMise(){
+    document.getElementById("tableMise").style.visibility = "visible";
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
+}
 
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -87,4 +153,61 @@ function res(win){
 	document.getElementById("res").innerHTML = msg + " "+ score + "pt";
 	
 	newRound();
+}
+
+function finDePartie() {
+    if (tours == 0){
+        //créer le bouton
+        var boutton = document.createElement("input");
+        boutton.type = "button";
+        boutton.value = "Fin de partie.";
+        boutton.name = "FIN";
+        var results = function resultat(){
+            var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie==true) {
+                x = "Prototype en cours de développement, veuillez patienter.";
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuMotriceTermine = true;
+                localStorage.getItem("hughlaurie", jeuLogicTermine);
+           
+            } else {
+                x = "Ah, d'accord.";
+            }
+            document.getElementById("retourProto").innerHTML = x;
+        }
+        boutton.onclick = results;
+        document.body.appendChild(boutton);
+    } else{
+
+    }
+}
+
+
+// enregistrer données du joueur dans fichier csv
+function enregistrerDonnees (type, data) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            //console.log(xhttp.response);
+        }
+    };
+
+    if (type == 0) {
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("joueur=" + data);
+    } else if (type == 1) {
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("data=" + data);
+    }
+
+
+    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
+    //xhttp.setRequestHeader("Content-type", "text/plain");
+    //xhttp.send("data=\"" + donneesJoueur + "\"");
+    //xhttp.send("data=15");
+
+    console.log("Sent data " + data);
 }

@@ -25,7 +25,7 @@ function lancerJeu () {
     if (jeuMotriceTermine) {
         var liensJeux = [
             "christopherreeve.html",
-            "test3.html"
+            "hughlaurie.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -36,7 +36,7 @@ function lancerJeu () {
     } else if (jeuSensoTermine) {
         var liensJeux = [
             "tomcuise.html",
-            "test3.html"
+            "hughlaurie.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -60,7 +60,7 @@ function lancerJeu () {
         var liensJeux = [
             "tomcruise.html",
             "christopherreeve.html",
-            "test3.html"];
+            "hughlaurie.html"];
         // get a random number between 0 and the number of links
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
