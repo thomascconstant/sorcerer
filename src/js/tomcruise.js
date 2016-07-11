@@ -64,6 +64,7 @@ function recupMise () {
         mise = 5;
         document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
+        document.getElementById("mise5").disabled = true;
     }else if(document.getElementById('mise6').checked) {
         mise = 6;
         document.getElementById("boutonMiser").disabled = true;
@@ -75,6 +76,15 @@ function recupMise () {
     }
     //afficher mise
     showMise();
+    
+    //verrouiller boutons de mise
+    document.getElementById("mise1").disabled = true;
+    document.getElementById("mise2").disabled = true;
+    document.getElementById("mise3").disabled = true;
+    document.getElementById("mise4").disabled = true;
+    document.getElementById("mise5").disabled = true;
+    document.getElementById("mise6").disabled = true;
+    document.getElementById("mise7").disabled = true;
     
     //afficher le target
     if(hideTarget) {
@@ -187,10 +197,20 @@ function stop() {
     miseValide = false;
     hideTarget = true;
     document.getElementById("boutonMiser").disabled = false;
+    
+    //déverrouiller boutons de mise
+    document.getElementById("mise1").disabled = false;
+    document.getElementById("mise2").disabled = false;
+    document.getElementById("mise3").disabled = false;
+    document.getElementById("mise4").disabled = false;
+    document.getElementById("mise5").disabled = false;
+    document.getElementById("mise6").disabled = false;
+    document.getElementById("mise7").disabled = false;
+    
     } else {
         finDePartie();
     }
-
+    
 }
 
 /**
