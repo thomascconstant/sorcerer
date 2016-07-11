@@ -1,0 +1,63 @@
+<html>
+
+<head>
+
+<style>
+.tdGame
+{
+	width: 20px; 
+	height:20px;
+}
+
+.site
+{
+	width: 300px;
+	padding:0px;
+	border: 0px solid black;
+	margin-left : auto;
+	margin-right : auto;
+		text-align:center;
+}
+
+.inSite
+{
+	padding:20px;
+	border: 1px solid black;
+
+}
+
+#board table, tr, td
+{
+	padding:0px;
+	margin:0px;
+	border:1px solid white;
+	border-collapse: collapse;
+}
+</style>
+
+<script src = "js/hughlaurie.js"> </script>
+
+</head>
+
+<body onload="go()">
+
+<div class="site">
+<h2>Le jeu ou t'es idiot !</h2>
+<div class="inSite">
+
+<table><tr><td id="me" onclick="res(true)">&nbsp</td><td onclick="res(false)" id="him">&nbsp;</td></table>
+<br>
+<div id="res">Score</div>
+<button onclick="diff(1)">Harder !</button>
+<button onclick="diff(-1)">Easier !</button>
+<button onclick="go()">Every day I'm shuffling !</button>
+<br>
+</div>
+<a href="test.html">doigt</a>::
+<a href="test2.html">yeux</a>::
+<a href="test3.html">tete</a>
+</div>
+
+</body>
+
+</html>

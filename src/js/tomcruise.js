@@ -197,8 +197,7 @@ function stop() {
     miseValide = false;
     hideTarget = true;
     document.getElementById("boutonMiser").disabled = false;
-    
-    //déverrouiller boutons de mise
+    //déverrouiller boutons de sélection de mise
     document.getElementById("mise1").disabled = false;
     document.getElementById("mise2").disabled = false;
     document.getElementById("mise3").disabled = false;

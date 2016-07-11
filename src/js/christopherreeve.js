@@ -1,3 +1,5 @@
+var nomDuJeu = "Sensoriel";
+var IDjoueur = localStorage.getItem("joueur");
 
 var nbCells = 2;
 var width = 300;
@@ -76,6 +78,17 @@ function recupMise () {
     }
     //afficher mise
     showMise();
+    
+    //verrouiller boutons de mise
+    document.getElementById("mise1").disabled = true;
+    document.getElementById("mise2").disabled = true;
+    document.getElementById("mise3").disabled = true;
+    document.getElementById("mise4").disabled = true;
+    document.getElementById("mise5").disabled = true;
+    document.getElementById("mise6").disabled = true;
+    document.getElementById("mise7").disabled = true;
+    
+    
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
 
@@ -114,13 +127,31 @@ function win(){
             //}else{
         //	nbCells = Math.min(6, nbCells+1);
         //}
+    }
+    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+    if (tours > 0) {
+        miseValide = false;
+        document.getElementById("boutonMiser").disabled = false;
+        //déverrouiller boutons de sélection de mise
+        document.getElementById("mise1").disabled = false;
+        document.getElementById("mise2").disabled = false;
+        document.getElementById("mise3").disabled = false;
+        document.getElementById("mise4").disabled = false;
+        document.getElementById("mise5").disabled = false;
+        document.getElementById("mise6").disabled = false;
+        document.getElementById("mise7").disabled = false;
+        
         makeGame(width,nbCells,1-difficulty);
+        
+    } else {
+        finDePartie();
+    }
+        
+    //makeGame(width,nbCells,1-difficulty);
 
         
-    }
-
-    console.log(difficulty);
-
+    
+    console.log(difficulty + "difficulté win");
 }
 
 function fail(){
@@ -144,9 +175,27 @@ function fail(){
     //	nbCells = Math.max(2,nbCells-1);
     //}
 
-    makeGame(width,nbCells,1-difficulty);
+    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+    if (tours > 0) {
+        miseValide = false;
+        document.getElementById("boutonMiser").disabled = false;
+        //déverrouiller boutons de sélection de mise
+        document.getElementById("mise1").disabled = false;
+        document.getElementById("mise2").disabled = false;
+        document.getElementById("mise3").disabled = false;
+        document.getElementById("mise4").disabled = false;
+        document.getElementById("mise5").disabled = false;
+        document.getElementById("mise6").disabled = false;
+        document.getElementById("mise7").disabled = false;
+        
+        makeGame(width,nbCells,1-difficulty);
+    } else {
+        finDePartie();
+    }
 
-    console.log(difficulty);
+    //makeGame(width,nbCells,1-difficulty);
+
+    console.log(difficulty + "difficulté fail");
 }
 
 function toHex(d) {
@@ -303,4 +352,31 @@ function afficherJeu(width,nbCellsX,diffColor) {
     strHtml += '</table>';
 
     document.getElementById("board").innerHTML = strHtml;
+}
+
+function finDePartie() {
+    if (tours == 0){
+        //créer le bouton
+        var boutton = document.createElement("input");
+        boutton.type = "button";
+        boutton.value = "Fin de partie.";
+        boutton.name = "FIN";
+        var results = function resultat(){
+            var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie==true) {
+                x = "Prototype en cours de développement, veuillez patienter.";
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuMotriceTermine = true;
+                localStorage.getItem("christopherreeve", jeuSensoTermine);
+           
+            } else {
+                x = "Ah, d'accord.";
+            }
+            document.getElementById("retourProto").innerHTML = x;
+        }
+        boutton.onclick = results;
+        document.body.appendChild(boutton);
+    } else{
+
+    }
 }
