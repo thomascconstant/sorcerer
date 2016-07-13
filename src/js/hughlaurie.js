@@ -15,7 +15,8 @@ var him;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
+var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var difficulte = 0; //de 0 à order.length - 2
 
@@ -30,25 +31,19 @@ function recupMise () {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
-        document.getElementById("boutonMiser").disabled = true;
+        
     }else if(document.getElementById('mise2').checked) {
         mise = 2;
-        document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise3').checked) {
         mise = 3;
-        document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise4').checked) {
         mise = 4;
-        document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise5').checked) {
         mise = 5;
-        document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise6').checked) {
         mise = 6;
-        document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise7').checked) {
         mise = 7;
-        document.getElementById("boutonMiser").disabled = true;
     }
     //afficher mise
     showMise();
@@ -62,17 +57,17 @@ function recupMise () {
     document.getElementById("mise6").disabled = true;
     document.getElementById("mise7").disabled = true;
     
-    
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
-    go();
+    
+    
 
 }
 
-function showMise(){
+function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
@@ -99,60 +94,91 @@ function shuffle(array) {
 }
 
 function shuffleOrder(){
-	order = shuffle(order);
+    order = shuffle(order);
 }
 
-function doIBeatHim(me, him){
-	for(var i=0;i<order.length;i++){
-		if(order[i] == me)
-			return false;
-		if (order[i] == him)
-			return true;
+function doIBeatHim(me, him) {
+    for(var i=0;i<order.length;i++){
+            if(order[i] == me)
+                    return false;
+            if (order[i] == him)
+                    return true;
 	}
 }
 
 function newRound(){
-	var nbElts = 2 + difficulte;
-	console.log("NbElts="+nbElts);
-	var meBefore = me;
-	me = Math.floor(Math.random() * nbElts);
-	while (me == meBefore) 
-		me = Math.floor(Math.random() * nbElts);
-	him = Math.floor(Math.random() * nbElts);
-	while (him == me) 
-		him = Math.floor(Math.random() * nbElts);
-		
-	document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
-	document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">'; 
+    var nbElts = 2 + difficulte;
+    console.log("NbElts="+nbElts);
+    var meBefore = me;
+    me = Math.floor(Math.random() * nbElts);
+    while (me == meBefore) 
+            me = Math.floor(Math.random() * nbElts);
+    him = Math.floor(Math.random() * nbElts);
+    while (him == me) 
+            him = Math.floor(Math.random() * nbElts);
+
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">'; 
+    
+    /*if(miseValide) {
+        //déverrouiller boutons figures
+        document.getElementById("me").disabled = false;
+        document.getElementById("him").disabled = false;
+    }*/
 }
 
 function go(){
-	shuffleOrder();
-	newRound();	
+    shuffleOrder();
+    newRound();	
 }
 
 function diff(sens){
-	difficulte += sens;
-	difficulte = Math.max(2,difficulte);
-	difficulte = Math.min(order.length-2,difficulte);
-	newRound();	
+    difficulte += sens;
+    difficulte = Math.max(2,difficulte);
+    difficulte = Math.min(order.length-2,difficulte);
+    newRound();	
 }
 
-function res(win){
-	var msg;
-	if(doIBeatHim(me,him) == win){
-		msg = 'ouaaaaais !'
-		score++;
-	}else{
-		msg = 'ben non.'
-		score--;
-	}
-		
-	score = Math.max(0,score);
-		
-	document.getElementById("res").innerHTML = msg + " "+ score + "pt";
-	
-	newRound();
+function res(win) {
+    var msg;
+    if(miseValide && doIBeatHim(me,him) == win){
+        score+=mise;    
+        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de sauvé(s) !";
+            
+    } else if (miseValide) {
+        score+=mise;    
+        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de perdu(s) !";
+    }
+
+    //score = Math.max(0,score);
+
+    //Un tour de moins, reset de la mise
+    tours--;
+    mise = "?";
+    document.getElementById("tours").innerHTML = tours;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
+    
+    //déverrouiller boutons de mise
+    document.getElementById("mise1").disabled = false;
+    document.getElementById("mise2").disabled = false;
+    document.getElementById("mise3").disabled = false;
+    document.getElementById("mise4").disabled = false;
+    document.getElementById("mise5").disabled = false;
+    document.getElementById("mise6").disabled = false;
+    document.getElementById("mise7").disabled = false;
+    
+    if (miseValide && tours > 0) {
+        newRound();
+    } else {
+        finDePartie();
+    }
+    
+    miseValide=false;
+    
+    //verrouiller boutons figures
+    document.getElementById("me").disabled = true;
+    document.getElementById("him").disabled = true;
 }
 
 function finDePartie() {

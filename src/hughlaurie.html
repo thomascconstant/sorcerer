@@ -80,17 +80,17 @@
         <br>A la fin d'un tour de jeu, de nouveaux chatons vous sont présentés. Sauvez les tous !<br></p>
 </div>
 
-<p style="color:#757575" align="center"><i>Choisissez votre mise, puis appuyez sur "Entrée" :</i></p>
+<p style="color:#757575" align="center"><i>Choisissez votre mise puis cliquez sur la figure gagnante :</i></p>
 <p style="color:#757575" align="center">
-    <input type="radio" name="mises" id="mise1" value="1" checked />1 &nbsp
-    <input type="radio" name="mises" id="mise2" value="2"/>2 &nbsp
-    <input type="radio" name="mises" id="mise3" value="3"/>3 &nbsp
-    <input type="radio" name="mises" id="mise4" value="4"/>4 &nbsp
-    <input type="radio" name="mises" id="mise5" value="5"/>5 &nbsp
-    <input type="radio" name="mises" id="mise6" value="6"/>6 &nbsp
-    <input type="radio" name="mises" id="mise7" value="7"/>7
+    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
+    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
+    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
+    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
+    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
+    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
+    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
 </p>
-<p style="text-align: center;"><button type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p>
+<!--<p style="text-align: center;"><button type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p>-->
 <p id="retourProto"></p>
 
     
@@ -99,7 +99,7 @@
 <div class="inSite">
 
 <table>
-    <tr><td id="me" onclick="res(true)">&nbsp</td><td onclick="res(false)" id="him">&nbsp;</td>
+    <tr><td id="me" onclick="res(true)">&nbsp</td><td id="him" onclick="res(false)" >&nbsp;</td>
 </table>
 <br>
 
