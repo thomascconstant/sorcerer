@@ -41,37 +41,42 @@ function init(){
     //testFile(document.getElementById("res"));
 }
 
+function accessMise () {
+    //déverrouiller boutons de sélection de mise
+    document.getElementById("mise1").disabled = false;
+    document.getElementById("mise2").disabled = false;
+    document.getElementById("mise3").disabled = false;
+    document.getElementById("mise4").disabled = false;
+    document.getElementById("mise5").disabled = false;
+    document.getElementById("mise6").disabled = false;
+    document.getElementById("mise7").disabled = false;
+    
+    run();
+}
+
 //récupérer mise
 function recupMise () {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise2').checked) {
         mise = 2;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise3').checked) {
         mise = 3;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise4').checked) {
         mise = 4;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise5').checked) {
         mise = 5;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
-        document.getElementById("mise5").disabled = true;
     }else if(document.getElementById('mise6').checked) {
         mise = 6;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }else if(document.getElementById('mise7').checked) {
         mise = 7;
-        document.getElementById("boutonMiser").disabled = true;
         document.getElementById("mise").innerHTML = mise;
     }
     //afficher mise
@@ -90,18 +95,32 @@ function recupMise () {
     if(hideTarget) {
         document.getElementById("target").style.visibility = "visible";
     }
-    document.getElementById("res").innerHTML = "Appuyez sur ESPACE pour arrêter le curseur.";
-    //document.getElementById("boutonMiser").addEventListener("keydown", keypressed, false);
+    document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter le curseur.";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
     hideTarget = false;
+    
+    changeTexteBouton();
 
 }
 
 function showMise(){
     document.getElementById("tableMise").style.visibility = "visible";
     
+}
+
+function changeTexteBouton() {
+    var elem = document.getElementById("boutonLancerCurseur");
+    
+    if (miseValide && elem.innerHTML=="Lancer le curseur") {
+        elem.innerHTML = "Arrêter le curseur";
+        document.getElementById("boutonLancerCurseur").disabled = false;
+        elem.onclick = stop;
+    } else {
+        elem.innerHTML = "Lancer le curseur";
+        elem.onclick = accessMise;
+    }
 }
 
 /**
@@ -167,12 +186,12 @@ function stop() {
     //On met a jour le score, etc...
     if(res == 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "chaton(s). Appuyez sur ESPACE pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "chaton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "chaton(s). Appuyez sur ESPACE pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "chaton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
         //feedbackNegatif;
     }
 
@@ -196,20 +215,11 @@ function stop() {
     if (tours > 0) {
     miseValide = false;
     hideTarget = true;
-    document.getElementById("boutonMiser").disabled = false;
-    //déverrouiller boutons de sélection de mise
-    document.getElementById("mise1").disabled = false;
-    document.getElementById("mise2").disabled = false;
-    document.getElementById("mise3").disabled = false;
-    document.getElementById("mise4").disabled = false;
-    document.getElementById("mise5").disabled = false;
-    document.getElementById("mise6").disabled = false;
-    document.getElementById("mise7").disabled = false;
-    
+    document.getElementById("boutonLancerCurseur").disabled = false;
     } else {
         finDePartie();
     }
-    
+    changeTexteBouton();
 }
 
 /**
@@ -222,7 +232,7 @@ function run() {
     
     if(tours > 0){
         running = true;
-
+        document.getElementById("boutonLancerCurseur").disabled = true;
         document.getElementById("res").innerHTML = "Choisissez votre mise.";
         document.getElementById("slider").style.left = "0px";
     }
@@ -252,6 +262,7 @@ function run() {
     if(tours > 0) {
         anim = setInterval(animBar, framelength);
     }
+    changeTexteBouton();
 }
 
 /**
@@ -268,12 +279,12 @@ function keypressed(event) {
     }
 
     if(key == 32){
-        if(running && miseValide)
+        if(running && miseValide) {
             stop();
-        else 
-            run();
-    
-}
+        } else { 
+            accessMise();
+        }
+    }
 }
 
 function feedbackPositif() {

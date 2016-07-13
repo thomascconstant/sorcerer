@@ -95,17 +95,17 @@
 	<button onclick="createFile()">Create</button><br>
 	<button onclick="deleteFile()">Delete</button><br> -->
 
-	<p style="color:#757575" align="center"><i>Choisissez votre mise, puis cliquez sur le bouton pour lancer le jeu :</i></p>
+	<p style="color:#757575" align="center"><i>Observer le mouvement du curseur avant de choisir votre mise :</i></p>
 	<p style="color:#757575" align="center">
-		<input type="radio" name="mises" id="mise1" value="1" checked />1 &nbsp
-		<input type="radio" name="mises" id="mise2" value="2"/>2 &nbsp
-		<input type="radio" name="mises" id="mise3" value="3"/>3 &nbsp
-		<input type="radio" name="mises" id="mise4" value="4"/>4 &nbsp
-		<input type="radio" name="mises" id="mise5" value="5"/>5 &nbsp
-		<input type="radio" name="mises" id="mise6" value="6"/>6 &nbsp
-		<input type="radio" name="mises" id="mise7" value="7"/>7
+		<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
+		<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
+		<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
+		<input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
+		<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
+		<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
+		<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
 	</p>
-	<p style="text-align: center;"><button type="button" id="boutonMiser" onclick="recupMise()" >Validez votre mise</button></p>
+        <p style="text-align: center;"><button type="button" disabled id="boutonLancerCurseur" onclick="accessMise()" >Lancer le curseur</button></p>
 	<p id="retourProto"></p>
 
     <div class="site">

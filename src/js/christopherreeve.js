@@ -33,7 +33,7 @@ function animate(){
 }
 
 function init() {
-    afficherJeu(width,nbCells);
+    //afficherJeu(width,nbCells);
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
@@ -42,9 +42,9 @@ function init() {
 function go() {
     makeGame(width,nbCells,1-difficulty);
     anim = setInterval(animate,10);
-    document.getElementById("tours").innerHTML = tours;
+    /*document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
-    document.getElementById("mise").innerHTML = mise;
+    document.getElementById("mise").innerHTML = mise;*/
     /*if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
     }
