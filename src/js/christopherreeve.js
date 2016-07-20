@@ -14,7 +14,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 10; //Nombre de tours restants
 
 function animate(){
 
@@ -52,7 +52,7 @@ function go() {
 }
 
 //récupérer mise
-function recupMise () {
+function recupMise() {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
@@ -147,7 +147,7 @@ function win(){
             finDePartie();
         }
 
-        //makeGame(width,nbCells,1-difficulty);
+        makeGame(width,nbCells,1-difficulty);
 
         console.log(difficulty + "difficulté win");  
     }
@@ -193,7 +193,7 @@ function fail(){
             finDePartie();
         }
 
-        //makeGame(width,nbCells,1-difficulty);
+        makeGame(width,nbCells,1-difficulty);
 
         console.log(difficulty + "difficulté fail");
     }
