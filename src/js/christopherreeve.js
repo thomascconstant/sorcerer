@@ -10,6 +10,7 @@ var colorTarget =  0;
 var colorCurrent = 0;
 var colorBase =  0;
 var nbCasesToFind = 0;
+var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
@@ -33,7 +34,6 @@ function animate(){
 }
 
 function init() {
-    //afficherJeu(width,nbCells);
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
@@ -94,7 +94,6 @@ function recupMise () {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
-    go();
 
 }
 
@@ -106,10 +105,59 @@ function showMise(){
 }
 
 function win(){
-    nbCasesToFind--;
-    if(nbCasesToFind <= 0) {
-        score += mise;
-        document.getElementById("res").innerHTML = "Pas mal... "+score+'pt';
+    if (miseValide === true){
+      nbCasesToFind--;
+        if(nbCasesToFind <= 0) {
+            score += mise;
+            document.getElementById("res").innerHTML = "Pas mal... "+score+'pt';
+
+            //Un tour de moins, reset de la mise
+            tours--;
+            mise = "?";
+            document.getElementById("tours").innerHTML = tours;
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("mise").innerHTML = mise;
+
+            //if(Math.random() < 0.7) {
+            if(difficulty >= 0.95) {
+                difficulty = Math.min(0.99,difficulty + 0.01);
+            } else {
+                difficulty = Math.min(0.95,difficulty + 0.05);
+            }
+                //}else{
+            //	nbCells = Math.min(6, nbCells+1);
+            //}
+            //makeGame(width,nbCells,1-difficulty);
+        }
+        //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+        if (tours > 0) {
+            miseValide = false;
+            document.getElementById("boutonMiser").disabled = false;
+            //déverrouiller boutons de sélection de mise
+            document.getElementById("mise1").disabled = false;
+            document.getElementById("mise2").disabled = false;
+            document.getElementById("mise3").disabled = false;
+            document.getElementById("mise4").disabled = false;
+            document.getElementById("mise5").disabled = false;
+            document.getElementById("mise6").disabled = false;
+            document.getElementById("mise7").disabled = false;
+
+
+        } else {
+            finDePartie();
+        }
+
+        //makeGame(width,nbCells,1-difficulty);
+
+        console.log(difficulty + "difficulté win");  
+    }
+    
+}
+
+function fail(){
+    if (miseValide === true){
+        score -= mise;
+        document.getElementById("res").innerHTML = "Oups ! " +score+'pt';
 
         //Un tour de moins, reset de la mise
         tours--;
@@ -119,83 +167,37 @@ function win(){
         document.getElementById("mise").innerHTML = mise;
 
         //if(Math.random() < 0.7) {
-        if(difficulty >= 0.95) {
-            difficulty = Math.min(0.99,difficulty + 0.01);
+        if(difficulty > 0.95) {
+            difficulty = difficulty - 0.01;
         } else {
-            difficulty = Math.min(0.95,difficulty + 0.05);
+            difficulty = Math.max(0,difficulty - 0.05);
         }
+        //makeGame(width,nbCells,1-difficulty);
             //}else{
-        //	nbCells = Math.min(6, nbCells+1);
+        //	nbCells = Math.max(2,nbCells-1);
         //}
-    }
-    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-    if (tours > 0) {
-        miseValide = false;
-        document.getElementById("boutonMiser").disabled = false;
-        //déverrouiller boutons de sélection de mise
-        document.getElementById("mise1").disabled = false;
-        document.getElementById("mise2").disabled = false;
-        document.getElementById("mise3").disabled = false;
-        document.getElementById("mise4").disabled = false;
-        document.getElementById("mise5").disabled = false;
-        document.getElementById("mise6").disabled = false;
-        document.getElementById("mise7").disabled = false;
-        
-        makeGame(width,nbCells,1-difficulty);
-        
-    } else {
-        finDePartie();
-    }
-        
-    //makeGame(width,nbCells,1-difficulty);
 
-        
+        //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+        if (tours > 0) {
+            miseValide = false;
+            document.getElementById("boutonMiser").disabled = false;
+            //déverrouiller boutons de sélection de mise
+            document.getElementById("mise1").disabled = false;
+            document.getElementById("mise2").disabled = false;
+            document.getElementById("mise3").disabled = false;
+            document.getElementById("mise4").disabled = false;
+            document.getElementById("mise5").disabled = false;
+            document.getElementById("mise6").disabled = false;
+            document.getElementById("mise7").disabled = false;
+        } else {
+            finDePartie();
+        }
+
+        //makeGame(width,nbCells,1-difficulty);
+
+        console.log(difficulty + "difficulté fail");
+    }
     
-    console.log(difficulty + "difficulté win");
-}
-
-function fail(){
-    score -= mise;
-    document.getElementById("res").innerHTML = "Oups ! " +score+'pt';
-
-    //Un tour de moins, reset de la mise
-    tours--;
-    mise = "?";
-    document.getElementById("tours").innerHTML = tours;
-    document.getElementById("score").innerHTML = score;
-    document.getElementById("mise").innerHTML = mise;
-
-    //if(Math.random() < 0.7) {
-    if(difficulty > 0.95) {
-        difficulty = difficulty - 0.01;
-    } else {
-        difficulty = Math.max(0,difficulty - 0.05);
-    }
-        //}else{
-    //	nbCells = Math.max(2,nbCells-1);
-    //}
-
-    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-    if (tours > 0) {
-        miseValide = false;
-        document.getElementById("boutonMiser").disabled = false;
-        //déverrouiller boutons de sélection de mise
-        document.getElementById("mise1").disabled = false;
-        document.getElementById("mise2").disabled = false;
-        document.getElementById("mise3").disabled = false;
-        document.getElementById("mise4").disabled = false;
-        document.getElementById("mise5").disabled = false;
-        document.getElementById("mise6").disabled = false;
-        document.getElementById("mise7").disabled = false;
-        
-        makeGame(width,nbCells,1-difficulty);
-    } else {
-        finDePartie();
-    }
-
-    //makeGame(width,nbCells,1-difficulty);
-
-    console.log(difficulty + "difficulté fail");
 }
 
 function toHex(d) {
@@ -252,80 +254,6 @@ function makeGame(width,nbCellsX,diffColor) {
     var iDecoy = Math.floor(Math.random() * nbCellsX);
     var jDecoy = Math.floor(Math.random() * nbCellsX);
 
-    var strHtml = '';
-    strHtml += '<table>';
-    for(var i=0;i<nbCellsX;i++) {
-        strHtml += '<tr>';
-        for(var j=0;j<nbCellsX;j++) {
-            var color = colorBaseHex;
-            var clickFun = "fail()";
-            var name = "cellFail";
-
-            var ijFind = i + j * nbCellsX;
-
-            if(cases.indexOf(ijFind) >= 0) {
-                color = colorFindHex;
-                clickFun = "win()";
-                name = "cellWin";
-            }
-
-
-            strHtml += '<td name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="'+clickFun+'">&nbsp;';
-            strHtml += '</td>';
-        }
-        strHtml += '</tr>';
-    }
-    strHtml += '</table>';
-
-    document.getElementById("board").innerHTML = strHtml;
-}
-
-function afficherJeu(width,nbCellsX,diffColor) {
-    nbCellsX = 5;
-
-    //Calc des props
-    var widthCell = width / nbCellsX;
-    var colorBaseR = Math.floor(Math.random() * 128 + 64);
-    var colorBaseV = Math.floor(Math.random() * 128 + 64);
-    var colorBaseB = Math.floor(Math.random() * 128 + 64);
-
-    colorBaseR = 128;
-    colorBaseV = colorBaseR;
-    colorBaseB = colorBaseR;
-
-
-    colorBase = colorBaseR;
-
-    var colorFindR = Math.floor(colorBaseR + 64 * diffColor);
-    var colorFindV = Math.floor(colorBaseV + 64 * diffColor);
-    var colorFindB = Math.floor(colorBaseB + 64 * diffColor);
-
-    colorTarget = colorFindB;
-    colorCurrent = colorTarget;
-
-    var colorBaseHex = toHexColor(colorBaseR,colorBaseV,colorBaseB);
-    var colorFindHex = toHexColor(colorFindR,colorFindV,colorFindB);
-
-    console.log(colorBaseHex);
-    console.log(colorFindHex);
-
-    var cases = [];
-    /*
-    var nbCells = 0;
-    nbCasesToFind = 4;
-    for(var i=0;i<nbCells;i++)	{
-        var ijFind = 0;
-        while(cases.indexOf(ijFind) >= 0)
-            ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
-        cases.push(ijFind);
-    }
-
-    var iFind = Math.floor(Math.random() * nbCellsX);
-    var jFind = Math.floor(Math.random() * nbCellsX);
-
-    var iDecoy = Math.floor(Math.random() * nbCellsX);
-    var jDecoy = Math.floor(Math.random() * nbCellsX);
-     */
     var strHtml = '';
     strHtml += '<table>';
     for(var i=0;i<nbCellsX;i++) {
