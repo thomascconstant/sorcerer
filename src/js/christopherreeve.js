@@ -37,6 +37,8 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    go();
+
 }
 
 function go() {
@@ -110,7 +112,7 @@ function win(){
         if(nbCasesToFind <= 0) {
             score += mise;
             document.getElementById("res").innerHTML = "Pas mal... "+score+'pt';
-
+            console.log(nbCasesToFind + "to go");
             //Un tour de moins, reset de la mise
             tours--;
             mise = "?";
@@ -127,10 +129,10 @@ function win(){
                 //}else{
             //	nbCells = Math.min(6, nbCells+1);
             //}
-            //makeGame(width,nbCells,1-difficulty);
+            makeGame(width,nbCells,1-difficulty);
         }
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-        if (tours > 0) {
+        if (tours === 0) {
             miseValide = false;
             document.getElementById("boutonMiser").disabled = false;
             //déverrouiller boutons de sélection de mise
@@ -147,7 +149,7 @@ function win(){
             finDePartie();
         }
 
-        makeGame(width,nbCells,1-difficulty);
+        //makeGame(width,nbCells,1-difficulty);
 
         console.log(difficulty + "difficulté win");  
     }
@@ -241,6 +243,7 @@ function makeGame(width,nbCellsX,diffColor) {
 
     var nbCells = 4;
     nbCasesToFind = 4;
+
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
         while(cases.indexOf(ijFind) >= 0)
