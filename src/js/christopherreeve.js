@@ -111,7 +111,7 @@ function win(){
       nbCasesToFind--;
         if(nbCasesToFind <= 0) {
             score += mise;
-            document.getElementById("res").innerHTML = "Pas mal... "+score+'pt';
+            document.getElementById("res").innerHTML = "Vous avez sauvé "+score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
             //Un tour de moins, reset de la mise
             tours--;
@@ -159,7 +159,7 @@ function win(){
 function fail(){
     if (miseValide === true){
         score -= mise;
-        document.getElementById("res").innerHTML = "Oups ! " +score+'pt';
+        document.getElementById("res").innerHTML = "Vous avez tué " +score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
 
         //Un tour de moins, reset de la mise
         tours--;
