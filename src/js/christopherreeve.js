@@ -14,7 +14,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 10; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
 
 function animate(){
 
@@ -130,10 +130,10 @@ function win(){
             //	nbCells = Math.min(6, nbCells+1);
             //}
             makeGame(width,nbCells,1-difficulty);
-        }
-        //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-        if (tours === 0) {
+            feedbackSonore();
+            
             miseValide = false;
+            
             document.getElementById("boutonMiser").disabled = false;
             //déverrouiller boutons de sélection de mise
             document.getElementById("mise1").disabled = false;
@@ -143,10 +143,11 @@ function win(){
             document.getElementById("mise5").disabled = false;
             document.getElementById("mise6").disabled = false;
             document.getElementById("mise7").disabled = false;
-
-
-        } else {
+        }
+        //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+        if (tours === 0 && miseValide === false) {
             finDePartie();
+
         }
 
         //makeGame(width,nbCells,1-difficulty);
@@ -310,4 +311,9 @@ function finDePartie() {
     } else{
 
     }
+}
+
+function feedbackSonore() {
+    var x = document.getElementById("winSound");
+    x.play();
 }

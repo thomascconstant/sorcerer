@@ -61,6 +61,13 @@
 </style>
 
 <script src="js/christopherreeve.js"></script>
+<script src="js/howler.js">
+    var sound = new Howl({
+      src: ["../src/sounds/win.mp3"]
+    });
+    
+    sound.play();
+</script>
 
 </head>
 
@@ -113,6 +120,11 @@
     <a href="christopherreeve.html">yeux</a>::
     <a href="test3.html">tete</a>-->
 </div>
+
+<audio id="winSound">
+  <source src="../src/sounds/win.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
 
 </body>
 
