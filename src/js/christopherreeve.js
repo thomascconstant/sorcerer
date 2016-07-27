@@ -11,10 +11,11 @@ var colorCurrent = 0;
 var colorBase =  0;
 var nbCasesToFind = 0;
 var miseValide = false; //Si la mise n'est pas validée par le joueur
+var winState = false; //statut du joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 15; //Nombre de tours restants
 
 function animate(){
 
@@ -110,6 +111,8 @@ function win(){
     if (miseValide === true){
       nbCasesToFind--;
         if(nbCasesToFind <= 0) {
+            winState = true;
+            feedbackSonore();
             score += mise;
             document.getElementById("res").innerHTML = "Vous avez sauvé "+score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
@@ -126,11 +129,13 @@ function win(){
             } else {
                 difficulty = Math.min(0.95,difficulty + 0.05);
             }
-                //}else{
-            //	nbCells = Math.min(6, nbCells+1);
-            //}
-            makeGame(width,nbCells,1-difficulty);
-            feedbackSonore();
+            
+            //bloquer jeu
+            if(confirm("Un nouveau plateau va vous êtes présenté, regardez le bien !")){
+                makeGame(width,nbCells,1-difficulty);
+            } else {
+                makeGame(width,nbCells,1-difficulty);
+            }
             
             miseValide = false;
             
@@ -150,8 +155,6 @@ function win(){
 
         }
 
-        //makeGame(width,nbCells,1-difficulty);
-
         console.log(difficulty + "difficulté win");  
     }
     
@@ -159,6 +162,8 @@ function win(){
 
 function fail(){
     if (miseValide === true){
+        winState = false;
+        feedbackSonore();
         score -= mise;
         document.getElementById("res").innerHTML = "Vous avez tué " +score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
 
@@ -196,7 +201,11 @@ function fail(){
             finDePartie();
         }
 
-        makeGame(width,nbCells,1-difficulty);
+        if(confirm("Un nouveau plateau va vous êtes présenté, regardez le bien !")){
+               makeGame(width,nbCells,1-difficulty);
+           } else {
+               makeGame(width,nbCells,1-difficulty);
+           }
 
         console.log(difficulty + "difficulté fail");
     }
@@ -314,6 +323,12 @@ function finDePartie() {
 }
 
 function feedbackSonore() {
-    var x = document.getElementById("winSound");
-    x.play();
+    if(winState === true) {
+        var x = document.getElementById("winSound");
+        x.play();
+    } else {
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+
 }
