@@ -289,7 +289,7 @@ function makeGame(width,nbCellsX,diffColor) {
             }
 
 
-            strHtml += '<td name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="'+clickFun+'">&nbsp;';
+            strHtml += '<td name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="'+clickFun+';changeColor()">&nbsp;';
             strHtml += '</td>';
         }
         strHtml += '</tr>';
@@ -297,10 +297,16 @@ function makeGame(width,nbCellsX,diffColor) {
     strHtml += '</table>';
 
     document.getElementById("board").innerHTML = strHtml;
+    console.log(strHtml);
+}
+
+function changeColor() {
+    document.getElementById("board").style.color = "#ff0000";
+    console.log("yep");
 }
 
 function finDePartie() {
-    if (tours == 0){
+    if (tours === 0){
         //créer le bouton
         var boutton = document.createElement("input");
         boutton.type = "button";
@@ -308,7 +314,7 @@ function finDePartie() {
         boutton.name = "FIN";
         var results = function resultat(){
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
-            if (messageFinPartie==true) {
+            if (messageFinPartie===true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
