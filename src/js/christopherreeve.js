@@ -38,7 +38,11 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-    go();
+    if(confirm("Des cases de la grille vont clignoter, regardez les bien !")){
+            go();
+        } else {
+            go();
+        }
 
 }
 
@@ -131,7 +135,7 @@ function win(){
             }
             
             //bloquer jeu
-            if(confirm("Un nouveau plateau va vous êtes présenté, regardez le bien !")){
+            if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                 makeGame(width,nbCells,1-difficulty);
             } else {
                 makeGame(width,nbCells,1-difficulty);
@@ -201,7 +205,7 @@ function fail(){
             finDePartie();
         }
 
-        if(confirm("Un nouveau plateau va vous êtes présenté, regardez le bien !")){
+        if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                makeGame(width,nbCells,1-difficulty);
            } else {
                makeGame(width,nbCells,1-difficulty);
