@@ -35,7 +35,7 @@ function lancerJeu () {
         window.open(lien,'_self',false);
     } else if (jeuSensoTermine) {
         var liensJeux = [
-            "tomcuise.html",
+            "introtom.html",
             "hughlaurie.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
@@ -58,7 +58,7 @@ function lancerJeu () {
     } else {
         // liens vers les jeux
         var liensJeux = [
-            "tomcruise.html",
+            "introtom.html",
             "christopherreeve.html",
             "hughlaurie.html"];
         // get a random number between 0 and the number of links
@@ -67,7 +67,7 @@ function lancerJeu () {
         randIdx = parseInt(randIdx, 10);
         // construct the link to be opened
         // var lien = liensJeux[randIdx]; à décommenter pour avoir un lancement aléatoire des jeux
-        var lien = "tomcruise.html"; //à commenter pour ne pas lancer uniquement ce jeu
+        var lien = "introtom.html"; //à commenter pour ne pas lancer uniquement ce jeu
         // open it in a new window / tab (depends on browser setting)
         window.open(lien,'_self',false);
     }  
