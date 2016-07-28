@@ -1,6 +1,7 @@
 //Variables du jeu
 var nomDuJeu = "Motrice";
 var IDjoueur = localStorage.getItem("joueur");
+var scoreJoueurTom = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var barSpeed = 1; //Vitesse de la barre : pixels par frame
 var direction = 1; //direction actuelle du deplacement de la barre
@@ -11,7 +12,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
 var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -300,7 +301,11 @@ function feedbackNegatif() {
 }
 
 function finDePartie() {
-    if (tours == 0){
+    if (tours === 0){
+        //récupérer score final du joueur
+        scoreJoueurTom = score;
+        localStorage.scoreJoueurTom = scoreJoueurTom;
+        console.log(scoreJoueurTom);
         //créer le bouton
         var boutton = document.createElement("input");
         boutton.type = "button";
