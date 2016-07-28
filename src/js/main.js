@@ -24,8 +24,8 @@ function lancerJeu () {
     //lancement selon progression
     if (jeuMotriceTermine) {
         var liensJeux = [
-            "christopherreeve.html",
-            "hughlaurie.html"
+            "introchristopher.html",
+            "introhugh.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -36,7 +36,7 @@ function lancerJeu () {
     } else if (jeuSensoTermine) {
         var liensJeux = [
             "introtom.html",
-            "hughlaurie.html"
+            "introhugh.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -46,8 +46,8 @@ function lancerJeu () {
         window.open(lien,'_self',false);
     } else if (jeuLogicTermine) {
         var liensJeux = [
-            "tomcruise.html",
-            "christopherreeve.html"
+            "introtom.html",
+            "introchristopher.html"
         ];
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -59,15 +59,15 @@ function lancerJeu () {
         // liens vers les jeux
         var liensJeux = [
             "introtom.html",
-            "christopherreeve.html",
-            "hughlaurie.html"];
+            "introchristopher.html",
+            "introhugh.html"];
         // get a random number between 0 and the number of links
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
         randIdx = parseInt(randIdx, 10);
         // construct the link to be opened
-        // var lien = liensJeux[randIdx]; à décommenter pour avoir un lancement aléatoire des jeux
-        var lien = "introtom.html"; //à commenter pour ne pas lancer uniquement ce jeu
+        var lien = liensJeux[randIdx]; //à commenter pour avoir un lancement aléatoire des jeux
+        // var lien = "introtom.html"; //à décommenter pour ne lancer que ce jeu
         // open it in a new window / tab (depends on browser setting)
         window.open(lien,'_self',false);
     }  
