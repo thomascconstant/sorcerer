@@ -1,5 +1,6 @@
 var nomDuJeu = "Logique";
 var IDjoueur = localStorage.getItem("joueur");
+var scoreJoueurHugh = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var figures = [
     "../src/img/cool.svg",
@@ -183,6 +184,10 @@ function res(win) {
 
 function finDePartie() {
     if (tours == 0){
+        //récupérer score final du joueur
+        scoreJoueurHugh = score;
+        localStorage.scoreJoueurTom = scoreJoueurHugh;
+        console.log(scoreJoueurHugh);
         //créer le bouton
         var boutton = document.createElement("input");
         boutton.type = "button";
