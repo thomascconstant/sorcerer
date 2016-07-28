@@ -1,5 +1,6 @@
 var nomDuJeu = "Sensoriel";
 var IDjoueur = localStorage.getItem("joueur");
+var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var nbCells = 2;
 var width = 300;
@@ -15,7 +16,7 @@ var winState = false; //statut du joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 15; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 
 function animate(){
 
@@ -307,6 +308,10 @@ function changeColor() {
 
 function finDePartie() {
     if (tours === 0){
+        //récupérer score final du joueur
+        scoreJoueurChristopher = score;
+        localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
+        console.log(scoreJoueurChristopher);
         //créer le bouton
         var boutton = document.createElement("input");
         boutton.type = "button";
