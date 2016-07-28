@@ -95,7 +95,7 @@ function shuffle(array) {
 }
 
 function shuffleOrder(){
-    order = shuffle(order);
+        order = shuffle(order);        
 }
 
 function doIBeatHim(me, him) {
@@ -119,8 +119,8 @@ function newRound(){
             him = Math.floor(Math.random() * nbElts);
 
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">'; 
-    
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+
     /*if(miseValide) {
         //déverrouiller boutons figures
         document.getElementById("me").disabled = false;
@@ -143,18 +143,19 @@ function diff(sens){
 function res(win) {
     var msg;
     if(miseValide && doIBeatHim(me,him) == win){
-        score+=mise;    
+        score+=mise;
+        tours--;
         document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de sauvé(s) !";
             
     } else if (miseValide) {
-        score+=mise;    
+        score+=mise;
+        tours--;
         document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de perdu(s) !";
     }
 
     //score = Math.max(0,score);
 
-    //Un tour de moins, reset de la mise
-    tours--;
+    //reset de la mise et affichage résultat
     mise = "?";
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
