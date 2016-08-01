@@ -11,6 +11,7 @@ var colorTarget =  0;
 var colorCurrent = 0;
 var colorBase =  0;
 var nbCasesToFind = 0;
+var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var winState = false; //statut du joueur
 
@@ -30,8 +31,15 @@ function animate(){
     else {
         colorCurrent = colorBase;
     }
+    
     for(var i=0;i<cells.length;i++){
-        cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
+        //console.log(cells[i].id);
+        //console.log(casesFound.indexOf(parseInt(cells[i].id)));
+        if (casesFound.indexOf(parseInt(cells[i].id)) >= 0) {
+            cells[i].style.backgroundColor = "#81C784";
+        } else {
+            cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
+        }
     }
 }
 
@@ -112,9 +120,10 @@ function showMise(){
     document.getElementById("mise").innerHTML = mise;
 }
 
-function win(){
-    if (miseValide === true){
+function win(ijFind){
+    if (miseValide === true && casesFound.indexOf(ijFind) < 0) {
       nbCasesToFind--;
+      casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
             feedbackSonore();
@@ -153,6 +162,8 @@ function win(){
             document.getElementById("mise5").disabled = false;
             document.getElementById("mise6").disabled = false;
             document.getElementById("mise7").disabled = false;
+            
+            casesFound = [];
         }
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours === 0 && miseValide === false) {
@@ -189,6 +200,8 @@ function fail(){
             //}else{
         //	nbCells = Math.max(2,nbCells-1);
         //}
+
+        casesFound = [];
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
@@ -267,8 +280,6 @@ function makeGame(width,nbCellsX,diffColor) {
         cases.push(ijFind);
     }
 
-    console.log(cases);
-
     var iFind = Math.floor(Math.random() * nbCellsX);
     var jFind = Math.floor(Math.random() * nbCellsX);
 
@@ -288,12 +299,11 @@ function makeGame(width,nbCellsX,diffColor) {
 
             if(cases.indexOf(ijFind) >= 0) {
                 color = colorFindHex;
-                clickFun = "win()";
+                clickFun = "win(" + ijFind + ")";
                 name = "cellWin";
             }
-
-
-            strHtml += '<td name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="'+clickFun+';changeColor()">&nbsp;';
+            
+            strHtml += '<td id="' + ijFind + '" name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="' + clickFun + '">&nbsp;';
             strHtml += '</td>';
         }
         strHtml += '</tr>';
@@ -302,11 +312,6 @@ function makeGame(width,nbCellsX,diffColor) {
 
     document.getElementById("board").innerHTML = strHtml;
     console.log(strHtml);
-}
-
-function changeColor() {
-    document.getElementById("board").style.color = "#ff0000";
-    console.log("yep");
 }
 
 function finDePartie() {
