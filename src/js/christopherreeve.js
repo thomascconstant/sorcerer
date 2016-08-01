@@ -137,11 +137,14 @@ function win(ijFind){
             document.getElementById("score").innerHTML = score;
             document.getElementById("mise").innerHTML = mise;
 
-            //if(Math.random() < 0.7) {
-            if(difficulty >= 0.95) {
-                difficulty = Math.min(0.99,difficulty + 0.01);
+            if(Math.random() < 0.7) {
+                if(difficulty >= 0.95) {
+                    difficulty = Math.min(0.99,difficulty + 0.01);
+                } else {
+                    difficulty = Math.min(0.95,difficulty + 0.05);
+                }
             } else {
-                difficulty = Math.min(0.95,difficulty + 0.05);
+                nbCells = Math.min(6, nbCells+1);
             }
             
             //bloquer jeu
@@ -190,17 +193,16 @@ function fail(){
         document.getElementById("score").innerHTML = score;
         document.getElementById("mise").innerHTML = mise;
 
-        //if(Math.random() < 0.7) {
-        if(difficulty > 0.95) {
-            difficulty = difficulty - 0.01;
+        if(Math.random() < 0.7) {
+            if(difficulty > 0.95) {
+                difficulty = difficulty - 0.01;
+            } else {
+                difficulty = Math.max(0,difficulty - 0.05);
+            }
         } else {
-            difficulty = Math.max(0,difficulty - 0.05);
+            nbCells = Math.max(2, nbCells-1);
         }
-        //makeGame(width,nbCells,1-difficulty);
-            //}else{
-        //	nbCells = Math.max(2,nbCells-1);
-        //}
-
+        
         casesFound = [];
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
@@ -239,7 +241,7 @@ function toHexColor(R,V,B){
 }
 
 function makeGame(width,nbCellsX,diffColor) {
-    nbCellsX = 5;
+    //nbCellsX = 5;
 
     //Calc des props
     var widthCell = width / nbCellsX;
@@ -264,8 +266,8 @@ function makeGame(width,nbCellsX,diffColor) {
     var colorBaseHex = toHexColor(colorBaseR,colorBaseV,colorBaseB);
     var colorFindHex = toHexColor(colorFindR,colorFindV,colorFindB);
 
-    console.log(colorBaseHex);
-    console.log(colorFindHex);
+    //console.log(colorBaseHex);
+    //console.log(colorFindHex);
 
     var cases = [];
 
@@ -311,7 +313,7 @@ function makeGame(width,nbCellsX,diffColor) {
     strHtml += '</table>';
 
     document.getElementById("board").innerHTML = strHtml;
-    console.log(strHtml);
+
 }
 
 function finDePartie() {
