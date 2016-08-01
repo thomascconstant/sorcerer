@@ -261,10 +261,13 @@ function makeGame(width,nbCellsX,diffColor) {
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
-        while(cases.indexOf(ijFind) >= 0)
+        do {
             ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+        } while(cases.indexOf(ijFind) >= 0)
         cases.push(ijFind);
     }
+
+    console.log(cases);
 
     var iFind = Math.floor(Math.random() * nbCellsX);
     var jFind = Math.floor(Math.random() * nbCellsX);
