@@ -11,6 +11,8 @@ var figures = [
     "../src/img/cheveux.svg",
     "../src/img/smile.svg"]
 var order = [0,1,2,3,4,5,6];
+var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
+var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
 var me;
 var him;
 
@@ -20,6 +22,49 @@ var tours = 5; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var difficulte = 0; //de 0 à order.length - 2
+
+function genererPredicatsBruits () {
+    var i=0;
+    var j=0;
+    while (i<=2) {
+        var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
+        if (predicats.includes(tirageAleatoire) === false) {
+            predicats.push(tirageAleatoire);
+            i++;
+        }
+    }
+    
+    while (j<=3) {
+        var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
+        if (bruits.includes(tirageAleatoire) === false && predicats.includes(tirageAleatoire) === false) {
+            bruits.push(tirageAleatoire);
+            j++;
+        }
+    }
+    
+    console.log(predicats);
+    console.log(bruits);
+    
+    /*for (var i=0; i<=2; i++) {
+        var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
+        if (predicats.includes(tirageAleatoire) === false) {
+            predicats.push(tirageAleatoire);
+        }else {
+            i--;
+        }
+    }
+    console.log(predicats);
+    
+    for (var j=0; j<=3; j++){
+        var tirageAleatoireBruits = order[Math.floor(Math.random()*order.length)];
+        if (predicats.includes(tirageAleatoireBruits) === false && bruits.includes(tirageAleatoireBruits) === false){
+            bruits.push(tirageAleatoireBruits);
+        }else {
+            j--;
+        }
+    }
+    console.log(bruits);*/
+}
 
 function init() {
     document.getElementById("tours").innerHTML = tours;
