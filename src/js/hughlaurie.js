@@ -108,9 +108,6 @@ function recupMise () {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
-    
-    
-
 }
 
 function showMise() {
@@ -140,7 +137,11 @@ function shuffle(array) {
 }
 
 function shuffleOrder(){
-    order = shuffle(order);        
+    order = shuffle(order);   
+}
+
+function premierTirage() {
+    var tirage = []
 }
 
 function doIBeatHim(me, him) {
@@ -157,10 +158,10 @@ function newRound(){
     console.log("NbElts="+nbElts);
     var meBefore = me;
     me = Math.floor(Math.random() * nbElts);
-    while (me == meBefore) 
+    while (me === meBefore) 
             me = Math.floor(Math.random() * nbElts);
     him = Math.floor(Math.random() * nbElts);
-    while (him == me) 
+    while (him === me) 
             him = Math.floor(Math.random() * nbElts);
 
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
@@ -183,6 +184,7 @@ function diff(sens){
     difficulte = Math.max(2,difficulte);
     difficulte = Math.min(order.length-2,difficulte);
     newRound();	
+    console.log(difficulte);
 }
 
 function res(win) {
