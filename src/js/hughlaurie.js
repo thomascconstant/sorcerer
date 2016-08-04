@@ -13,9 +13,16 @@ var figures = [
 var order = [0,1,2,3,4,5,6];
 var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
 var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
+var bruitsTirage = []; //Tableau dans lequel sont rangés les résultats des tirages relatifs aux bruits (indépendant des prédicats)
 var premierTirage = []; //Tableau dans lequel sont rangés les résultats du premier tirage des prédicats
 var deuxiemeTirage = []; //Tableau dans lequel sont rangés les résultats du deuxième tirage des prédicats
 var conclusionTirage = []; //Tableau dans lequel sont rangés les résultats du tirage de conclusion
+
+var tirageUn = false;
+var tirageDeux = false;
+var tirageFinal = false;
+var tirageBruits = false;
+
 var me;
 var him;
 
@@ -169,6 +176,8 @@ function genererPremierTirage() {
     
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageUn = true;
 }
 
 function genererDeuxiemeTirage () {
@@ -205,6 +214,8 @@ function genererDeuxiemeTirage () {
     
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageDeux = true;
 }
 
 function genererTirageConclusion () {
@@ -241,6 +252,37 @@ function genererTirageConclusion () {
     
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageFinal = true;
+}
+
+function genererTirageBruits () {
+    var i = 0;
+    while (i<1) {
+        me = order[Math.floor(Math.random()*order.length)];
+        if (bruitsTirage.includes(me) === false) {
+            bruitsTirage.push(me);
+            i++;
+        }
+    }
+    
+    var j = 0;
+    while (j<1) {
+        him = bruits[Math.floor(Math.random()*bruits.length)]; //chercher dans bruits au lieu de order pour éviter de tomber sur une combinaison équivalente à la conclusion
+        if (bruitsTirage.includes(him) === false) {
+            bruitsTirage.push(him);
+            j++;
+        }
+    }
+    
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(bruitsTirage + "bruits");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageBruits = true;
 }
 
 function doIBeatHim(me, him) {
@@ -255,7 +297,22 @@ function doIBeatHim(me, him) {
 function newRound(){
     var nbElts = 2 + difficulte;
     console.log("NbElts="+nbElts);
-    var meBefore = me;
+    console.log(difficulte);
+    
+    if (tirageUn === true) {
+        tirageFinal = false;
+        genererDeuxiemeTirage ();
+    } else if (tirageUn === true && tirageDeux === true && difficulte <= 1) {
+        genererConclusion ();
+    } else if (tirageUn === true && tirageDeux === true) {
+        genererBruits ();
+    } else if (tirageFinal === true) {
+        tirageUn = false;
+        tirageDeux = false;
+        genererPremierTirage ();
+    }
+    
+    /*var meBefore = me;
     me = Math.floor(Math.random() * nbElts);
     while (me === meBefore) 
             me = Math.floor(Math.random() * nbElts);
@@ -264,7 +321,7 @@ function newRound(){
             him = Math.floor(Math.random() * nbElts);
 
     document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';*/
 
     /*if(miseValide) {
         //déverrouiller boutons figures
@@ -275,7 +332,7 @@ function newRound(){
 
 function go(){
     shuffleOrder();
-    //newRound();
+    newRound();
     genererPremierTirage();
 }
 
