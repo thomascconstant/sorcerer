@@ -13,6 +13,9 @@ var figures = [
 var order = [0,1,2,3,4,5,6];
 var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
 var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
+var premierTirage = []; //Tableau dans lequel sont rangés les résultats du premier tirage des prédicats
+var deuxiemeTirage = []; //Tableau dans lequel sont rangés les résultats du deuxième tirage des prédicats
+var conclusionTirage = []; //Tableau dans lequel sont rangés les résultats du tirage de conclusion
 var me;
 var him;
 
@@ -42,8 +45,8 @@ function genererPredicatsBruits () {
         }
     }
     
-    console.log(predicats);
-    console.log(bruits);
+    console.log(predicats + "prédicats");
+    console.log(bruits + "bruits");
     
     /*for (var i=0; i<=2; i++) {
         var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
@@ -137,18 +140,114 @@ function shuffle(array) {
 }
 
 function shuffleOrder(){
-    order = shuffle(order);   
+    order = shuffle(order);
+    genererPredicatsBruits ();
 }
 
-function premierTirage() {
-    var tirage = []
+function genererPremierTirage() {
+    var i = 0;
+    while (i<1) {
+        me = predicats[Math.floor(Math.random()*predicats.length)];
+        if (premierTirage.includes(me) === false) {
+            premierTirage.push(me);
+            i++;
+        }
+    }
+    
+    var j = 0;
+    while (j<1) {
+        him = predicats[Math.floor(Math.random()*predicats.length)];
+        if (premierTirage.includes(him) === false) {
+            premierTirage.push(him);
+            j++;
+        }
+    }
+    
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(premierTirage + "premier tirage");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+}
+
+function genererDeuxiemeTirage () {
+    var i = 0;
+    while (i<1) {
+        var tirageA = premierTirage[Math.floor(Math.random()*premierTirage.length)];
+        if (deuxiemeTirage.includes(tirageA) === false) {
+            deuxiemeTirage.push(tirageA);
+            i++;
+        }
+    }
+    
+    var j = 0;
+    while (j<1) {
+        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
+        if (deuxiemeTirage.includes(tirageB) === false && premierTirage.includes(tirageB) === false) {
+            deuxiemeTirage.push(tirageB);
+            j++;
+        }
+    }
+   
+    me = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
+    var k = 0;
+    while (k<1) {
+        him = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
+        if (me !== him) {
+            k++;
+        }
+    }
+    
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(deuxiemeTirage + "deuxième tirage");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+}
+
+function genererTirageConclusion () {
+    var i = 0;
+    while (i<1) {
+        var tirageA = predicats[Math.floor(Math.random()*predicats.length)];
+        if (premierTirage.includes(tirageA) === true && deuxiemeTirage.includes(tirageA) === false) {
+            conclusionTirage.push(tirageA);
+            i++;
+        }
+    }
+    
+    var j = 0;
+    while (j<1) {
+        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
+        if (premierTirage.includes(tirageB) === false && deuxiemeTirage.includes(tirageB) === true) {
+            conclusionTirage.push(tirageB);
+            j++;
+        }
+    }
+    
+    me = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
+    var k = 0;
+    while (k<1) {
+        him = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
+        if (me !== him) {
+            k++;
+        }
+    }
+    
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(conclusionTirage + "conclusion");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
 }
 
 function doIBeatHim(me, him) {
     for(var i=0;i<order.length;i++){
-            if(order[i] == me)
+            if(order[i] === me)
                     return false;
-            if (order[i] == him)
+            if (order[i] === him)
                     return true;
 	}
 }
@@ -176,7 +275,8 @@ function newRound(){
 
 function go(){
     shuffleOrder();
-    newRound();	
+    //newRound();
+    genererPremierTirage();
 }
 
 function diff(sens){
@@ -189,7 +289,7 @@ function diff(sens){
 
 function res(win) {
     var msg;
-    if(miseValide && doIBeatHim(me,him) == win){
+    if(miseValide && doIBeatHim(me,him) === win){
         score+=mise;
         tours--;
         document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de sauvé(s) !";
@@ -231,7 +331,7 @@ function res(win) {
 }
 
 function finDePartie() {
-    if (tours == 0){
+    if (tours === 0){
         //récupérer score final du joueur
         scoreJoueurHugh = score;
         localStorage.scoreJoueurTom = scoreJoueurHugh;
@@ -243,7 +343,7 @@ function finDePartie() {
         boutton.name = "FIN";
         var results = function resultat(){
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
-            if (messageFinPartie==true) {
+            if (messageFinPartie===true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
