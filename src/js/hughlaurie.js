@@ -32,6 +32,7 @@ var tours = 5; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 var difficulte = 0; //de 0 à order.length - 2
+console.log(difficulte +"diff de base");
 
 function genererPredicatsBruits () {
     var i=0;
@@ -80,6 +81,12 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+}
+
+function go(){
+    shuffleOrder();
+    //newRound();
+    genererPremierTirage();
 }
 
 //récupérer mise
@@ -216,6 +223,7 @@ function genererDeuxiemeTirage () {
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
     
     tirageDeux = true;
+    tirageUn = false;
 }
 
 function genererTirageConclusion () {
@@ -254,6 +262,7 @@ function genererTirageConclusion () {
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
     
     tirageFinal = true;
+    tirageDeux = false;
 }
 
 function genererTirageBruits () {
@@ -295,21 +304,23 @@ function doIBeatHim(me, him) {
 }
 
 function newRound(){
-    var nbElts = 2 + difficulte;
+    /*var nbElts = 2 + difficulte;
     console.log("NbElts="+nbElts);
-    console.log(difficulte);
+    console.log(difficulte);*/
     
-    if (tirageUn === true) {
+    if (tirageUn === true && miseValide === true) {
         tirageFinal = false;
-        genererDeuxiemeTirage ();
-    } else if (tirageUn === true && tirageDeux === true && difficulte <= 1) {
-        genererConclusion ();
-    } else if (tirageUn === true && tirageDeux === true) {
-        genererBruits ();
-    } else if (tirageFinal === true) {
+        genererDeuxiemeTirage();
+    } else if (tirageDeux === true && miseValide === true && difficulte <=1) {
+        console.log("coucou");
+        genererTirageConclusion();
+    } else if (tirageDeux === true && miseValide === true && difficulte > 2) {
+        genererTirageBruits();
+    } else if (tirageFinal === true && miseValide === true) {
         tirageUn = false;
         tirageDeux = false;
-        genererPremierTirage ();
+        diffChange();
+        genererPremierTirage();
     }
     
     /*var meBefore = me;
@@ -330,18 +341,27 @@ function newRound(){
     }*/
 }
 
-function go(){
-    shuffleOrder();
-    newRound();
-    genererPremierTirage();
-}
-
 function diff(sens){
     difficulte += sens;
     difficulte = Math.max(2,difficulte);
     difficulte = Math.min(order.length-2,difficulte);
     newRound();	
-    console.log(difficulte);
+}
+
+function diffChange () {
+    if (tirageFinal === true && doIBeatHim(me,him) === win) {
+        difficulte ++;
+    } else if (tirageFinal === true) {
+        difficulte --;
+    }
+    
+    console.log(difficulte + "difficulté changée");
+    
+    /*var i = 0;
+    while (i <= difficulte && miseValide === true) {
+        genererTirageBruits ();
+        i ++;
+    }*/
 }
 
 function res(win) {
