@@ -26,6 +26,8 @@ var tirageBruits = false;
 var me;
 var him;
 
+var playerWin = false;
+
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 5; //Nombre de tours restants
@@ -85,8 +87,10 @@ function init() {
 
 function go(){
     shuffleOrder();
+    console.log(order);
     //newRound();
     genererPremierTirage();
+    
 }
 
 //récupérer mise
@@ -188,24 +192,24 @@ function genererPremierTirage() {
 }
 
 function genererDeuxiemeTirage () {
+    var j = 0;
+    while (j<1) {
+        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
+        if (deuxiemeTirage.includes(tirageB) === false && premierTirage.indexOf(tirageB) === 1) {
+            deuxiemeTirage.push(tirageB);
+            j++;
+        }
+    }
+    
     var i = 0;
     while (i<1) {
-        var tirageA = premierTirage[Math.floor(Math.random()*premierTirage.length)];
-        if (deuxiemeTirage.includes(tirageA) === false) {
+        var tirageA = predicats[Math.floor(Math.random()*predicats.length)];
+        if (deuxiemeTirage.includes(tirageA) === false && premierTirage.includes(tirageA) === false) {
             deuxiemeTirage.push(tirageA);
             i++;
         }
     }
     
-    var j = 0;
-    while (j<1) {
-        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
-        if (deuxiemeTirage.includes(tirageB) === false && premierTirage.includes(tirageB) === false) {
-            deuxiemeTirage.push(tirageB);
-            j++;
-        }
-    }
-   
     me = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
     var k = 0;
     while (k<1) {
@@ -292,10 +296,18 @@ function genererTirageBruits () {
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
     
     tirageBruits = true;
+    
+   bruitsTirage.length = 0; //vide le tableau pour ne pas limiter les tirages de bruits
 }
 
 function doIBeatHim(me, him) {
     for(var i=0;i<order.length;i++){
+        console.log(order[i]);
+        console.log(me);
+        console.log(him);
+        console.log(typeof order[i]);
+        console.log(typeof me);
+        console.log(typeof him);
             if(order[i] === me)
                     return false;
             if (order[i] === him)
@@ -309,19 +321,21 @@ function newRound(){
     console.log(difficulte);*/
     
     if (tirageUn === true && miseValide === true) {
-        tirageFinal = false;
         genererDeuxiemeTirage();
     } else if (tirageDeux === true && miseValide === true && difficulte <=1) {
         console.log("coucou");
         genererTirageConclusion();
-    } else if (tirageDeux === true && miseValide === true && difficulte > 2) {
+    } else if (tirageDeux === true && miseValide === true && difficulte >= 2) {
         genererTirageBruits();
     } else if (tirageFinal === true && miseValide === true) {
         tirageUn = false;
         tirageDeux = false;
+        tirageFinal = false;
         diffChange();
         genererPremierTirage();
     }
+    
+    playerWin = false;
     
     /*var meBefore = me;
     me = Math.floor(Math.random() * nbElts);
@@ -348,10 +362,10 @@ function diff(sens){
     newRound();	
 }
 
-function diffChange () {
-    if (tirageFinal === true && doIBeatHim(me,him) === win) {
+function diffChange (win) {
+    if (tirageFinal === true && playerWin) {
         difficulte ++;
-    } else if (tirageFinal === true) {
+    } else if (tirageFinal === true && difficulte >=1) {
         difficulte --;
     }
     
@@ -365,16 +379,19 @@ function diffChange () {
 }
 
 function res(win) {
-    var msg;
+    console.log(win);
     if(miseValide && doIBeatHim(me,him) === win){
+        console.log("gagne le match");
         score+=mise;
         tours--;
+        playerWin = true;
         document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de sauvé(s) !";
             
     } else if (miseValide) {
-        score+=mise;
+        console.log("pas gagne le match");
+        score-=mise;
         tours--;
-        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de perdu(s) !";
+        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. \n"+ score + " chaton(s) de perdu(s) !";
     }
 
     //score = Math.max(0,score);
