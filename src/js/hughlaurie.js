@@ -30,11 +30,11 @@ var playerWin = false;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 5; //Nombre de tours restants
+var tours = 50; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
-
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
+var nbreToursBruits = 0; //Nombre de tours que doit faire la fonction genererBruits();
 
 function genererPredicatsBruits () {
     var i=0;
@@ -88,7 +88,6 @@ function init() {
 function go(){
     shuffleOrder();
     console.log(order);
-    //newRound();
     genererPremierTirage();
     
 }
@@ -297,17 +296,13 @@ function genererTirageBruits () {
     
     tirageBruits = true;
     
+    nbreToursBruits --;
+    
     bruitsTirage.length = 0; //vide le tableau pour ne pas limiter les tirages de bruits
 }
 
 function doIBeatHim(me, him) {
     for(var i=0;i<order.length;i++){
-        console.log(order[i]);
-        console.log(me);
-        console.log(him);
-        console.log(typeof order[i]);
-        console.log(typeof me);
-        console.log(typeof him);
             if(order[i] === me)
                     return false;
             if (order[i] === him)
@@ -320,15 +315,14 @@ function newRound(){
     console.log("NbElts="+nbElts);
     console.log(difficulte);*/
     
-    if (tirageUn === true && miseValide === true) {
+    if (tirageUn && miseValide) {
         tirageFinal = false;
         genererDeuxiemeTirage();
-    } else if (tirageDeux === true && miseValide === true && difficulte <=1) {
-        console.log("coucou");
+    } else if (tirageDeux && miseValide && nbreToursBruits <=1) {
         genererTirageConclusion();
-    } else if (tirageDeux === true && miseValide === true && difficulte >= 2) {
+    } else if (tirageDeux && miseValide && nbreToursBruits > 1) {
         genererTirageBruits();
-    } else if (tirageFinal === true && miseValide === true) {
+    } else if (tirageFinal && miseValide) {
         tirageUn = false;
         tirageDeux = false;
         diffChange();
@@ -374,19 +368,16 @@ function diff(sens){
 }
 
 function diffChange(win) {
-    console.log(tirageFinal);
-    console.log(playerWin);
-    if (tirageFinal === true && playerWin) {
+    if (tirageFinal && playerWin) {
         difficulte ++;
+        nbreToursBruits = difficulte;
         console.log(difficulte + "difficulté augmentée");
-        //genererPremierTirage();
-    } else if (tirageFinal === true && difficulte >=1) {
+    } else if (tirageFinal && difficulte >=1) {
         difficulte --;
+        nbreToursBruits = difficulte;
         console.log(difficulte + "difficulté baissée");
-        //genererPremierTirage();
     } else {
         console.log(difficulte + "difficulté inchangée");
-        //genererPremierTirage();
     }
 
     
