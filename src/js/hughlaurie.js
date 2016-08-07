@@ -297,7 +297,7 @@ function genererTirageBruits () {
     
     tirageBruits = true;
     
-   bruitsTirage.length = 0; //vide le tableau pour ne pas limiter les tirages de bruits
+    bruitsTirage.length = 0; //vide le tableau pour ne pas limiter les tirages de bruits
 }
 
 function doIBeatHim(me, him) {
@@ -321,6 +321,7 @@ function newRound(){
     console.log(difficulte);*/
     
     if (tirageUn === true && miseValide === true) {
+        tirageFinal = false;
         genererDeuxiemeTirage();
     } else if (tirageDeux === true && miseValide === true && difficulte <=1) {
         console.log("coucou");
@@ -330,9 +331,9 @@ function newRound(){
     } else if (tirageFinal === true && miseValide === true) {
         tirageUn = false;
         tirageDeux = false;
-        tirageFinal = false;
         diffChange();
-        genererPremierTirage();
+        clearArray();
+        //genererPremierTirage();
     }
     
     playerWin = false;
@@ -355,6 +356,16 @@ function newRound(){
     }*/
 }
 
+function clearArray() {
+    predicats.length = 0;
+    bruits.length = 0;
+    bruitsTirage.length = 0;
+    premierTirage.length = 0;
+    deuxiemeTirage.length = 0; 
+    conclusionTirage.length = 0;
+    go();
+}
+
 function diff(sens){
     difficulte += sens;
     difficulte = Math.max(2,difficulte);
@@ -362,14 +373,23 @@ function diff(sens){
     newRound();	
 }
 
-function diffChange (win) {
+function diffChange(win) {
+    console.log(tirageFinal);
+    console.log(playerWin);
     if (tirageFinal === true && playerWin) {
         difficulte ++;
+        console.log(difficulte + "difficulté augmentée");
+        //genererPremierTirage();
     } else if (tirageFinal === true && difficulte >=1) {
         difficulte --;
+        console.log(difficulte + "difficulté baissée");
+        //genererPremierTirage();
+    } else {
+        console.log(difficulte + "difficulté inchangée");
+        //genererPremierTirage();
     }
+
     
-    console.log(difficulte + "difficulté changée");
     
     /*var i = 0;
     while (i <= difficulte && miseValide === true) {
