@@ -35,6 +35,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
 var nbreToursBruits = 0; //Nombre de tours que doit faire la fonction genererBruits();
+var resultatJoueur = [];
 
 function genererPredicatsBruits () {
     var i=0;
@@ -406,6 +407,11 @@ function res(win) {
     }
 
     //score = Math.max(0,score);
+    
+    //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+    resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
+    //console.log(resultatJoueur);
+    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
     //reset de la mise et affichage résultat
     mise = "?";
@@ -451,7 +457,7 @@ function finDePartie() {
             if (messageFinPartie===true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
-                var jeuMotriceTermine = true;
+                var jeuLogicTermine = true;
                 localStorage.getItem("hughlaurie", jeuLogicTermine);
            
             } else {
