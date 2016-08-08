@@ -17,7 +17,7 @@ var winState = false; //statut du joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 1; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
@@ -153,12 +153,6 @@ function win(ijFind){
             //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
             
             //bloquer jeu
-            if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
-                makeGame(width,nbCells,1-difficulty);
-            } else {
-                makeGame(width,nbCells,1-difficulty);
-            }
-            
             miseValide = false;
             
             document.getElementById("boutonMiser").disabled = false;
@@ -172,13 +166,20 @@ function win(ijFind){
             document.getElementById("mise7").disabled = false;
             
             casesFound = [];
+            
+            //lancer nouveau jeu sauf si plus de tours
+            if (tours === 0 && miseValide === false) {
+                finDePartie();
+            } else {
+                if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
+                    makeGame(width,nbCells,1-difficulty);
+                } else {
+                    makeGame(width,nbCells,1-difficulty);
+                }
+            }
+            
         }
-        //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-        if (tours === 0 && miseValide === false) {
-            finDePartie();
-
-        }
-
+        
         console.log(difficulty + "difficulté win");  
     }
     
@@ -226,15 +227,22 @@ function fail(){
             document.getElementById("mise5").disabled = false;
             document.getElementById("mise6").disabled = false;
             document.getElementById("mise7").disabled = false;
-        } else {
-            finDePartie();
-        }
-
-        if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
+            
+            if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                makeGame(width,nbCells,1-difficulty);
            } else {
                makeGame(width,nbCells,1-difficulty);
            }
+           
+        } else {
+            finDePartie();
+        }
+
+        /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
+               makeGame(width,nbCells,1-difficulty);
+           } else {
+               makeGame(width,nbCells,1-difficulty);
+           }*/
 
         console.log(difficulty + "difficulté fail");
     }
