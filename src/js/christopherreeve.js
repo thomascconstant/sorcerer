@@ -17,7 +17,7 @@ var winState = false; //statut du joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 1; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
@@ -331,8 +331,25 @@ function finDePartie() {
         scoreJoueurChristopher = score;
         localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
         console.log(scoreJoueurChristopher);
+        
+        //renvoyer le joueur vers le hub
+        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie === true) {
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuSensoTermine = true;
+                localStorage.getItem("christopherreeve", jeuSensoTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            } else {
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuSensoTermine = true;
+                localStorage.getItem("christopherreeve", jeuSensoTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            }
+        
         //créer le bouton
-        var boutton = document.createElement("input");
+        /*var boutton = document.createElement("input");
         boutton.type = "button";
         boutton.value = "Fin de partie.";
         boutton.name = "FIN";
@@ -350,7 +367,7 @@ function finDePartie() {
             document.getElementById("retourProto").innerHTML = x;
         }
         boutton.onclick = results;
-        document.body.appendChild(boutton);
+        document.body.appendChild(boutton);*/
     } else{
 
     }

@@ -12,7 +12,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 1; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -309,14 +309,12 @@ function finDePartie() {
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
-                x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
                 localStorage.getItem("tomcruise", jeuMotriceTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
                 localStorage.getItem("tomcruise", jeuMotriceTermine);
