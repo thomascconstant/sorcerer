@@ -30,7 +30,7 @@ var playerWin = false;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -446,8 +446,25 @@ function finDePartie() {
         scoreJoueurHugh = score;
         localStorage.scoreJoueurTom = scoreJoueurHugh;
         console.log(scoreJoueurHugh);
+        
+        //renvoyer le joueur vers le hub
+        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie===true) {
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuLogicTermine = true;
+                localStorage.getItem("hughlaurie", jeuLogicTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            } else {
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuLogicTermine = true;
+                localStorage.getItem("hughlaurie", jeuLogicTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            }
+            
         //créer le bouton
-        var boutton = document.createElement("input");
+        /*var boutton = document.createElement("input");
         boutton.type = "button";
         boutton.value = "Fin de partie.";
         boutton.name = "FIN";
@@ -463,9 +480,9 @@ function finDePartie() {
                 x = "Ah, d'accord.";
             }
             document.getElementById("retourProto").innerHTML = x;
-        }
+        };
         boutton.onclick = results;
-        document.body.appendChild(boutton);
+        document.body.appendChild(boutton);*/
     } else{
 
     }
