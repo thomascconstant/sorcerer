@@ -30,7 +30,7 @@ var playerWin = false;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 50; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
