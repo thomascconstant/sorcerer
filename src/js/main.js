@@ -19,7 +19,7 @@ function lancerJeu () {
     //récupérer boleen des jeux déjà terminés
     var jeuMotriceTermine = localStorage.getItem("tomcruise");
     var jeuSensoTermine = localStorage.getItem("christopherreeve");
-    var jeuLogicTermine = localStorage.getItem("test3");
+    var jeuLogicTermine = localStorage.getItem("hughlaurie");
     console.log(jeuMotriceTermine);
     //lancement selon progression
     if (jeuMotriceTermine) {
@@ -55,6 +55,18 @@ function lancerJeu () {
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
         window.open(lien,'_self',false);
+    } else if (jeuMotriceTermine && jeuSensoTermine) {
+        // open it in a new window / tab (depends on browser setting)
+        window.open("introhugh.html",'_self',false);
+    } else if (jeuMotriceTermine && jeuLogicTermine) {
+        // open it in a new window / tab (depends on browser setting)
+        window.open("christopherreeve.html",'_self',false);
+    } else if (jeuSensoTermine && jeuLogicTermine) {
+        // open it in a new window / tab (depends on browser setting)
+        window.open("introtom.html",'_self',false);
+    } else if (jeuMotriceTermine && jeuSensoTermine && jeuLogicTermine) {
+        //fin du jeu
+        alert("Bravo, vous avez sauvé des chatons !");
     } else {
         // liens vers les jeux
         var liensJeux = [
