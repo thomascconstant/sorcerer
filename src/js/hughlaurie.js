@@ -410,8 +410,7 @@ function res(win) {
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
     resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
-    //console.log(resultatJoueur);
-    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
+    //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
     //reset de la mise et affichage résultat
     mise = "?";

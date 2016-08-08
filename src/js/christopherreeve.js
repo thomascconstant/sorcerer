@@ -18,6 +18,7 @@ var winState = false; //statut du joueur
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 20; //Nombre de tours restants
+var resultatJoueur = [];
 
 function animate(){
 
@@ -147,6 +148,10 @@ function win(ijFind){
                 nbCells = Math.min(6, nbCells+1);
             }
             
+            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+            resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+            //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
+            
             //bloquer jeu
             if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                 makeGame(width,nbCells,1-difficulty);
@@ -204,6 +209,10 @@ function fail(){
         }
         
         casesFound = [];
+        
+        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+        resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+        //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
@@ -332,7 +341,7 @@ function finDePartie() {
             if (messageFinPartie===true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
-                var jeuMotriceTermine = true;
+                var jeuSensoTermine = true;
                 localStorage.getItem("christopherreeve", jeuSensoTermine);
            
             } else {
