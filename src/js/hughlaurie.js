@@ -396,13 +396,13 @@ function res(win) {
         score+=mise;
         tours--;
         playerWin = true;
-        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ score + " chaton(s) de sauvé(s) !";
+        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ mise + " chaton(s) de sauvé(s) !";
             
     } else if (miseValide) {
         console.log("pas gagne le match");
         score-=mise;
         tours--;
-        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. \n"+ score + " chaton(s) de perdu(s) !";
+        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. \n"+ mise + " chaton(s) de perdu(s) !";
     }
 
     //score = Math.max(0,score);

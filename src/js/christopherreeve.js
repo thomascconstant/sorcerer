@@ -128,7 +128,7 @@ function win(ijFind){
             winState = true;
             feedbackSonore();
             score += mise;
-            document.getElementById("res").innerHTML = "Vous avez sauvé "+score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" chaton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
             //Un tour de moins, reset de la mise
             tours--;
@@ -184,7 +184,7 @@ function fail(){
         winState = false;
         feedbackSonore();
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " +score+" chaton(s). Choisissez votre mise pour relancer le jeu.";
+        document.getElementById("res").innerHTML = "Vous avez tué " +mise+" chaton(s). Choisissez votre mise pour relancer le jeu.";
 
         //Un tour de moins, reset de la mise
         tours--;
@@ -356,4 +356,33 @@ function feedbackSonore() {
         x.play();
     }
 
+}
+
+// enregistrer données du joueur dans fichier csv
+function enregistrerDonnees (type, data) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            //console.log(xhttp.response);
+        }
+    };
+
+    if (type == 0) {
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("joueur=" + data);
+    } else if (type == 1) {
+        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("data=" + data);
+    }
+
+
+    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
+    //xhttp.setRequestHeader("Content-type", "text/plain");
+    //xhttp.send("data=\"" + donneesJoueur + "\"");
+    //xhttp.send("data=15");
+
+    console.log("Sent data " + data);
 }
