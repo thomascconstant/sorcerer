@@ -66,7 +66,7 @@ function lancerJeu () {
         // round it, so it can be used as array index
         randIdx = parseInt(randIdx, 10);
         // construct the link to be opened
-        var lien = liensJeux[randIdx]; //à commenter pour avoir un lancement aléatoire des jeux
+        var lien = liensJeux[randIdx]; //à décommenter pour avoir un lancement aléatoire des jeux
         // var lien = "introtom.html"; //à décommenter pour ne lancer que ce jeu
         // open it in a new window / tab (depends on browser setting)
         window.open(lien,'_self',false);

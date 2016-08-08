@@ -12,7 +12,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 1; //Nombre de tours restants
 var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -305,26 +305,46 @@ function finDePartie() {
         scoreJoueurTom = score;
         localStorage.scoreJoueurTom = scoreJoueurTom;
         console.log(scoreJoueurTom);
+        
+        //renvoyer le joueur vers le hub
+        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie === true) {
+                x = "Prototype en cours de développement, veuillez patienter.";
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuMotriceTermine = true;
+                localStorage.getItem("tomcruise", jeuMotriceTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            } else {
+                x = "Prototype en cours de développement, veuillez patienter.";
+                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                var jeuMotriceTermine = true;
+                localStorage.getItem("tomcruise", jeuMotriceTermine);
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
+            }
+        
         //créer le bouton
-        var boutton = document.createElement("input");
+        /*var boutton = document.createElement("input");
         boutton.type = "button";
         boutton.value = "Fin de partie.";
         boutton.name = "FIN";
         var results = function resultat(){
             var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
-            if (messageFinPartie==true) {
+            if (messageFinPartie === true) {
                 x = "Prototype en cours de développement, veuillez patienter.";
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
                 localStorage.getItem("tomcruise", jeuMotriceTermine);
-           
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html",'_self',false);
             } else {
                 x = "Ah, d'accord.";
             }
             document.getElementById("retourProto").innerHTML = x;
         }
         boutton.onclick = results;
-        document.body.appendChild(boutton);
+        document.body.appendChild(boutton);*/
     } else{
 
     }
