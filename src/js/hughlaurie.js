@@ -30,7 +30,7 @@ var playerWin = false;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -444,7 +444,7 @@ function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur
         scoreJoueurHugh = score;
-        localStorage.scoreJoueurTom = scoreJoueurHugh;
+        localStorage.scoreJoueurHugh = scoreJoueurHugh;
         console.log(scoreJoueurHugh);
         
         //renvoyer le joueur vers le hub
