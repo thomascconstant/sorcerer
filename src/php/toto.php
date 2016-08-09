@@ -1,9 +1,15 @@
 <?php
 
-
+// à commenter pour la version en ligne
 function openFile () {
     return fopen("../data.csv", "a");
 }
+
+// à décommenter pour la version locale
+/*function openFile () {
+    return fopen("ftp://username:password@monsite.com/www/sorcerer/data.csv", "a");
+}*/
+
 
 function enregisterJoueur ($joueur) {
     $handle = openFile();
