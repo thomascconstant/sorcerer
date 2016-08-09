@@ -84,6 +84,7 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    document.getElementById("res").innerHTML = "Choisissez votre mise.";
 }
 
 function go(){
@@ -126,6 +127,9 @@ function recupMise () {
     
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
+    
+    //afficher message de consigne
+    document.getElementById("res").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
@@ -397,13 +401,13 @@ function res(win) {
         score+=mise;
         tours--;
         playerWin = true;
-        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. \n"+ mise + " chaton(s) de sauvé(s) !";
+        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " chaton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
             
     } else if (miseValide) {
         console.log("pas gagne le match");
         score-=mise;
         tours--;
-        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. \n"+ mise + " chaton(s) de perdu(s) !";
+        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " chaton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
     }
 
     //score = Math.max(0,score);
