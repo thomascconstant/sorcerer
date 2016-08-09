@@ -9,7 +9,7 @@ var figures = [
     "../src/img/haha.svg",
     "../src/img/meh.svg",
     "../src/img/cheveux.svg",
-    "../src/img/smile.svg"]
+    "../src/img/smile.svg"];
 var order = [0,1,2,3,4,5,6];
 var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
 var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
