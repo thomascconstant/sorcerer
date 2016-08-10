@@ -28,6 +28,8 @@ var premierTirage = []; //Tableau dans lequel sont rangés les résultats du pre
 var deuxiemeTirage = []; //Tableau dans lequel sont rangés les résultats du deuxième tirage des prédicats
 var conclusionTirage = []; //Tableau dans lequel sont rangés les résultats du tirage de conclusion
 
+var conclusionTirage2 = [];
+
 var tirageUn = false;
 var tirageDeux = false;
 var tirageFinal = false;
@@ -195,6 +197,14 @@ function genererPremierTirage() {
         }
     }
     
+    // récupérer tirage le plus fort pour la conclusion
+    if (order[me] > order[him]) {
+        conclusionTirage2.push(me);
+    } else if (order[him] > order[me]) {
+        conclusionTirage2.push(him);
+    }
+    console.log(conclusionTirage2 + " envoyé dans conclusion");
+    
     console.log(me + "moi");
     console.log(him + "lui");
     console.log(premierTirage + "premier tirage");
@@ -232,6 +242,14 @@ function genererDeuxiemeTirage () {
             k++;
         }
     }
+    
+    // récupérer tirage le plus faible pour la conclusion
+    if (order[me] < order[him]) {
+        conclusionTirage2.push(me);
+    } else if (order[him] < order[me]) {
+        conclusionTirage2.push(him);
+    }
+    console.log(conclusionTirage2 + " envoyé dans conclusion");
     
     console.log(me + "moi");
     console.log(him + "lui");
