@@ -311,13 +311,13 @@ function finDePartie() {
             if (messageFinPartie === true) {
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
-                localStorage.getItem("tomcruise", jeuMotriceTermine);
+                localStorage.setItem("tomcruise", jeuMotriceTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuMotriceTermine = true;
-                localStorage.getItem("tomcruise", jeuMotriceTermine);
+                localStorage.setItem("tomcruise", jeuMotriceTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             }

@@ -456,13 +456,13 @@ function finDePartie() {
             if (messageFinPartie===true) {
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuLogicTermine = true;
-                localStorage.getItem("hughlaurie", jeuLogicTermine);
+                localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
                 enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
                 var jeuLogicTermine = true;
-                localStorage.getItem("hughlaurie", jeuLogicTermine);
+                localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             }

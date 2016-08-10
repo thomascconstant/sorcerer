@@ -21,47 +21,52 @@ function lancerJeu () {
     var jeuSensoTermine = localStorage.getItem("christopherreeve");
     var jeuLogicTermine = localStorage.getItem("hughlaurie");
     console.log(jeuMotriceTermine);
+    console.log(jeuSensoTermine);
+    console.log(jeuLogicTermine);
     //lancement selon progression
     if (jeuMotriceTermine) {
         var liensJeux = [
             "introchristopher.html",
             "introhugh.html"
         ];
-        var randIdx = Math.random() * liensJeux.length;
-        // round it, so it can be used as array index
-        randIdx = parseInt(randIdx, 10);
+        var choixLien = Math.floor(Math.random() * liensJeux.length);
+        console.log(choixLien);
+        console.log(liensJeux[choixLien]);
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
-        window.open(lien,'_self',false);
+        window.open(liensJeux[choixLien],'_self',false);
     } else if (jeuSensoTermine) {
         var liensJeux = [
             "introtom.html",
             "introhugh.html"
         ];
-        var randIdx = Math.random() * liensJeux.length;
-        // round it, so it can be used as array index
-        randIdx = parseInt(randIdx, 10);
+        var choixLien = Math.floor(Math.random() * liensJeux.length);
+        console.log(choixLien);
+        console.log(liensJeux[choixLien]);
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
-        window.open(lien,'_self',false);
+        window.open(liensJeux[choixLien],'_self',false);
     } else if (jeuLogicTermine) {
         var liensJeux = [
             "introtom.html",
             "introchristopher.html"
         ];
-        var randIdx = Math.random() * liensJeux.length;
-        // round it, so it can be used as array index
-        randIdx = parseInt(randIdx, 10);
+        var choixLien = Math.floor(Math.random() * liensJeux.length);
+        console.log(choixLien);
+        console.log(liensJeux[choixLien]);
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
-        window.open(lien,'_self',false);
+        window.open(liensJeux[choixLien],'_self',false);
     } else if (jeuMotriceTermine && jeuSensoTermine) {
+        console.log("coucou" + "envoie hugh");
         // open it in a new window / tab (depends on browser setting)
         window.open("introhugh.html",'_self',false);
     } else if (jeuMotriceTermine && jeuLogicTermine) {
+        console.log("coucou" + "envoie christopher");
         // open it in a new window / tab (depends on browser setting)
         window.open("christopherreeve.html",'_self',false);
     } else if (jeuSensoTermine && jeuLogicTermine) {
+        console.log("coucou" + "envoie tom");
         // open it in a new window / tab (depends on browser setting)
         window.open("introtom.html",'_self',false);
     } else if (jeuMotriceTermine && jeuSensoTermine && jeuLogicTermine) {
@@ -82,7 +87,7 @@ function lancerJeu () {
         // var lien = "introtom.html"; //à décommenter pour ne lancer que ce jeu
         // open it in a new window / tab (depends on browser setting)
         window.open(lien,'_self',false);
-    }  
+    }
 }
 
 // enregistrer données du joueur dans fichier csv
