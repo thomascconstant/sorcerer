@@ -90,7 +90,7 @@ function lancerJeu () {
     }
 }
 
-// enregistrer données du joueur dans fichier csv
+// enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
@@ -118,5 +118,33 @@ function enregistrerDonnees (type, data) {
 
     console.log("Sent data " + data);
 }
+
+// enregistrer données du joueur dans fichier csv pour la version en ligne (à décommenter pour la version en ligne)
+/*function enregistrerDonnees (type, data) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            //console.log(xhttp.response);
+        }
+    };
+
+    if (type == 0) {
+        xhttp.open("POST", "../sorcerer/php/toto.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("joueur=" + data);
+    } else if (type == 1) {
+        xhttp.open("POST", "../sorcerer/php/toto.php", true );
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("data=" + data);
+    }
+
+
+    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
+    //xhttp.setRequestHeader("Content-type", "text/plain");
+    //xhttp.send("data=\"" + donneesJoueur + "\"");
+    //xhttp.send("data=15");
+
+    console.log("Sent data " + data);*/
 
 

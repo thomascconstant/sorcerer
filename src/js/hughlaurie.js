@@ -2,6 +2,7 @@ var nomDuJeu = "Logique";
 var IDjoueur = localStorage.getItem("joueur");
 var scoreJoueurHugh = 0; //Score du joueur à renseigner en fin de session de jeu
 
+//à commenter pour la version en ligne
 var figures = [
     "../src/img/cool.svg",
     "../src/img/deg.svg",
@@ -10,6 +11,15 @@ var figures = [
     "../src/img/meh.svg",
     "../src/img/cheveux.svg",
     "../src/img/smile.svg"];
+//à décommenter pour la version en ligne
+/*var figures = [
+    "../sorcerer/img/cool.svg",
+    "../sorcerer/img/deg.svg",
+    "../sorcerer/img/triste.svg",
+    "../sorcerer/img/haha.svg",
+    "../sorcerer/img/meh.svg",
+    "../sorcerer/img/cheveux.svg",
+    "../sorcerer/img/smile.svg"];*/
 var order = [0,1,2,3,4,5,6];
 var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
 var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
@@ -493,7 +503,7 @@ function finDePartie() {
 }
 
 
-// enregistrer données du joueur dans fichier csv
+// enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
@@ -521,3 +531,31 @@ function enregistrerDonnees (type, data) {
 
     console.log("Sent data " + data);
 }
+
+// enregistrer données du joueur dans fichier csv pour la version en ligne (à décommenter pour la version en ligne)
+/*function enregistrerDonnees (type, data) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            //console.log(xhttp.response);
+        }
+    };
+
+    if (type == 0) {
+        xhttp.open("POST", "../sorcerer/php/toto.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("joueur=" + data);
+    } else if (type == 1) {
+        xhttp.open("POST", "../sorcerer/php/toto.php", true );
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("data=" + data);
+    }
+
+
+    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
+    //xhttp.setRequestHeader("Content-type", "text/plain");
+    //xhttp.send("data=\"" + donneesJoueur + "\"");
+    //xhttp.send("data=15");
+
+    console.log("Sent data " + data);*/
