@@ -404,4 +404,5 @@ function enregistrerDonnees (type, data) {
     //xhttp.send("data=\"" + donneesJoueur + "\"");
     //xhttp.send("data=15");
 
-    console.log("Sent data " + data);*/
+    console.log("Sent data " + data);
+}*/
