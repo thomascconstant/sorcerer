@@ -185,9 +185,9 @@ function shuffleOrder(){
 // générer un tirage avec la figure la plus faible du tableau
 function genererTirageAvecZero() {
     var tirageB = order[0];
-    console.log(tirageB + "ici");
     premierTirage.push(tirageB);
     predicats.push(tirageB);
+    console.log(predicats + "prédicats");
     
     var i = 0;
     while (i<1) {
@@ -199,10 +199,7 @@ function genererTirageAvecZero() {
         }
     }
     
-    console.log(tirageA);
-    console.log(tirageB);
-    console.log(premierTirage);
-    
+    console.log(predicats + "prédicats");
     afficherPremierTirage();
 }
 
@@ -227,15 +224,14 @@ function genererTirageSansZero() {
             j++;
         }
     }
-    
-    console.log(tirageA);
-    console.log(tirageB);
-    console.log(deuxiemeTirage);
-    
+    console.log(predicats + "prédicats");
     afficherDeuxiemeTirage();
 }
 
+// générer un tirage à partir des prédicats générés précédemment
 function genererTirageConclusion() {
+    console.log(predicats + "prédicats");
+    
     var tirageA = order[0];
     conclusionTirage.push(tirageA);
         
@@ -247,10 +243,6 @@ function genererTirageConclusion() {
             i++;
         }
     }
-    
-    console.log(tirageA);
-    console.log(tirageB);
-    console.log(conclusionTirage);
     
     afficherTirageConclusion();
 }
@@ -264,7 +256,6 @@ function afficherPremierTirage() {
             i++;
         }
     }
-    
      
     console.log(me + "moi");
     console.log(him + "lui");
