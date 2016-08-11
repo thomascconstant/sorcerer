@@ -9,3 +9,4 @@ CHANGELOG.md
 CONTRIBUTING.md
 gulpfile.js
 /nbproject/private/
+/src/log.txt

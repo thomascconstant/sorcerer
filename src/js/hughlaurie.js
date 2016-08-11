@@ -181,6 +181,31 @@ function shuffleOrder(){
 function genererPremierTirage() {
     var i = 0;
     while (i<1) {
+        me = order[Math.floor(Math.random()*order.length)];
+        if (premierTirage.includes(me) === false) {
+            premierTirage.push(me);
+            i++;
+        }
+    }
+    
+    console.log(order);
+    him = order.indexOf(0,0);
+    console.log(order.indexOf(0,0));
+    
+     
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(premierTirage + "premier tirage");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageUn = true;
+}
+
+/*function genererPremierTirage() {
+    var i = 0;
+    while (i<1) {
         me = predicats[Math.floor(Math.random()*predicats.length)];
         if (premierTirage.includes(me) === false) {
             premierTirage.push(me);
@@ -213,7 +238,7 @@ function genererPremierTirage() {
     document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
     
     tirageUn = true;
-}
+}*/
 
 function genererDeuxiemeTirage () {
     var j = 0;
