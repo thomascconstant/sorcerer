@@ -194,7 +194,7 @@ function genererTirageAvecZero() {
         var tirageA = order[Math.floor(Math.random()*order.length)];
         if (premierTirage.includes(tirageA) === false && premierTirage.includes(tirageB) && tirageA !== tirageB) {
             premierTirage.push(tirageA);
-            predicats.push(tirageB);
+            predicats.push(tirageA);
             i++;
         }
     }
