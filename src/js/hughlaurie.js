@@ -49,7 +49,7 @@ console.log(difficulte +"diff de base");
 var nbreToursBruits = 0; //Nombre de tours que doit faire la fonction genererBruits();
 var resultatJoueur = [];
 
-//générer le tableau de figures qui s'intercaleront entre le deuxième tirage et la conclusion à partir des prédicats
+// générer le tableau de figures qui s'intercaleront entre le deuxième tirage et la conclusion à partir des prédicats
 function genererBruits () {
     var i=0;
     while (i<=3) {
@@ -77,7 +77,7 @@ function go(){
     
 }
 
-//récupérer mise
+// récupérer mise
 function recupMise () {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
@@ -236,43 +236,6 @@ function afficherPremierTirage() {
     tirageUn = true;
 }
 
-/*function genererPremierTirage() {
-    var i = 0;
-    while (i<1) {
-        me = predicats[Math.floor(Math.random()*predicats.length)];
-        if (premierTirage.includes(me) === false) {
-            premierTirage.push(me);
-            i++;
-        }
-    }
-    
-    var j = 0;
-    while (j<1) {
-        him = predicats[Math.floor(Math.random()*predicats.length)];
-        if (premierTirage.includes(him) === false) {
-            premierTirage.push(him);
-            j++;
-        }
-    }
-    
-    // récupérer tirage le plus fort pour la conclusion
-    if (order[me] > order[him]) {
-        conclusionTirage2.push(me);
-    } else if (order[him] > order[me]) {
-        conclusionTirage2.push(him);
-    }
-    console.log(conclusionTirage2 + " envoyé dans conclusion");
-    
-    console.log(me + "moi");
-    console.log(him + "lui");
-    console.log(premierTirage + "premier tirage");
-    
-    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
-    
-    tirageUn = true;
-}*/
-
 function afficherDeuxiemeTirage() {
     me = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
     var i = 0;
@@ -294,53 +257,6 @@ function afficherDeuxiemeTirage() {
     tirageDeux = true;
     tirageUn = false;
 }
-
-/*function genererDeuxiemeTirage () {
-    var j = 0;
-    while (j<1) {
-        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
-        if (deuxiemeTirage.includes(tirageB) === false && premierTirage.indexOf(tirageB) === 1) {
-            deuxiemeTirage.push(tirageB);
-            j++;
-        }
-    }
-    
-    var i = 0;
-    while (i<1) {
-        var tirageA = predicats[Math.floor(Math.random()*predicats.length)];
-        if (deuxiemeTirage.includes(tirageA) === false && premierTirage.includes(tirageA) === false) {
-            deuxiemeTirage.push(tirageA);
-            i++;
-        }
-    }
-    
-    me = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
-    var k = 0;
-    while (k<1) {
-        him = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
-        if (me !== him) {
-            k++;
-        }
-    }
-    
-    // récupérer tirage le plus faible pour la conclusion
-    if (order[me] < order[him]) {
-        conclusionTirage2.push(me);
-    } else if (order[him] < order[me]) {
-        conclusionTirage2.push(him);
-    }
-    console.log(conclusionTirage2 + " envoyé dans conclusion");
-    
-    console.log(me + "moi");
-    console.log(him + "lui");
-    console.log(deuxiemeTirage + "deuxième tirage");
-    
-    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
-    
-    tirageDeux = true;
-    tirageUn = false;
-}*/
 
 function afficherTirageConclusion() {
     me = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
@@ -364,45 +280,7 @@ function afficherTirageConclusion() {
     tirageDeux = false;
 } 
 
-/*function genererTirageConclusion () {
-    var i = 0;
-    while (i<1) {
-        var tirageA = predicats[Math.floor(Math.random()*predicats.length)];
-        if (premierTirage.includes(tirageA) === true && deuxiemeTirage.includes(tirageA) === false) {
-            conclusionTirage.push(tirageA);
-            i++;
-        }
-    }
-    
-    var j = 0;
-    while (j<1) {
-        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
-        if (premierTirage.includes(tirageB) === false && deuxiemeTirage.includes(tirageB) === true) {
-            conclusionTirage.push(tirageB);
-            j++;
-        }
-    }
-    
-    me = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
-    var k = 0;
-    while (k<1) {
-        him = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
-        if (me !== him) {
-            k++;
-        }
-    }
-    
-    console.log(me + "moi");
-    console.log(him + "lui");
-    console.log(conclusionTirage + "conclusion");
-    
-    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">';
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
-    
-    tirageFinal = true;
-    tirageDeux = false;
-}*/
-
+// génère et affiche un tirage de figures qui s'insèreront entre le deuxième tirage et la conclusion
 function genererTirageBruits () {
     var i = 0;
     while (i<1) {
@@ -446,10 +324,6 @@ function doIBeatHim(me, him) {
 }
 
 function newRound(){
-    /*var nbElts = 2 + difficulte;
-    console.log("NbElts="+nbElts);
-    console.log(difficulte);*/
-    
     if (tirageUn && miseValide) {
         tirageFinal = false;
         genererTirageSansZero();
@@ -466,23 +340,6 @@ function newRound(){
     }
     
     playerWin = false;
-    
-    /*var meBefore = me;
-    me = Math.floor(Math.random() * nbElts);
-    while (me === meBefore) 
-            me = Math.floor(Math.random() * nbElts);
-    him = Math.floor(Math.random() * nbElts);
-    while (him === me) 
-            him = Math.floor(Math.random() * nbElts);
-
-    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
-    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';*/
-
-    /*if(miseValide) {
-        //déverrouiller boutons figures
-        document.getElementById("me").disabled = false;
-        document.getElementById("him").disabled = false;
-    }*/
 }
 
 function clearArray() {
@@ -514,14 +371,6 @@ function diffChange(win) {
     } else {
         console.log(difficulte + "difficulté inchangée");
     }
-
-    
-    
-    /*var i = 0;
-    while (i <= difficulte && miseValide === true) {
-        genererTirageBruits ();
-        i ++;
-    }*/
 }
 
 function res(win) {
