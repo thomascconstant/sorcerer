@@ -49,51 +49,18 @@ console.log(difficulte +"diff de base");
 var nbreToursBruits = 0; //Nombre de tours que doit faire la fonction genererBruits();
 var resultatJoueur = [];
 
-function genererPredicatsBruits () {
+//générer le tableau de figures qui s'intercaleront entre le deuxième tirage et la conclusion à partir des prédicats
+function genererBruits () {
     var i=0;
-    var j=0;
-    
-    var figureFaible = order[0];
-    console.log(figureFaible + "figure faible");
-    
-    while (i<=2) {
-        var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
-        if (predicats.includes(tirageAleatoire) === false) {
-            predicats.push(tirageAleatoire);
-            i++;
-        }
-    }
-    
-    while (j<=3) {
+    while (i<=3) {
         var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
         if (bruits.includes(tirageAleatoire) === false && predicats.includes(tirageAleatoire) === false) {
             bruits.push(tirageAleatoire);
-            j++;
+            i++;
         }
     }
-    
-    console.log(predicats + "prédicats");
+
     console.log(bruits + "bruits");
-    
-    /*for (var i=0; i<=2; i++) {
-        var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
-        if (predicats.includes(tirageAleatoire) === false) {
-            predicats.push(tirageAleatoire);
-        }else {
-            i--;
-        }
-    }
-    console.log(predicats);
-    
-    for (var j=0; j<=3; j++){
-        var tirageAleatoireBruits = order[Math.floor(Math.random()*order.length)];
-        if (predicats.includes(tirageAleatoireBruits) === false && bruits.includes(tirageAleatoireBruits) === false){
-            bruits.push(tirageAleatoireBruits);
-        }else {
-            j--;
-        }
-    }
-    console.log(bruits);*/
 }
 
 function init() {
@@ -179,7 +146,6 @@ function shuffle(array) {
 
 function shuffleOrder(){
     order = shuffle(order);
-    //genererPredicatsBruits ();
 }
 
 // générer un tirage avec la figure la plus faible du tableau
@@ -224,7 +190,10 @@ function genererTirageSansZero() {
             j++;
         }
     }
+    
     console.log(predicats + "prédicats");
+    
+    genererBruits();
     afficherDeuxiemeTirage();
 }
 
