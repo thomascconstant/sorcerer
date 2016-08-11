@@ -127,7 +127,7 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
-            feedbackSonore();
+            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
             document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" chaton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
