@@ -52,6 +52,10 @@ var resultatJoueur = [];
 function genererPredicatsBruits () {
     var i=0;
     var j=0;
+    
+    var figureFaible = order[0];
+    console.log(figureFaible + "figure faible");
+    
     while (i<=2) {
         var tirageAleatoire = order[Math.floor(Math.random()*order.length)];
         if (predicats.includes(tirageAleatoire) === false) {
@@ -102,7 +106,7 @@ function init() {
 function go(){
     shuffleOrder();
     console.log(order);
-    genererPremierTirage();
+    genererTirageAvecZero();
     
 }
 
@@ -175,22 +179,91 @@ function shuffle(array) {
 
 function shuffleOrder(){
     order = shuffle(order);
-    genererPredicatsBruits ();
+    //genererPredicatsBruits ();
 }
 
-function genererPremierTirage() {
+// générer un tirage avec la figure la plus faible du tableau
+function genererTirageAvecZero() {
+    var tirageB = order[0];
+    console.log(tirageB + "ici");
+    premierTirage.push(tirageB);
+    predicats.push(tirageB);
+    
     var i = 0;
     while (i<1) {
-        me = order[Math.floor(Math.random()*order.length)];
-        if (premierTirage.includes(me) === false) {
-            premierTirage.push(me);
+        var tirageA = order[Math.floor(Math.random()*order.length)];
+        if (premierTirage.includes(tirageA) === false && premierTirage.includes(tirageB) && tirageA !== tirageB) {
+            premierTirage.push(tirageA);
+            predicats.push(tirageB);
             i++;
         }
     }
     
-    console.log(order);
-    him = order.indexOf(0,0);
-    console.log(order.indexOf(0,0));
+    console.log(tirageA);
+    console.log(tirageB);
+    console.log(premierTirage);
+    
+    afficherPremierTirage();
+}
+
+// générer un tirage sans la figure la plus faible du tableau
+function genererTirageSansZero() {
+    var tirageZero = order[0];
+    var i = 0;
+    while (i<1) {
+        var tirageA = order[Math.floor(Math.random()*order.length)];
+        if (deuxiemeTirage.includes(tirageA) === false && premierTirage.includes(tirageA) && tirageA !== tirageZero) {
+            deuxiemeTirage.push(tirageA);
+            i++;
+        }
+    }
+    
+    var j = 0;
+    while (j<1) {
+        var tirageB = order[Math.floor(Math.random()*order.length)];
+        if (deuxiemeTirage.includes(tirageB) === false && premierTirage.includes(tirageB) === false && tirageB !== tirageZero) {
+            deuxiemeTirage.push(tirageB);
+            predicats.push(tirageB);
+            j++;
+        }
+    }
+    
+    console.log(tirageA);
+    console.log(tirageB);
+    console.log(deuxiemeTirage);
+    
+    afficherDeuxiemeTirage();
+}
+
+function genererTirageConclusion() {
+    var tirageA = order[0];
+    conclusionTirage.push(tirageA);
+        
+    var i = 0;
+    while (i<1) {
+        var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
+        if (conclusionTirage.includes(tirageB) === false && tirageB !== tirageA) {
+            conclusionTirage.push(tirageB);
+            i++;
+        }
+    }
+    
+    console.log(tirageA);
+    console.log(tirageB);
+    console.log(conclusionTirage);
+    
+    afficherTirageConclusion();
+}
+
+function afficherPremierTirage() {
+    me = premierTirage[Math.floor(Math.random()*premierTirage.length)];
+    var i = 0;
+    while (i<1) {
+        him = premierTirage[Math.floor(Math.random()*premierTirage.length)];
+        if (me !== him) {
+            i++;
+        }
+    }
     
      
     console.log(me + "moi");
@@ -240,7 +313,29 @@ function genererPremierTirage() {
     tirageUn = true;
 }*/
 
-function genererDeuxiemeTirage () {
+function afficherDeuxiemeTirage() {
+    me = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
+    var i = 0;
+    while (i<1) {
+        him = deuxiemeTirage[Math.floor(Math.random()*deuxiemeTirage.length)];
+        if (me !== him) {
+            i++;
+        }
+    }
+    
+     
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(deuxiemeTirage + "deuxieme tirage");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageDeux = true;
+    tirageUn = false;
+}
+
+/*function genererDeuxiemeTirage () {
     var j = 0;
     while (j<1) {
         var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
@@ -285,9 +380,31 @@ function genererDeuxiemeTirage () {
     
     tirageDeux = true;
     tirageUn = false;
-}
+}*/
 
-function genererTirageConclusion () {
+function afficherTirageConclusion() {
+    me = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
+    var i = 0;
+    while (i<1) {
+        him = conclusionTirage[Math.floor(Math.random()*conclusionTirage.length)];
+        if (me !== him) {
+            i++;
+        }
+    }
+    
+     
+    console.log(me + "moi");
+    console.log(him + "lui");
+    console.log(conclusionTirage + "conclusion tirage");
+    
+    document.getElementById("me").innerHTML = '<img src="'+figures[me]+'">'; 
+    document.getElementById("him").innerHTML = '<img src="'+figures[him]+'">';
+    
+    tirageFinal = true;
+    tirageDeux = false;
+} 
+
+/*function genererTirageConclusion () {
     var i = 0;
     while (i<1) {
         var tirageA = predicats[Math.floor(Math.random()*predicats.length)];
@@ -324,7 +441,7 @@ function genererTirageConclusion () {
     
     tirageFinal = true;
     tirageDeux = false;
-}
+}*/
 
 function genererTirageBruits () {
     var i = 0;
@@ -375,7 +492,7 @@ function newRound(){
     
     if (tirageUn && miseValide) {
         tirageFinal = false;
-        genererDeuxiemeTirage();
+        genererTirageSansZero();
     } else if (tirageDeux && miseValide && nbreToursBruits <=1) {
         genererTirageConclusion();
     } else if (tirageDeux && miseValide && nbreToursBruits > 1) {
