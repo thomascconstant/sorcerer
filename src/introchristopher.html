@@ -1,38 +1,112 @@
 <html>
 <head>
+    <title>Sorcerer</title>
+    
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Place favicon.ico in the root directory -->
-
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 
+<style>
+.slide {
+    background-attachment: fixed;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    min-height: 1000px;
+    background-repeat: no-repeat;
+    margin: 0px;
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover;
+}
 
+
+
+.hfill {
+    height: 8%;
+}
+
+
+.fondtexte {                                                                                                    
+    background-color: #373b3d; 
+    color: #000000;
+    position: absolute;
+    bottom: 300px;  
+    padding: 10px;   
+    margin: auto;
+    width: 100%;
+    height: 450px;   
+}
+	
+body {                                                                                                   
+    background-color: #373b3d;                                                                    
+    font-family: 'Raleway', sans-serif;                                                
+    font-size: 10pt;                                                                          
+    color: #fafafa;                                                                            
+    margin: 0; 
+
+    background-image:url("../src/img/sensoriel.jpg");
+    background-repeat: no-repeat;
+    margin: 0px;
+    background-size: cover;
+}
+	
+.texte {
+    font-family: 'Raleway', sans-serif;                                              
+    color: #fafafa;
+    text-align:center; 
+    font-size: 26px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 28px;
+}
+	
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #fafafa;
+    text-align:center; 
+    font-size: 30px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+	
+.button {
+    background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+	
+	
+</style>
 </head>
 
-<body bgcolor="#BDBDBD">
-<!--[if lt IE 8]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
+<body>
 
-<!-- Add your site or application content here -->
-
-<h1 style="color:#9E9E9E"
-    style="font-family:Helvetica"><p align="center">
-    SORCERER</p></h1>
-
-    <div>
-        <p style="color:#424242" align="center"><br>Vous allez jouer à une épreuve de perception visuelle. 
-        <br>Sur une grille de couleur uniforme, quatre carrés de luminosité légèrement différente vont clignoter en début de partie.
-        <br>Vous disposez d'un nombre de tours limités. Si vous trouvez tous les carrés, vous gagnez. Pour chaque tour, vous pouvez miser 1 à 7 chatons sur vos chances de gagner.
-        <br>Votre objectif est de sauver le plus de chatons possibles. Sinon, ils finissent en pudding.
-        <br>A la fin d'un tour de jeu, de nouveaux chatons vous sont présentés. Sauvez les tous !<br></p>
-        <p style="text-align: center;"><button type="button" id="commencerJeu" onclick="parent.location='christopherreeve.html'">Commencer à jouer</button></p><br>
+    <div class="fondtexte">
+        <p class="textetitre">L'épreuve de perception visuelle<br/></p> 
+        <p class="texte">« Un bon berger doit être capable de repérer ses moutons en un clignement d'oeil ! », chuchotte le Sorcier avant de vous expliquer les règles.<br/><br/>
+		« Sur une grille de couleur uniforme, quatre carrés de luminosité légèrement différente vont clignoter en début de partie.<br/>
+		Vous disposez d'un nombre de tours limités. Si vous trouvez tous les carrés, vous gagnez.<br/>
+		Pour chacun tour, vous devez miser 1 à 7 moutons sur vos chances de gagner. »<br/><br/>
+		Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
+		A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !<br></p>
+        <p style="text-align: center;"><button class="button" type="button" id="commencerJeu" onclick="parent.location='christopherreeve.html'">Commencez l'épreuve !</button></p><br>
     </div>
 
 
