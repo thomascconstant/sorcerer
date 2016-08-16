@@ -1,0 +1,121 @@
+<html>
+<head>
+    
+    <meta charset="utf-8">
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
+<style>
+.slide {
+    background-attachment: fixed;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    min-height: 1000px;
+    background-repeat: no-repeat;
+    margin: 0px;
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover;
+}
+
+
+
+.hfill {
+    height: 8%;
+}
+
+
+.fondtexte {                                                                                                    
+    background-color: #373b3d; 
+    color: #000000;
+    position: absolute;
+    bottom: 300px;  
+    padding: 10px;   
+    margin: auto;
+    width: 100%;
+    height: 400px;   
+}
+	
+body {                                                                                                   
+    background-color: #373b3d;                                                                    
+    font-family: 'Raleway', sans-serif;                                                
+    font-size: 10pt;                                                                          
+    color: #fafafa;                                                                            
+    margin: 0; 
+
+    background-image:url("../src/img/intro14fond.jpg");
+    background-repeat: no-repeat;
+    margin: 0px;
+    background-size: cover;
+}
+	
+.texte {
+    font-family: 'Raleway', sans-serif;                                              
+    color: #fafafa;
+    text-align:center; 
+    font-size: 26px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 28px;
+}
+	
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #fafafa;
+    text-align:center; 
+    font-size: 30px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+	
+.button {
+    background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+	
+	
+</style>
+</head>
+
+<body>
+
+<div class="fondtexte">
+    <p class="textetitre">Vous voilà maintenant face au Sorcier.<br/></p>
+	<p class="texte">Il vous propose trois jeux pour tester vos qualités de berger.<br/>Trois épreuves durant lesquelles vous aurez à sauver le plus de moutons possibles.<br/><br/>
+	Vous disposez pour chaque jeu d'un nombre de tours limités. A chaque tour, vous pouvez miser 1 à 7 crédits sur votre confiance dans votre capacité à réussir.<br/><br/>
+	A la fin d'un tour de jeu, de nouveaux crédits vous sont offerts par le Sorcier pour relancer votre mise.</p>
+    <p style="text-align: center;"><button class="button" type="button" id="commencerJeu" value="disable" onclick="donnerID()">Acceptez les règles et commencez les épreuves !</button></p><br/>
+</div>
+
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='https://www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+</script>
+</body>
+</html>
