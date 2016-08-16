@@ -380,13 +380,13 @@ function res(win) {
         score+=mise;
         tours--;
         playerWin = true;
-        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " chaton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
+        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " mouton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
             
     } else if (miseValide) {
         console.log("pas gagne le match");
         score-=mise;
         tours--;
-        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " chaton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
+        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " mouton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
     }
 
     //score = Math.max(0,score);

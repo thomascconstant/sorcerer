@@ -1,61 +1,132 @@
 <html>
 
 <head>
+    <title>Sorcerer</title>
+	
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Place favicon.ico in the root directory -->
-
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
     
 <style>
-.tdGame
-{
+
+.fondtexte {                                                                                                    
+    background-color: #373b3d; 
+    color: #000000;
+     
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+   
+}
+	
+body {                                                                                                   
+    background-color: #F5F5F5;                                                                    
+    font-family: 'Raleway', sans-serif;                                                
+    font-size: 10pt;                                                                          
+    color: #fafafa;                                                                            
+    margin: 0; 
+
+}
+	
+.texte {
+    font-family: 'Raleway', sans-serif;                                              
+    color: #fafafa;
+    text-align:center; 
+    font-size: 22px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 28px;
+}
+
+.textefeedback {
+    font-family: 'Raleway', sans-serif;                                              
+    color: #212121;
+    text-align:center; 
+    font-size: 22px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 28px;
+}
+	
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #fafafa;
+    text-align:center; 
+    font-size: 26px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+	
+.button {
+    background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.tdGame {
     width: 20px; 
     height:20px;
 }
 
-.site
-{
-    width: 435px;
-    padding:0px;
+.site {
+	width: 435px;
+	height: auto;
+    padding:auto;
     border: 0px solid black;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
+}
+
+.inSite {
+	padding: 20px;
+    border: 1px solid black;
+	margin-left: auto;
+    margin-right: auto;
+	
     text-align:center;
 }
 
-.inSite
-{
-    padding:20px;
-    border: 1px solid black;
-}
-
-.big
-{
-    font-size:40pt;
+.big {
+    color: #212121;
+	font-size:46pt;
     width:100px;
     text-align:center;
 }
 
 .board {
     padding:0px;
-    margin:auto;
+    margin:0px;
     border:0px solid white;
     border-collapse: collapse;
 }
 
-.table, tr, td
-{
-    padding:auto;
-    margin:auto;
+.table, tr, td {
+    color: #212121;
+	padding:auto;
+    margin: 0px;
     border:0px solid white;
     border-collapse: collapse;
+
 }
 </style>
 
@@ -63,53 +134,42 @@
 
 </head>
 
-<body bgcolor="#F5F5F5" onload="go(),init()">
-    <!--[if lt IE 8]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+<body onload="go(),init()">
 
-    <h1 style="color:#EEEEEE"
-    style="font-family:Helvetica"><p align="center">
-    SORCERER</p></h1>
-  
-<div>
-    <p style="color:#616161" align="center"><br>Vous êtes face à un jeu de déduction. 
-        <br>Deux figures vous sont présentées : l'une est toujours plus forte que l'autre. Pour gagner, vous devez trouver laquelle.
-        <br>Vous disposez d'un nombre de tours limités. Pour chacun d'entre eux, vous pouvez miser 1 à 7 chatons sur vos chances de gagner.
-        <br>Votre objectif est de sauver le plus de chatons possibles. Sinon, ils finissent en pudding.
-        <br>A la fin d'un tour de jeu, de nouveaux chatons vous sont présentés. Sauvez les tous !<br></p>
-</div>
-
-<p style="color:#757575" align="center"><i>Choisissez votre mise puis cliquez sur la figure gagnante :</i></p>
-<p style="color:#757575" align="center">
-    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
-    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
-    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
-    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
-    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
-    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
-    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
-</p>
-<!--<p style="text-align: center;"><button type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p>-->
-<p id="retourProto"></p>
-
+    <div class="fondtexte"><br/>
+        <p class="textetitre">L'épreuve de déduction<br/></p> 
+        <p class="texte">Deux figures vous sont présentées : l'une est toujours plus forte que l'autre. Pour gagner, vous devez trouver laquelle.<br/>
+		Vous disposez d'un nombre de tours limités. Pour chacun d'entre eux, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/><br/>
+		Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
+		A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Sauvez les tous !<br/></p>
+		<p class="texte" align="center"><i>Choisissez votre mise puis cliquez sur la figure gagnante :</i></p>
+		<p class="texte" align="center">
+			<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
+			<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
+			<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
+			<input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
+			<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
+			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
+			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
+		</p><br/></div>
+	
+	<br/><br/>
     
-<div class="site">
+	<div class="site">
 
-<div class="inSite">
+		<div class="inSite">
 
-<table>
-    <tr><td id="me" onclick="res(true)">&nbsp;</td><td id="him" onclick="res(false)" >&nbsp;</td></tr>
-</table>
+			<table>
+				<tr><td id="me" onclick="res(true)">&nbsp;</td><td id="him" onclick="res(false)" >&nbsp;</td></tr>
+			</table>
 
+		<div class="textefeedback" id="res"></div>
+	<br>
 
-<div id="res"></div>
-<br>
-
-<table align="center" id="tableMise">
-    <tr><td style="text-align:center">Tours</td><td style="text-align:center">Mise</td><td style="text-align:center">Chaton(s)</td></tr>
-    <tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
-</table>
+			<table align="center" id="tableMise">
+				<tr><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
+				<tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+			</table>
 
     <!--<button onclick="diff(1)">Harder !</button>
     <button onclick="diff(-1)">Easier !</button>
@@ -117,11 +177,13 @@
     <button onclick="genererDeuxiemeTirage ()">Deuxième tirage</button>
     <button onclick="genererTirageBruits ()">Bruits</button>
     <button onclick="genererTirageConclusion ()">Conclusion</button>-->
-<br>
+	<br>
 
-</div>
+		</div>
 
-</div>
+	</div>
+
+
 
 </body>
 
