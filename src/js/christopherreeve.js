@@ -381,7 +381,7 @@ function finDePartie() {
     }
 }
 
-function feedbackSonore() {
+/*function feedbackSonore() {
     if(winState === true) {
         var x = document.getElementById("winSound");
         x.play();
@@ -390,7 +390,7 @@ function feedbackSonore() {
         x.play();
     }
 
-}
+}*/
 
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
