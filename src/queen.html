@@ -1,0 +1,202 @@
+<html>
+<head>
+    <title>Sorcerer</title>
+    
+    <meta charset="utf-8">
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+	<script src="js/score.js"></script>
+
+<style>
+
+#fin1 {
+  background-image: url("../src/img/intro2fond.jpg");
+  background-color: #373b3d;
+}
+
+#fin2 {
+  background-image: url("../src/img/intro5fond.jpg");
+  background-color: #373b3d;
+}
+
+#fin3 {
+  background-image: url("../src/img/intro13fond.jpg");
+  background-color: #373b3d;
+}
+
+#fin4 {
+  background-image: url("../src/img/introXfond.jpg");
+  background-color: #373b3d;
+}
+
+.slide {
+  background-attachment: fixed;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  min-height: 1000px;
+  background-repeat: no-repeat;
+  margin: 0px;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover;
+}
+
+h1 {
+    font-family: Baskerville, "Baskerville Old Face", serif;
+    color: #fafafa;
+    font-size: 39px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+
+
+body {                                                                                                   
+    background-color: #373b3d;                                                                    
+    font-family: Baskerville, "Baskerville Old Face", serif;                                                
+    font-size: 10pt;                                                                          
+    color: #fafafa;                                                                            
+    margin: 0;                                                                                 
+}
+
+
+.hfill {
+    height: 45vh;
+}
+
+.slidetitle {
+    width: 100vw; 
+    text-align:center; 
+    font-size: +3em;
+    font-weight:bold;
+}
+
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #fafafa;
+    text-align:center; 
+    font-size: 39px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+.texte {
+    font-family: 'Raleway', sans-serif;                                                 
+    color: #fafafa;
+    text-align:center; 
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+    font-size: 39px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+.textepetit {
+    font-family: 'Raleway', sans-serif;                                                 
+    color: #fafafa;
+    text-align:center; 
+    font-size: 18px;
+    font-style: italic;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+.textelien {
+    font-family: 'Raleway', sans-serif;                                                 
+    color: #fafafa;
+    text-align:center; 
+    font-size: 18px;
+    font-style: italic;
+    text-decoration: underline;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+.textepurewhite {
+    font-family: 'Raleway', sans-serif;                                               
+    color: #FFFFFF;
+    text-align:center; 
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+    font-size: 39px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+.textepureblack {
+    font-family: 'Raleway', sans-serif;                                                 
+    color: #212121;
+    text-align:center;
+    <!--text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;-->
+    font-size: 39px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+
+</style>
+</head>
+<body onload = "feedbackScoreGeneral()">
+
+	<div class="slide"  style="background-position: 0% 0px;">
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+			<a class="texte">« Vous avez passé les trois épreuves... »<br/>Le Sorcier se frotte les mains en vous raccompagnant à l’entrée de son antre.</a><br/>
+        </div>
+    </div>
+	
+    <div class="slide" id="fin1" style="background-position: 0% 0px;">
+	<div class="hfill"> &nbsp;</div>
+	<div class="slidetitle">
+		<a class="texte">« Je transmettrai vos résultats à la Reine par pigeon à la première heure. Bon vent, berger ! »,<br/>ajouta t-il avant de vous laissez prendre le chemin du château.</a>
+	</div>
+    </div>
+
+    <div class="slide" id="fin2" style="background-position: 0% 0px;">
+	<div class="hfill"> &nbsp;</div>
+	<div class="slidetitle">
+		<a class="texte">Vous faites face à la Reine.<br/>Elle tient dans ses mains le parchemin décrivant le résultat de vos aventures.</a>
+	</div>
+    </div>
+
+    <div class="slide" id="fin3" style="background-position: 0% 0px;">
+	<div class="hfill"> &nbsp;</div>
+	<div class="slidetitle">
+		<a class="texte" id="feedbacks" ></a>
+	</div>
+    </div>
+
+    <div class="slide" id="fin4" style="background-position: 0% 0px;">
+	<div class="hfill"> &nbsp;</div>
+	<div class="slidetitle">
+		<a class="texte">Sur ces mots, vous quittez le château. Mais ne partez pas trop loin...<br/><br/>Le bruit court que La Reine a rendez-vous ce soir avec le Sorcier<br/>pour une nouvelle partie de poker.</a>
+	</div>
+    </div>
+
+    <div class="slide"  style="background-position: 0% 0px;">
+	<div class="hfill"> &nbsp;</div>
+	<div class="slidetitle">
+		<a class="textetitre">FIN</a><br/>
+		<a class="textelien" onclick="parent.location='index.html'" style="cursor:pointer">Pour recommencer à jouer, cliquez sur ce lien.</a>
+		<br/><br/>
+		<a class="textelien" onclick="parent.location='credits.html'" style="cursor:pointer">Crédits du jeu</a>
+	</div>
+    </div>
+
+</body>
+</html>
