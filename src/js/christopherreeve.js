@@ -17,7 +17,7 @@ var winState = false; //statut du joueur
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 27; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
@@ -188,7 +188,7 @@ function win(ijFind){
 function fail(){
     if (miseValide === true){
         winState = false;
-        feedbackSonore();
+        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         score -= mise;
         document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
@@ -381,7 +381,7 @@ function finDePartie() {
     }
 }
 
-/*function feedbackSonore() {
+function feedbackSonore() {
     if(winState === true) {
         var x = document.getElementById("winSound");
         x.play();
@@ -390,7 +390,7 @@ function finDePartie() {
         x.play();
     }
 
-}*/
+}
 
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
