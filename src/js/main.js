@@ -71,7 +71,7 @@ function lancerJeu () {
         window.open("introtom.html",'_self',false);
     } else if (jeuMotriceTermine && jeuSensoTermine && jeuLogicTermine) {
         //fin du jeu
-        windows.open("queen.html",'_self',false);
+        window.open("queen.html",'_self',false);
     } else {
         // liens vers les jeux
         var liensJeux = [
