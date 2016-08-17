@@ -24,7 +24,7 @@ function lancerJeu () {
     console.log(jeuSensoTermine);
     console.log(jeuLogicTermine);
     //lancement selon progression
-    if (jeuMotriceTermine) {
+    if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
         var liensJeux = [
             "introchristopher.html",
             "introhugh.html"
@@ -35,7 +35,7 @@ function lancerJeu () {
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
         window.open(liensJeux[choixLien],'_self',false);
-    } else if (jeuSensoTermine) {
+    } else if (jeuSensoTermine && jeuLogicTermine === null && jeuMotriceTermine === null) {
         var liensJeux = [
             "introtom.html",
             "introhugh.html"
@@ -46,7 +46,7 @@ function lancerJeu () {
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
         window.open(liensJeux[choixLien],'_self',false);
-    } else if (jeuLogicTermine) {
+    } else if (jeuLogicTermine && jeuSensoTermine === null && jeuMotriceTermine === null) {
         var liensJeux = [
             "introtom.html",
             "introchristopher.html"
@@ -57,15 +57,15 @@ function lancerJeu () {
         // construct the link to be opened
         // open it in a new window / tab (depends on browser setting)
         window.open(liensJeux[choixLien],'_self',false);
-    } else if (jeuMotriceTermine && jeuSensoTermine) {
+    } else if (jeuMotriceTermine && jeuSensoTermine && jeuLogicTermine === null) {
         console.log("coucou" + "envoie hugh");
         // open it in a new window / tab (depends on browser setting)
         window.open("introhugh.html",'_self',false);
-    } else if (jeuMotriceTermine && jeuLogicTermine) {
+    } else if (jeuMotriceTermine && jeuLogicTermine && jeuSensoTermine === null) {
         console.log("coucou" + "envoie christopher");
         // open it in a new window / tab (depends on browser setting)
         window.open("christopherreeve.html",'_self',false);
-    } else if (jeuSensoTermine && jeuLogicTermine) {
+    } else if (jeuSensoTermine && jeuLogicTermine && jeuMotriceTermine === null) {
         console.log("coucou" + "envoie tom");
         // open it in a new window / tab (depends on browser setting)
         window.open("introtom.html",'_self',false);
