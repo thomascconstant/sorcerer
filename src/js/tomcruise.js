@@ -186,12 +186,12 @@ function stop() {
     //On met a jour le score, etc...
     if(res == 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "chaton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "chaton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
         //feedbackNegatif;
     }
 
