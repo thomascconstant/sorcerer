@@ -129,7 +129,7 @@ function win(ijFind){
             winState = true;
             //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
-            document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" chaton(s). Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
             //Un tour de moins, reset de la mise
             tours--;
@@ -190,7 +190,7 @@ function fail(){
         winState = false;
         feedbackSonore();
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " +mise+" chaton(s). Choisissez votre mise pour relancer le jeu.";
+        document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
         //Un tour de moins, reset de la mise
         tours--;
