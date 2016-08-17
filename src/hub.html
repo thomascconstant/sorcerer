@@ -1,64 +1,147 @@
 <html>
 <head>
+    <title>Sorcerer</title>
+	
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Place favicon.ico in the root directory -->
-
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 
-    <style>
-        .big
-        {
-            font-size:40pt;
-            width:100px;
-            text-align:center;
-            color:#BDBDBD;
-        }
-    </style>
+<style>
+.slide {
+    background-attachment: fixed;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    min-height: 1000px;
+    background-repeat: no-repeat;
+    margin: 0px;
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover;
+}
+
+.hfill {
+    height: 8%;
+}
+
+.fondtexte {                                                                                                    
+    background-color: #373b3d; 
+    color: #000000;
+    position: absolute;
+    bottom: 300px;  
+    padding: 10px;   
+    margin: auto;
+    width: 100%;
+    height: auto;   
+}
+	
+body {                                                                                                   
+    background-color: #373b3d;                                                                    
+    font-family: 'Raleway', sans-serif;                                                
+    font-size: 10pt;                                                                          
+    color: #fafafa;                                                                            
+    margin: 0; 
+    background-image:url("../src/img/intro14fond.jpg");
+    background-repeat: no-repeat;
+    margin: 0px;
+    background-size: cover;
+}
+	
+.texte {
+    font-family: 'Raleway', sans-serif;                                              
+    color: #fafafa;
+    text-align:center; 
+    font-size: 26px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 28px;
+}
+
+.textescore {
+    font-family: 'Uncial Antiqua', cursive;                                             
+    color: #fafafa;
+    text-align:left; 
+    font-size: 20px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 10px;
+}
+
+.texteresults {
+    font-family: 'Raleway', sans-serif;                                            
+    color: #fafafa;
+    text-align:left; 
+    font-size: 20px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 5px;
+}
+	
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #fafafa;
+    text-align:center; 
+    font-size: 30px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 42.9px;
+}
+	
+.button {
+    background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.big {
+    font-size:40pt;
+    width:100px;
+    text-align:center;
+    color:#BDBDBD;
+}
+</style>
 
 </head>
 
-<body bgcolor="#616161">
-<!--[if lt IE 8]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
+<body>
 
-<!-- Add your site or application content here -->
-
-    <h1 style="color:#424242"
-        style="font-family:Helvetica"><p align="center">
-        SORCERER</p></h1><br><br>
-
+    <div class="fondtexte">
+		<p class="textetitre" align="center">L'antre du Sorcier</p>
+        <p class="texte" align="center">Entre deux épreuves, le Sorcier vous reçoit dans son salon.<br/>
+		« Installez-vous prés de la cheminée et prenez un instant pour penser à vos actions... » Le Sorcier laissa échapper un petit rire moqueur.<br/>
+		Vos résultats pour les différents jeux s'affichent ici.<br/>
+                Pensez en effet aux moutons que vous avez pu sauver... et à ceux que vous avez condamnés.<br/><br/></p>
+    
+		<p class="textescore">Votre score pour le jeu d'adresse est de :</p>
+                    <div class="texteresults" id="resultTom"></div>	
+		<p class="textescore">Votre score pour le jeu de perception visuelle est de :</p>
+			<div class="texteresults" id="resultChristopher"></div>
+		<p class="textescore">Votre score pour le jeu de déduction est de :</p>
+			<div class="texteresults" id="resultHugh"></div>
     <div>
-        <p style="color:#E0E0E0" align="center">Vos résultats des différents jeux s'affichent ici.
-            <br>
-            <br>Pensez à tous les chatons que vous avez pu sauver...
-            <br>... et à ceux que vous avez perdu.</p>
+    <!--<p class="texte" align="center">Votre aventure ne s'arrête pas là. Continuez et sauvez des moutons !</p>-->
+    <p style="text-align: center;"><button class="button" type="button" id="commencerJeu" value="disable" onclick="lancerJeu()">Poursuivre l'aventure !</button></p><br>
     </div>
 
-        <br>
-        <br>
-    
-    <p style="color:#BDBDBD">Votre score pour le jeu d'adresse est de :</p> 
-    <div class="big" id="resultTom"></div> 
-    <p style="color:#BDBDBD">Votre score pour le jeu de perception visuelle est de :</p>
-    <div class="big" id="resultChristopher"></div>
-    <p style="color:#BDBDBD">Votre score pour le jeu de déduction est de :</p>
-    <div class="big" id="resultHugh"></div>
-    
-    <div>
-    <p style="color:#E0E0E0" align="center">Votre aventure ne s'arrête pas là. Continuez et sauvez des chatons !
-        <!--<p style="color:#BDBDBD" align="center"><i>Appuyez sur "Entrée" pour commencer à jouer, ou cliquez sur le bouton :</i></p>
-        <p style="text-align: center;"><input type="text" style="text-align:center;" size="20" maxlength="20" id="nomJoueur" onkeypress="recupererNom()"></p>-->
-    <p style="text-align: center;"><button type="button" id="commencerJeu" value="disable" onclick="lancerJeu()">Poursuivre l'aventure !</button></p><br>
-    </div>
-
+	</div>
+	
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 <script>
     (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
