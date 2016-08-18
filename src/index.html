@@ -11,6 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script>function ambianceSonore() {
+    var x = document.getElementById("introSound");
+        x.play();
+}   </script>
 
 <style>
 
@@ -204,7 +208,7 @@ body {
 
 </style>
 </head>
-<body>
+<body onload="ambianceSonore()">
 
     <div class="slide"  style="background-position: 0% 0px;">
         <div class="hfill"> &nbsp;</div>
@@ -326,6 +330,12 @@ body {
 		<a class="textelien" onclick="parent.location='sorcerer.html'" style="cursor:pointer">Pour commencer à jouer, cliquez sur ce lien.</a>
 	</div>
     </div>
-
+    
+    <div><audio id="introSound">
+		<source src="../src/sounds/introb.mp3" type="audio/mpeg">
+		Your browser does not support the audio element.
+	</audio>
+    </div>
+    
 </body>
 </html>
