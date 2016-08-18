@@ -127,7 +127,7 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
-            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
+            feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
             document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
@@ -188,7 +188,7 @@ function win(ijFind){
 function fail(){
     if (miseValide === true){
         winState = false;
-        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
+        feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         score -= mise;
         document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
@@ -250,7 +250,7 @@ function fail(){
 }
 
 function toHex(d) {
-    return  ("0"+(Number(d).toString(16))).slice(-2).toUpperCase()
+    return ("0"+(Number(d).toString(16))).slice(-2).toUpperCase();
 }
 
 function toHexColor(R,V,B){
@@ -383,10 +383,31 @@ function finDePartie() {
 
 function feedbackSonore() {
     if(winState === true) {
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+        
+        var tirageSon = soundsWin[Math.floor(Math.random()*soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
+        
         var x = document.getElementById("winSound");
         x.play();
     } else {
+        var soundsFail = [
+            "../src/sounds/fail.mp3" 
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random()*soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
+        
         var x = document.getElementById("failSound");
+        x.play();
+    }
+    
+    if (tours === 0){
+        var x = document.getElementById("sheepSound");
         x.play();
     }
 
