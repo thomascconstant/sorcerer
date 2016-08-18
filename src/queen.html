@@ -11,7 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-	<script src="js/score.js"></script>
+    <script src="js/score.js"></script>
+    <script>function ambianceSonore() {
+                var x = document.getElementById("ambientSound");
+                x.play();
+            }
+    </script>
 
 <style>
 
@@ -139,7 +144,7 @@ body {
 
 </style>
 </head>
-<body onload = "feedbackScoreGeneral()">
+<body onload = "feedbackScoreGeneral(),ambianceSonore()">
 
 	<div class="slide"  style="background-position: 0% 0px;">
         <div class="hfill"> &nbsp;</div>
@@ -183,6 +188,12 @@ body {
 		<a class="textelien" onclick="parent.location='index.html'" style="cursor:pointer">Pour recommencer à jouer, cliquez sur ce lien.</a><br/>
 		<a class="textelien" onclick="parent.location='credits.html'" style="cursor:pointer">Crédits du jeu</a>
 	</div>
+    </div>
+    
+    <div><audio id="ambientSound">
+            <source src="../src/sounds/end.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+	</audio>
     </div>
 
 </body>
