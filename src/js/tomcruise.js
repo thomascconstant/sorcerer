@@ -226,7 +226,7 @@ function stop() {
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
     
-    //nettoyer les boutons mises
+    //nettoyer historique des boutons mises
     cleanMise();
 
     //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours

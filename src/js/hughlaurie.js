@@ -411,7 +411,7 @@ function res(win) {
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
     
-    //nettoyer historique bouttons mises
+    //nettoyer historique boutons mises
     cleanMise();
     
     //déverrouiller boutons de mise
