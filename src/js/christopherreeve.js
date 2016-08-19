@@ -121,6 +121,16 @@ function showMise(){
     document.getElementById("mise").innerHTML = mise;
 }
 
+function cleanMise() {
+    document.getElementById("mise1").checked = false;
+    document.getElementById("mise2").checked = false;
+    document.getElementById("mise3").checked = false;
+    document.getElementById("mise4").checked = false;
+    document.getElementById("mise5").checked = false;
+    document.getElementById("mise6").checked = false;
+    document.getElementById("mise7").checked = false;
+}
+
 function win(ijFind){
     if (miseValide === true && casesFound.indexOf(ijFind) < 0) {
       nbCasesToFind--;
@@ -154,8 +164,11 @@ function win(ijFind){
             
             //bloquer jeu
             miseValide = false;
-            
             document.getElementById("boutonMiser").disabled = false;
+            
+            //nettoyer historique des boutons mises
+            cleanMise();
+            
             //déverrouiller boutons de sélection de mise
             document.getElementById("mise1").disabled = false;
             document.getElementById("mise2").disabled = false;
@@ -219,6 +232,10 @@ function fail(){
         if (tours > 0) {
             miseValide = false;
             document.getElementById("boutonMiser").disabled = false;
+            
+            //nettoyer historique des boutons mises
+            cleanMise();
+            
             //déverrouiller boutons de sélection de mise
             document.getElementById("mise1").disabled = false;
             document.getElementById("mise2").disabled = false;
