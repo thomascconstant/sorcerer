@@ -127,7 +127,7 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
-            feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
+            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
             document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
             console.log(nbCasesToFind + "to go");
@@ -188,7 +188,7 @@ function win(ijFind){
 function fail(){
     if (miseValide === true){
         winState = false;
-        feedbackSonore();//à décommenter pour lancer les feedbacks sonores
+        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         score -= mise;
         document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
