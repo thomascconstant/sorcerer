@@ -111,6 +111,16 @@ function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
 }
 
+function cleanMise() {
+    document.getElementById("mise1").checked = false;
+    document.getElementById("mise2").checked = false;
+    document.getElementById("mise3").checked = false;
+    document.getElementById("mise4").checked = false;
+    document.getElementById("mise5").checked = false;
+    document.getElementById("mise6").checked = false;
+    document.getElementById("mise7").checked = false;
+}
+
 function showButton() {
     document.getElementById("boutonLancerBarre").style.visibility = "visible";
 }
@@ -203,14 +213,11 @@ function stop() {
         //feedbackNegatif;
     }
 
-
-
     //mise a jour de la difficulte selon le modele
     var nextDiff = diffModel.nextDifficulty(res);
     gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
 
     console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
-
 
     //Un tour de moins, reset de la mise
     tours--;
@@ -218,6 +225,9 @@ function stop() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    
+    //nettoyer les boutons mises
+    cleanMise();
 
     //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
     if (tours > 0) {
