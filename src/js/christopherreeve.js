@@ -73,25 +73,25 @@ function recupMise() {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise2').checked) {
         mise = 2;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise3').checked) {
         mise = 3;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise4').checked) {
         mise = 4;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise5').checked) {
         mise = 5;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise6').checked) {
         mise = 6;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }else if(document.getElementById('mise7').checked) {
         mise = 7;
-        document.getElementById("boutonMiser").disabled = true;
+        //document.getElementById("boutonMiser").disabled = true;
     }
     //afficher mise
     showMise();
@@ -112,7 +112,8 @@ function recupMise() {
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
     
-    //lancer compte à rebours avant jeu
+    //faire apparaître le compte à rebours et le lancer
+    document.getElementById("affichageCompteur").style.visibility = "visible";
     starTimer();
 
 }
@@ -167,7 +168,7 @@ function win(ijFind){
             
             //bloquer jeu
             miseValide = false;
-            document.getElementById("boutonMiser").disabled = false;
+            //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
             cleanMise();
@@ -235,7 +236,7 @@ function fail(){
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
             miseValide = false;
-            document.getElementById("boutonMiser").disabled = false;
+            //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
             cleanMise();
@@ -439,6 +440,7 @@ function feedbackSonore() {
     var temp = 0;
     temp = document.getElementById('timer');
     temp.innerHTML = "5";
+    //document.getElementById("affichageCompteur").innerHTML = "Nouvelle grille dans <span id="'+timer+'">5</span> secondes !";
 
     function countdown() {
     seconds = document.getElementById('timer').innerHTML;
@@ -448,6 +450,7 @@ function feedbackSonore() {
     temp = document.getElementById('timer');
     temp.innerHTML = "0";
     go();
+    //document.getElementById("affichageCompteur").style.visibility = "hidden";
     return;
     }
 

@@ -21,6 +21,14 @@
     margin: auto;
     width: 100%;
 }
+
+.zonefeedback {
+    background-color: #03A9F4; 
+    color: #000000;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
 	
 body {                                                                                                   
     background-color: #F5F5F5;                                                                    
@@ -138,27 +146,30 @@ body {
 
 <body onload="init()">
 
-	<div class="fondtexte"><br/>
-		<p class="textetitre">L'épreuve de perception visuelle<br/></p> 
-		<p class="texte">Sur une grille de couleur uniforme, quatre carrés de luminosité légèrement différente vont clignoter en début de partie.<br/>
-			Vous disposez d'un nombre de tours limités. Si vous trouvez tous les carrés, vous gagnez.<br/>
-			Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/><br/>
-			Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
-			A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !<br></p>
-		<p class="texte" align="center"><i>Choisissez votre mise, puis appuyez sur "Entrée" :</i></p>
-		<p class="texte" align="center">
-			<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
-			<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
-			<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
-			<input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
-			<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
-			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
-			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
-		</p>
-                <div class="compteur">Nouvelle grille dans <span id="timer">5</span> secondes !</div>
-		<p style="text-align: center;"><button class="button" type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p><br/>
-	</div>
-		<br/>
+    <div class="fondtexte"><br/>
+            <p class="textetitre">L'épreuve de perception visuelle<br/></p> 
+            <p class="texte">Sur une grille de couleur uniforme, quatre carrés de luminosité légèrement différente vont clignoter en début de partie.<br/>
+                    Vous disposez d'un nombre de tours limités. Si vous trouvez tous les carrés, vous gagnez.<br/>
+                    Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/><br/>
+                    Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
+                    A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !<br></p>
+            <p class="texte" align="center"><i>Choisissez votre mise, puis appuyez sur "Entrée" :</i></p>
+            <p class="texte" align="center">
+                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
+                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
+                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
+                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
+                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
+                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
+                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
+            </p><br/>
+            <!--<p style="text-align: center;"><button class="button" type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p><br/>-->
+    </div>
+    
+    <div class="zonefeedback">
+        <div class="compteur" style="display:visible"><p id="affichageCompteur" style="display:visible">Nouvelle grille dans <span id="timer">5</span> secondes !</p>
+            <span id="messageFeedback" style="display:visible">Choisissez votre mise.</span></div>
+    </div><br/>
 	<div class="site">
 
 		<div class="inSite">
