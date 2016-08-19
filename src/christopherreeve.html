@@ -77,32 +77,41 @@ body {
     cursor: pointer;
 }
 
+.compteur {
+    color: #fafafa;
+    font-size:20pt;
+        padding: auto;   
+    margin: auto;
+
+    text-align:center;
+}
+
 .tdGame {
-	width: 20px;
-	height:20px;
+    width: 20px;
+    height:20px;
 }
 
 .site {
-	width: 330px;
-	height: auto;
+    width: 330px;
+    height: auto;
     padding:auto;
-	border: 0px solid black;
-	margin-left : auto;
-	margin-right : auto;
-	text-align:center;
+    border: 0px solid black;
+    margin-left : auto;
+    margin-right : auto;
+    text-align:center;
 }
 
 .inSite {
-	padding:20px;
-	border: 1px solid black;
-	margin-left: auto;
+    padding:20px;
+    border: 1px solid black;
+    margin-left: auto;
     margin-right: auto;
     text-align:center;
 }
 
 .big {
     color: #212121;
-	font-size:40pt;
+    font-size:40pt;
     width:100px;
     text-align:center;
 }
@@ -115,7 +124,7 @@ body {
 } 
 
 .table, tr, td {
-	color: #212121;
+    color: #212121;
     padding:0px;
     margin:0px;
     border:0px solid white;
@@ -138,14 +147,15 @@ body {
 			A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !<br></p>
 		<p class="texte" align="center"><i>Choisissez votre mise, puis appuyez sur "Entrée" :</i></p>
 		<p class="texte" align="center">
-			<input type="radio" name="mises" id="mise1" value="1"/>1 &nbsp
-			<input type="radio" name="mises" id="mise2" value="2"/>2 &nbsp
-			<input type="radio" name="mises" id="mise3" value="3"/>3 &nbsp
-			<input type="radio" name="mises" id="mise4" value="4"/>4 &nbsp
-			<input type="radio" name="mises" id="mise5" value="5"/>5 &nbsp
-			<input type="radio" name="mises" id="mise6" value="6"/>6 &nbsp
-			<input type="radio" name="mises" id="mise7" value="7"/>7
+			<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
+			<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
+			<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
+			<input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
+			<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
+			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
+			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
 		</p>
+                <div class="compteur">Nouvelle grille dans <span id="timer">5</span> secondes !</div>
 		<p style="text-align: center;"><button class="button" type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p><br/>
 	</div>
 		<br/>
@@ -162,7 +172,9 @@ body {
 				</table>
 				<br/>
 
-	</div>
+        
+                                
+        </div>
 		<!--<a href="tomcruise.html">doigt</a>::
 		<a href="christopherreeve.html">yeux</a>::
 		<a href="test3.html">tete</a>-->

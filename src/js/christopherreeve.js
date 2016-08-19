@@ -48,11 +48,11 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-    if(confirm("Des cases de la grille vont clignoter, regardez les bien !")){
+    /*if(confirm("Des cases de la grille vont clignoter, regardez les bien !")){
             go();
         } else {
             go();
-        }
+        }*/
 
 }
 
@@ -111,6 +111,9 @@ function recupMise() {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
+    
+    //lancer compte à rebours avant jeu
+    starTimer();
 
 }
 
@@ -184,11 +187,12 @@ function win(ijFind){
             if (tours === 0 && miseValide === false) {
                 finDePartie();
             } else {
-                if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
+                
+                /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                     makeGame(width,nbCells,1-difficulty);
                 } else {
                     makeGame(width,nbCells,1-difficulty);
-                }
+                }*/
             }
             
         }
@@ -428,6 +432,32 @@ function feedbackSonore() {
         x.play();
     }
 
+}
+
+ function starTimer() {
+    var seconds = 0;
+    var temp = 0;
+    temp = document.getElementById('timer');
+    temp.innerHTML = "5";
+
+    function countdown() {
+    seconds = document.getElementById('timer').innerHTML;
+    seconds = parseInt(seconds, 10);
+
+    if (seconds === 1) {
+    temp = document.getElementById('timer');
+    temp.innerHTML = "0";
+    go();
+    return;
+    }
+
+    seconds--;
+    temp = document.getElementById('timer');
+    temp.innerHTML = seconds;
+    timeoutMyOswego = setTimeout(countdown, 1000);
+    } 
+
+    countdown();   
 }
 
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
