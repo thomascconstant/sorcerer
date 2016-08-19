@@ -88,9 +88,16 @@ body {
 .compteur {
     color: #fafafa;
     font-size:20pt;
-        padding: auto;   
+    padding: auto;   
     margin: auto;
+    text-align:center;
+}
 
+.messageFeedback {
+    color: #fafafa;
+    font-size:20pt;
+    padding: auto;   
+    margin: auto;
     text-align:center;
 }
 
@@ -167,8 +174,8 @@ body {
     </div>
     
     <div class="zonefeedback">
-        <div class="compteur" style="display:visible"><p id="affichageCompteur" style="display:visible">Nouvelle grille dans <span id="timer">5</span> secondes !</p>
-            <span id="messageFeedback" style="display:visible">Choisissez votre mise.</span></div>
+        <div class="compteur" id="affichageCompteur" style="display:block">Nouvelle grille dans <span id="timer">5</span> secondes !</div>
+        <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez votre mise.</div>
     </div><br/>
 	<div class="site">
 

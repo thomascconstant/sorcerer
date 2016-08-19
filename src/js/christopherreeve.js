@@ -113,7 +113,8 @@ function recupMise() {
     miseValide = true;
     
     //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageCompteur").style.visibility = "visible";
+    document.getElementById("affichageCompteur").style.display = "block";
+    document.getElementById("affichageFeedback").style.display = "none";
     starTimer();
 
 }
@@ -182,6 +183,9 @@ function win(ijFind){
             document.getElementById("mise6").disabled = false;
             document.getElementById("mise7").disabled = false;
             
+            //afficher message de choix de mise
+            document.getElementById("affichageFeedback").style.display = "block";
+            
             casesFound = [];
             
             //lancer nouveau jeu sauf si plus de tours
@@ -249,6 +253,9 @@ function fail(){
             document.getElementById("mise5").disabled = false;
             document.getElementById("mise6").disabled = false;
             document.getElementById("mise7").disabled = false;
+            
+            //afficher message de choix de mise
+            document.getElementById("affichageFeedback").style.display = "block";
             
             if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                makeGame(width,nbCells,1-difficulty);
@@ -450,7 +457,7 @@ function feedbackSonore() {
     temp = document.getElementById('timer');
     temp.innerHTML = "0";
     go();
-    //document.getElementById("affichageCompteur").style.visibility = "hidden";
+    document.getElementById("affichageCompteur").style.display = "none";
     return;
     }
 
