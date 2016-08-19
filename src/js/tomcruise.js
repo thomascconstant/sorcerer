@@ -97,7 +97,7 @@ function recupMise () {
     if(hideTarget) {
         document.getElementById("target").style.visibility = "visible";
     }
-    document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter le curseur.";
+    document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter la barre.";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
@@ -112,22 +112,22 @@ function showMise() {
 }
 
 function showButton() {
-    document.getElementById("boutonLancerCurseur").style.visibility = "visible";
+    document.getElementById("boutonLancerBarre").style.visibility = "visible";
 }
 
 function hideButton() {
-    document.getElementById("boutonLancerCurseur").style.visibility = "hidden";
+    document.getElementById("boutonLancerBarre").style.visibility = "hidden";
 }
 
 function changeTexteBouton() {
-    var elem = document.getElementById("boutonLancerCurseur");
+    var elem = document.getElementById("boutonLancerBarre");
     
-    if (miseValide && elem.innerHTML==="Lancer le curseur") {
-        elem.innerHTML = "Arrêter le curseur";
-        document.getElementById("boutonLancerCurseur").disabled = false;
+    if (miseValide && elem.innerHTML==="Lancer la barre") {
+        elem.innerHTML = "Arrêter la barre";
+        document.getElementById("boutonLancerBarre").disabled = false;
         elem.onclick = stop;
     } else {
-        elem.innerHTML = "Lancer le curseur";
+        elem.innerHTML = "Lancer la barre";
         elem.onclick = accessMise;
     }
 }
@@ -194,12 +194,12 @@ function stop() {
     //On met a jour le score, etc...
     if(res === 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
+        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackNegatif;
     }
 
@@ -223,7 +223,7 @@ function stop() {
     if (tours > 0) {
     miseValide = false;
     hideTarget = true;
-    document.getElementById("boutonLancerCurseur").disabled = false;
+    document.getElementById("boutonLancerBarre").disabled = false;
     } else {
         finDePartie();
     }
@@ -240,7 +240,7 @@ function run() {
     
     if(tours > 0){
         running = true;
-        document.getElementById("boutonLancerCurseur").disabled = true;
+        document.getElementById("boutonLancerBarre").disabled = true;
         hideButton();
         document.getElementById("res").innerHTML = "Choisissez votre mise.";
         document.getElementById("slider").style.left = "0px";
