@@ -80,8 +80,9 @@ function recupMise () {
         mise = 7;
         document.getElementById("mise").innerHTML = mise;
     }
-    //afficher mise
+    //afficher mise et afficher boutton
     showMise();
+    showButton();
     
     //verrouiller boutons de mise
     document.getElementById("mise1").disabled = true;
@@ -106,15 +107,22 @@ function recupMise () {
 
 }
 
-function showMise(){
+function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
-    
+}
+
+function showButton() {
+    document.getElementById("boutonLancerCurseur").style.visibility = "visible";
+}
+
+function hideButton() {
+    document.getElementById("boutonLancerCurseur").style.visibility = "hidden";
 }
 
 function changeTexteBouton() {
     var elem = document.getElementById("boutonLancerCurseur");
     
-    if (miseValide && elem.innerHTML=="Lancer le curseur") {
+    if (miseValide && elem.innerHTML==="Lancer le curseur") {
         elem.innerHTML = "Arrêter le curseur";
         document.getElementById("boutonLancerCurseur").disabled = false;
         elem.onclick = stop;
@@ -184,7 +192,7 @@ function stop() {
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
     //On met a jour le score, etc...
-    if(res == 1) {
+    if(res === 1) {
         score += mise;
         document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer le curseur.";
         //feedbackPositif();
@@ -233,6 +241,7 @@ function run() {
     if(tours > 0){
         running = true;
         document.getElementById("boutonLancerCurseur").disabled = true;
+        hideButton();
         document.getElementById("res").innerHTML = "Choisissez votre mise.";
         document.getElementById("slider").style.left = "0px";
     }
@@ -278,7 +287,7 @@ function keypressed(event) {
         document.getElementById("target").style.visibility = "visible";
     }
 
-    if(key == 32){
+    if(key === 32){
         if(running && miseValide) {
             stop();
         } else { 
@@ -354,16 +363,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type == 0) {
+    if (type === 0) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type == 1) {
+    } else if (type === 1) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

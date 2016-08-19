@@ -135,7 +135,7 @@ body {
 
 </head>
 
-<body onload="init(),run()" onkeydown="keypressed(event)">
+<body onload="init(),run(),hideButton()" onkeydown="keypressed(event)">
 
 	<div class="fondtexte"><br/>
 		<p class="textetitre">L'épreuve d'adresse<br/></p>
@@ -154,7 +154,7 @@ body {
 			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
 			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
 		</p>
-        <p style="text-align: center;"><button class="button" type="button" disabled id="boutonLancerCurseur" onclick="accessMise()" >Lancer le curseur</button></p><br/>
+        <p style="text-align: center;"><button class="button" style="display:visible" type="button" disabled id="boutonLancerCurseur" onclick="accessMise()" >Lancer le curseur</button></p><br/>
 	</div>
 	<br/>
     <div class="site">
