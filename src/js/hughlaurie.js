@@ -125,6 +125,16 @@ function showMise() {
     document.getElementById("mise").innerHTML = mise;
 }
 
+function cleanMise() {
+    document.getElementById("mise1").checked = false;
+    document.getElementById("mise2").checked = false;
+    document.getElementById("mise3").checked = false;
+    document.getElementById("mise4").checked = false;
+    document.getElementById("mise5").checked = false;
+    document.getElementById("mise6").checked = false;
+    document.getElementById("mise7").checked = false;
+}
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -400,6 +410,9 @@ function res(win) {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    
+    //nettoyer historique bouttons mises
+    cleanMise();
     
     //déverrouiller boutons de mise
     document.getElementById("mise1").disabled = false;
