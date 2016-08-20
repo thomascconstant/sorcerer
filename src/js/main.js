@@ -90,6 +90,14 @@ function lancerJeu () {
     }
 }
 
+function colorButton() {
+    document.getElementById('commencerJeu').style.backgroundColor="373b3d";
+}
+
+function uncolorButton() {
+    document.getElementById('commencerJeu').style.backgroundColor="757575";
+}
+
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();

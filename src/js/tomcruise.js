@@ -343,7 +343,7 @@ function feedbackNegatif() {
 }
 
 function colorButton() {
-    document.getElementById('boutonLancerBarre').style.backgroundColor="424242";
+    document.getElementById('boutonLancerBarre').style.backgroundColor="373b3d";
 }
 
 function uncolorButton() {
