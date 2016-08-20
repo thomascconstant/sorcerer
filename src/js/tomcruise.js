@@ -342,6 +342,14 @@ function feedbackNegatif() {
     document.body.appendChild(imageFeedback);
 }
 
+function colorButton() {
+    document.getElementById('boutonLancerBarre').style.backgroundColor="424242";
+}
+
+function uncolorButton() {
+    document.getElementById('boutonLancerBarre').style.backgroundColor="757575";
+}
+
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur

@@ -456,8 +456,6 @@ function res(win) {
 
 function colorMe() {
     document.getElementById('me').style.backgroundColor="E0E0E0";
-    //document.getElementById('me').style.width="150%";
-    //document.getElementById('me').style.position='absolute';
 }
 
 function uncolorMe() {

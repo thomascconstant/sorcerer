@@ -194,7 +194,7 @@ body {
 				<div class="target" id="target" style=""></div>
 			</div>
     <div class="textefeedback" id="res">&nbsp;</div>
-        <p style="text-align: center;"><button class="button" style="display:visible" type="button" disabled id="boutonLancerBarre" onclick="accessMise()" >Lancer la barre</button></p><br/>
+        <p style="text-align: center;"><button class="button" style="display:visible;cursor:pointer" type="button" disabled id="boutonLancerBarre" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="accessMise()" >Lancer la barre</button></p><br/>
 		<table id="tableMise">
 			<tr><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
 			<tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
