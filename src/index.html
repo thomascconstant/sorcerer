@@ -104,7 +104,6 @@
   margin: 0px;
   -webkit-background-size: cover; /* pour anciens Chrome et Safari */
   background-size: cover;
-
 }
 
 h1 {
@@ -135,6 +134,15 @@ body {
     text-align:center; 
     font-size: +3em;
     font-weight:bold;
+}
+
+.zonefeedback {
+    background-color: #03A9F4; 
+    color: #000000;
+    position: absolute;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
 }
 
 .textetitre {
@@ -215,7 +223,7 @@ body {
         <div class="hfill"> &nbsp;</div>
         <div class="slidetitle">
                 <a class="textetitre">Il existe un Sorcier.</a><br/>
-                <a class="textepetit">Pour commencer à jouer, utilisez la roulette de votre souris ou appuyez sur la flèche bas.</a>
+                <div class="zonefeedback"><a class="textepetit">Pour commencer à jouer, utilisez la roulette de votre souris ou appuyez sur la flèche bas.</a></div>
         </div>
     </div>
 	
@@ -328,7 +336,7 @@ body {
 	<div class="hfill"> &nbsp;</div>
 	<div class="slidetitle">
 		<a class="textetitre">Partez à la rencontre du Sorcier.</a><br/>
-		<a class="textelien" onclick="parent.location='sorcerer.html'" style="cursor:pointer">Pour commencer à jouer, cliquez sur ce lien.</a>
+                <div class="zonefeedback"> <a class="textelien" onclick="parent.location='sorcerer.html'" style="cursor:pointer">Pour commencer à jouer, cliquez ici.</a></div>
 	</div>
     </div>
     
