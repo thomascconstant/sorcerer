@@ -54,7 +54,7 @@ function init() {
         } else {
             go();
         }*/
-
+    makeGame(width,nbCells, difficulty);
 }
 
 function go() {
@@ -330,8 +330,9 @@ function makeGame(width,nbCellsX,diffColor) {
 
     var cases = [];
 
-    var nbCells = 4;
-    nbCasesToFind = 4;
+    //changer le nombre de cases qui clignote et le nbre de case à trouver
+    var nbCells = 1;
+    nbCasesToFind = 1;
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
