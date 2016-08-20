@@ -14,6 +14,7 @@ var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var winState = false; //statut du joueur
+countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
@@ -137,15 +138,21 @@ function cleanMise() {
 }
 
 function win(ijFind){
-    if (miseValide === true && casesFound.indexOf(ijFind) < 0) {
+    if (miseValide === true && countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
       nbCasesToFind--;
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
             //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
-            document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+            
+            //message de feedback
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+            //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+            
             console.log(nbCasesToFind + "to go");
+            
             //Un tour de moins, reset de la mise
             tours--;
             mise = "?";
@@ -169,6 +176,7 @@ function win(ijFind){
             
             //bloquer jeu
             miseValide = false;
+            countDownToZero = false;
             //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
@@ -208,11 +216,15 @@ function win(ijFind){
 }
 
 function fail(){
-    if (miseValide === true){
+    if (miseValide === true && countDownToZero === true){
         winState = false;
         //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+        
+        //message de feedback 
+        document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+        document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
         //Un tour de moins, reset de la mise
         tours--;
@@ -240,6 +252,7 @@ function fail(){
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
             miseValide = false;
+            countDownToZero = false;
             //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
@@ -257,11 +270,11 @@ function fail(){
             //afficher message de choix de mise
             document.getElementById("affichageFeedback").style.display = "block";
             
-            if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
+            /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
                makeGame(width,nbCells,1-difficulty);
            } else {
                makeGame(width,nbCells,1-difficulty);
-           }
+           }*/
            
         } else {
             finDePartie();
@@ -458,6 +471,7 @@ function feedbackSonore() {
     temp.innerHTML = "0";
     go();
     document.getElementById("affichageCompteur").style.display = "none";
+    countDownToZero = true;
     return;
     }
 
