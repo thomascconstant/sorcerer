@@ -39,6 +39,9 @@ function init(){
     }
     document.getElementById("tableMise").style.visibility = "hidden";
     
+    //afficher mise
+    showMise();
+    
     //testFile(document.getElementById("res"));
 }
 
@@ -80,8 +83,7 @@ function recupMise () {
         mise = 7;
         document.getElementById("mise").innerHTML = mise;
     }
-    //afficher mise et afficher boutton
-    showMise();
+    //afficher boutton
     showButton();
     
     //verrouiller boutons de mise
