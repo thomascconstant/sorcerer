@@ -454,6 +454,26 @@ function res(win) {
     document.getElementById("him").disabled = true;
 }
 
+function colorMe() {
+    document.getElementById('me').style.backgroundColor="E0E0E0";
+    //document.getElementById('me').style.width="150%";
+    //document.getElementById('me').style.position='absolute';
+}
+
+function uncolorMe() {
+    document.getElementById('me').style.backgroundColor="F5F5F5";
+}
+
+function colorHim() {
+    document.getElementById('him').style.backgroundColor="E0E0E0";
+    //document.getElementById('me').style.width="150%";
+    //document.getElementById('me').style.position='absolute';
+}
+
+function uncolorHim() {
+    document.getElementById('him').style.backgroundColor="F5F5F5";
+}
+
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur

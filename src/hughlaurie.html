@@ -19,7 +19,6 @@
 .fondtexte {                                                                                                    
     background-color: #373b3d; 
     color: #000000;
-     
     padding: auto;   
     margin: auto;
     width: 100%;
@@ -186,7 +185,7 @@ body {
 		<div class="inSite">
 
 			<table>
-				<tr><td id="me" onclick="res(true)">&nbsp;</td><td id="him" onclick="res(false)" >&nbsp;</td></tr>
+				<tr><td id="me" onmouseover="colorMe()" onmouseout="uncolorMe()" style="cursor:pointer" onclick="res(true)">&nbsp;</td><td id="him" onmouseover="colorHim()" onmouseout="uncolorHim()" style="cursor:pointer" onclick="res(false)" >&nbsp;</td></tr>
 			</table>
 
 		<div class="textefeedback" id="res"></div>
