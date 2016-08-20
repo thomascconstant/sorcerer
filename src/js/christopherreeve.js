@@ -147,7 +147,11 @@ function win(ijFind){
             score += mise;
             
             //message de feedback
-            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+             if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+            }
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
             //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
             
@@ -222,7 +226,11 @@ function fail(){
         score -= mise;
         
         //message de feedback 
-        document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+        if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+        }
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
