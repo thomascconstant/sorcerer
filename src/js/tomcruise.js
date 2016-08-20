@@ -97,7 +97,10 @@ function recupMise () {
     if(hideTarget) {
         document.getElementById("target").style.visibility = "visible";
     }
-    document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter la barre.";
+    //document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter la barre.";
+    
+    //message de feedback
+    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur le bouton pour arrêter la barre sur la cible."
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
@@ -204,12 +207,26 @@ function stop() {
     //On met a jour le score, etc...
     if(res === 1) {
         score += mise;
-        document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
+        //message de feedback
+        if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour relancer la barre.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour relancer la barre.";   
+        }
+        document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";    
+        //document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackPositif();
     }
     else {
         score -= mise;
-        document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
+        //message de feedback 
+        if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Cliquez sur le bouton pour relancer la barre.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Cliquez sur le bouton pour relancer la barre.";   
+        }
+        document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        //document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackNegatif;
     }
 
@@ -252,7 +269,12 @@ function run() {
         running = true;
         document.getElementById("boutonLancerBarre").disabled = true;
         hideButton();
-        document.getElementById("res").innerHTML = "Choisissez votre mise.";
+        
+        //messages de feedback
+        document.getElementById("affichageFeedback").innerHTML = "Choisissez le nombre de moutons que vous voulez miser sur vos chances de gagner :";
+        document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4"; 
+        //document.getElementById("res").innerHTML = "Choisissez votre mise.";
+        
         document.getElementById("slider").style.left = "0px";
     }
     

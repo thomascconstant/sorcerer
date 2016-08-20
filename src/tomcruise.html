@@ -21,6 +21,22 @@
     margin: auto;
     width: 100%;
 }
+
+.zonemise {                                                                                                    
+    background-color: #616161; 
+    color: #000000;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
+
+.zonefeedback {
+    background-color: #03A9F4; 
+    color: #000000;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
 	
 body {                                                                                                   
     background-color: #F5F5F5;                                                                    
@@ -77,58 +93,66 @@ body {
     cursor: pointer;
 }
 
+.messageFeedback {
+    color: #fafafa;
+    font-size:20pt;
+    padding: auto;   
+    margin: auto;
+    text-align:center;
+}
+
 .bar {
-	position: relative;
-	border: 1px solid black;
-	padding:0px;
-	width: 250px;
-	height:20px;
+    position: relative;
+    border: 1px solid black;
+    padding:0px;
+    width: 250px;
+    height:20px;
 }
 
 .slider {
-	position: absolute;
-	top:0px;
-	left:0px;
-	background-color: gray;
-	padding:0px;
-	width: 20px;
-	height:20px;
+    position: absolute;
+    top:0px;
+    left:0px;
+    background-color: gray;
+    padding:0px;
+    width: 20px;
+    height:20px;
 }
 
 .target {
-	position: absolute;
-	top:0;
-	left:125px;
-	border: 1px solid black;
-	background-color: black;
-	padding:0px;
-	width: 2px;
-	height:18px;
+    position: absolute;
+    top:0;
+    left:125px;
+    border: 1px solid black;
+    background-color: black;
+    padding:0px;
+    width: 2px;
+    height:18px;
 }
 
 .site {
-	width: 300px;
-	height: auto;
-	padding:0px;
-	border: 0px solid black;
-	margin-left : auto;
-	margin-right : auto;
-	text-align:center;
+    width: 300px;
+    height: auto;
+    padding:0px;
+    border: 0px solid black;
+    margin-left : auto;
+    margin-right : auto;
+    text-align:center;
 }
 
 .inSite {
-	padding:20px;
-	border: 1px solid black;
-	margin-left: auto;
+    padding:20px;
+    border: 1px solid black;
+    margin-left: auto;
     margin-right: auto;
     text-align:center;
 }
 
 .big {
-	color: #212121;
-	font-size:40pt;
-	width:100px;
-	text-align:center;
+    color: #212121;
+    font-size:40pt;
+    width:100px;
+    text-align:center;
 }
 
 </style>
@@ -137,25 +161,30 @@ body {
 
 <body onload="init(),run(),hideButton()" onkeydown="keypressed(event)">
 
-	<div class="fondtexte"><br/>
-		<p class="textetitre">L'épreuve d'adresse<br/></p>
-			<p class="texte"><b>En appuyant sur la touche ESPACE de votre clavier, vous devez arrêter la barre qui défile sur la cible.<br/>
-			Vous disposez d'un nombre de tours limités. Si la barre touche la cible, vous gagnez.<br/>
-			Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.</b><br/><br/>
-                        Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
-			A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Ramenez la paix dans le Royaume !<br/></p>
-		<p class="texte" align="center"><i>Observer le mouvement de la barre avant de choisir votre mise :</i></p>
-		<p class="texte" align="center">
-			<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
-			<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
-			<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
-			<input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
-			<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
-			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
-			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
-		</p>
-        <p style="text-align: center;"><button class="button" style="display:visible" type="button" disabled id="boutonLancerBarre" onclick="accessMise()" >Lancer la barre</button></p><br/>
-	</div>
+    <div class="fondtexte"><br/>
+            <p class="textetitre">L'épreuve d'adresse<br/></p>
+                    <p class="texte"><b>En appuyant sur la touche ESPACE de votre clavier, vous devez arrêter la barre qui défile sur la cible.<br/>
+                    Vous disposez d'un nombre de tours limités. Si la barre touche la cible, vous gagnez.<br/>
+                    Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.</b><br/><br/>
+                    Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
+                    A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Ramenez la paix dans le Royaume !</p><br/>
+    </div>
+    <div class="zonefeedback">
+        <div class="compteur" id="affichageCompteur" style="display:none">Une case va clignoter dans <span id="timer">5</span> secondes !</div>
+        <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez le nombre de moutons que vous voulez miser sur vos chances de gagner :</div>
+    </div>
+    <div class='zonemise'><br/>
+		<!--<p class="texte" align="center"><i>Observer le mouvement de la barre avant de choisir votre mise :</i></p>-->
+            <p class="messagefeedback" align="center">
+                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>&nbsp 1 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>&nbsp 2 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>&nbsp 3 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>&nbsp 4 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>&nbsp 5 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>&nbsp 6 &nbsp &nbsp
+                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>&nbsp 7
+            </p>
+            <br/></div>
 	<br/>
     <div class="site">
 
@@ -165,9 +194,8 @@ body {
 				<div class="slider" id="slider" style=""></div>
 				<div class="target" id="target" style=""></div>
 			</div>
-    <br/>
     <div class="textefeedback" id="res">&nbsp;</div>
-    <br/>
+        <p style="text-align: center;"><button class="button" style="display:visible" type="button" disabled id="boutonLancerBarre" onclick="accessMise()" >Lancer la barre</button></p><br/>
 		<table id="tableMise">
 			<tr><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
 			<tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
