@@ -12,7 +12,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 27; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -102,7 +102,7 @@ function recupMise () {
     //document.getElementById("res").innerHTML = "Appuyez sur ESPACE ou sur le bouton pour arrêter la barre.";
     
     //message de feedback
-    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur le bouton pour arrêter la barre sur la cible."
+    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur le bouton pour arrêter la barre sur la cible.";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;

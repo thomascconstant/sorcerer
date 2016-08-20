@@ -18,7 +18,7 @@ countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 27; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
