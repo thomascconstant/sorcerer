@@ -67,7 +67,7 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-    document.getElementById("res").innerHTML = "Choisissez votre mise.";
+    //document.getElementById("res").innerHTML = "Choisissez votre mise.";
 }
 
 function go(){
@@ -112,7 +112,9 @@ function recupMise () {
     //enregistrerDonnees(0, mise);
     
     //afficher message de consigne
-    document.getElementById("res").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
+    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+    //document.getElementById("res").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
@@ -390,13 +392,29 @@ function res(win) {
         score+=mise;
         tours--;
         playerWin = true;
-        document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " mouton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
+        
+        //message de feedback
+             if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+            }
+            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+        //document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " mouton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
             
     } else if (miseValide) {
         console.log("pas gagne le match");
         score-=mise;
         tours--;
-        document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " mouton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
+        
+        //message de feedback 
+        if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+        }
+        document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        //document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " mouton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
     }
 
     //score = Math.max(0,score);
