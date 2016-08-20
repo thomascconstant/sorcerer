@@ -22,6 +22,14 @@
     width: 100%;
 }
 
+.zonemise {                                                                                                    
+    background-color: #616161; 
+    color: #000000;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
+
 .zonefeedback {
     background-color: #03A9F4; 
     color: #000000;
@@ -154,29 +162,31 @@ body {
 <body onload="init()">
 
     <div class="fondtexte"><br/>
-            <p class="textetitre">L'épreuve de perception visuelle<br/></p> 
-            <p class="texte"><b>Sur une grille de couleur uniforme, 1 case d'une luminosité légèrement différente va clignoter en début de partie.<br/>
-                    Vous disposez d'un nombre de tours limités. Si vous trouvez la case, vous gagnez.</b></p>
-                    <p class="texte">Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/><br/>
-                    Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
-                    A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !<br></p>
-            <p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>
-            <p class="texte" align="center">
-                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>1 &nbsp
-                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>2 &nbsp
-                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>3 &nbsp
-                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>4 &nbsp
-                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>5 &nbsp
-                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>6 &nbsp
-                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>7
-            </p><br/>
-            <!--<p style="text-align: center;"><button class="button" type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p><br/>-->
+        <p class="textetitre">L'épreuve de perception visuelle<br/></p> 
+        <p class="texte"><b>Sur une grille de couleur uniforme, 1 case d'une luminosité légèrement différente va clignoter en début de partie.<br/>
+                Vous disposez d'un nombre de tours limités. Si vous trouvez la case, vous gagnez.</b></p>
+                <p class="texte">Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/><br/>
+                Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
+                A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !</p><br/>
     </div>
-    
     <div class="zonefeedback">
         <div class="compteur" id="affichageCompteur" style="display:none">Une case va clignoter dans <span id="timer">5</span> secondes !</div>
-        <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez votre mise.</div>
+        <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez le nombre de moutons que vous voulez miser sur vos chances de gagner :</div>
+    </div>
+    <div class='zonemise'><br/>
+        <!--<p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>-->
+        <p class="messageFeedback" align="center">
+                <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>&nbsp 1 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>&nbsp 2 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>&nbsp 3 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>&nbsp 4 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>&nbsp 5 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>&nbsp 6 &nbsp &nbsp
+                <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>&nbsp 7
+        </p><br/>
+            <!--<p style="text-align: center;"><button class="button" type="button" id="boutonMiser" onclick="recupMise()" >Valider votre mise</button></p><br/>-->
     </div><br/>
+    
 	<div class="site">
 
 		<div class="inSite">
