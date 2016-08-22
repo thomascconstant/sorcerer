@@ -339,8 +339,8 @@ function makeGame(width,nbCellsX,diffColor) {
     var cases = [];
 
     //changer le nombre de cases qui clignote et le nbre de case à trouver
-    var nbCells = 1;
-    nbCasesToFind = 1;
+    var nbCells = 3;
+    nbCasesToFind = 3;
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
