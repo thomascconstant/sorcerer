@@ -4,14 +4,32 @@ var scoreJoueurHugh = 0; //Score du joueur à renseigner en fin de session de je
 
 //à commenter pour la version en ligne
 var figures = [
+    "../src/img/cloud.svg",
+    "../src/img/extension.svg",
+    "../src/img/face.svg",
+    "../src/img/favorite.svg",
+    "../src/img/grade.svg",
+    "../src/img/home.svg",
+    "../src/img/moon.svg"];
+//old version
+/*var figures = [
     "../src/img/cool.svg",
     "../src/img/deg.svg",
     "../src/img/triste.svg",
     "../src/img/haha.svg",
     "../src/img/meh.svg",
     "../src/img/cheveux.svg",
-    "../src/img/smile.svg"];
+    "../src/img/smile.svg"];*/
 //à décommenter pour la version en ligne
+/*var figures = [
+    "../sorcerer/img/cloud.svg",
+    "../sorcerer/img/extension.svg",
+    "../sorcerer/img/face.svg",
+    "../sorcerer/img/favorite.svg",
+    "../sorcerer/img/grade.svg",
+    "../sorcerer/img/home.svg",
+    "../sorcerer/img/moon.svg"];*/
+//old version
 /*var figures = [
     "../sorcerer/img/cool.svg",
     "../sorcerer/img/deg.svg",
