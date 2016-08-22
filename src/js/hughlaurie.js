@@ -497,7 +497,7 @@ function finDePartie() {
         console.log(scoreJoueurHugh);
         
         //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
+        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie===true) {
                 enregistrerDonnees(1,resultatJoueur);
                 var jeuLogicTermine = true;
