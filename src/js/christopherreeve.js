@@ -18,11 +18,10 @@ countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 5; //Nombre de tours restants
+var tours = 20; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
-
     var step = Math.floor((colorCurrent - colorBase) / 10);
     step = Math.max(1,step);
 
@@ -75,22 +74,22 @@ function recupMise() {
         //boutton de mise 1 est validé
         mise = 1;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise2').checked) {
+    } else if(document.getElementById('mise2').checked) {
         mise = 2;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise3').checked) {
+    } else if(document.getElementById('mise3').checked) {
         mise = 3;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise4').checked) {
+    } else if(document.getElementById('mise4').checked) {
         mise = 4;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise5').checked) {
+    } else if(document.getElementById('mise5').checked) {
         mise = 5;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise6').checked) {
+    } else if(document.getElementById('mise6').checked) {
         mise = 6;
         //document.getElementById("boutonMiser").disabled = true;
-    }else if(document.getElementById('mise7').checked) {
+    } else if(document.getElementById('mise7').checked) {
         mise = 7;
         //document.getElementById("boutonMiser").disabled = true;
     }
@@ -106,6 +105,8 @@ function recupMise() {
     document.getElementById("mise6").disabled = true;
     document.getElementById("mise7").disabled = true;
     
+    //nettoyer la grille des cases trouvées (aka nettoyer tableau des cases trouvées), permet de garder afficher les cases trouvées jusqu'à la relance de la mise
+    casesFound = [];
     
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
@@ -170,12 +171,12 @@ function win(ijFind){
 
             if(Math.random() < 0.7) {
                 if(difficulty >= 0.95) {
-                    difficulty = Math.min(0.99,difficulty + 0.01);
+                    difficulty = Math.min(0.99,difficulty + 0.02);
                 } else {
                     difficulty = Math.min(0.95,difficulty + 0.05);
                 }
             } else {
-                nbCells = Math.min(6, nbCells+1);
+                nbCells = Math.min(8, nbCells+1);
             }
             
             //bloquer jeu
@@ -198,7 +199,7 @@ function win(ijFind){
             //afficher message de choix de mise
             document.getElementById("affichageFeedback").style.display = "block";
             
-            casesFound = [];
+            //casesFound = [];
             
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
@@ -255,7 +256,7 @@ function fail(){
             nbCells = Math.max(2, nbCells-1);
         }
         
-        casesFound = [];
+        //casesFound = [];
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
@@ -339,8 +340,8 @@ function makeGame(width,nbCellsX,diffColor) {
     var cases = [];
 
     //changer le nombre de cases qui clignote et le nbre de case à trouver
-    var nbCells = 3;
-    nbCasesToFind = 3;
+    var nbCells = 4;
+    nbCasesToFind = 4;
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
