@@ -9,7 +9,7 @@ function donnerID () {
     console.log(IDjoueur);
     localStorage.setItem("joueur",IDjoueur);
 
-    enregistrerDonnees(0, IDjoueur + ";" + "\n");
+    enregistrerDonnees(0, "IDjoueur" + ";" + "nom du jeu" + ";" + "mise" + ";" + "tours restant" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant ?" + "\n");
     lancerJeu();
     
 };
