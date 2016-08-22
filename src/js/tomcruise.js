@@ -14,6 +14,7 @@ var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
 var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
+var winState = false; //statut du joueur, false pour perdant
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
@@ -203,12 +204,14 @@ function stop() {
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res + "\n";
+    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + winState + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
 
     //On met a jour le score, etc...
     if(res === 1) {
         score += mise;
+        winState = true;
+        
         //message de feedback
         if (mise === 1) {
             document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour relancer la barre.";
@@ -221,6 +224,8 @@ function stop() {
     }
     else {
         score -= mise;
+        winState = false;
+        
         //message de feedback 
         if (mise === 1) {
             document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Cliquez sur le bouton pour relancer la barre.";
@@ -360,13 +365,13 @@ function finDePartie() {
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuMotriceTermine = true;
                 localStorage.setItem("tomcruise", jeuMotriceTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuMotriceTermine = true;
                 localStorage.setItem("tomcruise", jeuMotriceTermine);
                 // open it in a new window / tab (depends on browser setting)

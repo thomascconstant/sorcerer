@@ -9,7 +9,7 @@ function donnerID () {
     console.log(IDjoueur);
     localStorage.setItem("joueur",IDjoueur);
 
-    enregistrerDonnees(0, IDjoueur + ";");
+    enregistrerDonnees(0, IDjoueur + ";" + "\n");
     lancerJeu();
     
 };
@@ -103,16 +103,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type == 0) {
+    if (type === 0) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type == 1) {
+    } else if (type === 1) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

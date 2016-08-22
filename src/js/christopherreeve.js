@@ -13,7 +13,7 @@ var colorBase =  0;
 var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
-var winState = false; //statut du joueur
+var winState = false; //statut du joueur, false pour perdant
 countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
@@ -157,6 +157,10 @@ function win(ijFind){
             
             console.log(nbCasesToFind + "to go");
             
+            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+            resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+            //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
+            
             //Un tour de moins, reset de la mise
             tours--;
             mise = "?";
@@ -173,10 +177,6 @@ function win(ijFind){
             } else {
                 nbCells = Math.min(6, nbCells+1);
             }
-            
-            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
-            //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
             
             //bloquer jeu
             miseValide = false;
@@ -234,6 +234,10 @@ function fail(){
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
+        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+        resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+        //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
+        
         //Un tour de moins, reset de la mise
         tours--;
         mise = "?";
@@ -252,10 +256,6 @@ function fail(){
         }
         
         casesFound = [];
-        
-        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
-        //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
@@ -394,13 +394,13 @@ function finDePartie() {
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuSensoTermine = true;
                 localStorage.setItem("christopherreeve", jeuSensoTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuSensoTermine = true;
                 localStorage.setItem("christopherreeve", jeuSensoTermine);
                 // open it in a new window / tab (depends on browser setting)
@@ -498,16 +498,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type == 0) {
+    if (type === 0) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type == 1) {
+    } else if (type === 1) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

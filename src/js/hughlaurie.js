@@ -99,19 +99,18 @@ function go(){
 function recupMise () {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
-        mise = 1;
-        
-    }else if(document.getElementById('mise2').checked) {
+        mise = 1;  
+    } else if(document.getElementById('mise2').checked) {
         mise = 2;
-    }else if(document.getElementById('mise3').checked) {
+    } else if(document.getElementById('mise3').checked) {
         mise = 3;
-    }else if(document.getElementById('mise4').checked) {
+    } else if(document.getElementById('mise4').checked) {
         mise = 4;
-    }else if(document.getElementById('mise5').checked) {
+    } else if(document.getElementById('mise5').checked) {
         mise = 5;
-    }else if(document.getElementById('mise6').checked) {
+    } else if(document.getElementById('mise6').checked) {
         mise = 6;
-    }else if(document.getElementById('mise7').checked) {
+    } else if(document.getElementById('mise7').checked) {
         mise = 7;
     }
     //afficher mise
@@ -438,7 +437,7 @@ function res(win) {
     //score = Math.max(0,score);
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
+    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
     //reset de la mise et affichage résultat
@@ -500,13 +499,13 @@ function finDePartie() {
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
             if (messageFinPartie===true) {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuLogicTermine = true;
                 localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
+                enregistrerDonnees(1,resultatJoueur);
                 var jeuLogicTermine = true;
                 localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
@@ -544,16 +543,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type == 0) {
+    if (type === 0) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type == 1) {
+    } else if (type === 1) {
         xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
