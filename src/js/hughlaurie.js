@@ -4,40 +4,22 @@ var scoreJoueurHugh = 0; //Score du joueur à renseigner en fin de session de je
 
 //à commenter pour la version en ligne
 var figures = [
-    "../src/img/cloud.svg",
-    "../src/img/extension.svg",
-    "../src/img/face.svg",
-    "../src/img/favorite.svg",
-    "../src/img/grade.svg",
-    "../src/img/home.svg",
-    "../src/img/moon.svg"];
+    "img/cloud.svg",
+    "img/extension.svg",
+    "img/face.svg",
+    "img/favorite.svg",
+    "img/grade.svg",
+    "img/home.svg",
+    "img/moon.svg"];
 //old version
 /*var figures = [
-    "../src/img/cool.svg",
-    "../src/img/deg.svg",
-    "../src/img/triste.svg",
-    "../src/img/haha.svg",
-    "../src/img/meh.svg",
-    "../src/img/cheveux.svg",
-    "../src/img/smile.svg"];*/
-//à décommenter pour la version en ligne
-/*var figures = [
-    "../sorcerer/img/cloud.svg",
-    "../sorcerer/img/extension.svg",
-    "../sorcerer/img/face.svg",
-    "../sorcerer/img/favorite.svg",
-    "../sorcerer/img/grade.svg",
-    "../sorcerer/img/home.svg",
-    "../sorcerer/img/moon.svg"];*/
-//old version
-/*var figures = [
-    "../sorcerer/img/cool.svg",
-    "../sorcerer/img/deg.svg",
-    "../sorcerer/img/triste.svg",
-    "../sorcerer/img/haha.svg",
-    "../sorcerer/img/meh.svg",
-    "../sorcerer/img/cheveux.svg",
-    "../sorcerer/img/smile.svg"];*/
+    "img/cool.svg",
+    "img/deg.svg",
+    "img/triste.svg",
+    "img/haha.svg",
+    "img/meh.svg",
+    "img/cheveux.svg",
+    "img/smile.svg"];*/
 var order = [0,1,2,3,4,5,6];
 var predicats = []; //Tableau dans lequel seront injectées les figures prédicats
 var bruits = []; //Tableau dans lequel le reste des figures seront injectées (hors prédicats)
