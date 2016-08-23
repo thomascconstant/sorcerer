@@ -68,6 +68,7 @@ function init() {
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
     //document.getElementById("res").innerHTML = "Choisissez votre mise.";
+    document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
 }
 
 function go(){
@@ -114,6 +115,9 @@ function recupMise () {
     document.getElementById("affichageFeedback").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     //document.getElementById("res").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
+    
+    //effacer message concernant la séquence
+    document.getElementById("affichageSequence").style.display = "none";
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
@@ -347,6 +351,11 @@ function newRound(){
         tirageDeux = false;
         diffChange();
         clearArray();
+        
+        //afficher message de nouvelle séquence
+        document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures va être modifié.";
+        document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
+        document.getElementById("affichageSequence").style.display = "block";
         //genererPremierTirage();
     }
     
@@ -394,9 +403,9 @@ function res(win) {
         
         //message de feedback
              if (mise === 1) {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise.";
             } else {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise.";   
             }
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
         //document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " mouton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
@@ -408,9 +417,9 @@ function res(win) {
         
         //message de feedback 
         if (mise === 1) {
-            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Choisissez votre mise.";
         } else {
-            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Choisissez votre mise.";   
         }
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         //document.getElementById("res").innerHTML = "Vous n'avez pas trouvé la figure gagnante. <br>"+ mise + " mouton(s) de perdu(s) !<br> Choisissez votre mise pour relancer le jeu.";
