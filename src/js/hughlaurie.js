@@ -353,7 +353,7 @@ function newRound(){
         clearArray();
         
         //afficher message de nouvelle séquence
-        document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures va être modifié.";
+        document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.";
         document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
         document.getElementById("affichageSequence").style.display = "block";
         //genererPremierTirage();
