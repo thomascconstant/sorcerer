@@ -109,11 +109,11 @@ function enregistrerDonnees (type, data) {
     };
 
     if (type === 0) {
-        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true);
+        xhttp.open("POST", "php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
     } else if (type === 1) {
-        xhttp.open("POST", "http://localhost/sorcerer/src/php/toto.php", true );
+        xhttp.open("POST", "php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
     }
