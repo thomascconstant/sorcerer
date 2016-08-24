@@ -48,17 +48,24 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-    /*if(confirm("Des cases de la grille vont clignoter, regardez les bien !")){
-            go();
-        } else {
-            go();
-        }*/
-    makeGame(width,nbCells, difficulty);
+
+    //verrouiller boutons de mise
+    document.getElementById("mise1").disabled = true;
+    document.getElementById("mise2").disabled = true;
+    document.getElementById("mise3").disabled = true;
+    document.getElementById("mise4").disabled = true;
+    document.getElementById("mise5").disabled = true;
+    document.getElementById("mise6").disabled = true;
+    document.getElementById("mise7").disabled = true;
+    
+    //makeGame(width,nbCells, difficulty);
+    //anim = setInterval(animate,20);
 }
 
 function go() {
+    casesFound = [];
     makeGame(width,nbCells,1-difficulty);
-    anim = setInterval(animate,10);
+    anim = setInterval(animate,20);
     /*document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;*/
@@ -68,30 +75,30 @@ function go() {
     document.getElementById("tableMise").style.visibility = "hidden";*/
 }
 
+function goNew() {
+    casesFound = [];
+    document.getElementById("affichageFeedback").style.display = "none"; 
+    console.log("coucou");
+    startTimer();
+}
+
 //récupérer mise
 function recupMise() {
     if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise2').checked) {
         mise = 2;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise3').checked) {
         mise = 3;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise4').checked) {
         mise = 4;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise5').checked) {
         mise = 5;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise6').checked) {
         mise = 6;
-        //document.getElementById("boutonMiser").disabled = true;
     } else if(document.getElementById('mise7').checked) {
         mise = 7;
-        //document.getElementById("boutonMiser").disabled = true;
     }
     //afficher mise
     showMise();
@@ -105,9 +112,6 @@ function recupMise() {
     document.getElementById("mise6").disabled = true;
     document.getElementById("mise7").disabled = true;
     
-    //nettoyer la grille des cases trouvées (aka nettoyer tableau des cases trouvées), permet de garder afficher les cases trouvées jusqu'à la relance de la mise
-    casesFound = [];
-    
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
 
@@ -115,13 +119,26 @@ function recupMise() {
     miseValide = true;
     
     //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageCompteur").style.display = "block";
-    document.getElementById("affichageFeedback").style.display = "none";
-    starTimer();
-
+    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur les cases qui ont clignotées.";
+    //startTimer();
 }
 
-function showMise(){
+function activateMise() {
+   //déverrouiller boutons de sélection de mise
+    document.getElementById("mise1").disabled = false;
+    document.getElementById("mise2").disabled = false;
+    document.getElementById("mise3").disabled = false;
+    document.getElementById("mise4").disabled = false;
+    document.getElementById("mise5").disabled = false;
+    document.getElementById("mise6").disabled = false;
+    document.getElementById("mise7").disabled = false;
+
+    //afficher message de choix de mise
+    document.getElementById("affichageFeedback").style.display = "block";
+    document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise.";
+}
+
+function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
@@ -149,9 +166,9 @@ function win(ijFind){
             
             //message de feedback
              if (mise === 1) {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour générer une nouvelle grille.";
             } else {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";   
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour générer une nouvelle grille.";   
             }
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
             //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
@@ -182,11 +199,14 @@ function win(ijFind){
             //bloquer jeu
             miseValide = false;
             countDownToZero = false;
-            //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
             cleanMise();
             
+            //faire apparaitre bouton pour générer la grille
+            document.getElementById("boutonGenererGrille").style.visibility = "visible";
+            
+            /*
             //déverrouiller boutons de sélection de mise
             document.getElementById("mise1").disabled = false;
             document.getElementById("mise2").disabled = false;
@@ -197,7 +217,7 @@ function win(ijFind){
             document.getElementById("mise7").disabled = false;
             
             //afficher message de choix de mise
-            document.getElementById("affichageFeedback").style.display = "block";
+            document.getElementById("affichageFeedback").style.display = "block";*/
             
             //casesFound = [];
             
@@ -205,12 +225,7 @@ function win(ijFind){
             if (tours === 0 && miseValide === false) {
                 finDePartie();
             } else {
-                
-                /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
-                    makeGame(width,nbCells,1-difficulty);
-                } else {
-                    makeGame(width,nbCells,1-difficulty);
-                }*/
+                //makeGame(width,nbCells,1-difficulty);
             }
             
         }
@@ -262,11 +277,14 @@ function fail(){
         if (tours > 0) {
             miseValide = false;
             countDownToZero = false;
-            //document.getElementById("boutonMiser").disabled = false;
             
             //nettoyer historique des boutons mises
             cleanMise();
             
+            //faire apparaitre bouton pour générer la grille
+            document.getElementById("boutonGenererGrille").style.visibility = "visible";
+            
+            /*
             //déverrouiller boutons de sélection de mise
             document.getElementById("mise1").disabled = false;
             document.getElementById("mise2").disabled = false;
@@ -279,21 +297,11 @@ function fail(){
             //afficher message de choix de mise
             document.getElementById("affichageFeedback").style.display = "block";
             
-            /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
-               makeGame(width,nbCells,1-difficulty);
-           } else {
-               makeGame(width,nbCells,1-difficulty);
-           }*/
+            makeGame(width,nbCells,1-difficulty);*/
            
         } else {
             finDePartie();
         }
-
-        /*if(confirm("De nouvelles cases vont clignoter, regardez les bien !")){
-               makeGame(width,nbCells,1-difficulty);
-           } else {
-               makeGame(width,nbCells,1-difficulty);
-           }*/
 
         console.log(difficulty + "difficulté fail");
     }
@@ -385,6 +393,86 @@ function makeGame(width,nbCellsX,diffColor) {
 
 }
 
+function feedbackSonore() {
+    if(winState === true) {
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+        
+        var tirageSon = soundsWin[Math.floor(Math.random()*soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
+        
+        var x = document.getElementById("winSound");
+        x.play();
+    } else {
+        var soundsFail = [
+            "../src/sounds/fail.mp3" 
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random()*soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
+        
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+    
+    if (tours === 0){
+        var x = document.getElementById("sheepSound");
+        x.play();
+    }
+}
+
+ function startTimer() {
+    //faire apparaître le compte à rebours et le lancer
+    document.getElementById("affichageCompteur").style.display = "block";
+    
+    //faire disparaître bouton pour générer la grille
+    document.getElementById("boutonGenererGrille").style.visibility = "hidden";
+     
+     var seconds = 0;
+    var temp = 0;
+    temp = document.getElementById('timer');
+    temp.innerHTML = "5";
+    //document.getElementById("affichageCompteur").innerHTML = "Nouvelle grille dans <span id="'+timer+'">5</span> secondes !";
+
+    function countdown() {
+        seconds = document.getElementById('timer').innerHTML;
+        seconds = parseInt(seconds, 10);
+
+        if (seconds === 1) {
+            makeGame(width,nbCells,1-difficulty);
+            anim = setInterval(animate,20);
+            console.log(anim);
+            activateMise();
+        }
+
+        if (seconds === 1) {
+            temp = document.getElementById('timer');
+            temp.innerHTML = "0";
+            document.getElementById("affichageCompteur").style.display = "none";
+            countDownToZero = true;
+            return;
+        }
+    
+        seconds--;
+        temp = document.getElementById('timer');
+        temp.innerHTML = seconds;
+        timeoutMyOswego = setTimeout(countdown, 1000);
+    } 
+
+    countdown();   
+}
+
+function colorButton() {
+    document.getElementById('boutonGenererGrille').style.backgroundColor="373b3d";
+}
+
+function uncolorButton() {
+    document.getElementById('boutonGenererGrille').style.backgroundColor="757575";
+}
+
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur
@@ -431,67 +519,6 @@ function finDePartie() {
     } else{
 
     }
-}
-
-function feedbackSonore() {
-    if(winState === true) {
-        var soundsWin = [
-            "../src/sounds/baaaa1.mp3",
-            "../src/sounds/baaaa2.mp3",
-            "../src/sounds/baaaa3.mp3",
-            "../src/sounds/baaaa4.mp3"
-        ];
-        
-        var tirageSon = soundsWin[Math.floor(Math.random()*soundsWin.length)];
-        document.getElementById("winSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
-        
-        var x = document.getElementById("winSound");
-        x.play();
-    } else {
-        var soundsFail = [
-            "../src/sounds/fail.mp3" 
-        ];
-        var tirageSon = soundsFail[Math.floor(Math.random()*soundsFail.length)];
-        document.getElementById("failSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
-        
-        var x = document.getElementById("failSound");
-        x.play();
-    }
-    
-    if (tours === 0){
-        var x = document.getElementById("sheepSound");
-        x.play();
-    }
-
-}
-
- function starTimer() {
-    var seconds = 0;
-    var temp = 0;
-    temp = document.getElementById('timer');
-    temp.innerHTML = "5";
-    //document.getElementById("affichageCompteur").innerHTML = "Nouvelle grille dans <span id="'+timer+'">5</span> secondes !";
-
-    function countdown() {
-    seconds = document.getElementById('timer').innerHTML;
-    seconds = parseInt(seconds, 10);
-
-    if (seconds === 1) {
-    temp = document.getElementById('timer');
-    temp.innerHTML = "0";
-    go();
-    document.getElementById("affichageCompteur").style.display = "none";
-    countDownToZero = true;
-    return;
-    }
-
-    seconds--;
-    temp = document.getElementById('timer');
-    temp.innerHTML = seconds;
-    timeoutMyOswego = setTimeout(countdown, 1000);
-    } 
-
-    countdown();   
 }
 
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
