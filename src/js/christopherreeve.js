@@ -14,7 +14,7 @@ var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var winState = false; //statut du joueur, false pour perdant
-countDownToZero = false; //statut du compte à rebours
+var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
