@@ -42,8 +42,8 @@ var playerWin = false;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 27; //Nombre de tours restants
-var sequence = 0; //Numéro de la séquence en cours
+var tours = 10; //Nombre de tours restants
+var sequence = 2; //Numéro de séquences restantes
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -65,12 +65,12 @@ function genererBruits () {
 }
 
 function init() {
-    document.getElementById("tours").innerHTML = tours;
+    //document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
     document.getElementById("sequence").innerHTML = sequence;
     //document.getElementById("res").innerHTML = "Choisissez votre mise.";
-    document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
+    document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
 }
 
 function go(){
@@ -127,9 +127,10 @@ function recupMise () {
 
 function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
-    document.getElementById("tours").innerHTML = tours;
+    //document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    document.getElementById("sequence").innerHTML = sequence;
 }
 
 function cleanMise() {
@@ -341,14 +342,14 @@ function doIBeatHim(me, him) {
 }
 
 function newRound(){
-    if (tirageUn && miseValide) {
+    if (tirageUn && miseValide && sequence > 0) {
         tirageFinal = false;
         genererTirageSansZero();
-    } else if (tirageDeux && miseValide && nbreToursBruits <=1) {
+    } else if (tirageDeux && miseValide && sequence > 0 && nbreToursBruits <=1) {
         genererTirageConclusion();
-    } else if (tirageDeux && miseValide && nbreToursBruits > 1) {
+    } else if (tirageDeux && miseValide && sequence > 0 && nbreToursBruits > 1) {
         genererTirageBruits();
-    } else if (tirageFinal && miseValide) {
+    } else if (tirageFinal && miseValide && sequence > 0) {
         tirageUn = false;
         tirageDeux = false;
         diffChange();
@@ -356,13 +357,19 @@ function newRound(){
         
         //afficher message de nouvelle séquence
         document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.";
-        document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
+        document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
         document.getElementById("affichageSequence").style.display = "block";
         //genererPremierTirage();
         
         //mise à jour de la séquence
-        sequence++;
+        sequence--;
         document.getElementById("sequence").innerHTML = sequence;
+        
+        if (sequence === 0) {
+            finDePartie();
+        }
+    } else if (sequence === 0) {
+        finDePartie();
     }
     
     playerWin = false;
@@ -434,14 +441,15 @@ function res(win) {
     //score = Math.max(0,score);
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
+    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + sequence + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
     //reset de la mise et affichage résultat
     mise = "?";
-    document.getElementById("tours").innerHTML = tours;
+    //document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    document.getElementById("sequence").innerHTML = sequence;
     
     //nettoyer historique boutons mises
     cleanMise();
@@ -455,7 +463,7 @@ function res(win) {
     document.getElementById("mise6").disabled = false;
     document.getElementById("mise7").disabled = false;
     
-    if (miseValide && tours > 0) {
+    if (miseValide && sequence > 0) {
         newRound();
     } else {
         finDePartie();
@@ -487,7 +495,7 @@ function uncolorHim() {
 }
 
 function finDePartie() {
-    if (tours === 0){
+    if (sequence === 0){
         //récupérer score final du joueur
         scoreJoueurHugh = score;
         localStorage.scoreJoueurHugh = scoreJoueurHugh;
