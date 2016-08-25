@@ -98,6 +98,27 @@ function uncolorButton() {
     document.getElementById('commencerJeu').style.backgroundColor="757575";
 }
 
+function afficherResults() {
+    var jeuMotriceTermine = localStorage.getItem("tomcruise");
+    var jeuSensoTermine = localStorage.getItem("christopherreeve");
+    var jeuLogicTermine = localStorage.getItem("hughlaurie");
+
+    if (jeuMotriceTermine) {
+        document.getElementById("affichageTom").style.display = "block"; 
+        document.getElementById("resultTom").style.display = "block"; 
+    }
+    
+    if (jeuSensoTermine) {
+        document.getElementById("affichageChristopher").style.display = "block"; 
+        document.getElementById("resultChristopher").style.display = "block";
+    }
+    
+    if (jeuLogicTermine) {
+        document.getElementById("affichageHugh").style.display = "block"; 
+        document.getElementById("resultHugh").style.display = "block";
+    }
+}
+
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();

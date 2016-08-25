@@ -145,7 +145,7 @@ body {
 
 </head>
 
-<body onload="feedbackScore(),ambianceSonore()">
+<body onload="feedbackScore(),ambianceSonore(),afficherResults()">
 
     <div class="fondtexte">
 		<p class="textetitre" align="center">L'antre du Sorcier</p>
@@ -155,12 +155,12 @@ body {
                     Pensez en effet aux moutons que vous avez pu sauver... et à ceux que vous avez condamnés.</b></p>
     
 		<div class='zonefeedback'>
-                    <p class="textescore">Votre score pour le jeu d'adresse est de :</p>
-                        <div class="texteresults" id="resultTom"></div>	
-                    <p class="textescore">Votre score pour le jeu de perception visuelle est de :</p>
-			<div class="texteresults" id="resultChristopher"></div>
-                    <p class="textescore">Votre score pour le jeu de déduction est de :</p>
-			<div class="texteresults" id="resultHugh"></div><br/>
+                    <p class="textescore" style="display:none" id="affichageTom">Votre score pour le jeu d'adresse est de :</p>
+                        <div class="texteresults" style="display:none" id="resultTom"></div>	
+                    <p class="textescore" style="display:none" id="affichageChristopher">Votre score pour le jeu de perception visuelle est de :</p>
+			<div class="texteresults" style="display:none" id="resultChristopher"></div>
+                    <p class="textescore" style="display:none" id="affichageHugh">Votre score pour le jeu de déduction est de :</p>
+			<div class="texteresults" style="display:none" id="resultHugh"></div><br/>
 
     <div class="zonebutton">
         <p style="text-align: center;"><button class="button" type="button" id="commencerJeu" value="disable" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="lancerJeu()">Poursuivre l'aventure !</button></p>
