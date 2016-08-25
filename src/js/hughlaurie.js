@@ -43,7 +43,7 @@ var playerWin = false;
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 10; //Nombre de tours restants
-var sequence = 2; //Numéro de séquences restantes
+var sequence = 10; //Numéro de séquences restantes
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -500,7 +500,6 @@ function res(win) {
     document.getElementById("mise7").disabled = false;
     
     miseValide=false;
-    
 }
 
 function colorMe() {
