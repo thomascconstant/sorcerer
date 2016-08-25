@@ -225,7 +225,7 @@ function genererTirageConclusion() {
     var i = 0;
     while (i<1) {
         var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
-        if (conclusionTirage.includes(tirageB) === false && tirageB !== tirageA) {
+        if (conclusionTirage.includes(tirageB) === false && premierTirage.includes(tirageB) === false && deuxiemeTirage.includes(tirageB) && tirageB !== tirageA) {
             conclusionTirage.push(tirageB);
             i++;
         }
