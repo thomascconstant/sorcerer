@@ -43,6 +43,7 @@ var playerWin = false;
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 27; //Nombre de tours restants
+var sequence = 0; //Numéro de la séquence en cours
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -67,6 +68,7 @@ function init() {
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
+    document.getElementById("sequence").innerHTML = sequence;
     //document.getElementById("res").innerHTML = "Choisissez votre mise.";
     document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
 }
@@ -357,6 +359,10 @@ function newRound(){
         document.getElementById("affichageSequence").style.backgroundColor = "#E0E0E0";
         document.getElementById("affichageSequence").style.display = "block";
         //genererPremierTirage();
+        
+        //mise à jour de la séquence
+        sequence++;
+        document.getElementById("sequence").innerHTML = sequence;
     }
     
     playerWin = false;
