@@ -343,18 +343,20 @@ function doIBeatHim(me, him) {
 
 function newRound(){
     if (tirageUn && miseValide && sequence > 0) {
-        tirageFinal = false;
+        //tirageFinal = false;
         genererTirageSansZero();
     } else if (tirageDeux && miseValide && sequence > 0 && nbreToursBruits <=1) {
         genererTirageConclusion();
     } else if (tirageDeux && miseValide && sequence > 0 && nbreToursBruits > 1) {
         genererTirageBruits();
-    } else if (tirageFinal && miseValide && sequence > 0) {
+    } else if (tirageFinal && miseValide) {
         tirageUn = false;
         tirageDeux = false;
         diffChange();
         clearArray();
+        tirageFinal = false;
         
+        if (sequence > 0) {
         //afficher message de nouvelle séquence
         document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.";
         document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
@@ -362,15 +364,12 @@ function newRound(){
         //genererPremierTirage();
         
         //mise à jour de la séquence
-        sequence--;
-        document.getElementById("sequence").innerHTML = sequence;
-        
-        if (sequence === 0) {
-            finDePartie();
-        }
-    } else if (sequence === 0) {
-        finDePartie();
-    }
+        //sequence--;
+        //document.getElementById("sequence").innerHTML = sequence;
+        } //else if (sequence === 0) {
+            //finDePartie();
+        //}
+    } 
     
     playerWin = false;
 }
@@ -415,7 +414,7 @@ function res(win) {
         playerWin = true;
         
         //message de feedback
-             if (mise === 1) {
+            if (mise === 1) {
                 document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise.";
             } else {
                 document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise.";   
@@ -444,8 +443,6 @@ function res(win) {
     resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + sequence + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
-    //reset de la mise et affichage résultat
-    mise = "?";
     //document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
@@ -453,6 +450,45 @@ function res(win) {
     
     //nettoyer historique boutons mises
     cleanMise();
+    
+    //verrouiller boutons figures
+    document.getElementById("me").disabled = true;
+    document.getElementById("him").disabled = true;
+    
+    if (miseValide && tirageFinal === false && sequence > 0) {
+        newRound();
+    } else if (miseValide && tirageFinal && sequence > 1) {
+        sequence--;
+        console.log(sequence + "sequence");
+        document.getElementById("sequence").innerHTML = sequence;
+        newRound();
+    } else if (miseValide && sequence >= 1 && tirageFinal) {
+        sequence--;
+        console.log(sequence + "sequence");
+        document.getElementById("sequence").innerHTML = sequence;
+        
+        if(doIBeatHim(me,him) === win){
+            score+=mise;
+            if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons.";   
+            }
+            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+        } else if (doIBeatHim(me,him) !== win) {
+            score-=mise;
+            if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons.";   
+            }
+            document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        }
+        setInterval(finDePartie,1500);
+    }
+    
+    //reset de la mise et affichage résultat
+    mise = "?";
     
     //déverrouiller boutons de mise
     document.getElementById("mise1").disabled = false;
@@ -463,17 +499,8 @@ function res(win) {
     document.getElementById("mise6").disabled = false;
     document.getElementById("mise7").disabled = false;
     
-    if (miseValide && sequence > 0) {
-        newRound();
-    } else {
-        finDePartie();
-    }
-    
     miseValide=false;
     
-    //verrouiller boutons figures
-    document.getElementById("me").disabled = true;
-    document.getElementById("him").disabled = true;
 }
 
 function colorMe() {
