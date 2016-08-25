@@ -19,6 +19,7 @@
 .fondtexte {                                                                                                    
     background-color: #373b3d; 
     color: #000000;
+    padding-top: 1vw;
     padding: auto;   
     margin: auto;
     width: 100%;
@@ -70,7 +71,7 @@ body {
 	
 .textetitre {
     font-family: 'Uncial Antiqua', cursive;                                                
-    color: #fafafa;
+    color: #757575;
     text-align:center; 
     font-size: 2vw;
     font-style: normal;
@@ -125,7 +126,10 @@ body {
 }
 
 .inSite {
-    padding: 20px;
+    padding-top: 1vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-bottom: 0;
     border: 1px solid black;
     margin-left: auto;
     margin-right: auto;
@@ -148,7 +152,7 @@ body {
 
 .table, tr, td {
     color: #212121;
-    padding:auto;
+    padding: auto;
     margin: 0vw;
     border: 0vw solid white;
     border-collapse: collapse;
@@ -162,21 +166,21 @@ body {
 
 <body onload="go(),init()">
 
-    <div class="fondtexte"><br/>
-        <p class="textetitre">L'épreuve de déduction<br/></p> 
-        <p class="texte"><b>Un couple de figures vous est présenté : l'une d'entre elle est toujours plus forte que l'autre. Pour gagner, vous devez trouver laquelle.<br/>
+    <div class="fondtexte">
+        <div class="textetitre">L'épreuve de déduction</div> 
+        <div class="texte"><b>Un couple de figures vous est présenté : l'une d'entre elle est toujours plus forte que l'autre. Pour gagner, vous devez trouver laquelle.<br/>
                 Les figures apparaissent au cours de séquences comprenant plusieurs couples. Le choix d'une figure au sein d'un couple équivaut à un tour de jeu.<br/>
-                Vous disposez d'un nombre de tours limités. Pour chacun d'entre eux, vous devez miser 1 à 7 moutons sur vos chances de gagner.</b><br/>
+                Vous disposez d'un nombre de tours limités. Pour chacun d'entre eux, vous devez miser 1 à 7 moutons sur vos chances de gagner.</b></div>
 		<p class="texte">Votre objectif est de sauver le plus de moutons possibles. Sinon, ils finissent à la broche.<br/>
-		A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Sauvez les tous !</p><br/>
-    </div>
+		A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Sauvez les tous !</p>
+    
     <div class="zonefeedback">
         <div class="messageSequence" id="affichageSequence" style="display:block">Vous commencez une première séquence.</div>
         <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez le nombre de moutons que vous voulez miser sur vos chances de gagner :</div>
     </div>
-    <div class='zonemise'><br/>
+    <div class='zonemise'>
 		<!--<p class="texte" align="center"><i>Choisissez votre mise puis cliquez sur la figure gagnante :</i></p>-->
-		<p class="messageFeedback" align="center">
+		<div class="messageFeedback" align="center">
 			<input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>&nbsp 1 &nbsp &nbsp
 			<input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>&nbsp 2 &nbsp &nbsp
 			<input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>&nbsp 3 &nbsp &nbsp
@@ -184,10 +188,8 @@ body {
 			<input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>&nbsp 5 &nbsp &nbsp
 			<input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>&nbsp 6 &nbsp &nbsp
 			<input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>&nbsp 7
-		</p><br/></div>
-	
+		</div></div></div>
 	<br/>
-    
 	<div class="site">
 
 		<div class="inSite">
