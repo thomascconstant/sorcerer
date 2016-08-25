@@ -77,6 +77,7 @@ function go() {
 
 function goNew() {
     casesFound = [];
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     document.getElementById("affichageFeedback").style.display = "none"; 
     console.log("coucou");
     startTimer();
