@@ -360,8 +360,8 @@ function newRound(){
         
         if (sequence > 0) {
         //afficher message de nouvelle séquence
-        //alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.");
-        document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.";
+        //alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié.");
+        document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié.";
         document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
         document.getElementById("affichageSequence").style.display = "block";
         
@@ -509,9 +509,9 @@ function res(win) {
 }
 
 function messageDelayed() {
-    popUp = setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié."); }, 1000);
+    popUp = setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié."); }, 1000);
 
-    //setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié."); }, 2000);
+    //setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié."); }, 2000);
 }
 
 function colorMe() {
