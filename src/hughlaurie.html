@@ -116,7 +116,7 @@ body {
 }
 
 .site {
-    width: 435px;
+    width: 500px;
     height: auto;
     padding: auto;
     border: 0px solid black;
@@ -140,6 +140,13 @@ body {
     color: #212121;
     font-size: 3vw;
     width: 10vw;
+    text-align: center;
+}
+
+.little {
+    color: #757575;
+    font-size: 1.5vw;
+    width: 5vw;
     text-align: center;
 }
 
@@ -195,7 +202,7 @@ body {
 		<div class="inSite">
 
 			<table>
-				<tr><td id="me" onmouseover="colorMe()" onmouseout="uncolorMe()" style="cursor:pointer" onclick="res(true)">&nbsp;</td><td id="him" onmouseover="colorHim()" onmouseout="uncolorHim()" style="cursor:pointer" onclick="res(false)" >&nbsp;</td></tr>
+                            <tr><td id="me" onmouseover="colorMe()" onmouseout="uncolorMe()" style="cursor:pointer" onclick="res(true)">&nbsp;<td class="little">vs</td><td id="him" onmouseover="colorHim()" onmouseout="uncolorHim()" style="cursor:pointer" onclick="res(false)" >&nbsp;</td></tr>
 			</table>
 
 		<div class="textefeedback" id="res"></div>
