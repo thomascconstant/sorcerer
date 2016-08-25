@@ -40,6 +40,8 @@ var him;
 
 var playerWin = false;
 
+var popUp= 0;
+
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 10; //Nombre de tours restants
@@ -358,10 +360,10 @@ function newRound(){
         
         if (sequence > 0) {
         //afficher message de nouvelle séquence
+        //alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.");
         document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié.";
         document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
         document.getElementById("affichageSequence").style.display = "block";
-        //genererPremierTirage();
         
         //mise à jour de la séquence
         //sequence--;
@@ -461,6 +463,10 @@ function res(win) {
         sequence--;
         console.log(sequence + "sequence");
         document.getElementById("sequence").innerHTML = sequence;
+        
+        //afficher pop-up spécifiant le changement de séquence
+        //messageDelayed();
+        
         newRound();
     } else if (miseValide && sequence >= 1 && tirageFinal) {
         sequence--;
@@ -500,6 +506,12 @@ function res(win) {
     document.getElementById("mise7").disabled = false;
     
     miseValide=false;
+}
+
+function messageDelayed() {
+    popUp = setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié."); }, 1000);
+
+    //setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport des forces entre les figures a été modifié."); }, 2000);
 }
 
 function colorMe() {
