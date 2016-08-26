@@ -38,14 +38,15 @@ var tirageBruits = false;
 var me;
 var him;
 
-var playerWin = false;
+var playerWin = false; //statut du joueur, false pour perdant
+var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
 var popUp= 0;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 10; //Nombre de tours restants
-var sequence = 10; //Numéro de séquences restantes
+var tours = 30; //Nombre de tours restants
+var sequence = 3; //Numéro de séquences restantes
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
@@ -413,6 +414,7 @@ function res(win) {
         console.log("gagne le match");
         score+=mise;
         tours--;
+        actionDeJeu++;
         playerWin = true;
         
         //message de feedback
@@ -428,6 +430,7 @@ function res(win) {
         console.log("pas gagne le match");
         score-=mise;
         tours--;
+        actionDeJeu++;
         
         //message de feedback 
         if (mise === 1) {
@@ -442,7 +445,7 @@ function res(win) {
     //score = Math.max(0,score);
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + sequence + ";" + difficulte + ";" + score + ";" + playerWin + "\n";
+    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + sequence + ";" + mise + ";" + difficulte + ";" + score + ";" + playerWin + ";" + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
     //document.getElementById("tours").innerHTML = tours;
@@ -586,16 +589,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type === 0) {
+    if (type == 0) {
         xhttp.open("POST", "php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type === 1) {
+    } else if (type == 1) {
         xhttp.open("POST", "php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

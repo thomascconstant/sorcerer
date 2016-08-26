@@ -13,12 +13,15 @@ var colorBase =  0;
 var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
+
 var winState = false; //statut du joueur, false pour perdant
+var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
+
 var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
 
 function animate(){
@@ -162,8 +165,10 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
-            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             score += mise;
+            actionDeJeu++;
+            
+            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
             
             //message de feedback
              if (mise === 1) {
@@ -177,7 +182,7 @@ function win(ijFind){
             console.log(nbCasesToFind + "to go");
             
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+            resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
             //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
             
             //Un tour de moins, reset de la mise
@@ -239,8 +244,10 @@ function win(ijFind){
 function fail(){
     if (miseValide === true && countDownToZero === true){
         winState = false;
-        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         score -= mise;
+        actionDeJeu++;
+                
+        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         
         //message de feedback 
         if (mise === 1) {
@@ -252,7 +259,7 @@ function fail(){
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState + "\n";
+        resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
         //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
         
         //Un tour de moins, reset de la mise
@@ -527,16 +534,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type === 0) {
+    if (type == 0) {
         xhttp.open("POST", "php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type === 1) {
+    } else if (type == 1) {
         xhttp.open("POST", "php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

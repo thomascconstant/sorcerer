@@ -9,7 +9,8 @@ function donnerID () {
     console.log(IDjoueur);
     localStorage.setItem("joueur",IDjoueur);
 
-    enregistrerDonnees(0, "IDjoueur" + ";" + "nom du jeu" + ";" + "mise" + ";" + "tours restant" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant ?" + "\n");
+    //enregistrerDonnees(0, "IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
+    enregistrerDonnees(1,"\n");
     lancerJeu();
     
 };
@@ -86,7 +87,8 @@ function lancerJeu () {
         var lien = liensJeux[randIdx]; //à décommenter pour avoir un lancement aléatoire des jeux
         // var lien = "introtom.html"; //à décommenter pour ne lancer que ce jeu
         // open it in a new window / tab (depends on browser setting)
-        window.open(lien,'_self',false);
+        //window.open(lien,'_self',false);
+        window.open('introtom.html','_self',false);
     }
 }
 
@@ -124,16 +126,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type === 0) {
+    if (type == 0) {
         xhttp.open("POST", "php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type === 1) {
+    } else if (type == 1) {
         xhttp.open("POST", "php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);

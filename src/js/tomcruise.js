@@ -12,9 +12,11 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 20; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
+
 var winState = false; //statut du joueur, false pour perdant
+var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
@@ -203,14 +205,11 @@ function stop() {
 
     var res = (leftTarget + widthTarget >= leftSlider && leftTarget <= (leftSlider + widthSlider)) ? 1 : 0;
 
-    //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + winState + "\n";
-    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
-
     //On met a jour le score, etc...
     if(res === 1) {
         score += mise;
         winState = true;
+        actionDeJeu++;
         
         //message de feedback
         if (mise === 1) {
@@ -225,6 +224,7 @@ function stop() {
     else {
         score -= mise;
         winState = false;
+        actionDeJeu++;
         
         //message de feedback 
         if (mise === 1) {
@@ -243,8 +243,14 @@ function stop() {
 
     console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
 
-    //Un tour de moins, reset de la mise
+    //Un tour de moins
     tours--;
+    
+    //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";"+ gameSpeed + ";" + score + ";" + winState + ";" + "\n";
+    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
+    
+    //Reset de la mise
     mise = "?";
     document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
@@ -410,16 +416,16 @@ function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
             //console.log(xhttp.response);
         }
     };
 
-    if (type === 0) {
+    if (type == 0) {
         xhttp.open("POST", "php/toto.php", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
-    } else if (type === 1) {
+    } else if (type == 1) {
         xhttp.open("POST", "php/toto.php", true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
