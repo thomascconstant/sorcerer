@@ -10,7 +10,7 @@ function donnerID () {
     localStorage.setItem("joueur",IDjoueur);
 
     //enregistrerDonnees(0, "IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
-    enregistrerDonnees(1,"\n");
+    //enregistrerDonnees(1,"\n");
     lancerJeu();
     
 };
@@ -87,8 +87,7 @@ function lancerJeu () {
         var lien = liensJeux[randIdx]; //à décommenter pour avoir un lancement aléatoire des jeux
         // var lien = "introtom.html"; //à décommenter pour ne lancer que ce jeu
         // open it in a new window / tab (depends on browser setting)
-        //window.open(lien,'_self',false);
-        window.open('introtom.html','_self',false);
+        window.open(lien,'_self',false);
     }
 }
 
