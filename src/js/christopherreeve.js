@@ -83,6 +83,7 @@ function goNew() {
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     document.getElementById("affichageFeedback").style.display = "none"; 
     console.log("coucou");
+    makeGameNoColors(width,nbCells,1-difficulty); //afficher la grille sans cases à trouver
     startTimer();
 }
 
@@ -358,6 +359,83 @@ function makeGame(width,nbCellsX,diffColor) {
     //changer le nombre de cases qui clignote et le nbre de case à trouver
     var nbCells = 4;
     nbCasesToFind = 4;
+
+    for(var i=0;i<nbCells;i++)	{
+        var ijFind = 0;
+        do {
+            ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+        } while(cases.indexOf(ijFind) >= 0)
+        cases.push(ijFind);
+    }
+
+    var iFind = Math.floor(Math.random() * nbCellsX);
+    var jFind = Math.floor(Math.random() * nbCellsX);
+
+    var iDecoy = Math.floor(Math.random() * nbCellsX);
+    var jDecoy = Math.floor(Math.random() * nbCellsX);
+
+    var strHtml = '';
+    strHtml += '<table>';
+    for(var i=0;i<nbCellsX;i++) {
+        strHtml += '<tr>';
+        for(var j=0;j<nbCellsX;j++) {
+            var color = colorBaseHex;
+            var clickFun = "fail()";
+            var name = "cellFail";
+
+            var ijFind = i + j * nbCellsX;
+
+            if(cases.indexOf(ijFind) >= 0) {
+                color = colorFindHex;
+                clickFun = "win(" + ijFind + ")";
+                name = "cellWin";
+            }
+            
+            strHtml += '<td id="' + ijFind + '" name="'+name+'" style="background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="' + clickFun + '">&nbsp;';
+            strHtml += '</td>';
+        }
+        strHtml += '</tr>';
+    }
+    strHtml += '</table>';
+
+    document.getElementById("board").innerHTML = strHtml;
+
+}
+
+function makeGameNoColors(width,nbCellsX,diffColor) {
+    //nbCellsX = 5;
+
+    //Calc des props
+    var widthCell = width / nbCellsX;
+    var colorBaseR = Math.floor(Math.random() * 128 + 64);
+    var colorBaseV = Math.floor(Math.random() * 128 + 64);
+    var colorBaseB = Math.floor(Math.random() * 128 + 64);
+
+    colorBaseR = 128;
+    colorBaseV = colorBaseR;
+    colorBaseB = colorBaseR;
+
+
+    colorBase = colorBaseR;
+
+    var colorFindR = Math.floor(colorBaseR + 64 * diffColor);
+    var colorFindV = Math.floor(colorBaseV + 64 * diffColor);
+    var colorFindB = Math.floor(colorBaseB + 64 * diffColor);
+
+    colorTarget = colorFindB;
+    colorCurrent = colorTarget;
+
+    var colorBaseHex = toHexColor(colorBaseR,colorBaseV,colorBaseB);
+    var colorFindHex = toHexColor(colorFindR,colorFindV,colorFindB);
+
+    //console.log(colorBaseHex);
+    //console.log(colorFindHex);
+
+    var cases = [];
+
+    //changer le nombre de cases qui clignote et le nbre de case à trouver
+    var nbCells = 0;
+    nbCasesToFind = 0;
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
