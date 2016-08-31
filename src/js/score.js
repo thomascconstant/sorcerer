@@ -10,7 +10,6 @@ function feedbackScore () {
     document.getElementById("resultHugh").innerHTML = localStorage.scoreJoueurHugh;
 }
 
-
 function feedbackScoreGeneral () {
     if (scoreGlobal >= 10 && scoreGlobal < 50) {
         scoreGlobal = Math.abs(scoreGlobal);
