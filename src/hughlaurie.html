@@ -203,7 +203,7 @@ body {
 		<div class="inSite">
 
 			<table>
-                            <tr><td id="me" onmouseover="colorMe()" onmouseout="uncolorMe()" style="cursor:pointer" onclick="res(true)">&nbsp;<td class="little">vs</td><td id="him" onmouseover="colorHim()" onmouseout="uncolorHim()" style="cursor:pointer" onclick="res(false)" >&nbsp;</td></tr>
+                            <tr><td id="me" style="pointer-events:none; cursor:pointer" onmouseover="colorMe()" onmouseout="uncolorMe()" onclick="res(true)">&nbsp;<td class="little">vs</td><td id="him" style="cursor:pointer; pointer-events:none" onmouseover="colorHim()" onmouseout="uncolorHim()" onclick="res(false)" >&nbsp;</td></tr>
 			</table>
 
 		<div class="textefeedback" id="res"></div>
