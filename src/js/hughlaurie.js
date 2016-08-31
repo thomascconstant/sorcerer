@@ -45,13 +45,16 @@ var popUp= 0;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 30; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
 var sequence = 3; //Numéro de séquences restantes
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");
 var nbreToursBruits = 0; //Nombre de tours que doit faire la fonction genererBruits();
 var resultatJoueur = [];
+
+var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
+//var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
 // générer le tableau de figures qui s'intercaleront entre le deuxième tirage et la conclusion à partir des prédicats
 function genererBruits () {
@@ -80,7 +83,6 @@ function go(){
     shuffleOrder();
     console.log(order);
     genererTirageAvecZero();
-    
 }
 
 // récupérer mise
@@ -113,8 +115,9 @@ function recupMise () {
     document.getElementById("mise6").disabled = true;
     document.getElementById("mise7").disabled = true;
     
-    //enregistrer mise dans csv
-    //enregistrerDonnees(0, mise);
+    //déverrouiller boutons figures
+    document.getElementById("me").style.pointerEvents = "auto";
+    document.getElementById("him").style.pointerEvents = "auto";
     
     //afficher message de consigne
     document.getElementById("affichageFeedback").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
@@ -126,6 +129,10 @@ function recupMise () {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
+}
+
+function test(){
+    console.log("coucou");
 }
 
 function showMise() {
@@ -361,7 +368,6 @@ function newRound(){
         
         if (sequence > 0) {
         //afficher message de nouvelle séquence
-        //alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié.");
         document.getElementById("affichageSequence").innerHTML = "Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié.";
         document.getElementById("affichageSequence").style.backgroundColor = "#FFC107";
         document.getElementById("affichageSequence").style.display = "block";
@@ -410,6 +416,7 @@ function diffChange(win) {
 
 function res(win) {
     console.log(win);
+    
     if(miseValide && doIBeatHim(me,him) === win){
         console.log("gagne le match");
         score+=mise;
@@ -418,12 +425,12 @@ function res(win) {
         playerWin = true;
         
         //message de feedback
-            if (mise === 1) {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise.";
-            } else {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise.";   
-            }
-            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+        if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Choisissez votre mise.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Choisissez votre mise.";   
+        }
+        document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
         //document.getElementById("res").innerHTML = "Vous avez trouvé la figure gagnante. <br>"+ mise + " mouton(s) de sauvé(s) !<br> Choisissez votre mise pour relancer le jeu.";
             
     } else if (miseValide) {
@@ -457,8 +464,10 @@ function res(win) {
     cleanMise();
     
     //verrouiller boutons figures
-    document.getElementById("me").disabled = true;
-    document.getElementById("him").disabled = true;
+    document.getElementById('me').style.backgroundColor="F5F5F5";
+    document.getElementById('him').style.backgroundColor="F5F5F5";
+    document.getElementById("me").style.pointerEvents = "none";
+    document.getElementById("him").style.pointerEvents = "none";
     
     if (miseValide && tirageFinal === false && sequence > 0) {
         newRound();
@@ -477,7 +486,6 @@ function res(win) {
         document.getElementById("sequence").innerHTML = sequence;
         
         if(doIBeatHim(me,him) === win){
-            score+=mise;
             if (mise === 1) {
                 document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton.";
             } else {
@@ -485,7 +493,6 @@ function res(win) {
             }
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
         } else if (doIBeatHim(me,him) !== win) {
-            score-=mise;
             if (mise === 1) {
                 document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton.";
             } else {
@@ -493,7 +500,17 @@ function res(win) {
             }
             document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         }
-        setInterval(finDePartie,1500);
+        
+        //verrouiller boutons de mise
+        document.getElementById("mise1").disabled = true;
+        document.getElementById("mise2").disabled = true;
+        document.getElementById("mise3").disabled = true;
+        document.getElementById("mise4").disabled = true;
+        document.getElementById("mise5").disabled = true;
+        document.getElementById("mise6").disabled = true;
+        document.getElementById("mise7").disabled = true;
+        
+        setTimeout(finDePartie,1500);
     }
     
     //reset de la mise et affichage résultat
@@ -512,7 +529,7 @@ function res(win) {
 }
 
 function messageDelayed() {
-    popUp = setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié."); }, 1000);
+    popUp = setTimeout(function(){ alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié."); }, 1000);
 
     //setInterval(function(){ alert("Vous commencez une nouvelle séquence. Le rapport de force entre les figures a été modifié."); }, 2000);
 }
@@ -542,18 +559,17 @@ function finDePartie() {
         localStorage.scoreJoueurHugh = scoreJoueurHugh;
         console.log(scoreJoueurHugh);
         
+        // enregistrer les données du joueur
+        enregistrerDonnees(1,resultatJoueur);
+        var jeuLogicTermine = true;
+        localStorage.setItem("hughlaurie", jeuLogicTermine);
+        
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie===true) {
-                enregistrerDonnees(1,resultatJoueur);
-                var jeuLogicTermine = true;
-                localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                enregistrerDonnees(1,resultatJoueur);
-                var jeuLogicTermine = true;
-                localStorage.setItem("hughlaurie", jeuLogicTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             }
@@ -578,7 +594,7 @@ function finDePartie() {
         };
         boutton.onclick = results;
         document.body.appendChild(boutton);*/
-    } else{
+    } else {
 
     }
 }
@@ -590,16 +606,16 @@ function enregistrerDonnees (type, data) {
 
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-            //console.log(xhttp.response);
+            console.log(xhttp.responseText);
         }
     };
 
     if (type == 0) {
-        xhttp.open("POST", "php/toto.php", true);
+        xhttp.open("POST", phpFile, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
     } else if (type == 1) {
-        xhttp.open("POST", "php/toto.php", true );
+        xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
     }
@@ -612,32 +628,3 @@ function enregistrerDonnees (type, data) {
 
     console.log("Sent data " + data);
 }
-
-// enregistrer données du joueur dans fichier csv pour la version en ligne (à décommenter pour la version en ligne)
-/*function enregistrerDonnees (type, data) {
-    var xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            //console.log(xhttp.response);
-        }
-    };
-
-    if (type == 0) {
-        xhttp.open("POST", "../sorcerer/php/toto.php", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("joueur=" + data);
-    } else if (type == 1) {
-        xhttp.open("POST", "../sorcerer/php/toto.php", true );
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("data=" + data);
-    }
-
-
-    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
-    //xhttp.setRequestHeader("Content-type", "text/plain");
-    //xhttp.send("data=\"" + donneesJoueur + "\"");
-    //xhttp.send("data=15");
-
-    console.log("Sent data " + data);
-}*/

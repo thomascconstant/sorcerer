@@ -24,6 +24,9 @@ var mise = 0; //Combien le joueur a misé
 var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
 
+var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
+//var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
+
 function animate(){
     var step = Math.floor((colorCurrent - colorBase) / 10);
     step = Math.max(1,step);
@@ -82,7 +85,6 @@ function goNew() {
     casesFound = [];
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     document.getElementById("affichageFeedback").style.display = "none"; 
-    console.log("coucou");
     makeGameNoColors(width,nbCells,1-difficulty); //afficher la grille sans cases à trouver
     startTimer();
 }
@@ -230,7 +232,7 @@ function win(ijFind){
             
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
-                finDePartie();
+                setTimeout(finDePartie,1500);
             } else {
                 //makeGame(width,nbCells,1-difficulty);
             }
@@ -309,7 +311,7 @@ function fail(){
             makeGame(width,nbCells,1-difficulty);*/
            
         } else {
-            finDePartie();
+            setTimeout(finDePartie,1500);
         }
 
         console.log(difficulty + "difficulté fail");
@@ -566,18 +568,17 @@ function finDePartie() {
         localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
         console.log(scoreJoueurChristopher);
         
+        // enregistrer les données du joueur
+        enregistrerDonnees(1,resultatJoueur);
+        var jeuSensoTermine = true;
+        localStorage.setItem("christopherreeve", jeuSensoTermine);
+        
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
-                enregistrerDonnees(1,resultatJoueur);
-                var jeuSensoTermine = true;
-                localStorage.setItem("christopherreeve", jeuSensoTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             } else {
-                enregistrerDonnees(1,resultatJoueur);
-                var jeuSensoTermine = true;
-                localStorage.setItem("christopherreeve", jeuSensoTermine);
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
             }
@@ -613,16 +614,16 @@ function enregistrerDonnees (type, data) {
 
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-            //console.log(xhttp.response);
+            console.log(xhttp.responseText);
         }
     };
 
     if (type == 0) {
-        xhttp.open("POST", "php/toto.php", true);
+        xhttp.open("POST", phpFile, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("joueur=" + data);
     } else if (type == 1) {
-        xhttp.open("POST", "php/toto.php", true );
+        xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
     }
@@ -635,32 +636,3 @@ function enregistrerDonnees (type, data) {
 
     console.log("Sent data " + data);
 }
-
-// enregistrer données du joueur dans fichier csv pour la version en ligne (à décommenter pour la version en ligne)
-/*function enregistrerDonnees (type, data) {
-    var xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            //console.log(xhttp.response);
-        }
-    };
-
-    if (type == 0) {
-        xhttp.open("POST", "../sorcerer/php/toto.php", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("joueur=" + data);
-    } else if (type == 1) {
-        xhttp.open("POST", "../sorcerer/php/toto.php", true );
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("data=" + data);
-    }
-
-
-    //xhttp.open("POST", "http://localhost:63342/Bandit2/src/php/toto.php", true);
-    //xhttp.setRequestHeader("Content-type", "text/plain");
-    //xhttp.send("data=\"" + donneesJoueur + "\"");
-    //xhttp.send("data=15");
-
-    console.log("Sent data " + data);
-}*/
