@@ -232,7 +232,7 @@ function win(ijFind){
             
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
-                setTimeout(finDePartie,1500);
+                finDePartie();
             } else {
                 //makeGame(width,nbCells,1-difficulty);
             }
@@ -311,7 +311,7 @@ function fail(){
             makeGame(width,nbCells,1-difficulty);*/
            
         } else {
-            setTimeout(finDePartie,1500);
+            finDePartie();
         }
 
         console.log(difficulty + "difficulté fail");
@@ -519,7 +519,7 @@ function feedbackSonore() {
     //faire disparaître bouton pour générer la grille
     document.getElementById("boutonGenererGrille").style.visibility = "hidden";
      
-     var seconds = 0;
+    var seconds = 0;
     var temp = 0;
     temp = document.getElementById('timer');
     temp.innerHTML = "5";

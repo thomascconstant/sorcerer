@@ -267,7 +267,7 @@ function stop() {
     hideTarget = true;
     document.getElementById("boutonLancerBarre").disabled = false;
     } else {
-        setTimeout(finDePartie,1500);
+        finDePartie();
     }
     changeTexteBouton();
 }
@@ -430,7 +430,6 @@ function enregistrerDonnees (type, data) {
         xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("data=" + data);
-        console.log("coucou je suis passé");
     }
 
 
