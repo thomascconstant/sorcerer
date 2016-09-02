@@ -90,7 +90,8 @@ function go() {
 function goNew() {
     casesFound = [];
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
-    document.getElementById("affichageFeedback").style.display = "none"; 
+    document.getElementById("affichageFeedback").innerHTML = "Les cases vont clignoter dans...";
+    //document.getElementById("affichageFeedback").style.display = "none"; 
     makeGameNoColors(width,nbCells,1-difficulty); //afficher la grille sans cases à trouver
     startTimer();
 }
@@ -457,16 +458,16 @@ function makeGameNoColors(width,nbCellsX,diffColor) {
     var colorBaseV = Math.floor(Math.random() * 128 + 64);
     var colorBaseB = Math.floor(Math.random() * 128 + 64);
 
-    colorBaseR = 128;
+    colorBaseR = 100;
     colorBaseV = colorBaseR;
     colorBaseB = colorBaseR;
 
 
     colorBase = colorBaseR;
 
-    var colorFindR = Math.floor(colorBaseR + 64 * diffColor);
-    var colorFindV = Math.floor(colorBaseV + 64 * diffColor);
-    var colorFindB = Math.floor(colorBaseB + 64 * diffColor);
+    var colorFindR = Math.floor(colorBaseR + 100 * diffColor);
+    var colorFindV = Math.floor(colorBaseV + 100 * diffColor);
+    var colorFindB = Math.floor(colorBaseB + 100 * diffColor);
 
     colorTarget = colorFindB;
     colorCurrent = colorTarget;

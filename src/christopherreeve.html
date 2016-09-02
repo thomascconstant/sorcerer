@@ -92,14 +92,6 @@ body {
     cursor: pointer;
 }
 
-.compteur {
-    color: #fafafa;
-    font-size: 1.5vw;
-    padding: auto;   
-    margin: auto;
-    text-align:center;
-}
-
 .messageFeedback {
     color: #fafafa;
     font-size: 1.5vw;
@@ -132,6 +124,23 @@ body {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+}
+
+.compteur {
+    color: #FFC107;
+    position: absolute;
+    font-family: 'Raleway', sans-serif; 
+    font-size: 200px;
+    font-weight: bold;
+    width: 290px;
+    height: 310px;
+    padding-top: 0;
+    padding-left: 0vw;
+    padding-right: 0vw;
+    padding-bottom: 0;
+    border: 0px solid black;
+    margin: auto;
+    text-align:center;
 }
 
 .big {
@@ -171,7 +180,7 @@ body {
                 <p class="texte">Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br/>
                 A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !</p>
     <div class="zonefeedback">
-        <div class="compteur" id="affichageCompteur" style="display:none">Les cases vont clignoter dans <span id="timer">5</span> secondes !</div>
+        <!--<div class="compteur" id="affichageCompteur" style="display:none">Les cases vont clignoter dans <span id="timer">5</span> secondes !</div>-->
         <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer une grille.</div>
     </div>    
     <div class='zonemise'>
@@ -190,7 +199,7 @@ body {
 	<div class="site">
 
 		<div class="inSite">
-
+                    <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
 			<div id="board"></div>
 			<div class="textefeedback" id="res"></div>
                             <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()" >Générer une grille</button><br/>
