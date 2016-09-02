@@ -2,9 +2,13 @@ var nomDuJeu = "Sensoriel";
 var IDjoueur = localStorage.getItem("joueur");
 var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
 
-var nbCells = 2;
+var nbCells = 5;
 var width = 300;
+
 var difficulty = 0;
+var colorTransitionSpeed = 0.5;
+var modeViolent = true; //decalage entre les cases de 1 meme diagonales
+
 var score = 0;
 var anim = 0;
 var colorTarget =  0;
@@ -13,6 +17,7 @@ var colorBase =  0;
 var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
+
 
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
@@ -28,7 +33,8 @@ var phpFile = "php/toto.php"; // version locale, à commenter pour la version en
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
 function animate(){
-    var step = Math.floor((colorCurrent - colorBase) / 10);
+    var decreaseFactor = (30*(1-colorTransitionSpeed))+1;
+    var step = Math.floor((colorTarget - colorBase) / decreaseFactor);
     step = Math.max(1,step);
 
     var cells = document.getElementsByName("cellWin");
@@ -279,7 +285,7 @@ function fail(){
                 difficulty = Math.max(0,difficulty - 0.05);
             }
         } else {
-            nbCells = Math.max(2, nbCells-1);
+            nbCells = Math.max(5, nbCells-1);
         }
         
         //casesFound = [];
@@ -336,16 +342,16 @@ function makeGame(width,nbCellsX,diffColor) {
     var colorBaseV = Math.floor(Math.random() * 128 + 64);
     var colorBaseB = Math.floor(Math.random() * 128 + 64);
 
-    colorBaseR = 128;
+    colorBaseR = 100;
     colorBaseV = colorBaseR;
     colorBaseB = colorBaseR;
 
 
     colorBase = colorBaseR;
 
-    var colorFindR = Math.floor(colorBaseR + 64 * diffColor);
-    var colorFindV = Math.floor(colorBaseV + 64 * diffColor);
-    var colorFindB = Math.floor(colorBaseB + 64 * diffColor);
+    var colorFindR = Math.floor(colorBaseR + 100 * diffColor);
+    var colorFindV = Math.floor(colorBaseV + 100 * diffColor);
+    var colorFindB = Math.floor(colorBaseB + 100 * diffColor);
 
     colorTarget = colorFindB;
     colorCurrent = colorTarget;
@@ -357,17 +363,55 @@ function makeGame(width,nbCellsX,diffColor) {
     //console.log(colorFindHex);
 
     var cases = [];
+    var casesInterdites = [];
 
     //changer le nombre de cases qui clignote et le nbre de case à trouver
-    var nbCells = 4;
-    nbCasesToFind = 4;
+    var nbCells = 5;
+    nbCasesToFind = 5;
 
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
         do {
             ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
-        } while(cases.indexOf(ijFind) >= 0)
+        } while(casesInterdites.indexOf(ijFind) >= 0)
         cases.push(ijFind);
+        
+
+        var posx = ijFind % nbCellsX;
+        var posy = Math.floor(ijFind / nbCellsX);
+
+        //On interdit la case actuelle comme nouvelle case win
+        casesInterdites.push(ijFind);
+        
+        //On interdit les voisins directs comme nouvelles cases aussi
+        if(posx > 0){
+            casesInterdites.push(ijFind-1);
+        }
+        if(posx < nbCellsX-1){
+            casesInterdites.push(ijFind+1);
+        }
+        if(posy > 0){
+            casesInterdites.push(ijFind-nbCellsX);
+        }
+        if(posy < nbCellsX-1){
+            casesInterdites.push(ijFind+nbCellsX);
+        }
+
+        //On interdit aussi en diagonales
+        if(modeViolent){
+            if(posx > 0 && posy > 0){
+                casesInterdites.push((posy-1)*nbCellsX + (posx-1));
+            }
+            if(posx < nbCellsX-1 && posy > 0){
+                casesInterdites.push((posy-1)*nbCellsX + (posx+1));
+            }
+            if(posy < nbCellsX-1 && posx > 0){
+                casesInterdites.push((posy+1)*nbCellsX + (posx-1));
+            }
+            if(posy < nbCellsX-1 && posx < nbCellsX-1){
+                casesInterdites.push((posy+1)*nbCellsX + (posx+1));
+            }
+        }
     }
 
     var iFind = Math.floor(Math.random() * nbCellsX);
