@@ -182,10 +182,12 @@ function genererTirageAvecZero() {
     predicats.push(tirageB);
     console.log(predicats + "prédicats");
     
+    var tirageC = order[1];
+    
     var i = 0;
     while (i<1) {
         var tirageA = order[Math.floor(Math.random()*order.length)];
-        if (premierTirage.includes(tirageA) === false && premierTirage.includes(tirageB) && tirageA !== tirageB) {
+        if (premierTirage.includes(tirageA) === false && premierTirage.includes(tirageB) && tirageA !== tirageB && tirageA !== tirageC) {
             premierTirage.push(tirageA);
             predicats.push(tirageA);
             i++;
@@ -231,14 +233,17 @@ function genererTirageConclusion() {
     var tirageA = order[0];
     conclusionTirage.push(tirageA);
         
-    var i = 0;
+    var tirageB = predicats[2]; //récupérer la figure la plus forte dans les predicats
+    conclusionTirage.push(tirageB);
+    
+    /*var i = 0;
     while (i<1) {
         var tirageB = predicats[Math.floor(Math.random()*predicats.length)];
         if (conclusionTirage.includes(tirageB) === false && premierTirage.includes(tirageB) === false && deuxiemeTirage.includes(tirageB) && tirageB !== tirageA) {
             conclusionTirage.push(tirageB);
             i++;
         }
-    }
+    }*/
     
     afficherTirageConclusion();
 }
