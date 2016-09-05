@@ -11,97 +11,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <script>function ambianceSonore() {
-                var x = document.getElementById("ambientSound");
-                x.play();
-            }
-    </script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
 
 <style>
-
-#intro1 {
-  background-image: url("img/intro1fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro2 {
-  background-image: url("img/intro2fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro3 {
-  background-image: url("img/intro3fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro4 {
-  background-image: url("img/intro4fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro5 {
-  background-image: url("img/intro5fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro6 {
-  background-image: url("img/intro6fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro7 {
-  background-image: url("img/intro7fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro8 {
-  background-image: url("img/intro8fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro9 {
-  background-image: url("img/intro9fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro10 {
-  background-image: url("img/intro10fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro11 {
-  background-image: url("img/intro11fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro11bis {
-  background-image: url("img/intro6fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro12 {
-  background-image: url("img/intro12fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro13 {
-  background-image: url("img/intro13fond.jpg");
-  background-color: #373b3d;
-}
-
-#intro14 {
-  background-image: url("img/intro14fond.jpg");
-  background-color: #373b3d;
+.fondtexte {                                                                                                    
+    background-color: #373b3d; 
+    color: #000000;
+    position: absolute;  
+    margin-top: 32vh;
+    transform: translateY(-50%);
+    width: 100%;
 }
 
 .slide {
     background-attachment: fixed;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     position: relative;
     min-height: 100%;
     background-repeat: no-repeat;
-    margin: 0;
+    margin: 0vw;
     -webkit-background-size: cover; /* pour anciens Chrome et Safari */
     background-size: cover;
 }
@@ -115,17 +45,18 @@ h1 {
     font-weight: bold;
 }
 
+.hfill {
+    height: 40vh;
+}
+
 body {                                                                                                   
     background-color: #373b3d;                                                                    
-    font-family: Baskerville, 'Raleway', sans-serif;                                                
+    font-family: 'Raleway', sans-serif;                                                
     font-size: 1vw;                                                                          
     color: #fafafa;                                                                            
     margin: 0; 
-    background-repeat:repeat-x;                                                                                
-}
-
-.hfill {
-    height: 45vh;
+    margin: 0vw;
+    background-size: cover;
 }
 
 .slidetitle {
@@ -144,6 +75,14 @@ body {
     width: 100%;
 }
 
+.zonefeedback2 {
+    background-color: #00C853; 
+    color: #000000;
+    position: absolute;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
 .textetitre {
     font-family: 'Uncial Antiqua', cursive;                                                
     color: #fafafa;
@@ -162,17 +101,6 @@ body {
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
-}
-
-.texte {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #fafafa;
-    text-align:center; 
-    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-    font-size: 2.5vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
 }
 
 .textepetit {
@@ -195,161 +123,21 @@ body {
     font-variant: normal;
     font-weight: bold;
 }
-
-.textepurewhite {
-    font-family: 'Raleway', sans-serif;                                               
-    color: #FFFFFF;
-    text-align:center; 
-    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-    font-size: 2vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
-
-.textepureblack {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #212121;
-    text-align:center;
-    <!--text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;-->
-    font-size: 2vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
-
 </style>
 </head>
-<body onload="ambianceSonore()">
 
-    <div class="slide"  style="background-position: 0% 0px;">
+<body>
+    <div class="fondtexte">
         <div class="hfill"> &nbsp;</div>
         <div class="slidetitle">
             <p><a class="textetitre">Il existe un Sorcier,</a><br/>
                 <a class="textesoustitre">ou les incroyables aventures de Super Berger.</a></p>
-                <div class="zonefeedback"><a class="textepetit">Pour commencer à jouer, utilisez la roulette de votre souris ou appuyez sur la flèche bas.</a></div>
+            <div class="zonefeedback" id="affichageLienQuestionnaire" style="display:block"><a class="textelien" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfRjOij2wLe3LHnQdeGTD_1WRw7zkb1wg7UOf067UAAAz24Pw/viewform'),afficherLien()" style="cursor:pointer">Avant de commencer à jouer, complétez le questionnaire en cliquant sur le lien suivant.
+                    <br/>Une nouvelle fenêtre va s'ouvrir. Une fois le questionnaire terminé, vous pourrez revenir sur cette page et lancer le jeu.</a></div><br/>
+                <div class="zonefeedback2" id="affichageLienJeu" style="display:none"> <a class="textelien" onclick="parent.location='intro.html'" style="cursor:pointer">Pour commencer à jouer, cliquez ici.</a></div>
         </div>
     </div>
-	
-    <div class="slide" id="intro1" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="textetitre">Il existe un Sorcier.</a>
-	</div>
-    </div>
 
-    <div class="slide" id="intro2" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Il existe un Sorcier oeuvrant dans les montagnes à l’est du Royaume.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro3" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Il existe un Sorcier préparant sa vengeance sur le monde des mortels.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro4" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="textetitre">Il existe une Reine.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro5" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Il existe une Reine vivant dans la plus haute tour du château du Royaume.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro6" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Il existe une Reine ayant prêté serment de protéger son peuple du Sorcier.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro7" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Régulièrement, la Reine et le Sorcier se retrouvent pour jouer au poker.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro8" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Lors de leur dernière partie, l’enjeu fut le sort du Royaume.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro9" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Sur un brelan floppé, la Reine perdit.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro10" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="textepurewhite">Le Sorcier désigna sa récompense :<br/>il maudit le Royaume et transforma le peuple en un troupeau de moutons.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro11" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Humiliée, la Reine s'exila dans sa chambre et ne mangea plus de dessert.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro11bis" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Plusieurs lunes passèrent avant que la Reine ne reçut une missive du Sorcier.<br/>Ce dernier l’invita à une fête qu’il préparait en son honneur...</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro12" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">« Le plus grand et dernier méchoui du Royaume ! »</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro13" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">La Reine ne pouvant ainsi voir son peuple finir à la broche,<br/>elle fit appel aux meilleurs bergers et bergères du Royaume voisin.</a>
-	</div>
-    </div>
-
-    <div class="slide" id="intro14" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-            <a class="texte">Votre candidature a été retenue.<br/>Les instructions vous ont été transmises par pigeon voyageur :<br/>« Sauvez le plus de moutons possibles ! »<br></a>
-	</div>
-    </div>
-
-    <div class="slide"  style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-            <p><a class="textetitre">Partez à la rencontre du Sorcier !</a><br/>
-                <a class="textesoustitre">La Reine compte sur vous, Super Berger. Ne la décevez pas.</a></p>
-                <div class="zonefeedback"> <a class="textelien" onclick="parent.location='sorcerer.html'" style="cursor:pointer">Pour commencer à jouer, cliquez ici.</a></div>
-	</div>
-    </div>
-    
-    <div><audio loop id="ambientSound">
-		<source src="sounds/intro.mp3" type="audio/mpeg">
-		Your browser does not support the audio element.
-	</audio>
-    </div>
-    
 </body>
+
 </html>
