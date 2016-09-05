@@ -15,7 +15,12 @@ function donnerID () {
     enregistrerDonnees(1,"\n");
     lancerJeu();
     
-};
+}
+
+function afficherLien() {
+    document.getElementById("affichageLienJeu").style.display = "block";
+    document.getElementById("affichageLienQuestionnaire").style.display = "none";
+}
 
 //lancer de manière aléatoire ou selon progression le prochain jeu dans une nouvelle fenêtre
 function lancerJeu () {
