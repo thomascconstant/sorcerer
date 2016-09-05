@@ -6,7 +6,7 @@ var nbCells = 5;
 var width = 300;
 
 var difficulty = 0;
-var colorTransitionSpeed = 0.5;
+var colorTransitionSpeed = 0.1;
 var modePoussin = false;
 var modeNormal = true;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
@@ -28,7 +28,7 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 5; //Nombre de tours restants
+var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -204,7 +204,8 @@ function win(ijFind){
             document.getElementById("score").innerHTML = score;
             document.getElementById("mise").innerHTML = mise;
             
-            if(difficulty > 0.35) {
+            // a reprendre
+            /*if(difficulty > 0.35) {
                 modePoussin = false;
                 modeNormal = true;
                 difficulty = difficulty + 0.01;
@@ -213,11 +214,11 @@ function win(ijFind){
                 modeViolent = true;
                 difficulty = difficulty + 0.01;
             } else {
-                modePoussin = true;
+                modePoussin = false;
                 difficulty = difficulty + 0.01;
-            }
+            }*/
             
-            /*if(Math.random() < 0.7) {
+            if(Math.random() < 0.7) {
                 if(difficulty >= 0.95) {
                     difficulty = Math.min(0.99,difficulty + 0.02);
                     modeViolent = true;
@@ -227,7 +228,7 @@ function win(ijFind){
                 }
             } else {
                 nbCells = Math.min(8, nbCells+1);
-            }*/
+            }
             
             //bloquer jeu
             miseValide = false;
@@ -296,12 +297,13 @@ function fail(){
         document.getElementById("score").innerHTML = score;
         document.getElementById("mise").innerHTML = mise;
         
-        if(difficulty > 0.35) {
+        //a reprendre
+        /*if(difficulty > 0.35) {
             modePoussin = false;
             modeNormal = true;
             
             if(difficulty>0.01) {
-                difficulty = difficulty - 0.01;
+                difficulty = difficulty - 0.1;
             } else {
                 
             }
@@ -311,7 +313,7 @@ function fail(){
             modeViolent = true;
             
             if(difficulty>0.01) {
-                difficulty = difficulty - 0.01;
+                difficulty = difficulty - 0.1;
             } else {
                 
             }
@@ -322,12 +324,13 @@ function fail(){
             modeViolent = false;
             
             if(difficulty>0.01) {
-                difficulty = difficulty - 0.01;
+                difficulty = difficulty - 0.1;
             } else {
                 
             }
-        }
-        /*if(Math.random() < 0.7) {
+        }*/
+        
+        if(Math.random() < 0.7) {
             if(difficulty > 0.95) {
                 difficulty = difficulty - 0.01;
             } else {
@@ -337,7 +340,7 @@ function fail(){
             nbCells = Math.max(5, nbCells-1);
             modeViolent = false;
             console.log("mode violent: "+ modeViolent);
-        }*/
+        }
         
         //casesFound = [];
 
@@ -449,33 +452,25 @@ function makeGame(width,nbCellsX,diffColor) {
                 
                 cases.push((posy+1)*nbCellsX + (posx+1));
                 console.log(cases + " 5eme case");
-           
-
-                
-            
-        
+    
     }*/
     
-    console.log(cases + "cases");
-    
     if (modeNormal || modeViolent) {
-    for(var i=0;i<nbCells;i++)	{
-        var ijFind = 0;
-        do {
-            ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
-        } while(casesInterdites.indexOf(ijFind) >= 0)
-        cases.push(ijFind);
+        for(var i=0;i<nbCells;i++)	{
+            var ijFind = 0;
+            do {
+                ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+            } while(casesInterdites.indexOf(ijFind) >= 0)
+            cases.push(ijFind);
         
 
-        var posx = ijFind % nbCellsX;
-        var posy = Math.floor(ijFind / nbCellsX);
+            var posx = ijFind % nbCellsX;
+            var posy = Math.floor(ijFind / nbCellsX);
 
-        //On interdit la case actuelle comme nouvelle case win
-        casesInterdites.push(ijFind);
-        
-        //On interdit les voisins directs comme cases gagnantes
-        if(modeNormal) {
-            console.log("mode normal");
+            //On interdit la case actuelle comme nouvelle case win
+            casesInterdites.push(ijFind);
+
+            //On interdit les voisins directs comme cases gagnantes
             if(posx > 0){
                 casesInterdites.push(ijFind-1);
             }
@@ -488,24 +483,24 @@ function makeGame(width,nbCellsX,diffColor) {
             if(posy < nbCellsX-1){
                 casesInterdites.push(ijFind+nbCellsX);
             }
-        }
 
-        //On interdit aussi en diagonales
-        if(modeViolent) {
-            console.log("mode violent");
-            if(posx > 0 && posy > 0){
-                casesInterdites.push((posy-1)*nbCellsX + (posx-1));
+            //On interdit aussi en diagonales
+            if(modeViolent) {
+                console.log("mode violent");
+
+                if(posx > 0 && posy > 0){
+                    casesInterdites.push((posy-1)*nbCellsX + (posx-1));
+                }
+                if(posx < nbCellsX-1 && posy > 0){
+                    casesInterdites.push((posy-1)*nbCellsX + (posx+1));
+                }
+                if(posy < nbCellsX-1 && posx > 0){
+                    casesInterdites.push((posy+1)*nbCellsX + (posx-1));
+                }
+                if(posy < nbCellsX-1 && posx < nbCellsX-1){
+                    casesInterdites.push((posy+1)*nbCellsX + (posx+1));
+                }
             }
-            if(posx < nbCellsX-1 && posy > 0){
-                casesInterdites.push((posy-1)*nbCellsX + (posx+1));
-            }
-            if(posy < nbCellsX-1 && posx > 0){
-                casesInterdites.push((posy+1)*nbCellsX + (posx-1));
-            }
-            if(posy < nbCellsX-1 && posx < nbCellsX-1){
-                casesInterdites.push((posy+1)*nbCellsX + (posx+1));
-            }
-        }
     }
     }
 
