@@ -7,7 +7,9 @@ var width = 300;
 
 var difficulty = 0;
 var colorTransitionSpeed = 0.5;
-var modeViolent = true; //decalage entre les cases de 1 meme diagonales
+var modePoussin = false;
+var modeNormal = true;
+var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var score = 0;
 var anim = 0;
@@ -201,16 +203,31 @@ function win(ijFind){
             document.getElementById("tours").innerHTML = tours;
             document.getElementById("score").innerHTML = score;
             document.getElementById("mise").innerHTML = mise;
-
-            if(Math.random() < 0.7) {
+            
+            if(difficulty > 0.35) {
+                modePoussin = false;
+                modeNormal = true;
+                difficulty = difficulty + 0.01;
+            } else if (difficulty > 0.7) {
+                modeNormal = false;
+                modeViolent = true;
+                difficulty = difficulty + 0.01;
+            } else {
+                modePoussin = true;
+                difficulty = difficulty + 0.01;
+            }
+            
+            /*if(Math.random() < 0.7) {
                 if(difficulty >= 0.95) {
                     difficulty = Math.min(0.99,difficulty + 0.02);
+                    modeViolent = true;
+                    console.log("mode violent: "+ modeViolent);
                 } else {
                     difficulty = Math.min(0.95,difficulty + 0.05);
                 }
             } else {
                 nbCells = Math.min(8, nbCells+1);
-            }
+            }*/
             
             //bloquer jeu
             miseValide = false;
@@ -278,8 +295,39 @@ function fail(){
         document.getElementById("tours").innerHTML = tours;
         document.getElementById("score").innerHTML = score;
         document.getElementById("mise").innerHTML = mise;
-
-        if(Math.random() < 0.7) {
+        
+        if(difficulty > 0.35) {
+            modePoussin = false;
+            modeNormal = true;
+            
+            if(difficulty>0.01) {
+                difficulty = difficulty - 0.01;
+            } else {
+                
+            }
+                
+        } else if (difficulty > 0.7) {
+            modeNormal = false;
+            modeViolent = true;
+            
+            if(difficulty>0.01) {
+                difficulty = difficulty - 0.01;
+            } else {
+                
+            }
+                
+        } else {
+            modePoussin = false;
+            modeNormal = true;
+            modeViolent = false;
+            
+            if(difficulty>0.01) {
+                difficulty = difficulty - 0.01;
+            } else {
+                
+            }
+        }
+        /*if(Math.random() < 0.7) {
             if(difficulty > 0.95) {
                 difficulty = difficulty - 0.01;
             } else {
@@ -287,7 +335,9 @@ function fail(){
             }
         } else {
             nbCells = Math.max(5, nbCells-1);
-        }
+            modeViolent = false;
+            console.log("mode violent: "+ modeViolent);
+        }*/
         
         //casesFound = [];
 
@@ -369,7 +419,46 @@ function makeGame(width,nbCellsX,diffColor) {
     //changer le nombre de cases qui clignote et le nbre de case à trouver
     var nbCells = 5;
     nbCasesToFind = 5;
+    
+    //On compte les voisins directs comme cases gagnantes
+    /*if(modePoussin) {
+        
+            var ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+            cases.push(ijFind);
+            console.log(cases + " 1ere case");
+            
+                var posx = ijFind % nbCellsX;
+                var posy = Math.floor(ijFind / nbCellsX);
+            
+        caseHautDroite = (posy-1)*nbCellsX + (posx-1);
+        caseHautGauche = (posy-1)*nbCellsX + (posx+1);
+        caseBasDroite =  (posy+1)*nbCellsX + (posx-1);
+        caseBasGauche = (posy+1)*nbCellsX + (posx+1);
+        if (caseHautDroite > 0){      
+        cases.push((posy-1)*nbCellsX + (posx-1));
+        console.log(cases + " 2eme case");
+         } else {
+             
+         }
+                
+                cases.push((posy-1)*nbCellsX + (posx+1));
+                console.log(cases + " 3eme case");
+                
+                cases.push((posy+1)*nbCellsX + (posx-1));
+                console.log(cases + " 4eme case");
+                
+                cases.push((posy+1)*nbCellsX + (posx+1));
+                console.log(cases + " 5eme case");
+           
 
+                
+            
+        
+    }*/
+    
+    console.log(cases + "cases");
+    
+    if (modeNormal || modeViolent) {
     for(var i=0;i<nbCells;i++)	{
         var ijFind = 0;
         do {
@@ -384,22 +473,26 @@ function makeGame(width,nbCellsX,diffColor) {
         //On interdit la case actuelle comme nouvelle case win
         casesInterdites.push(ijFind);
         
-        //On interdit les voisins directs comme nouvelles cases aussi
-        if(posx > 0){
-            casesInterdites.push(ijFind-1);
-        }
-        if(posx < nbCellsX-1){
-            casesInterdites.push(ijFind+1);
-        }
-        if(posy > 0){
-            casesInterdites.push(ijFind-nbCellsX);
-        }
-        if(posy < nbCellsX-1){
-            casesInterdites.push(ijFind+nbCellsX);
+        //On interdit les voisins directs comme cases gagnantes
+        if(modeNormal) {
+            console.log("mode normal");
+            if(posx > 0){
+                casesInterdites.push(ijFind-1);
+            }
+            if(posx < nbCellsX-1){
+                casesInterdites.push(ijFind+1);
+            }
+            if(posy > 0){
+                casesInterdites.push(ijFind-nbCellsX);
+            }
+            if(posy < nbCellsX-1){
+                casesInterdites.push(ijFind+nbCellsX);
+            }
         }
 
         //On interdit aussi en diagonales
-        if(modeViolent){
+        if(modeViolent) {
+            console.log("mode violent");
             if(posx > 0 && posy > 0){
                 casesInterdites.push((posy-1)*nbCellsX + (posx-1));
             }
@@ -413,6 +506,7 @@ function makeGame(width,nbCellsX,diffColor) {
                 casesInterdites.push((posy+1)*nbCellsX + (posx+1));
             }
         }
+    }
     }
 
     var iFind = Math.floor(Math.random() * nbCellsX);
@@ -577,7 +671,7 @@ function feedbackSonore() {
         if (seconds === 1) {
             makeGame(width,nbCells,1-difficulty);
             anim = setInterval(animate,20);
-            console.log(anim);
+            console.log(anim + "anim");
             activateMise();
         }
 
