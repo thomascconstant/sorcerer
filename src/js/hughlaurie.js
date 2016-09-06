@@ -45,8 +45,8 @@ var popUp= 0;
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
-var sequence = 3; //Numéro de séquences restantes
+var tours = 36; //Nombre de tours restants
+var sequence = 12; //Numéro de séquences restantes
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 var difficulte = 0; //de 0 à order.length - 2
 console.log(difficulte +"diff de base");

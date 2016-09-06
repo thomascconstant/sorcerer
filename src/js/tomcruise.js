@@ -12,7 +12,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 5; //Nombre de tours restants
+var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var winState = false; //statut du joueur, false pour perdant
