@@ -131,10 +131,6 @@ function recupMise () {
     miseValide = true;
 }
 
-function test(){
-    console.log("coucou");
-}
-
 function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
     //document.getElementById("tours").innerHTML = tours;
@@ -353,7 +349,8 @@ function doIBeatHim(me, him) {
 	}
 }
 
-function newRound(){
+function newRound() {
+    document.getElementById("boutonNouveauTour").style.visibility = "hidden";
     if (tirageUn && miseValide && sequence > 0) {
         //tirageFinal = false;
         genererTirageSansZero();
@@ -473,15 +470,40 @@ function res(win) {
     
     if (miseValide && tirageFinal === false && sequence > 0) {
         newRound();
+        
+         //déverrouiller boutons de mise
+        document.getElementById("mise1").disabled = false;
+        document.getElementById("mise2").disabled = false;
+        document.getElementById("mise3").disabled = false;
+        document.getElementById("mise4").disabled = false;
+        document.getElementById("mise5").disabled = false;
+        document.getElementById("mise6").disabled = false;
+        document.getElementById("mise7").disabled = false;
     } else if (miseValide && tirageFinal && sequence > 1) {
         sequence--;
         console.log(sequence + "sequence");
         document.getElementById("sequence").innerHTML = sequence;
         
-        //afficher pop-up spécifiant le changement de séquence
-        //messageDelayed();
+        //afficher bouton pour changement de séquence
+        document.getElementById("boutonNouveauTour").style.visibility = "visible";
+        //newRound();
         
-        newRound();
+        if(doIBeatHim(me,him) === win){
+            if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour lancer une nouvelle séquence.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour lancer une nouvelle séquence.";   
+            }
+            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+        } else if (doIBeatHim(me,him) !== win) {
+            if (mise === 1) {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Cliquez sur le bouton pour lancer une nouvelle séquence.";
+            } else {
+                document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Cliquez sur le bouton pour lancer une nouvelle séquence.";   
+            }
+            document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        }
+
     } else if (miseValide && sequence >= 1 && tirageFinal) {
         sequence--;
         console.log(sequence + "sequence");
@@ -515,8 +537,27 @@ function res(win) {
         setTimeout(finDePartie,1500);
     }
     
-    //reset de la mise et affichage résultat
+    //reset de la mise et affichage
     mise = "?";
+    document.getElementById("mise").innerHTML = mise;
+    
+    miseValide=false;
+    
+    /*
+    //déverrouiller boutons de mise
+    document.getElementById("mise1").disabled = false;
+    document.getElementById("mise2").disabled = false;
+    document.getElementById("mise3").disabled = false;
+    document.getElementById("mise4").disabled = false;
+    document.getElementById("mise5").disabled = false;
+    document.getElementById("mise6").disabled = false;
+    document.getElementById("mise7").disabled = false;*/
+}
+
+function changeSequence() {
+    miseValide = true;
+    newRound();
+    miseValide=false;
     
     //déverrouiller boutons de mise
     document.getElementById("mise1").disabled = false;
@@ -527,7 +568,9 @@ function res(win) {
     document.getElementById("mise6").disabled = false;
     document.getElementById("mise7").disabled = false;
     
-    miseValide=false;
+    //afficher message de consigne
+    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur la figure que vous pensez gagnante.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 }
 
 function messageDelayed() {
@@ -552,6 +595,14 @@ function colorHim() {
 
 function uncolorHim() {
     document.getElementById('him').style.backgroundColor="F5F5F5";
+}
+
+function colorButton() {
+    document.getElementById('boutonNouveauTour').style.backgroundColor="373b3d";
+}
+
+function uncolorButton() {
+    document.getElementById('boutonNouveauTour').style.backgroundColor="757575";
 }
 
 function finDePartie() {
