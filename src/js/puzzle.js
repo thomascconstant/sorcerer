@@ -396,6 +396,7 @@ function toHexColor(R,V,B){
 var g_casesNum = [];
 var g_width = 0;
 var g_nbCellX = 0;
+var g_lastCoup = 5;
 
 function makeGame(width,nbCellX,diff) {
 
@@ -430,7 +431,7 @@ function makeGame(width,nbCellX,diff) {
 
       //On permute avec une case au hasard
       var moveValid = false;
-      var lastCoup = 5;
+      g_lastCoup = 5;
       while(!moveValid){
 
         var yTest = Math.floor(iCaseVide/g_nbCellX);
@@ -444,7 +445,15 @@ function makeGame(width,nbCellX,diff) {
           case 3: yTest = yTest+1; break;
         }
 
-        if(xTest > 0 && xTest < g_nbCellX && yTest > 0 && yTest < g_nbCellX && coup != lastCoup ){
+        var coupOk = true;
+        switch (coup){
+          case 0: if(g_lastCoup == 1) coupOk = false; break;
+          case 1: if(g_lastCoup == 0) coupOk = false; break;
+          case 2: if(g_lastCoup == 3) coupOk = false; break;
+          case 3: if(g_lastCoup == 2) coupOk = false; break;
+        }
+
+        if(xTest > 0 && xTest < g_nbCellX && yTest > 0 && yTest < g_nbCellX && coupOk ){
           switch (coup){
             case 0: console.log("left"); break;
             case 1: console.log("right"); break;
@@ -452,7 +461,7 @@ function makeGame(width,nbCellX,diff) {
             case 3: console.log("down"); break;
           }
           permute(xTest,yTest);
-          lastCoup = coup;
+          g_lastCoup = coup;
           moveValid = true;
         }
 
@@ -475,14 +484,33 @@ function drawGrid(){
       for(var j=0;j<g_nbCellX;j++) {
           var color = "#AAAAAA";
           var clickFun = "clickCase("+j+","+i+")";
+          var txtColor = "#000000";
 
           color = toHexColor(100,100 + g_casesNum[i*g_nbCellX+j]*6,100)
 
+          var border = '';
           if(g_casesNum[i*g_nbCellX+j] < 0)
             color = "#AAAAFF";
 
 
-          strHtml += '<td style="text-align:center; background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="' + clickFun + '">&nbsp;';
+
+          if(g_casesNum[(i+1)*g_nbCellX+j] < 0 ||
+            g_casesNum[(i-1)*g_nbCellX+j] < 0 ||
+            g_casesNum[i*g_nbCellX+(j+1)] < 0 ||
+            g_casesNum[i*g_nbCellX+(j-1)] < 0  )
+              txtColor = "#0000FF";
+
+          var cursor = '';
+          if(g_casesNum[(i-1)*g_nbCellX+j] < 0)
+            cursor = 'cursor:url(img/arrow-down.png),grab;';
+          if(g_casesNum[(i+1)*g_nbCellX+j] < 0)
+            cursor = 'cursor:url(img/arrow-up.png),grab;';
+          if(g_casesNum[(i)*g_nbCellX+(j-1)] < 0)
+              cursor = 'cursor:url(img/arrow-right.png),grab;';
+            if(g_casesNum[(i)*g_nbCellX+(j+1)] < 0)
+                cursor = 'cursor:url(img/arrow-left.png),grab;';
+
+          strHtml += '<td style="'+cursor+' text-align:center; color:'+txtColor+'; background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="' + clickFun + '">&nbsp;';
           if(g_casesNum[i*g_nbCellX+j] >= 0)
             strHtml += g_casesNum[i*g_nbCellX+j];
           else
