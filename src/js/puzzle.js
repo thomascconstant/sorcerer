@@ -400,7 +400,7 @@ var g_lastCoup = 5;
 
 function makeGame(width,nbCellX,diff) {
 
-    g_nbCellX = nbCellX = 5;
+    g_nbCellX = nbCellX = 3;
     g_width = width;
 
     //Creation du tableau
@@ -419,9 +419,9 @@ function makeGame(width,nbCellX,diff) {
 
     //On permiet
     var nbPermMax = 10;
-    var nbPerm = nbPermMax * diff;
+    var nbPerm = Math.floor(nbPermMax * diff);
     console.log("Making grid with "+nbPerm+ " permutations");
-
+    g_lastCoup = 5;
     for(var i=0;i<nbPermMax * diff;i++){
       //on cherche la case vide
       var iCaseVide = -1;
@@ -431,7 +431,7 @@ function makeGame(width,nbCellX,diff) {
 
       //On permute avec une case au hasard
       var moveValid = false;
-      g_lastCoup = 5;
+
       while(!moveValid){
 
         var yTest = Math.floor(iCaseVide/g_nbCellX);
@@ -453,7 +453,7 @@ function makeGame(width,nbCellX,diff) {
           case 3: if(g_lastCoup == 2) coupOk = false; break;
         }
 
-        if(xTest > 0 && xTest < g_nbCellX && yTest > 0 && yTest < g_nbCellX && coupOk ){
+        if(xTest >= 0 && xTest < g_nbCellX && yTest >= 0 && yTest < g_nbCellX && coupOk ){
           switch (coup){
             case 0: console.log("left"); break;
             case 1: console.log("right"); break;
@@ -463,6 +463,13 @@ function makeGame(width,nbCellX,diff) {
           permute(xTest,yTest);
           g_lastCoup = coup;
           moveValid = true;
+        }else{
+          switch (coup){
+            case 0: console.log("oups no left"); break;
+            case 1: console.log("oups no  right"); break;
+            case 2: console.log("oups no up"); break;
+            case 3: console.log("oups no down"); break;
+          }
         }
 
 
@@ -486,7 +493,8 @@ function drawGrid(){
           var clickFun = "clickCase("+j+","+i+")";
           var txtColor = "#000000";
 
-          color = toHexColor(100,100 + g_casesNum[i*g_nbCellX+j]*6,100)
+          var stepColor = Math.floor(150/(g_nbCellX*g_nbCellX));
+          color = toHexColor(100,100 + g_casesNum[i*g_nbCellX+j]*stepColor,100)
 
           var border = '';
           if(g_casesNum[i*g_nbCellX+j] < 0)
@@ -494,11 +502,13 @@ function drawGrid(){
 
 
 
-          if(g_casesNum[(i+1)*g_nbCellX+j] < 0 ||
+          /*if(g_casesNum[(i+1)*g_nbCellX+j] < 0 ||
             g_casesNum[(i-1)*g_nbCellX+j] < 0 ||
             g_casesNum[i*g_nbCellX+(j+1)] < 0 ||
             g_casesNum[i*g_nbCellX+(j-1)] < 0  )
-              txtColor = "#0000FF";
+              txtColor = "#0000FF";*/
+            if(Math.abs(g_casesNum[i*g_nbCellX+j]) != i*g_nbCellX+j )
+                  txtColor = "#FFA500";
 
           var cursor = '';
           if(g_casesNum[(i-1)*g_nbCellX+j] < 0)
