@@ -17,7 +17,10 @@ var colorTarget =  0;
 var colorCurrent = 0;
 var colorBase =  0;
 var nbCasesToFind = 0;
+var cases = []; //tableau des cases à trouver
+var casesFake = []; //tableau des cases perdantes
 var casesFound = []; //tableau des cases trouvées
+var casesNotFound = []; //tableau des cases trouvées mais sans correspondance
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
 
@@ -51,7 +54,7 @@ function animate(){
         //console.log(cells[i].id);
         //console.log(casesFound.indexOf(parseInt(cells[i].id)));
         if (casesFound.indexOf(parseInt(cells[i].id)) >= 0) {
-            cells[i].style.backgroundColor = "#81C784";
+            cells[i].style.backgroundColor = "#0288d1";
         } else {
             cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
         }
@@ -171,16 +174,103 @@ function cleanMise() {
     document.getElementById("mise7").checked = false;
 }
 
-function win(ijFind){
-    if (miseValide === true && countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
-      nbCasesToFind--;
-      casesFound.push(ijFind);
+function selectWin(ijFind) {
+    if (countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
+        nbCasesToFind--;
+        casesFound.push(ijFind);
+        console.log("nombre de cases à trouver" + nbCasesToFind);
+
+        if (nbCasesToFind <= 0) {
+            //win();
+            winState = true;
+            recupMise();
+        }
+    }
+}
+
+function selectFail(ijFind) {
+    if (countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
+        nbCasesToFind--;
+        casesNotFound.push(ijFind);
+        
+        console.log("nombre de cases à trouver" + nbCasesToFind);
+
+        var decreaseFactor = (30*(1-colorTransitionSpeed))+1;
+        var step = Math.floor((colorTarget - colorBase) / decreaseFactor);
+        step = Math.max(1,step);
+
+        var cells = document.getElementsByName("cellFail");
+
+        if(colorCurrent - colorBase > step)
+            colorCurrent -= step;
+        else {
+            colorCurrent = colorBase;
+        }
+
+        for(var i=0;i<cells.length;i++){
+            console.log(casesNotFound + "cases non trouvées");
+            if (casesNotFound.indexOf(parseInt(cells[i].id)) >= 0) {
+                cells[i].style.backgroundColor = "#0288d1";
+            } else {
+                cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
+            }
+        }
+
+        if (nbCasesToFind <= 0) {
+            //fail();
+            winState = false;
+            alert("stop"); //mettre une div par dessus ici
+            recupMise();
+        }
+    }
+}
+
+function results() {
+    if (winState && miseValide) {
+        win();
+    }
+    
+    if (winState === false && miseValide) {
+        fail();
+    }
+}
+
+function afficherCasesGagnantes() {
+    var decreaseFactor = (30*(1-colorTransitionSpeed))+1;
+    var step = Math.floor((colorTarget - colorBase) / decreaseFactor);
+    step = Math.max(1,step);
+
+    var cells = document.getElementsByName("cellWin");
+    //console.log(colorTarget+'/'+colorBase);
+    if(colorCurrent - colorBase > step)
+        colorCurrent -= step;
+    else {
+        colorCurrent = colorBase;
+    }
+    
+    for(var i=0;i<cells.length;i++){
+        //console.log(cells[i].id);
+        //console.log(casesFound.indexOf(parseInt(cells[i].id)));
+        if (casesFound.indexOf(parseInt(cells[i].id)) >= 0) {
+            cells[i].style.border = "5px solid #00e676";
+        } else {
+            cells[i].style.border = "5px solid #00e676";
+        }
+    }
+}
+
+function win(){
+    if(miseValide) {
+      //nbCasesToFind--;
+      //casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
             score += mise;
             actionDeJeu++;
             
             //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
+            
+            afficherCasesGagnantes();
             
             //message de feedback
              if (mise === 1) {
@@ -274,10 +364,12 @@ function win(ijFind){
 }
 
 function fail(){
-    if (miseValide === true && countDownToZero === true){
+    if (miseValide) {
         winState = false;
         score -= mise;
         actionDeJeu++;
+        
+        afficherCasesGagnantes();
                 
         //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
         
@@ -380,7 +472,6 @@ function fail(){
 
         console.log(difficulty + "difficulté fail");
     }
-    
 }
 
 function toHex(d) {
@@ -420,7 +511,7 @@ function makeGame(width,nbCellsX,diffColor) {
     //console.log(colorBaseHex);
     //console.log(colorFindHex);
 
-    var cases = [];
+    cases = [];
     var casesInterdites = [];
 
     //changer le nombre de cases qui clignote et le nbre de case à trouver
@@ -468,14 +559,15 @@ function makeGame(width,nbCellsX,diffColor) {
                 ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
             } while(casesInterdites.indexOf(ijFind) >= 0)
             cases.push(ijFind);
-
-
+        
+        console.log("cases gagnantes :"+cases);
+ 
             var posx = ijFind % nbCellsX;
             var posy = Math.floor(ijFind / nbCellsX);
 
             //On interdit la case actuelle comme nouvelle case win
             casesInterdites.push(ijFind);
-
+            
             if(modeNormal || modeViolent) {
                 console.log("mode normal: "+ modeNormal);
                 //On interdit les voisins directs comme cases gagnantes
@@ -512,12 +604,22 @@ function makeGame(width,nbCellsX,diffColor) {
             }
         }
     }
+    
+    var z = (nbCellsX * nbCellsX) - (cases.length);
+
+    for(var i=0;i<z;i++) {
+        var ijFake = 0;
+            do {
+                ijFake = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+            } while(cases.indexOf(ijFake) >= 0)
+                casesFake.push(ijFake);
+    }
 
     var iFind = Math.floor(Math.random() * nbCellsX);
     var jFind = Math.floor(Math.random() * nbCellsX);
-
-    var iDecoy = Math.floor(Math.random() * nbCellsX);
-    var jDecoy = Math.floor(Math.random() * nbCellsX);
+    
+    var iFake = Math.floor(Math.random() * nbCellsX);
+    var jFake = Math.floor(Math.random() * nbCellsX);
 
     var strHtml = '';
     strHtml += '<table>';
@@ -525,14 +627,24 @@ function makeGame(width,nbCellsX,diffColor) {
         strHtml += '<tr>';
         for(var j=0;j<nbCellsX;j++) {
             var color = colorBaseHex;
-            var clickFun = "fail()";
-            var name = "cellFail";
-
+            var clickFun = 0;
+            var name = 0;
+            
+            var ijFind = i + j * nbCellsX;
+            
+            if(casesFake.indexOf(ijFake) >= 0) {
+                color = colorBaseHex;
+                //var clickFun = "fail()";
+                clickFun = "selectFail(" + ijFind + ")";
+                name = "cellFail";
+            }
+            
             var ijFind = i + j * nbCellsX;
 
             if(cases.indexOf(ijFind) >= 0) {
                 color = colorFindHex;
-                clickFun = "win(" + ijFind + ")";
+                //clickFun = "win(" + ijFind + ")";
+                clickFun = "selectWin(" + ijFind + ")";
                 name = "cellWin";
             }
             
