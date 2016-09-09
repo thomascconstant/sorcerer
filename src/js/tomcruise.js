@@ -250,6 +250,8 @@ function stop() {
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
     resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";"+ gameSpeed + ";" + score + ";" + winState + ";" + "\n";
+    console.log(resultatJoueur + "résultats");
+    console.log(winState);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
     
     //Reset de la mise
