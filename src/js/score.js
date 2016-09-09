@@ -1,13 +1,13 @@
 var scoreJeuChristopher = parseInt(localStorage.scoreJoueurChristopher);
 var scoreJeuTom = parseInt(localStorage.scoreJoueurTom);
-var scoreJeuHugh = parseInt(localStorage.scoreJoueurHugh);
+var scoreJeuBenedict = parseInt(localStorage.scoreJoueurBenedict);
 
-var scoreGlobal = scoreJeuChristopher + scoreJeuTom + scoreJeuHugh;
+var scoreGlobal = scoreJeuChristopher + scoreJeuTom + scoreJeuBenedict;
 
 function feedbackScore () {
     document.getElementById("resultTom").innerHTML = localStorage.scoreJoueurTom;
     document.getElementById("resultChristopher").innerHTML = localStorage.scoreJoueurChristopher;
-    document.getElementById("resultHugh").innerHTML = localStorage.scoreJoueurHugh;
+    document.getElementById("resultBenedict").innerHTML = localStorage.scoreJoueurBenedict;
 }
 
 function feedbackScoreGeneral () {
