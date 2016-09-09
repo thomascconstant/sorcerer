@@ -35,7 +35,7 @@ function lancerJeu () {
     if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
         var liensJeux = [
             "introchristopher.html",
-            "introhugh.html"
+            "introbenedict.html"
         ];
         var choixLien = Math.floor(Math.random() * liensJeux.length);
         // construct the link to be opened
@@ -44,7 +44,7 @@ function lancerJeu () {
     } else if (jeuSensoTermine && jeuLogicTermine === null && jeuMotriceTermine === null) {
         var liensJeux = [
             "introtom.html",
-            "introhugh.html"
+            "introbenedict.html"
         ];
         var choixLien = Math.floor(Math.random() * liensJeux.length);
         // construct the link to be opened
@@ -61,7 +61,7 @@ function lancerJeu () {
         window.open(liensJeux[choixLien],'_self',false);
     } else if (jeuMotriceTermine && jeuSensoTermine && jeuLogicTermine === null) {
         // open it in a new window / tab (depends on browser setting)
-        window.open("introhugh.html",'_self',false);
+        window.open("introbenedict.html",'_self',false);
     } else if (jeuMotriceTermine && jeuLogicTermine && jeuSensoTermine === null) {
         // open it in a new window / tab (depends on browser setting)
         window.open("christopherreeve.html",'_self',false);
