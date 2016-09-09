@@ -83,6 +83,16 @@ body {
     margin: auto;
     width: 100%;
 }
+
+.zonebutton {
+    background-color: #373b3d; 
+    color: #000000;
+    position: absolute;
+    padding: auto;   
+    margin: auto;
+    width: 100%;
+}
+
 .textetitre {
     font-family: 'Uncial Antiqua', cursive;                                                
     color: #fafafa;
@@ -101,6 +111,26 @@ body {
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
+}
+
+.texteBox {
+    font-family: 'Uncial Antiqua', cursive;                                                
+    color: #212121;
+    text-align:center; 
+    font-size: 1.5vw;
+    font-style: italic;
+    font-variant: normal;
+    font-weight: normal;
+}
+
+.texte {
+    font-family: 'Raleway', sans-serif;                                                 
+    color: #fafafa;
+    text-align:center; 
+    font-size: 1.5vw;
+    font-style: italic;
+    font-variant: normal;
+    font-weight: bold;
 }
 
 .textepetit {
@@ -123,6 +153,20 @@ body {
     font-variant: normal;
     font-weight: bold;
 }
+
+.button {
+    background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin: 1vw;
+    cursor: pointer;
+}
 </style>
 </head>
 
@@ -133,8 +177,11 @@ body {
             <p><a class="textetitre">Il existe un Sorcier,</a><br/>
                 <a class="textesoustitre">ou les incroyables aventures de Super Berger.</a></p>
             <div class="zonefeedback" id="affichageLienQuestionnaire" style="display:block"><a class="textelien" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfRjOij2wLe3LHnQdeGTD_1WRw7zkb1wg7UOf067UAAAz24Pw/viewform'),afficherLien()" style="cursor:pointer">Avant de commencer à jouer, complétez le questionnaire en cliquant sur le lien suivant.
-                    <br/>Une nouvelle fenêtre va s'ouvrir. Une fois le questionnaire terminé, vous pourrez revenir sur cette page et lancer le jeu.</a></div><br/>
-                <div class="zonefeedback2" id="affichageLienJeu" style="display:none"> <a class="textelien" onclick="parent.location='intro.html'" style="cursor:pointer">Pour commencer à jouer, cliquez ici.</a></div>
+                    <br/>Une nouvelle fenêtre va s'ouvrir. Une fois le questionnaire terminé, vous pourrez revenir sur cette page et lancer le jeu.</a><br/></div>
+                <div class="zonefeedback2" id="affichageLienJeu" style="display:none"> <a class="texte" >Pour commencer à jouer, entre ton nom, Berger :</a>
+                    <div class ="inputTexte" id="affichageZoneTexte" style="display:block"> <input class="texteBox" style="text-align:center;" size="20" maxlength="20" id="nomJoueur" onkeypress="recupererNom(event)"><br/>
+                        <a class="texte" >... puis appuye sur la touche Entrée !</a></div>
+                    <div class="zonebutton" style="display:none"><button class="button" id="commencerJeu" style="display:none" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="parent.location='intro.html'">Se lancer dans l'aventure !</button></div></div>
         </div>
     </div>
 

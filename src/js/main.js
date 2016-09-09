@@ -1,17 +1,44 @@
 var IDjoueur = ""; //donner une ID au joueur
-
+var nomJoueur = ""; //nom entré par le joueur
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
+
+//récupérer identité joueur
+function recupererNom(event) {
+    if (event.keyCode === 13) {
+        nomJoueur = document.getElementById("nomJoueur").value;
+        verifierNom();
+    }
+}
+
+function verifierNom() {
+    if (isNaN(nomJoueur)) {
+        localStorage.setItem("name",nomJoueur);
+        console.log("nom du joueur : " + nomJoueur);
+        
+        //document.getElementById("commencerJeu").style.display = "block";
+        //document.getElementById("commencerJeu").disabled = false;
+        
+        donnerID();
+
+    } else if (nomJoueur === "") {
+        alert("Veuillez entre votre nom, s'il vous plaît.");
+    } else if (nomJoueur.indexOf('1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9' || '0' || '&' || '#' || '{' || '}' || '[' || ']') >= 0) {
+        alert("Veuillez entre votre nom, s'il vous plaît.");
+    } else {
+        alert("Veuillez entre votre nom, s'il vous plaît.");
+    }
+}
 
 function donnerID () {
     // Math.random should be unique because of its seeding algorithm.
     // Convert it to base 36 (numbers + letters), and grab the first 9 characters
     // after the decimal.
     var IDjoueur = Math.random().toString(36).substr(2, 9);
-    console.log(IDjoueur);
     localStorage.setItem("joueur",IDjoueur);
+        console.log("ID du joueur : " + IDjoueur);
 
-    //enregistrerDonnees(0, "IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
+    //enregistrerDonnees(0, "nomJoueur" + ";" + IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
     enregistrerDonnees(1,"\n");
     lancerJeu();
     
