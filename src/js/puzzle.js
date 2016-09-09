@@ -507,8 +507,8 @@ function drawGrid(){
             g_casesNum[i*g_nbCellX+(j+1)] < 0 ||
             g_casesNum[i*g_nbCellX+(j-1)] < 0  )
               txtColor = "#0000FF";*/
-            if(Math.abs(g_casesNum[i*g_nbCellX+j]) != i*g_nbCellX+j )
-                  txtColor = "#FFA500";
+          //  if(Math.abs(g_casesNum[i*g_nbCellX+j]) != i*g_nbCellX+j )
+            //      txtColor = "#FFA500";
 
           var cursor = '';
           if(g_casesNum[(i-1)*g_nbCellX+j] < 0)
