@@ -52,7 +52,7 @@ body {
     font-family: 'Raleway', sans-serif;
     color: #fafafa;
     text-align:center;
-    font-size: 1.3vw;
+    font-size: 1.1vw;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
@@ -107,7 +107,7 @@ body {
 }
 
 .site {
-    width: 330px;
+    width: 530px;
     height: auto;
     padding: auto;
     border: 0px solid black;
@@ -139,7 +139,7 @@ body {
     padding-right: 0vw;
     padding-bottom: 0vw;
     border: 0px solid black;
-    margin: auto;
+    margin-left: 100px;
     text-align:center;
 }
 
@@ -152,7 +152,9 @@ body {
 
 .board {
     padding: 0px;
-    margin: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width : 310px;
     border: 1px solid white;
     border-collapse: collapse;
 }
@@ -166,17 +168,19 @@ body {
 }
 </style>
 
-<script src="js/puzzle.js"></script>
+<script src="js/benedictcumberbatch.js"></script>
 
 </head>
 
 <body onload="init()">
 
     <div class="fondtexte">
-        <div class="textetitre">L'épreuve de perception visuelle</div>
-        <div class="texte"><b>Sur une grille de couleur uniforme, 5 cases de luminosité légèrement différente vont clignoter à la fin du décompte.<br/>
-            Vous disposez d'un nombre de tours limités. Si vous trouvez les cases, vous gagnez.<br/>
-            Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.</b></div>
+        <div class="textetitre">L'épreuve de déduction</div>
+        <div class="texte"><b>Votre objectif est de remettre les chiffres dans l'ordre.<br/>
+            Pour cela, déplacez la case bleue en cliquant sur une case adjacente<br/>
+            Vous disposez d'abord d'un temps limité pour observer la grille. <br>
+            Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/>
+            Après avoir misé, le nombre de coups et le temps sont à nouveau limités.<br/></b></div>
                 <p class="texte">Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br/>
                 A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !</p>
     <div class="zonefeedback">
@@ -200,12 +204,12 @@ body {
 
 		<div class="inSite">
                     <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
-			<div id="board"></div>
+			<div class="board" id="board"></div>
 			<div class="textefeedback" id="res"></div>
                             <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()" >Générer une grille</button><br/>
 				<table id="tableMise">
-						<tr><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
-						<tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+						<tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
+						<tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
 				</table>
                         <br/></div></div>
 

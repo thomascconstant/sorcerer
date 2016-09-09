@@ -1,6 +1,6 @@
-var nomDuJeu = "Sensoriel";
+var nomDuJeu = "Logique2";
 var IDjoueur = localStorage.getItem("joueur");
-var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
+var scoreJoueurBenedict = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
 var width = 300;
@@ -28,7 +28,7 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 30; //Nombre de tours restants
+var tours = 2; //Nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -137,6 +137,13 @@ function recupMise() {
     //faire apparaître le compte à rebours et le lancer
     document.getElementById("affichageFeedback").innerHTML = "Cliquez sur les cases qui ont clignotées.";
     //startTimer();
+
+    //On reset le temps
+    g_temps_coups = g_duree_coup;
+    document.getElementById("temps").innerHTML = g_temps_coups;
+    clearInterval(g_timer_coup_id);
+    g_timer_coup_id = setInterval(timerCoups,1000);
+    showGrid(true);
 }
 
 function activateMise() {
@@ -191,7 +198,7 @@ function win(ijFind){
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
             //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
-            console.log(nbCasesToFind + "to go");
+            //console.log(nbCasesToFind + "to go");
 
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
             resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
@@ -269,7 +276,7 @@ function win(ijFind){
 
         }
 
-        console.log(difficulty + "difficulté win");
+        console.log("Nouvelle difficulte:",difficulty);
     }
 
 }
@@ -346,7 +353,7 @@ function fail(){
             modeViolent = false;
             console.log("mode violent: "+ modeViolent);
         }*/
-        difficulty = Math.max(0,difficulty+0.1);
+        difficulty = Math.max(0,difficulty-0.1);
 
         //casesFound = [];
 
@@ -380,10 +387,12 @@ function fail(){
             finDePartie();
         }
 
-        console.log(difficulty + "difficulté fail");
+        console.log("Nouvelle difficulte:",difficulty);
     }
 
 }
+
+
 
 function toHex(d) {
     return ("0"+(Number(d).toString(16))).slice(-2).toUpperCase();
@@ -397,6 +406,10 @@ var g_casesNum = [];
 var g_width = 0;
 var g_nbCellX = 0;
 var g_lastCoup = 5;
+var g_nb_coups = 0;
+var g_timer_coup_id = 0;
+var g_temps_coups = 0;
+const g_duree_coup = 20;
 
 function makeGame(width,nbCellX,diff) {
 
@@ -406,7 +419,7 @@ function makeGame(width,nbCellX,diff) {
     //Creation du tableau
     g_casesNum = [];
     for(var i=0;i<g_nbCellX*g_nbCellX;i++){
-      g_casesNum.push(i);
+      g_casesNum.push(i+1);
     }
 
     //On enleve la case du milieu
@@ -420,9 +433,11 @@ function makeGame(width,nbCellX,diff) {
     //On permiet
     var nbPermMax = 10;
     var nbPerm = Math.floor(nbPermMax * diff);
+    g_nb_coups = nbPerm;
+    document.getElementById("nbCoups").innerHTML = g_nb_coups;
     console.log("Making grid with "+nbPerm+ " permutations");
     g_lastCoup = 5;
-    for(var i=0;i<nbPermMax * diff;i++){
+    for(var i=0;i<nbPerm;i++){
       //on cherche la case vide
       var iCaseVide = -1;
       for(var is=0;is<g_nbCellX*g_nbCellX;is++)
@@ -455,20 +470,20 @@ function makeGame(width,nbCellX,diff) {
 
         if(xTest >= 0 && xTest < g_nbCellX && yTest >= 0 && yTest < g_nbCellX && coupOk ){
           switch (coup){
-            case 0: console.log("left"); break;
-            case 1: console.log("right"); break;
-            case 2: console.log("up"); break;
-            case 3: console.log("down"); break;
+            case 0: console.log("permutation",i,"left"); break;
+            case 1: console.log("permutation",i,"right"); break;
+            case 2: console.log("permutation",i,"up"); break;
+            case 3: console.log("permutation",i,"down"); break;
           }
           permute(xTest,yTest);
           g_lastCoup = coup;
           moveValid = true;
         }else{
           switch (coup){
-            case 0: console.log("oups no left"); break;
-            case 1: console.log("oups no  right"); break;
-            case 2: console.log("oups no up"); break;
-            case 3: console.log("oups no down"); break;
+            case 0: console.log("> oups no left"); break;
+            case 1: console.log("> oups no right"); break;
+            case 2: console.log("> oups no up"); break;
+            case 3: console.log("> oups no down"); break;
           }
         }
 
@@ -479,7 +494,23 @@ function makeGame(width,nbCellX,diff) {
 
 
     drawGrid();
+
+    g_temps_coups = g_duree_coup;
+    document.getElementById("temps").innerHTML = g_temps_coups;
+    if(g_nb_coups > 0){     
+        clearInterval(g_timer_coup_id); 
+        g_timer_coup_id = setInterval(timerCoups,1000);
+    }
+
 }
+
+function showGrid(show){
+    if(!show)
+        document.getElementById("board").innerHTML = "";
+    else
+        drawGrid();
+}
+
 
 function drawGrid(){
   //Affichage
@@ -507,7 +538,7 @@ function drawGrid(){
             g_casesNum[i*g_nbCellX+(j+1)] < 0 ||
             g_casesNum[i*g_nbCellX+(j-1)] < 0  )
               txtColor = "#0000FF";*/
-          //  if(Math.abs(g_casesNum[i*g_nbCellX+j]) != i*g_nbCellX+j )
+          //  if(Math.abs(g_casesNum[i*g_nbCellX+j]) != i*g_nbCellX+j +1 )
             //      txtColor = "#FFA500";
 
           var cursor = '';
@@ -540,8 +571,9 @@ function drawGrid(){
 function permute(i,j){
 
   var numCase = j*g_nbCellX+i;
+  var coup = false;
 
-  console.log("permute on "+i,j)
+  //console.log("permute on "+i,j)
 
   //gauche
   if(i > 0 && g_casesNum[numCase-1] < 0)
@@ -549,6 +581,7 @@ function permute(i,j){
     var tmp = g_casesNum[numCase-1];
     g_casesNum[numCase-1] = g_casesNum[numCase];
      g_casesNum[numCase] = tmp;
+     coup = true;
   }
 
   if(i < g_nbCellX-1 && g_casesNum[numCase+1] < 0)
@@ -556,6 +589,7 @@ function permute(i,j){
     var tmp = g_casesNum[numCase+1];
     g_casesNum[numCase+1] = g_casesNum[numCase];
      g_casesNum[numCase] = tmp;
+     coup = true;
   }
 
   if(j > 0 && g_casesNum[numCase-g_nbCellX] < 0)
@@ -563,6 +597,7 @@ function permute(i,j){
     var tmp = g_casesNum[numCase-g_nbCellX];
     g_casesNum[numCase-g_nbCellX] = g_casesNum[numCase];
      g_casesNum[numCase] = tmp;
+     coup = true;
   }
 
   //console.log(i,j,g_casesNum[numCase+g_nbCellX]);
@@ -571,10 +606,13 @@ function permute(i,j){
     var tmp = g_casesNum[numCase+g_nbCellX];
     g_casesNum[numCase+g_nbCellX] = g_casesNum[numCase];
      g_casesNum[numCase] = tmp;
+     coup = true;
   }
 
 
   drawGrid();
+
+  return coup;
 }
 
 function clickCase(x,y){
@@ -582,21 +620,45 @@ function clickCase(x,y){
   if(!miseValide)
     return;
 
-    permute(x,y);
+  if(g_nb_coups > 0)
+    if(permute(x,y))
+        g_nb_coups--;
+
+  document.getElementById("nbCoups").innerHTML = g_nb_coups;
 
   //on teste si gagne
   var youWin = true;
   for(var i=0;i<g_nbCellX*g_nbCellX;i++){
     //console.log(g_casesNum[i],i);
-    if(Math.abs(g_casesNum[i]) != i)
+    if(Math.abs(g_casesNum[i]) != i+1)
       youWin = false;
   }
 
-  console.log(youWin);
+  //console.log(youWin);
   if(youWin){
     nbCasesToFind = 0;
     win(0);
   }
+
+  if(g_nb_coups == 0 || youWin)
+    clearInterval(g_timer_coup_id);
+
+  if(g_nb_coups == 0 && !youWin)
+    fail();
+}
+
+function timerCoups(){
+    g_temps_coups--;
+    document.getElementById("temps").innerHTML = g_temps_coups;
+    if(g_temps_coups <= 0){
+        clearInterval(g_timer_coup_id);
+        
+        if(!miseValide)
+            showGrid(false);
+        else
+            fail();
+    }
+
 }
 
 
@@ -652,7 +714,7 @@ function feedbackSonore() {
         if (seconds === 1) {
             makeGame(width,nbCells,difficulty);
             anim = setInterval(animate,20);
-            console.log(anim + "anim");
+            //console.log(anim + "anim");
             activateMise();
         }
 
@@ -684,14 +746,14 @@ function uncolorButton() {
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur
-        scoreJoueurChristopher = score;
-        localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
-        console.log(scoreJoueurChristopher);
+        scoreJoueurBenedict = score;
+        localStorage.scoreJoueurBenedict = scoreJoueurBenedict;
+        console.log(scoreJoueurBenedict);
 
         // enregistrer les données du joueur
         enregistrerDonnees(1,resultatJoueur);
-        var jeuSensoTermine = true;
-        localStorage.setItem("christopherreeve", jeuSensoTermine);
+        var jeuLogicTermine = true;
+        localStorage.setItem("benedictcumberbatch", jeuLogicTermine);
 
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
