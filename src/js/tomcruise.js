@@ -1,6 +1,7 @@
 //Variables du jeu
 var nomDuJeu = "Motrice";
 var IDjoueur = localStorage.getItem("joueur");
+var nomJoueur = localStorage.getItem("name");
 var scoreJoueurTom = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var barSpeed = 1; //Vitesse de la barre : pixels par frame
@@ -249,7 +250,7 @@ function stop() {
     tours--;
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";"+ gameSpeed + ";" + score + ";" + winState + ";" + "\n";
+    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";"+ gameSpeed + ";" + score + ";" + winState + ";" + "\n";
     console.log(resultatJoueur + "résultats");
     console.log(winState);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );

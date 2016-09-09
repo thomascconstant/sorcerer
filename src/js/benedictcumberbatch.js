@@ -1,5 +1,6 @@
 var nomDuJeu = "Logique2";
 var IDjoueur = localStorage.getItem("joueur");
+var nomJoueur = localStorage.getItem("name");
 var scoreJoueurBenedict = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
@@ -28,7 +29,7 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 2; //Nombre de tours restants
+var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -201,7 +202,7 @@ function win(ijFind){
             //console.log(nbCasesToFind + "to go");
 
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
             //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
 
             //Un tour de moins, reset de la mise

@@ -1,5 +1,6 @@
 var nomDuJeu = "Sensoriel";
 var IDjoueur = localStorage.getItem("joueur");
+var nomJoueur = localStorage.getItem("name");
 var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
@@ -316,7 +317,7 @@ function win(){
             console.log(nbCasesToFind + "to go");
             
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
             //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
             
             //Un tour de moins, reset de la mise
