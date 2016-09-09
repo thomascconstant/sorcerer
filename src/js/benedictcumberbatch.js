@@ -1,6 +1,6 @@
 var nomDuJeu = "Logique2";
 var IDjoueur = localStorage.getItem("joueur");
-var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
+var scoreJoueurBenedict = 0; //Score du joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
 var width = 300;
@@ -746,14 +746,14 @@ function uncolorButton() {
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur
-        scoreJoueurChristopher = score;
-        localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
-        console.log(scoreJoueurChristopher);
+        scoreJoueurBenedict = score;
+        localStorage.scoreJoueurBenedict = scoreJoueurBenedict;
+        console.log(scoreJoueurBenedict);
 
         // enregistrer les données du joueur
         enregistrerDonnees(1,resultatJoueur);
-        var jeuSensoTermine = true;
-        localStorage.setItem("christopherreeve", jeuSensoTermine);
+        var jeuLogicTermine = true;
+        localStorage.setItem("benedictcumberbatch", jeuLogicTermine);
 
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");

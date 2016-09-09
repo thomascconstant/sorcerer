@@ -27,7 +27,7 @@ function lancerJeu () {
     //récupérer boleen des jeux déjà terminés
     var jeuMotriceTermine = localStorage.getItem("tomcruise");
     var jeuSensoTermine = localStorage.getItem("christopherreeve");
-    var jeuLogicTermine = localStorage.getItem("hughlaurie");
+    var jeuLogicTermine = localStorage.getItem("benedictcumberbatch");
     console.log(jeuMotriceTermine);
     console.log(jeuSensoTermine);
     console.log(jeuLogicTermine);
@@ -76,7 +76,7 @@ function lancerJeu () {
         var liensJeux = [
             "introtom.html",
             "introchristopher.html",
-            "introhugh.html"];
+            "introbenedict.html"];
         // get a random number between 0 and the number of links
         var randIdx = Math.random() * liensJeux.length;
         // round it, so it can be used as array index
@@ -100,7 +100,7 @@ function uncolorButton() {
 function afficherResults() {
     var jeuMotriceTermine = localStorage.getItem("tomcruise");
     var jeuSensoTermine = localStorage.getItem("christopherreeve");
-    var jeuLogicTermine = localStorage.getItem("hughlaurie");
+    var jeuLogicTermine = localStorage.getItem("benedictcumberbatch");
 
     if (jeuMotriceTermine) {
         document.getElementById("affichageTom").style.display = "block"; 
@@ -113,8 +113,8 @@ function afficherResults() {
     }
     
     if (jeuLogicTermine) {
-        document.getElementById("affichageHugh").style.display = "block"; 
-        document.getElementById("resultHugh").style.display = "block";
+        document.getElementById("affichageBenedict").style.display = "block"; 
+        document.getElementById("resultBenedict").style.display = "block";
     }
 }
 
