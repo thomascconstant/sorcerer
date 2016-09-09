@@ -17,9 +17,11 @@ var colorTarget =  0;
 var colorCurrent = 0;
 var colorBase =  0;
 var nbCasesToFind = 0;
+var nbDeClics = 5; //nombre de clics que le joueur fait en cliquant sur le tableau
 var cases = []; //tableau des cases à trouver
 var casesFake = []; //tableau des cases perdantes
 var casesFound = []; //tableau des cases trouvées
+var casesClicked = []; //tableau des cases cliquees
 var casesNotFound = []; //tableau des cases trouvées mais sans correspondance
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
@@ -48,17 +50,21 @@ function animate(){
         colorCurrent -= step;
     else {
         colorCurrent = colorBase;
+        clearInterval(anim);
     }
     
     for(var i=0;i<cells.length;i++){
         //console.log(cells[i].id);
         //console.log(casesFound.indexOf(parseInt(cells[i].id)));
-        if (casesFound.indexOf(parseInt(cells[i].id)) >= 0) {
+        /*if (casesFound.indexOf(parseInt(cells[i].id)) >= 0) {
             cells[i].style.backgroundColor = "#0288d1";
         } else {
             cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
-        }
+        }*/
+        cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
     }
+    
+  
 }
 
 function init() {
@@ -81,6 +87,7 @@ function init() {
 
 function go() {
     casesFound = [];
+    casesClicked = [];
     makeGame(width,nbCells,1-difficulty);
     anim = setInterval(animate,20);
     /*document.getElementById("tours").innerHTML = tours;
@@ -94,6 +101,8 @@ function go() {
 
 function goNew() {
     casesFound = [];
+    casesNotFound = [];
+    casesClicked = [];
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     document.getElementById("affichageFeedback").innerHTML = "Les cases vont clignoter dans...";
     //document.getElementById("affichageFeedback").style.display = "none"; 
@@ -138,8 +147,9 @@ function recupMise() {
     miseValide = true;
     
     //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur les cases qui ont clignotées.";
-    //startTimer();
+    document.getElementById("affichageFeedback").innerHTML = "Les cases gagnantes vont s'afficher.";
+    
+    results();
 }
 
 function activateMise() {
@@ -154,7 +164,8 @@ function activateMise() {
 
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
-    document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise.";
+    document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise pour valider votre sélection.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 }
 
 function showMise() {
@@ -175,53 +186,74 @@ function cleanMise() {
 }
 
 function selectWin(ijFind) {
-    if (countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
-        nbCasesToFind--;
-        casesFound.push(ijFind);
-        console.log("nombre de cases à trouver" + nbCasesToFind);
-
-        if (nbCasesToFind <= 0) {
-            //win();
-            winState = true;
-            recupMise();
+    
+    if(casesClicked.indexOf(ijFind) < 0){
+        if(nbDeClics > 0){
+            casesClicked.push(ijFind);
+            document.getElementById(ijFind).style.backgroundColor = "#0288d1";
+            nbDeClics--;
+            
+            if (countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
+                nbCasesToFind--;
+                casesFound.push(ijFind);
+            }
+             
         }
+    } else {
+        casesClicked.splice(casesClicked.indexOf(ijFind),1);
+        
+        if(casesFound.indexOf(ijFind) >= 0){
+            casesFound.splice(casesFound.indexOf(ijFind),1);
+            nbCasesToFind++;
+        }
+        
+        document.getElementById(ijFind).style.backgroundColor = toHexColor(colorBase,colorBase,colorBase);
+        nbDeClics++;
     }
+
+    console.log("nombre de cases à trouver" + nbCasesToFind);
+
+    if (nbDeClics <= 0 && nbCasesToFind <= 0) {
+        winState = true;
+        activateMise();
+        console.log("nombre de clics restant : " + nbDeClics);
+    } else if (nbDeClics <= 0) {
+        winState = false;
+        activateMise();
+        console.log("nombre de clics restant : " + nbDeClics);
+    }
+        
+    console.log("nombre de clics restant : " + nbDeClics);
 }
 
 function selectFail(ijFind) {
-    if (countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
-        nbCasesToFind--;
+    if(casesClicked.indexOf(ijFind) < 0){
+        if(nbDeClics > 0){
+            casesClicked.push(ijFind);
+            document.getElementById(ijFind).style.backgroundColor = "#0288d1";
+            nbDeClics--;
+        }
+        
+    } else {
+        casesClicked.splice(casesClicked.indexOf(ijFind),1);
+        document.getElementById(ijFind).style.backgroundColor = toHexColor(colorBase,colorBase,colorBase);
+        nbDeClics++;
+    }
+    console.log(casesClicked);
+        
+    if (countDownToZero === true && casesFound.indexOf(ijFind) < 0 && nbDeClics >= 0) {
+
         casesNotFound.push(ijFind);
         
         console.log("nombre de cases à trouver" + nbCasesToFind);
 
-        var decreaseFactor = (30*(1-colorTransitionSpeed))+1;
-        var step = Math.floor((colorTarget - colorBase) / decreaseFactor);
-        step = Math.max(1,step);
-
-        var cells = document.getElementsByName("cellFail");
-
-        if(colorCurrent - colorBase > step)
-            colorCurrent -= step;
-        else {
-            colorCurrent = colorBase;
-        }
-
-        for(var i=0;i<cells.length;i++){
-            console.log(casesNotFound + "cases non trouvées");
-            if (casesNotFound.indexOf(parseInt(cells[i].id)) >= 0) {
-                cells[i].style.backgroundColor = "#0288d1";
-            } else {
-                cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
-            }
-        }
-
-        if (nbCasesToFind <= 0) {
-            //fail();
-            winState = false;
-            alert("stop"); //mettre une div par dessus ici
-            recupMise();
-        }
+        
+        console.log("nombre de clics restant : " + nbDeClics);
+    }
+    
+    if (nbDeClics <= 0) {
+        winState = false;
+        activateMise();  
     }
 }
 
@@ -512,11 +544,13 @@ function makeGame(width,nbCellsX,diffColor) {
     //console.log(colorFindHex);
 
     cases = [];
+    casesFake = [];
     var casesInterdites = [];
 
-    //changer le nombre de cases qui clignote et le nbre de case à trouver
+    //changer le nombre de cases qui clignotent, le nbre de case à trouver et le nombre de clics possibles
     var nbCells = 5;
     nbCasesToFind = 5;
+    nbDeClics = nbCasesToFind;
 
     //On compte les voisins directs comme cases gagnantes
     /*if(modePoussin) {
@@ -788,13 +822,14 @@ function feedbackSonore() {
             makeGame(width,nbCells,1-difficulty);
             anim = setInterval(animate,20);
             console.log(anim + "anim");
-            activateMise();
         }
 
         if (seconds === 1) {
             temp = document.getElementById('timer');
             temp.innerHTML = "0";
             document.getElementById("affichageCompteur").style.display = "none";
+            document.getElementById("affichageFeedback").innerHTML = "Cliquez sur les cases que vous pensez être gagnantes.";
+            document.getElementById("affichageFeedback").style.backgroundColor = "#ff5722";
             countDownToZero = true;
             return;
         }
@@ -805,7 +840,7 @@ function feedbackSonore() {
         timeoutMyOswego = setTimeout(countdown, 1000);
     } 
 
-    countdown();   
+    countdown();  
 }
 
 function colorButton() {
