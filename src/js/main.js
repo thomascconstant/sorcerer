@@ -59,7 +59,9 @@ function lancerJeu () {
     console.log(jeuSensoTermine);
     console.log(jeuLogicTermine);
     //lancement selon progression
-    if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
+    if (jeuMotriceTermine === null && jeuSensoTermine === null && jeuLogicTermine === null) {
+        window.open("intro.html",'_self',false); 
+    } else if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
         var liensJeux = [
             "introchristopher.html",
             "introbenedict.html"
