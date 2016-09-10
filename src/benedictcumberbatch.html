@@ -176,16 +176,16 @@ body {
 
     <div class="fondtexte">
         <div class="textetitre">L'épreuve de déduction</div>
-        <div class="texte"><b>Votre objectif est de remettre les chiffres dans l'ordre.<br/>
-            Pour cela, déplacez la case bleue en cliquant sur une case adjacente<br/>
-            Vous disposez d'abord d'un temps limité pour observer la grille. <br>
+        <div class="texte"><b>Votre objectif est de remettre les cases du plateau de jeu dans l'ordre (en partant de 1).<br/>
+            Pour cela, déplacez la case bleue en cliquant sur une case adjacente.<br/>
+            Vous disposez d'abord d'un temps limité pour observer le plateau de jeu, avant qu'il ne disparaisse. <br>
             Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/>
             Après avoir misé, le nombre de coups et le temps sont à nouveau limités.<br/></b></div>
                 <p class="texte">Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br/>
                 A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !</p>
     <div class="zonefeedback">
-        <!--<div class="compteur" id="affichageCompteur" style="display:none">Les cases vont clignoter dans <span id="timer">5</span> secondes !</div>-->
-        <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer une grille.</div>
+        <!--<div class="compteur" id="affichageCompteur" style="display:none">Le plateau de jeu va apparaître dans <span id="timer">5</span> secondes !</div>-->
+        <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer un plateau de jeu.</div>
     </div>
     <div class='zonemise'>
         <!--<p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>-->
@@ -206,7 +206,7 @@ body {
                     <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
 			<div class="board" id="board"></div>
 			<div class="textefeedback" id="res"></div>
-                            <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()" >Générer une grille</button><br/>
+                            <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()" >Générer un plateau de jeu</button><br/>
 				<table id="tableMise">
 						<tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
 						<tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>

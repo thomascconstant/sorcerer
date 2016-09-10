@@ -80,6 +80,7 @@ function go() {
     casesFound = [];
     makeGame(width,nbCells,1-difficulty);
     anim = setInterval(animate,20);
+    document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
     /*document.getElementById("tours").innerHTML = tours;
     document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;*/
@@ -91,8 +92,8 @@ function go() {
 
 function goNew() {
     casesFound = [];
-    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
-    document.getElementById("affichageFeedback").innerHTML = "Les cases vont clignoter dans...";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
+    document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu va apparaître dans...";
     //document.getElementById("affichageFeedback").style.display = "none";
     makeGame(width,nbCells,0); //afficher la grille sans cases à trouver
     startTimer();
@@ -135,7 +136,8 @@ function recupMise() {
     miseValide = true;
 
     //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageFeedback").innerHTML = "Cliquez sur les cases qui ont clignotées.";
+    document.getElementById("affichageFeedback").innerHTML = "Déplacez le carré bleu pour ranger le plateau dans l'ordre.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
     //startTimer();
 
     //On reset le temps
@@ -159,6 +161,7 @@ function activateMise() {
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 }
 
 function showMise() {
@@ -653,15 +656,18 @@ function timerCoups(){
     if(g_temps_coups <= 0){
         clearInterval(g_timer_coup_id);
         
-        if(!miseValide)
-            showGrid(false);
-        else
+        if(!miseValide) {
+            document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu a disparu. Choisissez votre mise pour continuer.";
+            document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
+            showGrid(false);  
+        } else {
             fail();
+         
+        }
+            
     }
 
 }
-
-
 
 function feedbackSonore() {
     if(winState === true) {

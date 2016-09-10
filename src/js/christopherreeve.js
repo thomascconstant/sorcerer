@@ -34,7 +34,7 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 5; //Nombre de tours restants
+var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
