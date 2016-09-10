@@ -34,7 +34,7 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 30; //Nombre de tours restants
+var tours = 5; //Nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -449,7 +449,7 @@ function fail(){
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + "" + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
         //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
         
         //Un tour de moins, reset de la mise

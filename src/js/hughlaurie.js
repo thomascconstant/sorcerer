@@ -451,7 +451,7 @@ function res(win) {
     //score = Math.max(0,score);
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + sequence + ";" + mise + ";" + difficulte + ";" + score + ";" + playerWin + ";" + "\n";
+    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + sequence + ";" + mise + ";" + difficulte + ";" + score + ";" + playerWin + ";" + "\n";
     //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulte + ";" + score + ";" + playerWin );
 
     //document.getElementById("tours").innerHTML = tours;
