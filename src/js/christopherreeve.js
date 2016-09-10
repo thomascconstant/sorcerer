@@ -292,7 +292,37 @@ function afficherCasesGagnantes() {
     }
 }
 
-function win(){
+function difficultyGame() {
+    if (difficulty < 0.3) {
+        modeNormal = false;
+        modeViolent = false;
+        modePoussin = true;
+        
+        nbCells = Math.max(5, nbCells-1);
+        
+        console.log("mode poussin: "+ modePoussin);
+        
+    } else if (difficulty >= 0.3 && difficulty < 0.6) {
+        modeNormal = true;
+        modeViolent = false;
+        modePoussin = false;
+        
+        nbCells = Math.max(5, nbCells+1);
+        
+        console.log("mode normal: "+ modeNormal);
+        
+    } else if (difficulty  >= 0.6) {
+        modeNormal = false;
+        modeViolent = true;
+        modePoussin = false;
+        
+        nbCells = Math.max(5, nbCells+1);
+        
+        console.log("mode violent: "+ modeViolent);
+    }
+}
+
+function win() {
     if(miseValide) {
       //nbCasesToFind--;
       //casesFound.push(ijFind);
@@ -341,7 +371,10 @@ function win(){
                 difficulty = difficulty + 0.01;
             }*/
             
-            if(Math.random() < 0.7) {
+            difficulty = Math.min(1,difficulty+0.1);
+            difficultyGame();
+            
+            /*if(Math.random() < 0.7) {
                 if(difficulty >= 0.95) {
                     difficulty = Math.min(0.99,difficulty + 0.02);
                     modeViolent = true;
@@ -355,7 +388,7 @@ function win(){
                 }
             } else {
                 nbCells = Math.min(8, nbCells+1);
-            }
+            }*/
             
             //bloquer jeu
             miseValide = false;
@@ -459,7 +492,10 @@ function fail(){
             }
         }*/
         
-        if(Math.random() < 0.7) {
+        difficulty = Math.max(0,difficulty-0.1);
+        difficultyGame();
+        
+        /*if(Math.random() < 0.7) {
             if(difficulty > 0.95) {
                 difficulty = difficulty - 0.01;
             } else {
@@ -469,7 +505,7 @@ function fail(){
             nbCells = Math.max(5, nbCells-1);
             modeViolent = false;
             console.log("mode violent: "+ modeViolent);
-        }
+        }*/
         
         //casesFound = [];
 
