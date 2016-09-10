@@ -40,7 +40,8 @@ function donnerID () {
 
     //enregistrerDonnees(0, "nomJoueur" + ";" + IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
     enregistrerDonnees(1,"\n");
-    lancerJeu();
+    //lancerJeu();
+    window.open("intro.html",'_self',false); 
     
 }
 
@@ -59,9 +60,7 @@ function lancerJeu () {
     console.log(jeuSensoTermine);
     console.log(jeuLogicTermine);
     //lancement selon progression
-    if (jeuMotriceTermine === null && jeuSensoTermine === null && jeuLogicTermine === null) {
-        window.open("intro.html",'_self',false); 
-    } else if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
+    if (jeuMotriceTermine && jeuSensoTermine === null && jeuLogicTermine === null) {
         var liensJeux = [
             "introchristopher.html",
             "introbenedict.html"
