@@ -73,9 +73,34 @@ DT <- csv.data
 mylogit <- glm(gagnant ~ mise, data = DT, family = "binomial"(link = "logit"))
 summary(mylogit)
 
-sample = data.frame(difficulty=seq(0, 1, 0.05))
+sample = data.frame(mise=seq(1, 7, 1))
 newres = predict(mylogit, newdata = sample, type = "response")
-plot(DT$difficulty, DT$gagnant, xlab="difficulty",  ylab="gagnant",  col=rgb(0,100,0,20,maxColorValue=255))
+plot(DT$mise, DT$difficulty, xlab="mise",  ylab="difficulty",  col=rgb(0,100,0,150,maxColorValue=255))
 points(data.frame(sample,newres), type="l")
+
+#------------- histogrammes des mises
+dataMise1 <- csv.data[which(csv.data$mise=="1"),]
+dataMise2 <- csv.data[which(csv.data$mise=="2"),]
+dataMise3 <- csv.data[which(csv.data$mise=="3"),]
+dataMise4 <- csv.data[which(csv.data$mise=="4"),]
+dataMise5 <- csv.data[which(csv.data$mise=="5"),]
+dataMise6 <- csv.data[which(csv.data$mise=="6"),]
+dataMise7 <- csv.data[which(csv.data$mise=="7"),]
+
+l <- list(dataMise1$diff,dataMise2$diff,dataMise3$diff,dataMise4$diff,dataMise5$diff,dataMise6$diff,dataMise7$diff)
+multhist(l)
+
+#------------- histogrammes des mises groupes
+dataMise1 <- csv.data[which(csv.data$mise=="1"),]
+dataMise23 <- csv.data[which(csv.data$mise=="2" & csv.data$mise=="3"),]
+dataMise4 <- csv.data[which(csv.data$mise=="3"),]
+dataMise56 <- csv.data[which(csv.data$mise=="5") & csv.data$mise=="6",]
+dataMise7 <- csv.data[which(csv.data$mise=="7"),]
+
+
+l <- list(dataMise1$diff,dataMise23$diff,dataMise4$diff,dataMise56$diff,dataMise7$diff)
+multhist(l)
+
+
 
 
