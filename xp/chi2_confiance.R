@@ -1,3 +1,6 @@
+#install.packages("data.table")
+require(data.table)
+
 csv.data <- read.csv("./log_thomas.txt",header=TRUE,sep=";")
 #DT <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
 #DT <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
