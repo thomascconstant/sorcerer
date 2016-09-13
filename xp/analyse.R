@@ -78,14 +78,20 @@ newres = predict(mylogit, newdata = sample, type = "response")
 plot(DT$mise, DT$difficulty, xlab="mise",  ylab="difficulty",  col=rgb(0,100,0,150,maxColorValue=255))
 points(data.frame(sample,newres), type="l")
 
+
+l <- list(csv.data$diff)
+multhist(l)
+
+
 #------------- histogrammes des mises
-dataMise1 <- csv.data[which(csv.data$mise=="1"),]
-dataMise2 <- csv.data[which(csv.data$mise=="2"),]
-dataMise3 <- csv.data[which(csv.data$mise=="3"),]
-dataMise4 <- csv.data[which(csv.data$mise=="4"),]
-dataMise5 <- csv.data[which(csv.data$mise=="5"),]
-dataMise6 <- csv.data[which(csv.data$mise=="6"),]
-dataMise7 <- csv.data[which(csv.data$mise=="7"),]
+DT <- csv.data
+dataMise1 <- DT[which(DT$mise=="1"),]
+dataMise2 <- DT[which(DT$mise=="2"),]
+dataMise3 <- DT[which(DT$mise=="3"),]
+dataMise4 <- DT[which(DT$mise=="4"),]
+dataMise5 <- DT[which(DT$mise=="5"),]
+dataMise6 <- DT[which(DT$mise=="6"),]
+dataMise7 <- DT[which(DT$mise=="7"),]
 
 l <- list(dataMise1$diff,dataMise2$diff,dataMise3$diff,dataMise4$diff,dataMise5$diff,dataMise6$diff,dataMise7$diff)
 multhist(l)
@@ -93,13 +99,77 @@ multhist(l)
 #------------- histogrammes des mises groupes
 dataMise1 <- csv.data[which(csv.data$mise=="1"),]
 dataMise23 <- csv.data[which(csv.data$mise=="2" & csv.data$mise=="3"),]
-dataMise4 <- csv.data[which(csv.data$mise=="3"),]
+dataMise4 <- csv.data[which(csv.data$mise=="4"),]
 dataMise56 <- csv.data[which(csv.data$mise=="5") & csv.data$mise=="6",]
 dataMise7 <- csv.data[which(csv.data$mise=="7"),]
 
 
 l <- list(dataMise1$diff,dataMise23$diff,dataMise4$diff,dataMise56$diff,dataMise7$diff)
 multhist(l)
+
+#------------- histogrammes des mises
+DT <- csv.data[which(csv.data$gagnant=="1"),]
+dataMiseWin1 <- DT[which(DT$mise=="1"),]
+dataMiseWin7 <- DT[which(DT$mise=="7"),]
+
+DT <- csv.data[which(csv.data$gagnant=="0"),]
+dataMiseFail1 <- DT[which(DT$mise=="1"),]
+dataMiseFail7 <- DT[which(DT$mise=="7"),]
+
+l <- list(dataMiseWin1$diff,dataMiseWin7$diff,dataMiseFail1$diff,dataMiseFail7$diff)
+multhist(l)
+
+#------------- chi2 confiance
+csv.data <- read.csv("./log_thomas.txt",header=TRUE,sep=";")
+#DT <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
+DT <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
+#DT <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
+#DT <- csv.data
+
+DTDiffDir <- DT[1,]
+DTDiffDir <- cbind(DTDiffDir,data.table(mont="desc"))
+for(i in 2:nrow(DT)){
+  if(DT[i-1,"difficulty"] > DT[i,"difficulty"]){
+    DTDiffDir <- rbind(DTDiffDir,cbind(DT[i,],data.table(mont="desc")))
+  }else{
+    DTDiffDir <- rbind(DTDiffDir,cbind(DT[i,],data.table(mont="mont")))
+  }
+}
+DT <- DTDiffDir
+
+#DTMiseHaute <- cbind(DT,data.table(miseHaute=0))
+#DTMiseHaute = DTMiseHaute[0,]
+#for(i in 1:nrow(DT)){
+#  if(DT[i,"mise"] > 5){
+#    DTMiseHaute <- rbind(DTMiseHaute,cbind(DT[i,],data.table(miseHaute="haute")))
+#  }else{
+#    DTMiseHaute <- rbind(DTMiseHaute,cbind(DT[i,],data.table(miseHaute="faible")))
+#  }
+#}
+#DT <- DTMiseHaute
+
+DTMiseHaute <- cbind(DT,data.table(miseHaute=0))
+DTMiseHaute = DTMiseHaute[0,]
+for(i in 1:nrow(DT)){
+  if(DT[i,"mise"] > 5){
+    DTMiseHaute <- rbind(DTMiseHaute,cbind(DT[i,],data.table(miseHaute="2haute")))
+  }else if(DT[i,"mise"] > 2){
+    DTMiseHaute <- rbind(DTMiseHaute,cbind(DT[i,],data.table(miseHaute="1moyen")))
+  }else{
+    DTMiseHaute <- rbind(DTMiseHaute,cbind(DT[i,],data.table(miseHaute="0faible")))
+  }
+}
+DT <- DTMiseHaute
+
+#garder que les 20 derniers tours de chaque personne
+DT <- as.data.table(DT)
+setkey(DT, IDjoueur, nom_du_jeu)
+DT <- DT[, tail(.SD, 20), by = key(DT)]
+
+tbl = table(DT$mont, DT$miseHaute)
+tbl
+
+chisq.test(tbl)
 
 
 
