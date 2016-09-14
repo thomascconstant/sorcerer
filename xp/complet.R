@@ -13,6 +13,7 @@ file = "./log_thomas_correct_motrice.txt"
 #---------------------------------- fonctions
 
 addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
+  DTLoc <- DTL
   
   #echec au lieu de succes pour diff c'est mieux
   DTLoc$perdant <- 1-DTLoc$gagnant;
@@ -41,11 +42,11 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   
   #nombre de fail consecutifs
   DTNbFail <- DTLoc[1,]
-  nbFailCpt = DTLoc[1,"perdant"]
+  nbFailCpt = DTLoc[1,perdant]
   DTNbFail <- cbind(DTNbFail,data.table(nbFail=nbFailCpt))
 
   for(i in 2:nrow(DTLoc)){
-    if(DTLoc[i,"gagnant"] == 0){
+    if(DTLoc[i,gagnant] == 0){
       nbFailCpt = nbFailCpt+1;
     }else{
       nbFailCpt = 0;
@@ -56,11 +57,11 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   
   #nombre de wins consecutifs
   DTNbWin <- DTLoc[1,]
-  nbWinCpt = DTLoc[1,"gagnant"]
+  nbWinCpt = DTLoc[1,gagnant]
   DTNbWin <- cbind(DTNbWin,data.table(nbWin=nbWinCpt))
   
   for(i in 2:nrow(DTLoc)){
-    if(DTLoc[i,"gagnant"] == 1){
+    if(DTLoc[i,gagnant] == 1){
       nbWinCpt = nbWinCpt+1;
     }else{
       nbWinCpt = 0;
@@ -128,14 +129,17 @@ csv.data <- read.csv(file,header=TRUE,sep=";")
 
 #difficulte logique
 DTL <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
+DTL <- as.data.table(DTL)
 DTL <- addVariables(DTL,drawLogit,titre="Logique")
 
 #difficulte sensorielle
 DTS <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
+DTS <- as.data.table(DTS)
 DTS <- addVariables(DTS,drawLogit,titre="Sensorielle")
 
 #difficulte motrice
 DTM <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
+DTM <- as.data.table(DTM)
 DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation difficulte
 DTM <- addVariables(DTM,drawLogit,titre="Motrice")
 
