@@ -7,6 +7,12 @@ csv.data <- read.csv("./log_thomas.txt",header=TRUE,sep=";")
 #DT <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
 DT <- csv.data
 
+
+#normalisation de la mise
+DT$miseNorm <- DT$mise / 7;
+DT$evalDiff <- 1 - DT$miseNorm;
+DT$erreurdiff <- DT$difficulty - DT$evalDiff;
+
 DTDiffDir <- DT[1,]
 DTDiffDir <- cbind(DTDiffDir,data.table(mont="desc"))
 for(i in 2:nrow(DT)){
