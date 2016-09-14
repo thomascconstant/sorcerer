@@ -240,12 +240,6 @@ function stop() {
         //feedbackNegatif;
     }
 
-    //mise a jour de la difficulte selon le modele
-    var nextDiff = diffModel.nextDifficulty(res);
-    gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
-
-    console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
-
     //Un tour de moins
     tours--;
     
@@ -255,6 +249,12 @@ function stop() {
     console.log(winState);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
     
+    //mise a jour de la difficulte selon le modele
+    var nextDiff = diffModel.nextDifficulty(res);
+    gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
+
+    console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+
     //Reset de la mise
     mise = "?";
     document.getElementById("tours").innerHTML = tours;
