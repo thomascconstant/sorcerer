@@ -120,8 +120,8 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE){
 #---------------------------------- traitement
 
 #Prepa plot
-attach(mtcars)
-par(mfrow=c(2,3))
+#attach(mtcars)
+#par(mfrow=c(5,3))
 
 #on recup les données
 csv.data <- read.csv(file,header=TRUE,sep=";")
@@ -153,5 +153,20 @@ if(removeTenFirst)
 fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE)
 summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE)
+summary(fit)
+
+fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE)
+summary(fit)
+fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE)
+summary(fit)
+
+fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE)
+summary(fit)
+fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE)
+summary(fit)
+
+fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE)
+summary(fit)
+fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE)
 summary(fit)
 
