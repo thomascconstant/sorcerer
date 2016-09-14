@@ -11,7 +11,7 @@ file = "./log_thomas_correct_motrice.txt"
 
 #---------------------------------- fonctions
 
-addVariables <- function(DTLoc,trace = FALSE){
+addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   
   #echec au lieu de succes pour diff c'est mieux
   DTLoc$perdant <- 1-DTLoc$gagnant;
@@ -31,12 +31,12 @@ addVariables <- function(DTLoc,trace = FALSE){
   if(trace){
     sample = data.frame(difficulty=seq(0, 1, 0.05))
     newres = predict(mylogit, newdata = sample, type = "response")
-    plot(DT$difficulty, DT$perdant, xlab="difficulty",  ylab="perdant",  col=rgb(0,100,0,100,maxColorValue=255))
+    plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="difficulty",  ylab="perdant",  col=rgb(0,100,0,100,maxColorValue=255))
     points(data.frame(sample,newres), type="o")
   }
   
   #erreur d'estimation de la difficulte par le joueur (exces de confiance ?)
-  DT$erreurdiff <- DT$evalDiff - DT$estDiff;
+  DTLoc$erreurdiff <- DTLoc$evalDiff - DTLoc$estDiff;
   
   return (DTLoc)
 }
@@ -48,16 +48,16 @@ csv.data <- read.csv(file,header=TRUE,sep=";")
 
 #difficulte logique
 DTL <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
-DTL <- addVariables(DTL,drawLogit)
+DTL <- addVariables(DTL,drawLogit,titre="Logique")
 
 #difficulte sensorielle
 DTS <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
-DTS <- addVariables(DTS,drawLogit)
+DTS <- addVariables(DTS,drawLogit,titre="Sensorielle")
 
 #difficulte motrice
 DTM <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
 DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation difficulte
-DTM <- addVariables(DTM,drawLogit)
+DTM <- addVariables(DTM,drawLogit,titre="Motrice")
 
 #creation de la table totale
 DT <- data.table()
@@ -65,7 +65,7 @@ if(useLogique) DT <- rbind(DT,DTL)
 if(useMotrice) DT <- rbind(DT,DTM)
 if(useSensorielle) DT <- rbind(DT,DTS)
 
-
+#
 DTDiffDir <- DT[1,]
 DTDiffDir <- cbind(DTDiffDir,data.table(mont="desc"))
 for(i in 2:nrow(DT)){
