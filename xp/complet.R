@@ -13,7 +13,6 @@ file = "./log_thomas_correct_motrice.txt"
 #---------------------------------- fonctions
 
 addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
-  DTLoc <- DTL
   
   #echec au lieu de succes pour diff c'est mieux
   DTLoc$perdant <- 1-DTLoc$gagnant;
@@ -86,11 +85,11 @@ removeHeadTail <- function(DTLoc,nb,bHead=TRUE){
   return(DTLoc)
 }
 
-lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE){
+lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 
   if(fails){
     fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
-    plot(x=DTLoc$nbFail, y=DTLoc$erreurdiff)
+    plot(x=DTLoc$nbFail, y=DTLoc$erreurdiff, main=titre, xlab="Nombre d'échecs consécutifs", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbFail]
     TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+var(erreurdiff)),by=nbFail]
     TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-var(erreurdiff)),by=nbFail]
@@ -103,7 +102,7 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE){
   }
   else{
     fit <- aov(erreurdiff ~ nbWin, data=DTLoc)
-    plot(x=DTLoc$nbWin, y=DTLoc$erreurdiff)
+    plot(x=DTLoc$nbWin, y=DTLoc$erreurdiff, main=titre, xlab="Nombre de succès consécutifs", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbWin]
     TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+var(erreurdiff)),by=nbWin]
     TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-var(erreurdiff)),by=nbWin]
@@ -154,23 +153,23 @@ if(removeTenFirst)
   DT <- removeHeadTail(DT,10);
 
 #lien erreur d'eval diff (esces confiance ?) et fails ou succes répétés
-fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE)
+fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
 summary(fit)
-fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE)
-summary(fit)
-
-fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE)
-summary(fit)
-fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE)
+fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
 summary(fit)
 
-fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE)
+fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Logique")
 summary(fit)
-fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE)
+fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Logique")
 summary(fit)
 
-fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE)
+fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Motrice")
 summary(fit)
-fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE)
+fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Motrice")
+summary(fit)
+
+fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Sensorielle")
+summary(fit)
+fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Sensorielle")
 summary(fit)
 
