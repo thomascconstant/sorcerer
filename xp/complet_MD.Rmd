@@ -1,7 +1,8 @@
 ---
 title: "Rapport données expérimentations pilotes"
-output: html_document
+output: pdf_document
 ---
+
 ```{r include = FALSE}
 #setwd("C:/Users/Thomas Constant/Source/Repos/sorcerer/xp")
 #install.packages("rmarkdown")
@@ -130,7 +131,9 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 
   return(fit)
 }
+```
 
+```{r echo=FALSE}
 #---------------------------------- traitement
 
 #Prepa plot
@@ -139,23 +142,32 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 
 #on recup les données
 csv.data <- read.csv(file,header=TRUE,sep=";")
+```
 
+
+```{r echo=FALSE}
 #difficulte logique
 DTL <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
 DTL <- as.data.table(DTL)
 DTL <- addVariables(DTL,drawLogit,titre="Logique")
+```
 
+```{r echo=FALSE}
 #difficulte sensorielle
 DTS <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
 DTS <- as.data.table(DTS)
 DTS <- addVariables(DTS,drawLogit,titre="Sensorielle")
+```
 
+```{r echo=FALSE}
 #difficulte motrice
 DTM <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
 DTM <- as.data.table(DTM)
 DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation difficulte
 DTM <- addVariables(DTM,drawLogit,titre="Motrice")
+```
 
+```{r echo=FALSE}
 #creation de la table totale
 DT <- data.table()
 if(useLogique) DT <- rbind(DT,DTL)
@@ -171,17 +183,23 @@ fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
 summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
 summary(fit)
+```
 
+```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Logique")
 summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Logique")
 summary(fit)
+```
 
+```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Motrice")
 summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Motrice")
 summary(fit)
+```
 
+```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Sensorielle")
 summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Sensorielle")
