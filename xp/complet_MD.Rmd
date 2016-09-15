@@ -144,6 +144,23 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 csv.data <- read.csv(file,header=TRUE,sep=";")
 ```
 
+<h2>Cadre des expérimentations pilotes</h2>
+Les expérimentations pilotes ont pu être menés du 6 au 10 septembre, dans les mêmes conditions que celles prévues pour les expérimentations finales, à savoir dans les locaux du Living Lab auprès du public cible. 
+Sur cette période, 32 personnes ont participé aux expérimentations, mais seulement 8 d'entres elles ont pu tester la version finalisée du jeu (le prototype ayant évolué au cours de ces expérimentations). Ces huit personnes ont testé les trois jeux de manière aléatoire (pour éviter tout effet d'ordre et de fatigue), réalisant 30 tours de jeu pour chaque tâche. Au total, nous obtenons 240 observations pour un jeu, soit 720 observations recouvrant l'ensemble des types de difficulté.
+
+Pour ces expérimentations, les participants ont pu jouer aux versions finales des trois épreuves, chacune recouvrant un type de difficulté. Pour chaque type, la difficulté évolue suivant si le joueur est en condition d'échec ou de réussite, et non une courbe prédéfinie. Autrement dit, la difficulté augmente lorsque le joueur gagne ; puis baisse lorsque le joueur perd.
+
+Pour un joueur identifié, nous nous focalisons sur les données suivantes : 
+
+la mise, révélant leur confiance vis-à-vis de leur action de jeu ;
+
+le tour de jeu, spécifiant la position du joueur au cours de la progression (allant de 1, début du jeu, à 30, dernier tour de jeu) ;
+
+la difficulté du jeu à un tour de jeu donné (comprise entre 0 -facile- et 1 -très difficile-) ;
+
+l'état du joueur en sortie de tour, à savoir s'il est gagnant (1) ou perdant (0).
+
+Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté réelle est basé sur l'observation du nombre d'échec de chaque joueur pour une difficulté donnée. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté a priori du jeu et celle observée lors des expérimentations, et ce pour les trois jeux.
 
 ```{r echo=FALSE}
 #difficulte logique
@@ -166,6 +183,8 @@ DTM <- as.data.table(DTM)
 DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation difficulte
 DTM <- addVariables(DTM,drawLogit,titre="Motrice")
 ```
+
+Une deuxième étape consiste à vérifier si l'évolution de la difficulté du jeu a un impact sur la difficulté ressentie par les joueurs, la mise servant ici de référence. L'analyse précédente a permis de pouvoir obtenir la difficulté réelle de chaque jeu, nouvelle variable qui sert dorénavant de mesure de base pour observer les variations de la difficulté ressentie par le joueur.
 
 ```{r echo=FALSE}
 #creation de la table totale
