@@ -1,5 +1,5 @@
 ---
-title: "Rapport données expérimentations pilotes"
+title: "Analyse des données des joueurs (expérimentations pilotes)"
 output: html_document
 ---
 
@@ -11,6 +11,7 @@ output: html_document
 
 ```{r include = FALSE}
 #install.packages("data.table")
+#install.packages("ggplot2")
 require(data.table)
 require(ggplot2)
 ```
@@ -48,7 +49,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   if(trace){
     sample = data.frame(difficulty=seq(0, 1, 0.05))
     newres = predict(mylogit, newdata = sample, type = "response")
-    plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="difficulty",  ylab="perdant",  col=rgb(0,100,0,100,maxColorValue=255))
+    plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="Difficulté heuristique",  ylab="Difficulté réelle (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
     points(data.frame(sample,newres), type="o")
   }
   
@@ -107,7 +108,7 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     
     
     
-    plot(x=DTLoc$nbFail, y=DTLoc$erreurdiff, main=titre, xlab="Nombre d'échecs consécutifs", ylab="Erreur d'estimation de la difficulté")
+    plot(x=DTLoc$nbFail, y=DTLoc$erreurdiff, main=titre, xlab="Nombre d'échecs consécutifs (nbFail)", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbFail]
     TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbFail]
     TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbFail]
@@ -131,7 +132,7 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
   else{
     
     
-    plot(x=DTLoc$nbWin, y=DTLoc$erreurdiff, main=titre, xlab="Nombre de succès consécutifs", ylab="Erreur d'estimation de la difficulté")
+    plot(x=DTLoc$nbWin, y=DTLoc$erreurdiff, main=titre, xlab="Nombre de succès consécutifs (nbWin)", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbWin]
     TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbWin]
     TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbWin]
@@ -170,33 +171,32 @@ csv.data <- read.csv(file,header=TRUE,sep=";")
 ```
 
 ## Cadre des expérimentations pilotes
-<p align = "justify" >Les expérimentations pilotes ont pu être menés du 6 au 10 septembre, dans les mêmes conditions que celles prévues pour les expérimentations finales, à savoir dans les locaux du Living Lab auprès du public cible.
-Sur cette période, 32 personnes ont participé aux expérimentations, mais seulement 8 d'entres elles ont pu tester la version finalisée du jeu (le prototype ayant évolué au cours de ces expérimentations). Ces huit personnes ont expérimenté les trois jeux de manière aléatoire (pour éviter tout effet d'ordre et de fatigue), réalisant 30 tours de jeu pour chaque tâche dédiée à un type de difficulté, logique, sensorielle et motrice. Au total, nous obtenons 240 observations pour un jeu, soit 720 observations recouvrant l'ensemble des trois types de difficulté.</p>
+<p align = "justify" >&nbsp;&nbsp; Les expérimentations pilotes ont pu être menés du 6 au 10 septembre, dans les mêmes conditions que celles prévues pour les expérimentations finales, à savoir dans les locaux du Living Lab auprès du public cible. Sur cette période, 32 personnes ont participé aux expérimentations, mais seulement 8 d'entre-elles ont pu tester la version finalisée du jeu (le prototype ayant évolué au cours de ces expérimentations). Ces huit personnes ont expérimenté les trois jeux de manière aléatoire (pour éviter tout effet d'ordre et de fatigue), réalisant 30 tours de jeu pour chaque tâche dédiée à un type de difficulté (logique, sensorielle et motrice). Au total, nous obtenons 240 observations pour un jeu, soit 720 observations recouvrant l'ensemble des trois types de difficulté.</p>
 
-<p align = "justify" >Pour ces expérimentations, les participants ont pu jouer aux versions finales des trois épreuves, chacune recouvrant un type de difficulté. Pour chaque type, la difficulté évolue suivant si le joueur est en condition d'échec ou de réussite, et non une courbe prédéfinie. Autrement dit, la difficulté augmente lorsque le joueur gagne ; puis baisse lorsque le joueur perd.</p>
+<p align = "justify" >&nbsp;&nbsp; Les données traitées et présentées ici sont tirées des 8 participants qui ont pu jouer aux versions finales des trois épreuves où la difficulté évolue suivant si le joueur est en condition d'échec ou de réussite, et non une courbe prédéfinie. Autrement dit, la difficulté augmente lorsque le joueur gagne ; puis baisse lorsque le joueur perd.</p>
 
-Pour un joueur identifié, nous nous focalisons sur les données suivantes : 
+&nbsp;&nbsp; Pour un joueur identifié, nous nous focalisons sur les données suivantes : 
 
 * la **mise**, révélant leur confiance vis-à-vis de leur action de jeu ;
 * le **tour de jeu**, spécifiant la position du joueur au cours de la progression (allant de 1, début du jeu, à 30, dernier tour de jeu) ;
 * la **difficulté** du jeu à un tour de jeu donné (comprise entre 0 -facile- et 1 -très difficile-) ;
 * l'**état de réussite** du joueur en sortie de tour, à savoir s'il est gagnant (1) ou perdant (0).
 
-## Calcul de la difficulté réelle
-<p align = "justify" >Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu prévue a priori lors de sa conception est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté réelle est basé sur l'observation du nombre d'échec de chaque joueur pour un niveau de difficulté donnée. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté a priori du jeu et celle observée lors des expérimentations, et ce pour les trois jeux. Cette analyse permet d'observer que, par exemple dans le cas du jeu de logique, pour une difficulté a priori de 0%, le joueur est perdant 20% du temps.</p>
+## Estimation de la difficulté réelle
+<p align = "justify" >&nbsp;&nbsp; Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu prévue a priori par le concepteur (difficulté heuristique) est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté "réelle" est basé sur l'observation du nombre d'échec de chaque joueur pour un niveau donné de difficulté. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté heuristique et celle observée lors des expérimentations, et ce pour les trois jeux. Par exemple, dans le cas du jeu de déduction, pour une difficulté a priori de 0%, la réelle serait de 20%.</p>
 
 ```{r echo=FALSE}
 #difficulte logique
 DTL <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
 DTL <- as.data.table(DTL)
-DTL <- addVariables(DTL,drawLogit,titre="Logique")
+DTL <- addVariables(DTL,drawLogit,titre="Jeu de déduction (difficulté logique)")
 ```
 
 ```{r echo=FALSE}
 #difficulte sensorielle
 DTS <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
 DTS <- as.data.table(DTS)
-DTS <- addVariables(DTS,drawLogit,titre="Sensorielle")
+DTS <- addVariables(DTS,drawLogit,titre="Jeu de perception visuelle (difficulté sensorielle)")
 ```
 
 ```{r echo=FALSE}
@@ -204,19 +204,25 @@ DTS <- addVariables(DTS,drawLogit,titre="Sensorielle")
 DTM <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
 DTM <- as.data.table(DTM)
 DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation difficulte
-DTM <- addVariables(DTM,drawLogit,titre="Motrice")
+DTM <- addVariables(DTM,drawLogit,titre="Jeu d'adresse (difficulté motrice)")
 ```
 
-<p align = "justify" >Une deuxième étape consiste à vérifier si l'évolution de la difficulté du jeu a un impact sur la difficulté ressentie par les joueurs, la mise servant ici de référence. L'analyse précédente a permis de pouvoir obtenir la difficulté réelle de chaque jeu, nouvelle variable qui sert dorénavant de mesure de base pour observer les variations de la difficulté ressentie par le joueur.</p>
-Deux nouvelles mesures sont ajoutées :
+## Estimation de l'excès et du manque de confiance
+<p align = "justify" >&nbsp;&nbsp; Une deuxième étape consiste à vérifier si l'évolution de la difficulté du jeu a un impact sur la difficulté ressentie par les joueurs, la mise servant ici de référence. L'analyse précédente a permis de pouvoir obtenir la difficulté réelle de chaque jeu, nouvelle variable qui sert dorénavant de mesure de base pour observer les variations de la difficulté ressentie par le joueur.</p>
+&nbsp;&nbsp; Deux nouvelles mesures sont ajoutées :
 
-<p align = "justify" >* Le nombre d'échecs consécutifs du joueur qui nous permet de vérifier sa progression. Un échec faisant revenir le joueur à une tâche de difficulté moindre, plus le joueur perd, plus la difficulté du jeu baisse.
+<p align = "justify" >* Le nombre d'échecs consécutifs du joueur (noté **nbFail**), qui permet de vérifier sa progression. Un échec faisant revenir le joueur à une tâche de difficulté moindre ; plus le joueur perd, plus la difficulté du jeu baisse.</p>
 
-<p align = "justify" >* Le nombre de succès consécutifs du joueur, où un succès entraîne une augmentation de la difficulté au tour suivant ; autrement dit, plus le joueur gagne, plus la difficulté augmente. Dans les deux cas, il n'y a modification de la progression de la difficulté que si le statut de réussite du joueur change (de gagnant à perdant, de perdant à un gagnant).</p>
+<p align = "justify" >* Le nombre de succès consécutifs du joueur (noté **nbWin**), où un succès entraîne une augmentation de la difficulté au tour suivant ; autrement dit, plus le joueur gagne, plus la difficulté augmente.</p> 
 
-<p align = "justify" >La mise, basée sur une échelle de Lickert de 1 à 7, nous permet d'avoir une appréciation pour chaque tour de jeu de la difficulté ressentie par le joueur (et non de la difficulté réelle de la tâche). La mise est donc normalisée, entre 0 et 1, à laquelle on retranche la difficulté réelle calculée en amont. Cette différence nous permet d'obtenir l'erreur d'appréciation de la difficulté du jeu, cadrée ici entre -1 et +1.</p>
+<p align = "justify" >&nbsp;&nbsp; Dans les deux cas, il n'y a modification de la progression de la difficulté que si le statut de réussite du joueur change (de gagnant à perdant, de perdant à un gagnant).</p>
 
-<p align = "justify" >Les figures suivantes présentent ainsi, pour chaque jeu (et donc chaque type de difficulté), le nombre d'échecs consécutifs (nbFail) et de succès consécutifs (nbWin) par rapport à l'erreur d'appréciation de la difficulté par le joueur. Chaque figure est accompagnée des conclusions d'une analyse de la varience (ANOVA). Malgré le faible nombre de joueurs, il est possible de commenter ces résultats, en attendant de les confronter aux données qui vont être récupérées sur une population plus importante lors des expérimentations finales.</p>
+<p align = "justify" >&nbsp;&nbsp; La mise, basée sur une échelle de Likert de 1 à 7 points, permet d'obtenir une appréciation pour chaque tour de jeu de la difficulté ressentie par le joueur (et non de la difficulté réelle de la tâche). La mise est donc normalisée, entre 0 et 1, à laquelle on retranche la difficulté réelle calculée en amont. Cette différence nous permet d'obtenir l'erreur d'appréciation de la difficulté du jeu, cadrée ici entre -1 et +1.</p>
+
+<p align = "justify" >&nbsp;&nbsp; Les figures suivantes présentent ainsi, pour tous les jeux puis pour chacun d'entre-eux (et donc pour chaque type de difficulté), le nombre d'échecs consécutifs (nbFail) et de succès consécutifs (nbWin) par rapport à l'erreur d'appréciation de la difficulté par le joueur. Chaque figure est accompagnée des conclusions d'une analyse de la variance (ANOVA) et de la régression linéaire, tracée en vert. La courbe rouge correspond aux valeurs médianes, les bleues mesurent quant à elles deux fois l'écart type, signifiant le faible nombre de participants. Malgré cette limite, il est possible de commenter ces données, en attendant de les confronter à celles qui vont être récupérées sur une population plus importante lors des expérimentations finales.</p>
+
+### Résultats pour les trois jeux
+<p align = "justify" >&nbsp;&nbsp; Pour l'ensemble des données tirées des trois jeux, on observe dans le cas d'échecs consécutifs une sur-estimation de la difficulté du jeu, laissant à penser que le joueur développe un manque de confiance quant à ses chances de réussir. A l'inverse, lorsque le joueur cumule les succès, il aurait tendance à sous-estimer la difficulté du jeu, bien que l'effet soit moins visible pour les échecs. Le manque de données pour ce cas peut en être à l'origine.</p>
 
 ```{r echo=FALSE}
 #creation de la table totale
@@ -234,24 +240,51 @@ fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
 ```
 
-<p align = "justify" >Pour l'ensemble des données tirées des trois jeux, on observe dans le cas d'échecs consécutifs une sur-estimation de la difficulté du jeu, laissant à penser que le joueur développe un manque de confiance quant à ses chances de réussir. A l'inverse, lorsque le joueur cumule les succès, il aurait tendance à sous-estimer la difficulté du jeu, bien que l'effet soit moins visible pour les échecs. Le manque de données pour ce cas peut en être à l'origine.</p> 
+### Résultats pour la difficulté logique
+<p align = "justify" >&nbsp;&nbsp; Indépendamment pour le jeu de déduction, le nombre d'échecs consécutifs ne semble pas avoir un trop important impact sur l'estimation de la difficulté par le joueur, et ne conduirait pas à un manque de confiance. Une hypothèse serait que, face à ce type de difficulté, le joueur aurait plus de temps pour apprécier son aptitude à résoudre le problème donné et donc une meilleure appréciation de la difficulté. A l'inverse, il ferait preuve d'un léger excès de confiance dans le cas de succès répétés. De nouvelles données permettront de mieux cerner ces comportements.</p>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Logique")
-fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Logique")
+fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Jeu de déduction (difficulté logique)")
 ```
 
-<p align = "justify" >Indépendamment pour le jeu de déduction (focalisé sur une difficulté logique), le nombre d'échecs consécutifs ne semble pas avoir un trop important impact sur l'estimation de la difficulté par le joueur, et ne conduirait pas à un manque de confiance. Une hypothèse serait que, face à ce type de difficulté, le joueur aurait plus de temps pour apprécier son aptitude à résoudre le problème donné et donc une meilleure appréciation de la difficulté. A l'inverse, il ferait preuve d'un léger excès de confiance dans le cas de succès répétés. De nouvelles données permettront de mieux cerner ces comportements.</p>
-
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Motrice")
-fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Motrice")
+fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Jeu de déduction (difficulté logique)")
 ```
 
-<p align = "justify" >Le jeu d'adresse (focalisé sur une difficulté motrice) ne montre qu'une légère sous-estimation de la difficulté dans le cas d'échecs consécutifs, mais aussi dans le cas de succès consécutifs. Là aussi, de nouvelles données permettront d'étoffer cette analyse.</p>
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
+
+### Résultats pour la difficulté motrice
+<p align = "justify" >&nbsp;&nbsp; Le jeu d'adresse ne montre qu'une légère sous-estimation de la difficulté dans le cas d'échecs consécutifs, qui tendrait à disparaître. Les résultats sont plus probants dans le cas de succès consécutifs. Là aussi, de nouvelles données permettront d'étoffer cette analyse, mais une modification de la conception du jeu pourrait permettre d'isoler les comportements. De tous, le jeu d'adresse est le plus rapide à réaliser (les tours de jeu s'enchaînant vite), ce qui peut entraîner une plus grande inattention de la part du joueur (là où la tâche de perception visuelle en requiert énormément, et celle de logique pouvant provoquer une rapide saturation cognitive).</p>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Sensorielle")
+fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Jeu d'adresse (difficulté motrice)")
+```
+
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
+```{r echo=FALSE}
+fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Jeu d'adresse (difficulté motrice)")
+```
+
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
+
+### Résultats pour la difficulté sensorielle
+<p align = "justify" >&nbsp;&nbsp; Reste le jeu de perception visuelle, dont les résultats semblent le mieux confirmer nos hypothèses, mettant en évidence un excès de confiance de la part du joueur lorsqu'il cumule les succès, et un manque de confiance lorsqu'il cumule les échecs.</p>
+
+```{r echo=FALSE}
+fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Jeu de perception visuelle (difficulté sensorielle)")
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -260,7 +293,7 @@ plot(fit)
 <div style="clear:both">&nbsp;</div>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Sensorielle")
+fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Jeu de perception visuelle (difficulté sensorielle)")
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -268,6 +301,4 @@ plot(fit)
 ```
 <div style="clear:both">&nbsp;</div>
 
-
-<p align = "justify" >Reste le jeu basé sur la difficulté sensorielle, dont les résultats semblent le mieux confirmer nos hypothèses, mettant en évidence un excès de confiance de la part du joueur lorsqu'il cumule les succès, et un manque de confiance lorsqu'il cumule les échecs.</p>
 
