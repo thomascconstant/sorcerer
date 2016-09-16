@@ -12,6 +12,7 @@ output: html_document
 ```{r include = FALSE}
 #install.packages("data.table")
 require(data.table)
+require(ggplot2)
 ```
 
 
@@ -103,33 +104,57 @@ removeHeadTail <- function(DTLoc,nb,bHead=TRUE){
 lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 
   if(fails){
-    fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
+    
+    
+    
     plot(x=DTLoc$nbFail, y=DTLoc$erreurdiff, main=titre, xlab="Nombre d'échecs consécutifs", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbFail]
-    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+var(erreurdiff)),by=nbFail]
-    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-var(erreurdiff)),by=nbFail]
+    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbFail]
+    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbFail]
     setkey(TMP,nbFail)
     setkey(TMP2,nbFail)
     setkey(TMP3,nbFail)
     points(y=TMP$meanDiffEstimated, x=TMP$nbFail, col="red", type="o")
     points(y=TMP2$varUpDiffEstimated, x=TMP2$nbFail, col="blue", type="o")
     points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
+    
+    print("Anova")
+    fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
+    print(summary(fit))
+    
+    print("Regression linéaire")
+    fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbFail)
+    abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
+    print(summary(fitl))
+    
   }
   else{
-    fit <- aov(erreurdiff ~ nbWin, data=DTLoc)
+    
+    
     plot(x=DTLoc$nbWin, y=DTLoc$erreurdiff, main=titre, xlab="Nombre de succès consécutifs", ylab="Erreur d'estimation de la difficulté")
     TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbWin]
-    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+var(erreurdiff)),by=nbWin]
-    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-var(erreurdiff)),by=nbWin]
+    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbWin]
+    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbWin]
     setkey(TMP,nbWin)
     setkey(TMP2,nbWin)
     setkey(TMP3,nbWin)
     points(y=TMP$meanDiffEstimated, x=TMP$nbWin, col="red", type="o")
     points(y=TMP2$varUpDiffEstimated, x=TMP2$nbWin, col="blue", type="o")
     points(y=TMP3$varDownDiffEstimated, x=TMP3$nbWin, col="blue", type="o")
+    #ggplot(data=DTLoc, aes(factor(DTLoc$nbWin),erreurdiff)) + geom_boxplot()
+    
+    print("Anova")
+    fit <- aov(erreurdiff ~ nbWin, data=DTLoc)
+    print(summary(fit))
+    
+    fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbWin)
+    abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
+    print("Regression linéaire")
+    print(summary(fitl))
+
   }
 
-  return(fit)
+  return(fitl)
 }
 ```
 
@@ -206,37 +231,43 @@ if(removeTenFirst)
 
 #lien erreur d'eval diff (exces confiance ?) et fails ou succes répétés
 fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
-summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
-summary(fit)
 ```
 
 <p align = "justify" >Pour l'ensemble des données tirées des trois jeux, on observe dans le cas d'échecs consécutifs une sur-estimation de la difficulté du jeu, laissant à penser que le joueur développe un manque de confiance quant à ses chances de réussir. A l'inverse, lorsque le joueur cumule les succès, il aurait tendance à sous-estimer la difficulté du jeu, bien que l'effet soit moins visible pour les échecs. Le manque de données pour ce cas peut en être à l'origine.</p> 
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Logique")
-summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Logique")
-summary(fit)
 ```
 
 <p align = "justify" >Indépendamment pour le jeu de déduction (focalisé sur une difficulté logique), le nombre d'échecs consécutifs ne semble pas avoir un trop important impact sur l'estimation de la difficulté par le joueur, et ne conduirait pas à un manque de confiance. Une hypothèse serait que, face à ce type de difficulté, le joueur aurait plus de temps pour apprécier son aptitude à résoudre le problème donné et donc une meilleure appréciation de la difficulté. A l'inverse, il ferait preuve d'un léger excès de confiance dans le cas de succès répétés. De nouvelles données permettront de mieux cerner ces comportements.</p>
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Motrice")
-summary(fit)
 fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Motrice")
-summary(fit)
 ```
 
 <p align = "justify" >Le jeu d'adresse (focalisé sur une difficulté motrice) ne montre qu'une légère sous-estimation de la difficulté dans le cas d'échecs consécutifs, mais aussi dans le cas de succès consécutifs. Là aussi, de nouvelles données permettront d'étoffer cette analyse.</p>
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Sensorielle")
-summary(fit)
-fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Sensorielle")
-summary(fit)
 ```
+
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
+
+```{r echo=FALSE}
+fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Sensorielle")
+```
+
+```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
+plot(fit)
+```
+<div style="clear:both">&nbsp;</div>
+
 
 <p align = "justify" >Reste le jeu basé sur la difficulté sensorielle, dont les résultats semblent le mieux confirmer nos hypothèses, mettant en évidence un excès de confiance de la part du joueur lorsqu'il cumule les succès, et un manque de confiance lorsqu'il cumule les échecs.</p>
 
