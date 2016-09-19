@@ -10,3 +10,5 @@ CONTRIBUTING.md
 gulpfile.js
 /nbproject/private/
 /src/log.txt
+/xp/*.RData
+/xp/.Rhistory
