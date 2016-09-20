@@ -49,7 +49,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   if(trace){
     sample = data.frame(difficulty=seq(0, 1, 0.05))
     newres = predict(mylogit, newdata = sample, type = "response")
-    plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="Difficulté heuristique",  ylab="Difficulté réelle (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
+    plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté objective (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
     points(data.frame(sample,newres), type="o")
   }
   
@@ -182,8 +182,8 @@ csv.data <- read.csv(file,header=TRUE,sep=";")
 * la **difficulté** du jeu à un tour de jeu donné (comprise entre 0 -facile- et 1 -très difficile-) ;
 * l'**état de réussite** du joueur en sortie de tour, à savoir s'il est gagnant (1) ou perdant (0).
 
-## Estimation de la difficulté réelle
-<p align = "justify" >&nbsp;&nbsp; Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu prévue a priori par le concepteur (difficulté heuristique) est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté "réelle" est basé sur l'observation du nombre d'échec de chaque joueur pour un niveau donné de difficulté. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté heuristique et celle observée lors des expérimentations, et ce pour les trois jeux. Par exemple, dans le cas du jeu de déduction, pour une difficulté a priori de 0%, la réelle serait de 20%.</p>
+## Estimation de la difficulté objective
+<p align = "justify" >&nbsp;&nbsp; Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu prévue a priori par le concepteur (difficulté hypothétique) est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté "objective" est basé sur l'observation du nombre d'échec de chaque joueur pour un niveau donné de difficulté. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté heuristique et celle observée lors des expérimentations, et ce pour les trois jeux. Par exemple, dans le cas du jeu de déduction, pour une difficulté hypothétique a priori de 0%, la difficulté objective serait de 20%.</p>
 
 ```{r echo=FALSE}
 #difficulte logique
