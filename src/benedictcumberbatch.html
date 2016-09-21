@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 
 <head>
     <title>Sorcerer</title>
@@ -25,11 +25,11 @@
 }
 
 .zonemise {
-    background-color: #616161;
-    color: #000000;
+    color: #fafafa;
     padding: auto;
     margin: auto;
     width: 100%;
+    display: inline-block;
 }
 
 .zonefeedback {
@@ -41,7 +41,7 @@
 }
 
 body {
-    background-color: #F5F5F5;
+    background-color: #373b3d;
     font-family: 'Raleway', sans-serif;
     font-size: 1vw;
     color: #fafafa;
@@ -79,8 +79,28 @@ body {
     font-weight: bold;
 }
 
+.centerize {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .button {
     background-color: #757575;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin: 1vw;
+    cursor: pointer;
+}
+
+.buttonRegles {
+    background-color: #373b3d;
     font-family: 'Uncial Antiqua', cursive;
     border: none;
     color: white;
@@ -96,14 +116,35 @@ body {
 .messageFeedback {
     color: #fafafa;
     font-size: 1.5vw;
+    display: inline-block;
     padding: auto;
     margin: auto;
     text-align:center;
 }
 
+.messageFeedbackMise {
+    background-color: #757575;
+    color: #fafafa;
+    font-size: 1.5vw;
+    display: inline-block;
+    width: 100%;
+    padding: auto;
+    margin: auto;
+    text-align:center;
+}
+
+
 .tdGame {
     width: 20px;
     height: 20px;
+}
+
+.overSite {
+    background-color: #F5F5F5;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1vw;
+    color: #fafafa;
+    margin: 0;
 }
 
 .site {
@@ -173,53 +214,68 @@ body {
 </head>
 
 <body onload="init()">
-
     <div class="fondtexte">
-        <div class="textetitre">L'épreuve de déduction</div>
-        <div class="texte"><b>Votre objectif est de remettre les cases du plateau de jeu dans l'ordre (en partant de 1).<br/>
-            Pour cela, déplacez la case bleue en cliquant sur une case adjacente.<br/>
-            Vous disposez d'abord d'un temps limité pour observer le plateau de jeu, avant qu'il ne disparaisse. <br>
-            Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br/>
-            Après avoir misé, le nombre de coups et le temps sont à nouveau limités.<br/></b></div>
-                <p class="texte">Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br/>
-                A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !</p>
-    <div class="zonefeedback">
-        <!--<div class="compteur" id="affichageCompteur" style="display:none">Le plateau de jeu va apparaître dans <span id="timer">5</span> secondes !</div>-->
-        <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer un plateau de jeu.</div>
-    </div>
-    <div class='zonemise'>
-        <!--<p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>-->
-        <div class="messageFeedback">
-                <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()"/>&nbsp; 1 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()"/>&nbsp; 2 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()"/>&nbsp; 3 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()"/>&nbsp; 4 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()"/>&nbsp; 5 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()"/>&nbsp; 6 &nbsp; &nbsp;
-                <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()"/>&nbsp; 7
+        <div class="textetitre"><p>L'épreuve de déduction</p></div>
+        <div class="centerize">
+            <div class="zonefeedback">
+                <!--<div class="compteur" id="affichageCompteur" style="display:none">Le plateau de jeu va apparaître dans <span id="timer">5</span> secondes !</div>-->
+                <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer un plateau de jeu.</div>
+            </div>
+            <div class="messageFeedbackMise">
+                <div class='zonemise' id="boutonsMise" style="display:none">
+                    <!--<p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>-->
+                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()" />&nbsp; 4 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()" />&nbsp; 5 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()" />&nbsp; 6 &nbsp; &nbsp;
+                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()" />&nbsp; 7
+                </div>
+            </div>
         </div>
-    </div></div><br/>
+    </div>
+    <div class="overSite"><br />
+        <div class="site">
+            <div class="inSite">
+                <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
+                <div class="board" id="board"></div>
+                <div class="textefeedback" id="res"></div>
+                <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer un plateau de jeu</button><br />
+                <table id="tableMise">
+                    <tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
+                    <tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+                </table>
+                <br />
+            </div>
+        </div><br /><br />
+    </div>
+    <div class="fondtexte">
+        <div class="centerize">
+            <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>
 
-	<div class="site">
-
-		<div class="inSite">
-                    <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
-			<div class="board" id="board"></div>
-			<div class="textefeedback" id="res"></div>
-                            <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()" >Générer un plateau de jeu</button><br/>
-				<table id="tableMise">
-						<tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
-						<tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
-				</table>
-                        <br/></div></div>
-
-	<div>
+            <div class="texte" id="affichageRegles" style="display:none">
+                <b>
+                    Votre objectif est de remettre les cases du plateau de jeu dans l'ordre (en partant de 1).<br />
+                    Pour cela, déplacez la case bleue en cliquant sur une case adjacente.<br />
+                    Vous disposez d'abord d'un temps limité pour observer le plateau de jeu, avant qu'il ne disparaisse. <br>
+                    Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br />
+                    Après avoir misé, le nombre de coups et le temps sont à nouveau limités.<br />
+                </b>
+                <p class="texte">
+                    Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br />
+                    A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !
+                </p><br />
+            </div>
+        </div>
+        <div>
             <audio id="winSound" autoplay></audio>
             <audio id="failSound" autoplay></audio>
             <audio id="sheepSound">
-		<source src="sounds/baaaa1.mp3" type="audio/mpeg"></audio>
+                <source src="sounds/baaaa1.mp3" type="audio/mpeg">
+            </audio>
         </div>
-
+    </div>
 </body>
 
 </html>

@@ -97,6 +97,9 @@ function goNew() {
     //document.getElementById("affichageFeedback").style.display = "none";
     makeGame(width,nbCells,0); //afficher la grille sans cases à trouver
     startTimer();
+
+    //cacher les boutons de mise
+    document.getElementById("boutonsMise").style.display = "none";
 }
 
 //récupérer mise
@@ -162,6 +165,10 @@ function activateMise() {
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise.";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+
+    //afficher boutons de mise
+    console.log(document.getElementById("boutonsMise").style.display);
+    document.getElementById("boutonsMise").style.display = "block";
 }
 
 function showMise() {
@@ -745,6 +752,24 @@ function colorButton() {
 
 function uncolorButton() {
     document.getElementById('boutonGenererGrille').style.backgroundColor="757575";
+}
+
+function colorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "757575";
+}
+
+function uncolorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
+}
+
+function afficherRegles() {
+    if (document.getElementById("affichageRegles").style.display === "none") {
+        document.getElementById("boutonAfficherRegles").innerHTML = "Masquer les règles";
+        document.getElementById("affichageRegles").style.display = "block";
+    } else if (document.getElementById("affichageRegles").style.display === "block") {
+        document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
+        document.getElementById("affichageRegles").style.display = "none";
+    }
 }
 
 function finDePartie() {
