@@ -156,6 +156,38 @@ body {
     text-align: center;
 }
 
+.leftsite {
+    background-color: #81C784;
+    width: 300px;
+    height: auto;
+    padding: auto;
+    color: #212121;
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 1.2vw;
+    border: 0px solid black;
+    margin-left : 1vw;
+    margin-right : auto;
+    text-align: center;
+    float: left;
+    box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+}
+
+.rightsite {
+    background-color: #E57373;
+    width: 300px;
+    height: auto;
+    padding: auto;
+    color: #212121;
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 1.2vw;
+    border: 0px solid black;
+    margin-left : auto;
+    margin-right : 1vw;
+    text-align: center;
+    float: right;
+    box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+}
+
 .inSite {
     padding-top: 1vw;
     padding-left: 1vw;
@@ -236,12 +268,26 @@ body {
         </div>
     </div>
     <div class="overSite"><br />
+        <div class="leftsite">
+            Moutons sauvés
+                <div class="texte">
+                    (1 image = 5 moutons)
+                </div>
+            <div id="imagemoutongagne"></div>
+        </div>
+        <div class="rightsite">
+            Moutons embrochés
+                <div class="texte">
+                    (1 image = 5 moutons)
+                </div>
+            <div id="imagemoutonperdu"></div>
+        </div>
         <div class="site">
             <div class="inSite">
                 <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
                 <div class="board" id="board"></div>
                 <div class="textefeedback" id="res"></div>
-                <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer un plateau de jeu</button><br />
+                <button class="button" style="display:inline;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer un plateau de jeu</button><br />
                 <table id="tableMise">
                     <tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
                     <tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>

@@ -197,6 +197,8 @@ function win(ijFind){
             score += mise;
             actionDeJeu++;
 
+            addSheep(); //faire apparaître un mouton sur la page
+
             //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
 
             //message de feedback
@@ -296,6 +298,8 @@ function fail(){
         winState = false;
         score -= mise;
         actionDeJeu++;
+
+        addSheep(); //faire apparaître un mouton sur la page
 
         //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
 
@@ -769,6 +773,23 @@ function afficherRegles() {
     } else if (document.getElementById("affichageRegles").style.display === "block") {
         document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
         document.getElementById("affichageRegles").style.display = "none";
+    }
+}
+
+function addSheep() {
+    if (winState === true) {
+        var elem = document.createElement("img");
+        elem.setAttribute("src", "img/unrip_mouton.png");
+        elem.setAttribute("height", "60");
+        elem.setAttribute("width", "90");
+        elem.setAttribute("alt", "Flower");
+        document.getElementById("imagemoutongagne").appendChild(elem);
+    } else if (winState === false) {
+        var elem = document.createElement("img");
+        elem.setAttribute("src", "img/rip_mouton.png");
+        elem.setAttribute("height", "60");
+        elem.setAttribute("width", "90");
+        document.getElementById("imagemoutonperdu").appendChild(elem);
     }
 }
 
