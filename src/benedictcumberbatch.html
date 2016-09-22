@@ -240,6 +240,61 @@ body {
     border: 0px solid white;
     border-collapse: collapse;
 }
+
+.compteurMoutons {
+    width:76px;
+    height:47px;
+    animation:compteurMoutons 1s 1;
+    -moz-animation:compteurMoutons 1s 1;
+    -webkit-animation:compteurMoutons 1s 1;
+    -o-animation:compteurMoutons 1s 1;
+}
+
+/* Chrome, Safari, Opera */
+    @-webkit-keyframes compteurMoutons {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        25% {
+            -webkit-transform: rotate(20deg);
+        }
+
+        50% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        55% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        70% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(-360deg);
+        }
+    }
+
+/* Standard syntax */
+@-moz-keyframes compteurMoutons {
+    0% {transform: rotate(0deg);}
+    25% {transform: rotate(20deg);}
+    50% {transform: rotate(0deg);}
+    55% {transform: rotate(0deg);}
+    70% {transform: rotate(0deg);}
+    100% {transform: rotate(-360deg);}
+}
+
+@-o-keyframes compteurMoutons {
+    0% {transform: rotate(0deg);}
+    25% {transform: rotate(20deg);}
+    50% {transform: rotate(0deg);}
+    55% {transform: rotate(0deg);}
+    70% {transform: rotate(0deg);}
+    100% {transform: rotate(-360deg);}
+}
 </style>
 
 <script src="js/benedictcumberbatch.js"></script>
@@ -272,16 +327,16 @@ body {
         <div class="leftsite">
             Moutons sauvés
                 <div class="texte">
-                    (1 image = 5 moutons)
+                    (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutongagne"></div>
+            <div id="imagemoutongagne"></div> <div class="animated_div" id="compteurMoutons"></div>
         </div>
         <div class="rightsite">
             Moutons embrochés
                 <div class="texte">
-                    (1 image = 5 moutons)
+                    (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutonperdu"></div>
+            <div id="imagemoutonperdu"></div> <div class="animated_div" id="compteurMoutons"></div>
         </div>
         <div class="site">
             <div class="inSite">
@@ -318,9 +373,6 @@ body {
         <div>
             <audio id="winSound" autoplay></audio>
             <audio id="failSound" autoplay></audio>
-            <audio id="sheepSound">
-                <source src="sounds/baaaa1.mp3" type="audio/mpeg">
-            </audio>
         </div>
     </div>
 </body>

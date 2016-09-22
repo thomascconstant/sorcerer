@@ -24,6 +24,11 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
+var moutonsGagnes = 0;
+var moutonsPerdus = 0;
+var compteurMoutonsGagnes = 0;
+var compteurMoutonsPerdus = 0;
+
 var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
@@ -167,7 +172,6 @@ function activateMise() {
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 
     //afficher boutons de mise
-    console.log(document.getElementById("boutonsMise").style.display);
     document.getElementById("boutonsMise").style.display = "block";
 }
 
@@ -194,6 +198,10 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
+            moutonsGagnes += mise;
+            console.log(moutonsGagnes + "moutons gagnes")
+            compteurMoutonsGagnes += moutonsGagnes;
+            console.log(compteurMoutonsGagnes + "moutons gagnes winState");
             score += mise;
             actionDeJeu++;
 
@@ -296,6 +304,10 @@ function win(ijFind){
 function fail(){
     if (miseValide === true && countDownToZero === true){
         winState = false;
+        moutonsPerdus += mise;
+        console.log(moutonsPerdus + "moutons perdus")
+        compteurMoutonsPerdus += moutonsPerdus;
+        console.log(compteurMoutonsPerdus + "moutons perdus winState");
         score -= mise;
         actionDeJeu++;
 
@@ -678,37 +690,6 @@ function timerCoups(){
 
 }
 
-function feedbackSonore() {
-    if(winState === true) {
-        var soundsWin = [
-            "../src/sounds/baaaa1.mp3",
-            "../src/sounds/baaaa2.mp3",
-            "../src/sounds/baaaa3.mp3",
-            "../src/sounds/baaaa4.mp3"
-        ];
-
-        var tirageSon = soundsWin[Math.floor(Math.random()*soundsWin.length)];
-        document.getElementById("winSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
-
-        var x = document.getElementById("winSound");
-        x.play();
-    } else {
-        var soundsFail = [
-            "../src/sounds/fail.mp3"
-        ];
-        var tirageSon = soundsFail[Math.floor(Math.random()*soundsFail.length)];
-        document.getElementById("failSound").innerHTML = '<source src="' +tirageSon+ '" type="audio/mpeg">';
-
-        var x = document.getElementById("failSound");
-        x.play();
-    }
-
-    if (tours === 0){
-        var x = document.getElementById("sheepSound");
-        x.play();
-    }
-}
-
  function startTimer() {
     //faire apparaître le compte à rebours et le lancer
     document.getElementById("affichageCompteur").style.display = "block";
@@ -777,19 +758,88 @@ function afficherRegles() {
 }
 
 function addSheep() {
-    if (winState === true) {
+    if (winState === true && compteurMoutonsGagnes >= 7) {
+        console.log(compteurMoutonsGagnes + "moutons gagnes");
+        
+        console.log(compteurMoutonsGagnes + "moutons gagnes final");
+
+        document.getElementById("compteurMoutons").innerHTML = "x" + compteurMoutonsGagnes;
+        compteurMoutonsGagnes -= 7;
+
+        //afficher mouton
         var elem = document.createElement("img");
         elem.setAttribute("src", "img/unrip_mouton.png");
         elem.setAttribute("height", "60");
         elem.setAttribute("width", "90");
-        elem.setAttribute("alt", "Flower");
         document.getElementById("imagemoutongagne").appendChild(elem);
-    } else if (winState === false) {
+
+        //feedback sonore
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+
+        var tirageSon = soundsWin[Math.floor(Math.random() * soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("winSound");
+        x.play();
+
+    } else if (winState === false && compteurMoutonsPerdus >= 7) {
+        console.log(compteurMoutonsPerdus + "moutons perdus");
+        compteurMoutonsPerdus -= 7;
+        console.log(compteurMoutonsPerdus + "moutons perdus");
+        
+        //afficher mouton
         var elem = document.createElement("img");
         elem.setAttribute("src", "img/rip_mouton.png");
         elem.setAttribute("height", "60");
         elem.setAttribute("width", "90");
         document.getElementById("imagemoutonperdu").appendChild(elem);
+
+        //feedback sonore
+        var soundsFail = [
+            "../src/sounds/fail.mp3"
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random() * soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+}
+
+
+function feedbackSonore() {
+    if (winState === true) {
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+
+        var tirageSon = soundsWin[Math.floor(Math.random() * soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("winSound");
+        x.play();
+    } else {
+        var soundsFail = [
+            "../src/sounds/fail.mp3"
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random() * soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+
+    if (tours === 0) {
+        var x = document.getElementById("sheepSound");
+        x.play();
     }
 }
 
