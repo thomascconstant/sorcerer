@@ -241,60 +241,56 @@ body {
     border-collapse: collapse;
 }
 
-.compteurMoutons {
+#compteurMoutonsGagnes {
     width:76px;
     height:47px;
-    animation:compteurMoutons 1s 1;
-    -moz-animation:compteurMoutons 1s 1;
-    -webkit-animation:compteurMoutons 1s 1;
-    -o-animation:compteurMoutons 1s 1;
+    background-color: red;
+    -webkit-animation: zoomdiv 1s;
+    -webkit-animation-play-state: paused;
+    animation: zoomdiv 1s;
+    animation-play-state: paused;
+}
+
+#compteurMoutonsPerdus {
+    width:76px;
+    height:47px;
+    background-color: red;
+    animation: zoomdiv 1s 1;
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+    -moz-animation: zoomdiv 1s 1; zoomdiv 1s 1; zoomdiv 1s 1;
+    -webkit-animation: zoomdiv 1s 1; zoomdiv 1s 1;
+    -o-animation: zoomdiv 1s 1; zoomdiv 1s 1;
+}
+
+#compteurMoutonsGagnes:hover {
+-webkit-animation: notexistent;
+    animation: notexistent;
 }
 
 /* Chrome, Safari, Opera */
-    @-webkit-keyframes compteurMoutons {
+    @-webkit-keyframes zoomdiv {
         0% {
-            -webkit-transform: rotate(0deg);
+            -webkit-transform: scale(1,1);
         }
 
         25% {
-            -webkit-transform: rotate(20deg);
+            -webkit-transform: scale(0.5,0.5);
         }
 
         50% {
-            -webkit-transform: rotate(0deg);
-        }
-
-        55% {
-            -webkit-transform: rotate(0deg);
+            -webkit-transform: scale(2,2);
         }
 
         70% {
-            -webkit-transform: rotate(0deg);
+            -webkit-transform: scale(0.5,0.5);
         }
 
         100% {
-            -webkit-transform: rotate(-360deg);
+            -webkit-transform: scale(1,1);
         }
     }
 
-/* Standard syntax */
-@-moz-keyframes compteurMoutons {
-    0% {transform: rotate(0deg);}
-    25% {transform: rotate(20deg);}
-    50% {transform: rotate(0deg);}
-    55% {transform: rotate(0deg);}
-    70% {transform: rotate(0deg);}
-    100% {transform: rotate(-360deg);}
-}
-
-@-o-keyframes compteurMoutons {
-    0% {transform: rotate(0deg);}
-    25% {transform: rotate(20deg);}
-    50% {transform: rotate(0deg);}
-    55% {transform: rotate(0deg);}
-    70% {transform: rotate(0deg);}
-    100% {transform: rotate(-360deg);}
-}
 </style>
 
 <script src="js/benedictcumberbatch.js"></script>
@@ -329,14 +325,14 @@ body {
                 <div class="texte">
                     (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutongagne"></div> <div class="animated_div" id="compteurMoutons"></div>
+            <div id="imagemoutongagne"></div> <div id="compteurMoutonsGagnes"></div>
         </div>
         <div class="rightsite">
             Moutons embrochés
                 <div class="texte">
                     (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutonperdu"></div> <div class="animated_div" id="compteurMoutons"></div>
+            <div id="imagemoutonperdu"></div> <div id="compteurMoutonsPerdus"></div>
         </div>
         <div class="site">
             <div class="inSite">
@@ -352,6 +348,10 @@ body {
             </div>
         </div><br /><br />
     </div>
+
+    <button onclick="zoomDiv()">CLICK</button>
+    <button onclick="restartZoomDiv()">CLICK2</button>
+
     <div class="fondtexte">
         <div class="centerize">
             <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>

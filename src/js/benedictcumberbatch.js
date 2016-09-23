@@ -36,6 +36,8 @@ var mise = 0; //Combien le joueur a misé
 var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
+var running = false;
+
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
@@ -757,13 +759,32 @@ function afficherRegles() {
     }
 }
 
+function zoomDiv() {
+    if (running === false) {
+        console.log("coucou je zoom");
+        document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "running";
+        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "running";
+        running = true;
+    }
+    
+}
+
+function restartZoomDiv() {
+    if (running === true) {
+        console.log("coucou je suis restarted");
+        document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "paused";
+        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "paused";
+    }
+
+}
+
 function addSheep() {
     if (winState === true && compteurMoutonsGagnes >= 7) {
         console.log(compteurMoutonsGagnes + "moutons gagnes");
         
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
-        document.getElementById("compteurMoutons").innerHTML = "x" + compteurMoutonsGagnes;
+        document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
         compteurMoutonsGagnes -= 7;
 
         //afficher mouton
