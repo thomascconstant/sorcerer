@@ -241,17 +241,14 @@ body {
     border-collapse: collapse;
 }
 
-#compteurMoutonsGagnes {
+.animationMoutonsGagnes {
     width:76px;
     height:47px;
     background-color: red;
-    -webkit-animation: zoomdiv 1s;
-    -webkit-animation-play-state: paused;
-    animation: zoomdiv 1s;
-    animation-play-state: paused;
+    
 }
 
-#compteurMoutonsPerdus {
+.animationMoutonsPerdus {
     width:76px;
     height:47px;
     background-color: red;
@@ -263,8 +260,19 @@ body {
     -o-animation: zoomdiv 1s 1; zoomdiv 1s 1;
 }
 
-#compteurMoutonsGagnes:hover {
--webkit-animation: notexistent;
+.doanim {
+    -webkit-animation: zoomdiv 1s;
+    -webkit-animation-play-state: running;
+    animation: zoomdiv 1s;
+    animation-play-state: running;
+}
+
+.reset {
+    animation: reset .5s;
+}
+
+.compteurMoutonsGagnes:hover {
+    -webkit-animation: notexistent;
     animation: notexistent;
 }
 
@@ -325,14 +333,14 @@ body {
                 <div class="texte">
                     (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutongagne"></div> <div id="compteurMoutonsGagnes"></div>
+            <div id="imagemoutongagne"></div> <div class="animationMoutonsGagnes" id="compteurMoutonsGagnes"></div>
         </div>
         <div class="rightsite">
             Moutons embrochés
                 <div class="texte">
                     (1 image = 7 moutons)
                 </div>
-            <div id="imagemoutonperdu"></div> <div id="compteurMoutonsPerdus"></div>
+            <div id="imagemoutonperdu"></div> <div class="animationMoutonsPerdus" id="compteurMoutonsPerdus"></div>
         </div>
         <div class="site">
             <div class="inSite">

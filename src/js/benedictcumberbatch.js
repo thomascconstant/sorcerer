@@ -760,20 +760,32 @@ function afficherRegles() {
 }
 
 function zoomDiv() {
+    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    animMoutonsWin.classList.add('doAnim');
+    animMoutonsWin.classList.remove('reset');
+
     if (running === false) {
-        console.log("coucou je zoom");
+        
+
+        /*console.log("coucou je zoom");
         document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "running";
         document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "running";
-        running = true;
+        running = true;*/
     }
     
 }
 
 function restartZoomDiv() {
+    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    animMoutonsWin.classList.remove('doAnim');
+    animMoutonsWin.classList.add('reset');
+
     if (running === true) {
-        console.log("coucou je suis restarted");
+        
+
+        /*console.log("coucou je suis restarted");
         document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "paused";
-        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "paused";
+        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "paused";*/
     }
 
 }
