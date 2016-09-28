@@ -71,7 +71,7 @@ function animate(){
 
 function init() {
     document.getElementById("tours").innerHTML = tours;
-    document.getElementById("score").innerHTML = score;
+    //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
 
     //verrouiller boutons de mise
@@ -105,8 +105,14 @@ function goNew() {
     casesFound = [];
     document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
     document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu va apparaître dans...";
+
+    //changer affichage mise
+    mise = '?';
+    document.getElementById("mise").innerHTML = mise;
     //document.getElementById("affichageFeedback").style.display = "none";
-    makeGame(width,nbCells,0); //afficher la grille sans cases à trouver
+
+    makeGame(width, nbCells, 0); //afficher la grille sans cases à trouver
+
     startTimer();
 
     //cacher les boutons de mise
@@ -187,7 +193,7 @@ function activateMise() {
 function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
     document.getElementById("tours").innerHTML = tours;
-    document.getElementById("score").innerHTML = score;
+    //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
 }
 
@@ -238,8 +244,8 @@ function win(ijFind){
             tours--;
             mise = "?";
             document.getElementById("tours").innerHTML = tours;
-            document.getElementById("score").innerHTML = score;
-            document.getElementById("mise").innerHTML = mise;
+            //document.getElementById("score").innerHTML = score;
+            //document.getElementById("mise").innerHTML = mise;
 
             // a reprendre
             /*if(difficulty > 0.35) {
@@ -343,8 +349,8 @@ function fail(){
         tours--;
         mise = "?";
         document.getElementById("tours").innerHTML = tours;
-        document.getElementById("score").innerHTML = score;
-        document.getElementById("mise").innerHTML = mise;
+        //document.getElementById("score").innerHTML = score;
+        //document.getElementById("mise").innerHTML = mise;
 
         //a reprendre
         /*if(difficulty > 0.35) {

@@ -78,6 +78,7 @@ body {
     font-style: normal;
     font-variant: normal;
     font-weight: bold;
+    padding-bottom: 1vw;
 }
 
 .centerize {
@@ -327,7 +328,7 @@ body {
 
 <body onload="init()">
     <div class="fondtexte">
-        <div class="textetitre"><p>L'épreuve de déduction</p></div>
+        <div class="textetitre">L'épreuve de déduction</div>
         <div class="centerize">
             <div class="zonefeedback">
                 <!--<div class="compteur" id="affichageCompteur" style="display:none">Le plateau de jeu va apparaître dans <span id="timer">5</span> secondes !</div>-->
@@ -362,8 +363,8 @@ body {
                 <div class="textefeedback" id="res"></div>
                 <button class="button" style="display:inline;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer un plateau de jeu</button><br />
                 <table id="tableMise">
-                    <tr><td class="textefeedback" style="text-align:center">Temps</td><td class="textefeedback" style="text-align:center">Coups</td><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
-                    <tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+                    <tr><td class="textefeedback" style="text-align:center">Temps restant</td><td class="textefeedback" style="text-align:center">Coups restants</td><td class="textefeedback" style="text-align:center">Tours restants</td><td class="textefeedback" style="text-align:center">Moutons misés</td></tr>
+                    <tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td></tr>
                 </table>
                 <br />
             </div>
