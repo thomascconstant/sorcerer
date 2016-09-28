@@ -324,25 +324,29 @@ body {
 }
 
 .compteurMoutonsGagnes {
-    width: 5vw;
-    height: 3vw;
+    width: 6vw;
+    height: 6vw;
     position: relative;
-    left: 40%;
+    left: 35%;
     //background-color: red;
     font-family: 'Raleway', sans-serif;
-    font-size: 2vw;
-    text-align:center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: white;
+    text-align: center;
 }
 
 .compteurMoutonsPerdus {
     width: 5vw;
-    height: 3vw;
+    height: 6vw;
     position: relative;
-    left: 40%;
+    left: 35%;
     //background-color: red;
     font-family: 'Raleway', sans-serif;
-    font-size: 2vw;
-    text-align:center;
+    font-size: 3vw;
+    font-weight: bold;
+    color: white;
+    text-align: center;
 }
 
 .doAnimZoomdiv {
@@ -352,32 +356,118 @@ body {
     animation-play-state: running;
 }
 
+.tada {
+  -webkit-animation-name: tada 1s;
+  animation: tada 1s;
+  animation-name: tada;
+}
+
+.flash {
+  -webkit-animation-name: flash 2s;
+  animation: flash 2s;
+  animation-name: flash;
+}
+
 .reset {
     animation: reset .5s;
 }
 
 /* Chrome, Safari, Opera */
-    @-webkit-keyframes zoomdiv {
-        0% {
-            -webkit-transform: scale(1,1);
-        }
-
-        25% {
-            -webkit-transform: scale(0.5,0.5);
-        }
-
-        50% {
-            -webkit-transform: scale(2,2);
-        }
-
-        70% {
-            -webkit-transform: scale(0.5,0.5);
-        }
-
-        100% {
-            -webkit-transform: scale(1,1);
-        }
+@-webkit-keyframes zoomdiv {
+    0% {
+        -webkit-transform: scale(1,1);
     }
+
+    25% {
+        -webkit-transform: scale(0.5,0.5);
+    }
+
+    50% {
+        -webkit-transform: scale(2,2);
+    }
+
+    70% {
+        -webkit-transform: scale(0.5,0.5);
+    }
+
+    100% {
+        -webkit-transform: scale(1,1);
+    }
+}
+
+@-webkit-keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@-webkit-keyframes flash {
+  from, 50%, to {
+    opacity: 1;
+  }
+
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+@keyframes flash {
+  from, 50%, to {
+    opacity: 1;
+  }
+
+  25%, 75% {
+    opacity: 0;
+  }
+}
 
 </style>
 
@@ -409,11 +499,11 @@ body {
     <div class="overSite"><br />
         <div class="leftsite" id="boxMoutonsGagnes" style="display:none">
             Moutons sauvés<br />
-            <div id="imageMoutonGagne"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div><br />
+            <div id="imageMoutonGagne"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div>
         </div>
         <div class="rightsite" id="boxMoutonsPerdus" style="display:none">
             Moutons embrochés<br />
-            <div id="imageMoutonPerdu"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div><br />
+            <div id="imageMoutonPerdu"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div>
         </div>
         <div class="site">
             <div class="inSite">

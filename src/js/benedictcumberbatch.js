@@ -749,7 +749,7 @@ function addSheep() {
     if (winState === true) {
         document.getElementById("boxMoutonsGagnes").style.display = "block";  //faire apparaître box pour décompte de moutons
 
-        document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
+        document.getElementById("compteurMoutonsGagnes").innerHTML = "x " + compteurMoutonsGagnes;
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
         if (moutonAffiche === false) {
@@ -783,7 +783,7 @@ function addSheep() {
     } else if (winState === false) {
         document.getElementById("boxMoutonsPerdus").style.display = "block"; //faire apparaître box pour décompte de moutons
 
-        document.getElementById("compteurMoutonsPerdus").innerHTML = "x" + compteurMoutonsPerdus;
+        document.getElementById("compteurMoutonsPerdus").innerHTML = "x " + compteurMoutonsPerdus;
         console.log(compteurMoutonsPerdus + "moutons perdus final");
 
         if (moutonRipAffiche === false) {
@@ -815,23 +815,23 @@ function addSheep() {
 // ----------------------------feedback visuels et sonores--------------------
 function launchAnimateScoreMoutonsGagnes() {
     var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
-    animMoutonsWin.classList.add('doAnimZoomdiv');
+    animMoutonsWin.classList.add('tada');
     animMoutonsWin.classList.remove('reset');
 }
 
 function launchAnimateScoreMoutonsPerdus() {
     var animMoutonsWin = document.querySelector('.compteurMoutonsPerdus');
-    animMoutonsWin.classList.add('doAnimZoomdiv');
+    animMoutonsWin.classList.add('flash');
     animMoutonsWin.classList.remove('reset');
 }
 
 function restartAnimateScoreMoutons() {
     var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
-    animMoutonsWin.classList.remove('doAnimZoomdiv');
+    animMoutonsWin.classList.remove('tada');
     animMoutonsWin.classList.add('reset');
 
     var animMoutonsFail = document.querySelector('.compteurMoutonsPerdus');
-    animMoutonsFail.classList.remove('doAnimZoomdiv');
+    animMoutonsFail.classList.remove('flash');
     animMoutonsFail.classList.add('reset');
 }
 
