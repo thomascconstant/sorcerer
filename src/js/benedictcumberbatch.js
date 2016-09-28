@@ -759,9 +759,9 @@ function afficherRegles() {
     }
 }
 
-function zoomDiv() {
+function launchAnimateScoreMoutons() {
     var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
-    animMoutonsWin.classList.add('doAnim');
+    animMoutonsWin.classList.add('doAnimZoomdiv');
     animMoutonsWin.classList.remove('reset');
 
     if (running === false) {
@@ -775,7 +775,7 @@ function zoomDiv() {
     
 }
 
-function restartZoomDiv() {
+function restartAnimateScoreMoutons() {
     var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
     animMoutonsWin.classList.remove('doAnim');
     animMoutonsWin.classList.add('reset');
@@ -802,9 +802,9 @@ function addSheep() {
         //afficher mouton
         var elem = document.createElement("img");
         elem.setAttribute("src", "img/unrip_mouton.png");
-        elem.setAttribute("height", "60");
-        elem.setAttribute("width", "90");
-        document.getElementById("imagemoutongagne").appendChild(elem);
+        elem.setAttribute("height", "120");
+        elem.setAttribute("width", "180");
+        document.getElementById("imageMoutonGagne").appendChild(elem);
 
         //feedback sonore
         var soundsWin = [
@@ -830,7 +830,7 @@ function addSheep() {
         elem.setAttribute("src", "img/rip_mouton.png");
         elem.setAttribute("height", "60");
         elem.setAttribute("width", "90");
-        document.getElementById("imagemoutonperdu").appendChild(elem);
+        document.getElementById("imageMoutonPerdu").appendChild(elem);
 
         //feedback sonore
         var soundsFail = [

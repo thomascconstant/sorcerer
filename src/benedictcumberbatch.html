@@ -170,6 +170,7 @@ body {
     margin-right : auto;
     text-align: center;
     float: left;
+    overflow: hidden; /* add this to contain floated children */
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
 }
 
@@ -186,6 +187,7 @@ body {
     margin-right : 1vw;
     text-align: center;
     float: right;
+    overflow: hidden; /* add this to contain floated children */
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
 }
 
@@ -241,26 +243,47 @@ body {
     border-collapse: collapse;
 }
 
+#imageMoutonGagne {
+    width: 200px;
+    height: 140px;
+    padding-top: 0.9vw;
+    position: relative;
+    left: 50px;
+    border: 1px solid red;
+}
+
+#imageMoutonPerdu {
+    width: 200px;
+    height: 140px;
+    padding-top: 0.9vw;
+    position: relative;
+    left: 50px;
+    border: 1px solid red;
+}
+
 .animationMoutonsGagnes {
-    width:76px;
-    height:47px;
+    width: 3vw;
+    height: 3vw;
+    position: relative;
+    left: 45%;
     background-color: red;
-    
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 2vw;
+    text-align:center;
 }
 
 .animationMoutonsPerdus {
-    width:76px;
-    height:47px;
+    width: 3vw;
+    height: 3vw;
+    position: relative;
+    left: 45%;
     background-color: red;
-    animation: zoomdiv 1s 1;
-    -webkit-animation-play-state: paused;
-    animation-play-state: paused;
-    -moz-animation: zoomdiv 1s 1; zoomdiv 1s 1; zoomdiv 1s 1;
-    -webkit-animation: zoomdiv 1s 1; zoomdiv 1s 1;
-    -o-animation: zoomdiv 1s 1; zoomdiv 1s 1;
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 2vw;
+    text-align:center;
 }
 
-.doanim {
+.doAnimZoomdiv {
     -webkit-animation: zoomdiv 1s;
     -webkit-animation-play-state: running;
     animation: zoomdiv 1s;
@@ -269,11 +292,6 @@ body {
 
 .reset {
     animation: reset .5s;
-}
-
-.compteurMoutonsGagnes:hover {
-    -webkit-animation: notexistent;
-    animation: notexistent;
 }
 
 /* Chrome, Safari, Opera */
@@ -329,18 +347,12 @@ body {
     </div>
     <div class="overSite"><br />
         <div class="leftsite">
-            Moutons sauvés
-                <div class="texte">
-                    (1 image = 7 moutons)
-                </div>
-            <div id="imagemoutongagne"></div> <div class="animationMoutonsGagnes" id="compteurMoutonsGagnes"></div>
+            Moutons sauvés<br />
+            <div id="imageMoutonGagne"></div> <div class="animationMoutonsGagnes" id="compteurMoutonsGagnes"></div><br />
         </div>
         <div class="rightsite">
-            Moutons embrochés
-                <div class="texte">
-                    (1 image = 7 moutons)
-                </div>
-            <div id="imagemoutonperdu"></div> <div class="animationMoutonsPerdus" id="compteurMoutonsPerdus"></div>
+            Moutons embrochés<br />
+            <div id="imageMoutonPerdu"></div> <div class="animationMoutonsPerdus" id="compteurMoutonsPerdus"></div><br />
         </div>
         <div class="site">
             <div class="inSite">
@@ -357,8 +369,8 @@ body {
         </div><br /><br />
     </div>
 
-    <button onclick="zoomDiv()">CLICK</button>
-    <button onclick="restartZoomDiv()">CLICK2</button>
+    <button onclick="launchAnimateScoreMoutons()">CLICK</button>
+    <button onclick="restartAnimateScoreMoutons()">CLICK2</button>
 
     <div class="fondtexte">
         <div class="centerize">
