@@ -206,6 +206,7 @@ function win(ijFind){
             moutonsGagnes += mise;
             console.log(moutonsGagnes + "moutons gagnes")
             compteurMoutonsGagnes += moutonsGagnes;
+            moutonsGagnes = 0;
             console.log(compteurMoutonsGagnes + "moutons gagnes winState");
             score += mise;
             actionDeJeu++;
@@ -312,6 +313,7 @@ function fail(){
         moutonsPerdus += mise;
         console.log(moutonsPerdus + "moutons perdus")
         compteurMoutonsPerdus += moutonsPerdus;
+        moutonsPerdus = 0;
         console.log(compteurMoutonsPerdus + "moutons perdus winState");
         score -= mise;
         actionDeJeu++;
