@@ -40,6 +40,7 @@ var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var running = false;
+var animationReset = false; //état de l'animation
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -110,6 +111,9 @@ function goNew() {
 
     //cacher les boutons de mise
     document.getElementById("boutonsMise").style.display = "none";
+
+    //recharger l'animation
+    restartAnimateScoreMoutons();
 }
 
 //récupérer mise
@@ -764,37 +768,6 @@ function afficherRegles() {
     }
 }
 
-function launchAnimateScoreMoutons() {
-    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
-    animMoutonsWin.classList.add('doAnimZoomdiv');
-    animMoutonsWin.classList.remove('reset');
-
-    if (running === false) {
-        
-
-        /*console.log("coucou je zoom");
-        document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "running";
-        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "running";
-        running = true;*/
-    }
-    
-}
-
-function restartAnimateScoreMoutons() {
-    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
-    animMoutonsWin.classList.remove('doAnim');
-    animMoutonsWin.classList.add('reset');
-
-    if (running === true) {
-        
-
-        /*console.log("coucou je suis restarted");
-        document.getElementById("compteurMoutonsGagnes").style.WebkitAnimationPlayState = "paused";
-        document.getElementById("compteurMoutonsGagnes").style.animationPlayState = "paused";*/
-    }
-
-}
-
 function addSheep() {
     if (winState === true) {
         document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
@@ -810,6 +783,9 @@ function addSheep() {
 
             moutonAffiche = true; //ne plus afficher d'image de moutons
         }
+
+        //feedback visuel
+        launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, pour un goNew()
 
         //feedback sonore
         var soundsWin = [
@@ -840,6 +816,9 @@ function addSheep() {
             moutonRipAffiche = true; //ne plus afficher d'image de moutons
         }
 
+        //feedback visuel
+        launchAnimateScoreMoutonsPerdus(); //le rechargement de l'animation se fait plus tard, pour un goNew()
+
         //feedback sonore
         var soundsFail = [
             "../src/sounds/fail.mp3"
@@ -852,6 +831,29 @@ function addSheep() {
     }
 }
 
+// ----------------------------feedback visuels et sonores--------------------
+function launchAnimateScoreMoutonsGagnes() {
+    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    animMoutonsWin.classList.add('doAnimZoomdiv');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function launchAnimateScoreMoutonsPerdus() {
+    var animMoutonsWin = document.querySelector('.animationMoutonsPerdus');
+    animMoutonsWin.classList.add('doAnimZoomdiv');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function restartAnimateScoreMoutons() {
+    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    animMoutonsWin.classList.remove('doAnimZoomdiv');
+    animMoutonsWin.classList.add('reset');
+
+    var animMoutonsFail = document.querySelector('.animationMoutonsPerdus');
+    animMoutonsFail.classList.remove('doAnimZoomdiv');
+    animMoutonsFail.classList.add('reset');
+
+}
 
 function feedbackSonore() {
     if (winState === true) {
