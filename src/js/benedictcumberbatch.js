@@ -791,13 +791,13 @@ function restartAnimateScoreMoutons() {
 }
 
 function addSheep() {
-    if (winState === true && compteurMoutonsGagnes >= 7) {
+    if (winState === true) {
         console.log(compteurMoutonsGagnes + "moutons gagnes");
         
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
         document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
-        compteurMoutonsGagnes -= 7;
+
 
         //afficher mouton
         var elem = document.createElement("img");
@@ -820,16 +820,16 @@ function addSheep() {
         var x = document.getElementById("winSound");
         x.play();
 
-    } else if (winState === false && compteurMoutonsPerdus >= 7) {
+    } else if (winState === false) {
         console.log(compteurMoutonsPerdus + "moutons perdus");
-        compteurMoutonsPerdus -= 7;
-        console.log(compteurMoutonsPerdus + "moutons perdus");
+        document.getElementById("compteurMoutonsPerdus").innerHTML = "x" + compteurMoutonsPerdus;
+
         
         //afficher mouton
         var elem = document.createElement("img");
         elem.setAttribute("src", "img/rip_mouton.png");
-        elem.setAttribute("height", "60");
-        elem.setAttribute("width", "90");
+        elem.setAttribute("height", "120");
+        elem.setAttribute("width", "180");
         document.getElementById("imageMoutonPerdu").appendChild(elem);
 
         //feedback sonore
