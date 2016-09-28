@@ -350,29 +350,43 @@ body {
 }
 
 .doAnimZoomdiv {
-    -webkit-animation: zoomdiv 1s;
+    -webkit-animation: zoomdiv;
     -webkit-animation-play-state: running;
     animation: zoomdiv 1s;
     animation-play-state: running;
 }
 
 .tada {
-  -webkit-animation-name: tada 1s;
+  -webkit-animation-name: tada;
   animation: tada 1s;
   animation-name: tada;
 }
 
 .flash {
-  -webkit-animation-name: flash 2s;
+  -webkit-animation-name: flash;
   animation: flash 2s;
   animation-name: flash;
 }
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation: fadeOut 0.5s;
+    animation-name: fadeOut;
+}
+
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation: fadeIn 0.5s;
+  animation-name: fadeIn;
+}
+
 
 .reset {
     animation: reset .5s;
 }
 
-/* Chrome, Safari, Opera */
+/* zoomdiv Chrome, Safari, Opera */
 @-webkit-keyframes zoomdiv {
     0% {
         -webkit-transform: scale(1,1);
@@ -395,6 +409,7 @@ body {
     }
 }
 
+/* tada */
 @-webkit-keyframes tada {
   from {
     -webkit-transform: scale3d(1, 1, 1);
@@ -449,6 +464,7 @@ body {
   }
 }
 
+/* flash */
 @-webkit-keyframes flash {
   from, 50%, to {
     opacity: 1;
@@ -466,6 +482,48 @@ body {
 
   25%, 75% {
     opacity: 0;
+  }
+}
+
+/* fadeOut */
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* fadeIn */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
