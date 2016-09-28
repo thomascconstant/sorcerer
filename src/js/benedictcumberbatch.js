@@ -221,9 +221,9 @@ function win(ijFind){
 
             //message de feedback
              if (mise === 1) {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour générer une nouvelle grille.";
+                 document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " + mise + " mouton. Cliquez sur le bouton pour générer un plateau de jeu.";
             } else {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour générer une nouvelle grille.";
+                 document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " + mise + " moutons. Cliquez sur le bouton pour générer un plateau de jeu.";
             }
             document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
             //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
@@ -546,7 +546,6 @@ function showGrid(show){
         drawGrid();
 }
 
-
 function drawGrid(){
   //Affichage
   var widthCell = g_width / g_nbCellX;
@@ -599,8 +598,6 @@ function drawGrid(){
   strHtml += '</table>';
 
   document.getElementById("board").innerHTML = strHtml;
-
-
 }
 
 function permute(i,j){
@@ -742,34 +739,10 @@ function timerCoups(){
     countdown();
 }
 
-function colorButton() {
-    document.getElementById('boutonGenererGrille').style.backgroundColor="373b3d";
-}
-
-function uncolorButton() {
-    document.getElementById('boutonGenererGrille').style.backgroundColor="757575";
-}
-
-function colorButtonRules() {
-    document.getElementById('boutonAfficherRegles').style.backgroundColor = "757575";
-}
-
-function uncolorButtonRules() {
-    document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
-}
-
-function afficherRegles() {
-    if (document.getElementById("affichageRegles").style.display === "none") {
-        document.getElementById("boutonAfficherRegles").innerHTML = "Masquer les règles";
-        document.getElementById("affichageRegles").style.display = "block";
-    } else if (document.getElementById("affichageRegles").style.display === "block") {
-        document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
-        document.getElementById("affichageRegles").style.display = "none";
-    }
-}
-
 function addSheep() {
     if (winState === true) {
+        document.getElementById("boxMoutonsGagnes").style.display = "block";  //faire apparaître box pour décompte de moutons
+
         document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
@@ -802,6 +775,8 @@ function addSheep() {
         x.play();
 
     } else if (winState === false) {
+        document.getElementById("boxMoutonsPerdus").style.display = "block"; //faire apparaître box pour décompte de moutons
+
         document.getElementById("compteurMoutonsPerdus").innerHTML = "x" + compteurMoutonsPerdus;
         console.log(compteurMoutonsPerdus + "moutons perdus final");
 
@@ -833,26 +808,25 @@ function addSheep() {
 
 // ----------------------------feedback visuels et sonores--------------------
 function launchAnimateScoreMoutonsGagnes() {
-    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
     animMoutonsWin.classList.add('doAnimZoomdiv');
     animMoutonsWin.classList.remove('reset');
 }
 
 function launchAnimateScoreMoutonsPerdus() {
-    var animMoutonsWin = document.querySelector('.animationMoutonsPerdus');
+    var animMoutonsWin = document.querySelector('.compteurMoutonsPerdus');
     animMoutonsWin.classList.add('doAnimZoomdiv');
     animMoutonsWin.classList.remove('reset');
 }
 
 function restartAnimateScoreMoutons() {
-    var animMoutonsWin = document.querySelector('.animationMoutonsGagnes');
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
     animMoutonsWin.classList.remove('doAnimZoomdiv');
     animMoutonsWin.classList.add('reset');
 
-    var animMoutonsFail = document.querySelector('.animationMoutonsPerdus');
+    var animMoutonsFail = document.querySelector('.compteurMoutonsPerdus');
     animMoutonsFail.classList.remove('doAnimZoomdiv');
     animMoutonsFail.classList.add('reset');
-
 }
 
 function feedbackSonore() {
@@ -886,6 +860,33 @@ function feedbackSonore() {
     }
 }
 
+function colorButton() {
+    document.getElementById('boutonGenererGrille').style.backgroundColor = "373b3d";
+}
+
+function uncolorButton() {
+    document.getElementById('boutonGenererGrille').style.backgroundColor = "757575";
+}
+
+function colorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "757575";
+}
+
+function uncolorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
+}
+
+function afficherRegles() {
+    if (document.getElementById("affichageRegles").style.display === "none") {
+        document.getElementById("boutonAfficherRegles").innerHTML = "Masquer les règles";
+        document.getElementById("affichageRegles").style.display = "block";
+    } else if (document.getElementById("affichageRegles").style.display === "block") {
+        document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
+        document.getElementById("affichageRegles").style.display = "none";
+    }
+}
+
+// ----------------------------fin de partie et enregistrement des données--------------------
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur

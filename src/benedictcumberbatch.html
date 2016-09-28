@@ -163,8 +163,9 @@ body {
     height: auto;
     padding: auto;
     color: #212121;
-    font-family: 'Uncial Antiqua', cursive;
-    font-size: 1.2vw;
+    display: none;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.8vw;
     border: 0px solid black;
     margin-left : 1vw;
     margin-right : auto;
@@ -180,8 +181,9 @@ body {
     height: auto;
     padding: auto;
     color: #212121;
-    font-family: 'Uncial Antiqua', cursive;
-    font-size: 1.2vw;
+    display: none;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.8vw;
     border: 0px solid black;
     margin-left : auto;
     margin-right : 1vw;
@@ -249,7 +251,7 @@ body {
     padding-top: 0.9vw;
     position: relative;
     left: 50px;
-    border: 1px solid red;
+    border: 0px solid red;
 }
 
 #imageMoutonPerdu {
@@ -258,27 +260,27 @@ body {
     padding-top: 0.9vw;
     position: relative;
     left: 50px;
-    border: 1px solid red;
+    border: 0px solid red;
 }
 
-.animationMoutonsGagnes {
+.compteurMoutonsGagnes {
     width: 5vw;
     height: 3vw;
     position: relative;
-    left: 42.5%;
-    background-color: red;
-    font-family: 'Uncial Antiqua', cursive;
+    left: 40%;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
     font-size: 2vw;
     text-align:center;
 }
 
-.animationMoutonsPerdus {
+.compteurMoutonsPerdus {
     width: 5vw;
     height: 3vw;
     position: relative;
-    left: 42.5%;
-    background-color: red;
-    font-family: 'Uncial Antiqua', cursive;
+    left: 40%;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
     font-size: 2vw;
     text-align:center;
 }
@@ -333,7 +335,6 @@ body {
             </div>
             <div class="messageFeedbackMise">
                 <div class='zonemise' id="boutonsMise" style="display:none">
-                    <!--<p class="texte" align="center"><i>Choisissez le nombre de moutons que vous voulez miser :</i></p>-->
                     <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
@@ -346,13 +347,13 @@ body {
         </div>
     </div>
     <div class="overSite"><br />
-        <div class="leftsite">
+        <div class="leftsite" id="boxMoutonsGagnes" style="display:none">
             Moutons sauvés<br />
-            <div id="imageMoutonGagne"></div> <div class="animationMoutonsGagnes" id="compteurMoutonsGagnes"></div><br />
+            <div id="imageMoutonGagne"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div><br />
         </div>
-        <div class="rightsite">
+        <div class="rightsite" id="boxMoutonsPerdus" style="display:none">
             Moutons embrochés<br />
-            <div id="imageMoutonPerdu"></div> <div class="animationMoutonsPerdus" id="compteurMoutonsPerdus"></div><br />
+            <div id="imageMoutonPerdu"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div><br />
         </div>
         <div class="site">
             <div class="inSite">
@@ -368,9 +369,6 @@ body {
             </div>
         </div><br /><br />
     </div>
-
-    <button onclick="launchAnimateScoreMoutonsGagnes()">CLICK</button>
-    <button onclick="restartAnimateScoreMoutons()">CLICK2</button>
 
     <div class="fondtexte">
         <div class="centerize">
