@@ -747,6 +747,7 @@ function timerCoups(){
 
 function addSheep() {
     if (winState === true) {
+        launchFadeInLeftBox(); //lance animation box pour décompte de moutons
         document.getElementById("boxMoutonsGagnes").style.display = "block";  //faire apparaître box pour décompte de moutons
 
         document.getElementById("compteurMoutonsGagnes").innerHTML = "x " + compteurMoutonsGagnes;
@@ -781,6 +782,7 @@ function addSheep() {
         x.play();
 
     } else if (winState === false) {
+        launchFadeInRightBox(); //lance animation box pour décompte de moutons
         document.getElementById("boxMoutonsPerdus").style.display = "block"; //faire apparaître box pour décompte de moutons
 
         document.getElementById("compteurMoutonsPerdus").innerHTML = "x " + compteurMoutonsPerdus;
@@ -923,6 +925,16 @@ function restartFadeInOutTexte() {
     var animTexte = document.querySelector('.texte');
     animTexte.classList.remove('fadeOut');
     animTexte.classList.add('reset');
+}
+
+function launchFadeInLeftBox() {
+    var animTexte = document.querySelector('.leftsite');
+    animTexte.classList.add('fadeInLeft');
+}
+
+function launchFadeInRightBox() {
+    var animTexte = document.querySelector('.rightsite');
+    animTexte.classList.add('fadeInRight');
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
