@@ -583,13 +583,13 @@ function drawGrid(){
 
           var cursor = '';
           if(g_casesNum[(i-1)*g_nbCellX+j] < 0)
-            cursor = 'cursor:url(img/arrow-down.png),grab;';
+              cursor = 'cursor:url(img/keyboard_arrow_down.svg),auto;';
           if(g_casesNum[(i+1)*g_nbCellX+j] < 0)
-            cursor = 'cursor:url(img/arrow-up.png),grab;';
+              cursor = 'cursor:url(img/keyboard_arrow_up.svg),auto;';
           if(g_casesNum[(i)*g_nbCellX+(j-1)] < 0)
-              cursor = 'cursor:url(img/arrow-right.png),grab;';
+              cursor = 'cursor:url(img/keyboard_arrow_right.svg),auto;';
             if(g_casesNum[(i)*g_nbCellX+(j+1)] < 0)
-                cursor = 'cursor:url(img/arrow-left.png),grab;';
+                cursor = 'cursor:url(img/keyboard_arrow_left.svg),auto;';
 
           strHtml += '<td style="'+cursor+' text-align:center; color:'+txtColor+'; background-color:'+color+'; width:'+widthCell+'px; height:'+widthCell+'px" onclick="' + clickFun + '">&nbsp;';
           if(g_casesNum[i*g_nbCellX+j] >= 0)
