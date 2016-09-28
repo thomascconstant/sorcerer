@@ -29,6 +29,9 @@ var moutonsPerdus = 0;
 var compteurMoutonsGagnes = 0;
 var compteurMoutonsPerdus = 0;
 
+var moutonAffiche = false; //vérifier affichage du mouton vivant
+var moutonRipAffiche = false; //vérifier affichage du mouton mort
+
 var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
@@ -792,19 +795,19 @@ function restartAnimateScoreMoutons() {
 
 function addSheep() {
     if (winState === true) {
-        console.log(compteurMoutonsGagnes + "moutons gagnes");
-        
+        document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
-        document.getElementById("compteurMoutonsGagnes").innerHTML = "x" + compteurMoutonsGagnes;
+        if (moutonAffiche === false) {
+            //afficher mouton
+            var elem = document.createElement("img");
+            elem.setAttribute("src", "img/unrip_mouton.png");
+            elem.setAttribute("height", "120");
+            elem.setAttribute("width", "180");
+            document.getElementById("imageMoutonGagne").appendChild(elem);
 
-
-        //afficher mouton
-        var elem = document.createElement("img");
-        elem.setAttribute("src", "img/unrip_mouton.png");
-        elem.setAttribute("height", "120");
-        elem.setAttribute("width", "180");
-        document.getElementById("imageMoutonGagne").appendChild(elem);
+            moutonAffiche = true; //ne plus afficher d'image de moutons
+        }
 
         //feedback sonore
         var soundsWin = [
@@ -821,16 +824,19 @@ function addSheep() {
         x.play();
 
     } else if (winState === false) {
-        console.log(compteurMoutonsPerdus + "moutons perdus");
         document.getElementById("compteurMoutonsPerdus").innerHTML = "x" + compteurMoutonsPerdus;
+        console.log(compteurMoutonsPerdus + "moutons perdus final");
 
-        
-        //afficher mouton
-        var elem = document.createElement("img");
-        elem.setAttribute("src", "img/rip_mouton.png");
-        elem.setAttribute("height", "120");
-        elem.setAttribute("width", "180");
-        document.getElementById("imageMoutonPerdu").appendChild(elem);
+        if (moutonRipAffiche === false) {
+            //afficher mouton
+            var elem = document.createElement("img");
+            elem.setAttribute("src", "img/rip_mouton.png");
+            elem.setAttribute("height", "120");
+            elem.setAttribute("width", "180");
+            document.getElementById("imageMoutonPerdu").appendChild(elem);
+
+            moutonRipAffiche = true; //ne plus afficher d'image de moutons
+        }
 
         //feedback sonore
         var soundsFail = [
