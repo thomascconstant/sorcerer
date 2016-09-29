@@ -117,11 +117,6 @@ function goNew() {
 
     //cacher les boutons de mise
     document.getElementById("boutonsMise").style.display = "none";
-
-    //recharger l'animation
-    restartAnimateScoreMoutons();
-    restartFadeOutUpBoxes();
-
 }
 
 //récupérer mise
@@ -171,6 +166,11 @@ function recupMise() {
     clearInterval(g_timer_coup_id);
     g_timer_coup_id = setInterval(timerCoups,1000);
     showGrid(true);
+
+    //recharger l'animation
+    restartAnimateScoreMoutons();
+    restartFadeOutUpBoxes();
+
 }
 
 function activateMise() {
@@ -788,7 +788,7 @@ function addSheep() {
         }
 
         //feedback visuel
-        launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, pour un goNew()
+        launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, lorsque la mise est récupérée pour laisser le temps à l'anim de se terminer
         launchFadeOutUpLeftBox();
         setTimeout(function eraseText() {
             document.getElementById("addMoutonsGagnes").style.display = "none";
