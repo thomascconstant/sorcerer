@@ -249,36 +249,7 @@ function win(ijFind){
             //document.getElementById("score").innerHTML = score;
             //document.getElementById("mise").innerHTML = mise;
 
-            // a reprendre
-            /*if(difficulty > 0.35) {
-                modePoussin = false;
-                modeNormal = true;
-                difficulty = difficulty + 0.01;
-            } else if (difficulty > 0.7) {
-                modeNormal = false;
-                modeViolent = true;
-                difficulty = difficulty + 0.01;
-            } else {
-                modePoussin = false;
-                difficulty = difficulty + 0.01;
-            }*/
-
             difficulty = Math.min(1,difficulty+0.1);
-            /*if(Math.random() < 0.7) {
-                if(difficulty >= 0.95) {
-                    difficulty = Math.min(0.99,difficulty + 0.02);
-                    modeViolent = true;
-                    modeNormal = false;
-                    console.log("mode violent: "+ modeViolent);
-                } else {
-                    difficulty = Math.min(0.95,difficulty + 0.05);
-                    modeNormal = true;
-                    modeViolent = false;
-                    modePoussin = false;
-                }
-            } else {
-                nbCells = Math.min(8, nbCells+1);
-            }*/
 
             //bloquer jeu
             miseValide = false;
@@ -289,21 +260,6 @@ function win(ijFind){
 
             //faire apparaitre bouton pour générer la grille
             document.getElementById("boutonGenererGrille").style.visibility = "visible";
-
-            /*
-            //déverrouiller boutons de sélection de mise
-            document.getElementById("mise1").disabled = false;
-            document.getElementById("mise2").disabled = false;
-            document.getElementById("mise3").disabled = false;
-            document.getElementById("mise4").disabled = false;
-            document.getElementById("mise5").disabled = false;
-            document.getElementById("mise6").disabled = false;
-            document.getElementById("mise7").disabled = false;
-
-            //afficher message de choix de mise
-            document.getElementById("affichageFeedback").style.display = "block";*/
-
-            //casesFound = [];
 
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
@@ -320,7 +276,7 @@ function win(ijFind){
 }
 
 function fail(){
-    if (miseValide === true && countDownToZero === true){
+    if (miseValide === true && countDownToZero === true) {
         winState = false;
         moutonsPerdus += mise;
         console.log(moutonsPerdus + "moutons perdus")
@@ -354,53 +310,7 @@ function fail(){
         //document.getElementById("score").innerHTML = score;
         //document.getElementById("mise").innerHTML = mise;
 
-        //a reprendre
-        /*if(difficulty > 0.35) {
-            modePoussin = false;
-            modeNormal = true;
-
-            if(difficulty>0.01) {
-                difficulty = difficulty - 0.1;
-            } else {
-
-            }
-
-        } else if (difficulty > 0.7) {
-            modeNormal = false;
-            modeViolent = true;
-
-            if(difficulty>0.01) {
-                difficulty = difficulty - 0.1;
-            } else {
-
-            }
-
-        } else {
-            modePoussin = false;
-            modeNormal = true;
-            modeViolent = false;
-
-            if(difficulty>0.01) {
-                difficulty = difficulty - 0.1;
-            } else {
-
-            }
-        }*/
-
-        /*if(Math.random() < 0.7) {
-            if(difficulty > 0.95) {
-                difficulty = difficulty - 0.01;
-            } else {
-                difficulty = Math.max(0,difficulty - 0.05);
-            }
-        } else {
-            nbCells = Math.max(5, nbCells-1);
-            modeViolent = false;
-            console.log("mode violent: "+ modeViolent);
-        }*/
         difficulty = Math.max(0,difficulty-0.1);
-
-        //casesFound = [];
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
@@ -412,21 +322,6 @@ function fail(){
 
             //faire apparaitre bouton pour générer la grille
             document.getElementById("boutonGenererGrille").style.visibility = "visible";
-
-            /*
-            //déverrouiller boutons de sélection de mise
-            document.getElementById("mise1").disabled = false;
-            document.getElementById("mise2").disabled = false;
-            document.getElementById("mise3").disabled = false;
-            document.getElementById("mise4").disabled = false;
-            document.getElementById("mise5").disabled = false;
-            document.getElementById("mise6").disabled = false;
-            document.getElementById("mise7").disabled = false;
-
-            //afficher message de choix de mise
-            document.getElementById("affichageFeedback").style.display = "block";
-
-            makeGame(width,nbCells,1-difficulty);*/
 
         } else {
             finDePartie();
