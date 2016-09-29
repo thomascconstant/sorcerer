@@ -792,7 +792,7 @@ function addSheep() {
         launchFadeOutUpLeftBox();
         setTimeout(function eraseText() {
             document.getElementById("addMoutonsGagnes").style.display = "none";
-        }, 3000);
+        }, 2800);
 
         //feedback sonore
         var soundsWin = [
@@ -833,7 +833,7 @@ function addSheep() {
         launchFadeOutUpRightBox();
         setTimeout(function eraseText() {
             document.getElementById("addMoutonsPerdus").style.display = "none";
-        }, 3000);
+        }, 2800);
 
 
         //feedback sonore
