@@ -655,8 +655,27 @@ function permute(i,j){
 
 function clickCase(x,y){
 
-  if(!miseValide)
-    return;
+    /*if(!miseValide)
+        return;*/
+
+    //vérifier état de mise pour animation instruction de jeu
+    if (miseValide === false) {
+        document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+
+        setTimeout(function changerCouleur() {
+            document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+        }, 200);
+
+        setTimeout(function changerCouleur() {
+            document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        }, 400);
+
+        setTimeout(function changerCouleur() {
+            document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+        }, 600);
+
+        return;
+    }
 
   if(g_nb_coups > 0)
     if(permute(x,y))
