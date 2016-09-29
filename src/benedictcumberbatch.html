@@ -223,6 +223,7 @@ body {
     height: auto;
     padding: auto;
     color: #212121;
+    position: relative;
     display: none;
     font-family: 'Raleway', sans-serif;
     font-size: 1.8vw;
@@ -241,6 +242,7 @@ body {
     height: auto;
     padding: auto;
     color: #212121;
+    position: relative;
     display: none;
     font-family: 'Raleway', sans-serif;
     font-size: 1.8vw;
@@ -336,6 +338,20 @@ body {
     text-align: center;
 }
 
+.addMoutonsGagnes {
+    width: 5vw;
+    height: 5vw;
+    left: 35%;
+    z-index: 10;
+    position: absolute;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    color: lightgrey;
+    text-align: center;
+}
+
 .compteurMoutonsPerdus {
     width: 5vw;
     height: 6vw;
@@ -346,6 +362,20 @@ body {
     font-size: 3vw;
     font-weight: bold;
     color: white;
+    text-align: center;
+}
+
+.addMoutonsPerdus {
+    width: 5vw;
+    height: 5vw;
+    left: 35%;
+    z-index: 10;
+    position: absolute;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    color: lightgrey;
     text-align: center;
 }
 
@@ -374,7 +404,6 @@ body {
     animation-name: fadeOut;
 }
 
-
 .fadeIn {
   -webkit-animation-name: fadeIn;
   animation: fadeIn 0.5s;
@@ -388,9 +417,15 @@ body {
 }
 
 .fadeInRight {
-  -webkit-animation-name: fadeInRight;
-  animation: fadeInRight 0.3s;
-  animation-name: fadeInRight;
+    -webkit-animation-name: fadeInRight;
+    animation: fadeInRight 0.3s;
+    animation-name: fadeInRight;
+}
+
+.fadeOutUp {
+    -webkit-animation-name: fadeOutUp;
+    animation: fadeOutUp 4s;
+    animation-name: fadeOutUp;
 }
 
 .reset {
@@ -583,16 +618,41 @@ body {
 }
 
 @keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+  /* fadeOutUp */
+@-webkit-keyframes fadeOutUp {
   from {
-    opacity: 0;
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0);
+    opacity: 1;
   }
 
   to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
     opacity: 1;
-    -webkit-transform: none;
-    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
   }
 }
 
@@ -626,11 +686,11 @@ body {
     <div class="overSite"><br />
         <div class="leftsite" id="boxMoutonsGagnes" style="display:none">
             Moutons sauvés<br />
-            <div id="imageMoutonGagne"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div>
+            <div id="imageMoutonGagne"></div> <div class="addMoutonsGagnes" id="addMoutonsGagnes" style="display:block"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div>
         </div>
         <div class="rightsite" id="boxMoutonsPerdus" style="display:none">
             Moutons embrochés<br />
-            <div id="imageMoutonPerdu"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div>
+            <div id="imageMoutonPerdu"></div> <div class="addMoutonsPerdus" id="addMoutonsPerdus" style="display:block"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div>
         </div>
         <div class="site">
             <div class="inSite">

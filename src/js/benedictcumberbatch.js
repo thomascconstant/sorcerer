@@ -120,6 +120,8 @@ function goNew() {
 
     //recharger l'animation
     restartAnimateScoreMoutons();
+    restartFadeOutUpBoxes();
+
 }
 
 //récupérer mise
@@ -216,14 +218,14 @@ function win(ijFind){
             moutonsGagnes += mise;
             console.log(moutonsGagnes + "moutons gagnes")
             compteurMoutonsGagnes += moutonsGagnes;
-            moutonsGagnes = 0;
+            
             console.log(compteurMoutonsGagnes + "moutons gagnes winState");
             score += mise;
             actionDeJeu++;
 
             addSheep(); //faire apparaître un mouton sur la page
 
-            //feedbackSonore(); //à décommenter pour lancer les feedbacks sonores
+            moutonsGagnes = 0;
 
             //message de feedback
              if (mise === 1) {
@@ -323,14 +325,14 @@ function fail(){
         moutonsPerdus += mise;
         console.log(moutonsPerdus + "moutons perdus")
         compteurMoutonsPerdus += moutonsPerdus;
-        moutonsPerdus = 0;
+        
         console.log(compteurMoutonsPerdus + "moutons perdus winState");
         score -= mise;
         actionDeJeu++;
 
         addSheep(); //faire apparaître un mouton sur la page
 
-        //feedbackSonore();//à décommenter pour lancer les feedbacks sonores
+        moutonsPerdus = 0;
 
         //message de feedback
         if (mise === 1) {
@@ -473,7 +475,7 @@ function makeGame(width,nbCellX,diff) {
 
     //On permiet
     var nbPermMax = 10;
-    var nbPerm = Math.floor(nbPermMax * diff);
+    var nbPerm = Math.max(1, Math.floor(nbPermMax * diff));
     g_nb_coups = nbPerm;
     document.getElementById("nbCoups").innerHTML = g_nb_coups;
     console.log("Making grid with "+nbPerm+ " permutations");
@@ -768,8 +770,10 @@ function addSheep() {
     if (winState === true) {
         launchFadeInLeftBox(); //lance animation box pour décompte de moutons
         document.getElementById("boxMoutonsGagnes").style.display = "block";  //faire apparaître box pour décompte de moutons
+        document.getElementById("addMoutonsGagnes").style.display = "block";
 
-        document.getElementById("compteurMoutonsGagnes").innerHTML = "x " + compteurMoutonsGagnes;
+        document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+        document.getElementById("addMoutonsGagnes").innerHTML = "+" + moutonsGagnes;
         console.log(compteurMoutonsGagnes + "moutons gagnes final");
 
         if (moutonAffiche === false) {
@@ -785,6 +789,10 @@ function addSheep() {
 
         //feedback visuel
         launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, pour un goNew()
+        launchFadeOutUpLeftBox();
+        setTimeout(function eraseText() {
+            document.getElementById("addMoutonsGagnes").style.display = "none";
+        }, 3000);
 
         //feedback sonore
         var soundsWin = [
@@ -803,8 +811,10 @@ function addSheep() {
     } else if (winState === false) {
         launchFadeInRightBox(); //lance animation box pour décompte de moutons
         document.getElementById("boxMoutonsPerdus").style.display = "block"; //faire apparaître box pour décompte de moutons
+        document.getElementById("addMoutonsPerdus").style.display = "block";
 
-        document.getElementById("compteurMoutonsPerdus").innerHTML = "x " + compteurMoutonsPerdus;
+        document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+        document.getElementById("addMoutonsPerdus").innerHTML = "+" + moutonsPerdus;
         console.log(compteurMoutonsPerdus + "moutons perdus final");
 
         if (moutonRipAffiche === false) {
@@ -820,6 +830,11 @@ function addSheep() {
 
         //feedback visuel
         launchAnimateScoreMoutonsPerdus(); //le rechargement de l'animation se fait plus tard, pour un goNew()
+        launchFadeOutUpRightBox();
+        setTimeout(function eraseText() {
+            document.getElementById("addMoutonsPerdus").style.display = "none";
+        }, 3000);
+
 
         //feedback sonore
         var soundsFail = [
@@ -954,6 +969,28 @@ function launchFadeInLeftBox() {
 function launchFadeInRightBox() {
     var animTexte = document.querySelector('.rightsite');
     animTexte.classList.add('fadeInRight');
+}
+
+function launchFadeOutUpLeftBox() {
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.add('fadeOutUp');
+    animFadeOutWin.classList.remove('reset');
+}
+
+function launchFadeOutUpRightBox() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.add('fadeOutUp');
+    animFadeOutFail.classList.remove('reset');
+}
+
+function restartFadeOutUpBoxes() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.remove('fadeOutUp');
+    animFadeOutFail.classList.add('reset');
+
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.remove('fadeOutUp');
+    animFadeOutWin.classList.add('reset');
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
