@@ -19,10 +19,15 @@ var resultatJoueur = [];
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
-var hideTarget = true; //Si on doit cacher la target a chaque tour
+var moutonsGagnes = 0;
+var moutonsPerdus = 0;
+var compteurMoutonsGagnes = 0;
+var compteurMoutonsPerdus = 0;
 
-var chatonContent = '../src/img/happyKitten.jpg';
-var chatonTriste = '../src/img/sadKitten.jpg';
+var moutonAffiche = false; //vérifier affichage du mouton vivant
+var moutonRipAffiche = false; //vérifier affichage du mouton mort
+
+var hideTarget = true; //Si on doit cacher la target a chaque tour
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -35,10 +40,8 @@ function init(){
     var diff = diffModel.currentDiff;
     gameSpeed = diffModel.getChallengeFromDiff(diff);
 
-    //tours = 20;
-    //mise = 0;
     document.getElementById("tours").innerHTML = tours;
-    document.getElementById("score").innerHTML = score;
+    //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
     if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
@@ -51,7 +54,13 @@ function init(){
     //testFile(document.getElementById("res"));
 }
 
-function accessMise () {
+function accessMise() {
+    //afficher boutons mise
+    setTimeout(function eraseZoneMise() {
+        document.getElementById("boutonsMise").style.display = "block";
+    }, 10);
+    launchFadeInMise();
+
     //déverrouiller boutons de sélection de mise
     document.getElementById("mise1").disabled = false;
     document.getElementById("mise2").disabled = false;
@@ -61,6 +70,9 @@ function accessMise () {
     document.getElementById("mise6").disabled = false;
     document.getElementById("mise7").disabled = false;
     
+    //reset affichage mise
+    document.getElementById("mise").innerHTML = mise;
+
     run();
 }
 
@@ -70,22 +82,22 @@ function recupMise () {
         //boutton de mise 1 est validé
         mise = 1;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise2').checked) {
+    } else if(document.getElementById('mise2').checked) {
         mise = 2;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise3').checked) {
+    } else if(document.getElementById('mise3').checked) {
         mise = 3;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise4').checked) {
+    } else if(document.getElementById('mise4').checked) {
         mise = 4;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise5').checked) {
+    } else if(document.getElementById('mise5').checked) {
         mise = 5;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise6').checked) {
+    } else if(document.getElementById('mise6').checked) {
         mise = 6;
         document.getElementById("mise").innerHTML = mise;
-    }else if(document.getElementById('mise7').checked) {
+    } else if(document.getElementById('mise7').checked) {
         mise = 7;
         document.getElementById("mise").innerHTML = mise;
     }
@@ -113,9 +125,15 @@ function recupMise () {
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
     hideTarget = false;
-    
+
     changeTexteBouton();
 
+    //cacher les boutons de mise
+    restartFadeInOutMise();
+    setTimeout(launchFadeOutMise(), 100);
+    setTimeout(function eraseZoneMise() {
+        document.getElementById("boutonsMise").style.display = "none";
+    }, 490);
 }
 
 function showMise() {
@@ -210,9 +228,17 @@ function stop() {
 
     //On met a jour le score, etc...
     if(res === 1) {
-        score += mise;
         winState = true;
+
+        moutonsGagnes += mise;
+        compteurMoutonsGagnes += moutonsGagnes;
+
         actionDeJeu++;
+        score += mise;
+
+        addSheep(); //faire apparaître un mouton sur la page
+
+        moutonsGagnes = 0;
         
         //message de feedback
         if (mise === 1) {
@@ -225,9 +251,17 @@ function stop() {
         //feedbackPositif();
     }
     else {
-        score -= mise;
         winState = false;
+
+        moutonsPerdus += mise;
+        compteurMoutonsPerdus += moutonsPerdus;
+
         actionDeJeu++;
+        score -= mise;
+
+        addSheep(); //faire apparaître un mouton sur la page
+
+        moutonsPerdus = 0;
         
         //message de feedback 
         if (mise === 1) {
@@ -258,8 +292,8 @@ function stop() {
     //Reset de la mise
     mise = "?";
     document.getElementById("tours").innerHTML = tours;
-    document.getElementById("score").innerHTML = score;
-    document.getElementById("mise").innerHTML = mise;
+    //document.getElementById("score").innerHTML = score;
+    //document.getElementById("mise").innerHTML = mise;
     
     //nettoyer historique des boutons mises
     cleanMise();
@@ -283,7 +317,7 @@ function run() {
         return;
     }
     
-    if(tours > 0){
+    if(tours > 0) {
         running = true;
         document.getElementById("boutonLancerBarre").disabled = true;
         hideButton();
@@ -296,7 +330,7 @@ function run() {
         document.getElementById("slider").style.left = "0px";
     }
     
-    if(hideTarget){
+    if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
     //document.getElementById("target").style.left = (Math.random()*30+35)+'%';
     }
@@ -346,48 +380,279 @@ function keypressed(event) {
     }
 }
 
-function feedbackPositif() {
-    var imageFeedback = document.createElement("img");
-    imageFeedback.src = chatonContent;
-    document.body.appendChild(imageFeedback);
+function addSheep() {
+    if (winState === true) {
+        launchFadeInLeftBox(); //lance animation box pour décompte de moutons
+        document.getElementById("boxMoutonsGagnes").style.display = "block";  //faire apparaître box pour décompte de moutons
+        document.getElementById("addMoutonsGagnes").style.display = "block";
+
+        document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+        document.getElementById("addMoutonsGagnes").innerHTML = "+" + moutonsGagnes;
+        console.log(compteurMoutonsGagnes + "moutons gagnes final");
+
+        if (moutonAffiche === false) {
+            //afficher mouton
+            var elem = document.createElement("img");
+            elem.setAttribute("src", "img/unrip_mouton.png");
+            elem.setAttribute("height", "120");
+            elem.setAttribute("width", "180");
+            document.getElementById("imageMoutonGagne").appendChild(elem);
+
+            moutonAffiche = true; //ne plus afficher d'image de moutons
+        }
+
+        //feedback visuel
+        launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, lorsque la mise est récupérée pour laisser le temps à l'anim de se terminer
+        launchFadeOutUpLeftBox();
+        restartFadeInOutMise();
+        setTimeout(function eraseText() {
+            document.getElementById("addMoutonsGagnes").style.display = "none";
+        }, 2800);
+
+        //feedback sonore
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+
+        var tirageSon = soundsWin[Math.floor(Math.random() * soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("winSound");
+        x.play();
+
+    } else if (winState === false) {
+        launchFadeInRightBox(); //lance animation box pour décompte de moutons
+        document.getElementById("boxMoutonsPerdus").style.display = "block"; //faire apparaître box pour décompte de moutons
+        document.getElementById("addMoutonsPerdus").style.display = "block";
+
+        document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+        document.getElementById("addMoutonsPerdus").innerHTML = "+" + moutonsPerdus;
+        console.log(compteurMoutonsPerdus + "moutons perdus final");
+
+        if (moutonRipAffiche === false) {
+            //afficher mouton
+            var elem = document.createElement("img");
+            elem.setAttribute("src", "img/rip_mouton.png");
+            elem.setAttribute("height", "120");
+            elem.setAttribute("width", "180");
+            document.getElementById("imageMoutonPerdu").appendChild(elem);
+
+            moutonRipAffiche = true; //ne plus afficher d'image de moutons
+        }
+
+        //feedback visuel
+        launchAnimateScoreMoutonsPerdus(); //le rechargement de l'animation se fait plus tard, pour un goNew()
+        launchFadeOutUpRightBox();
+        restartFadeInOutMise();
+        setTimeout(function eraseText() {
+            document.getElementById("addMoutonsPerdus").style.display = "none";
+        }, 2800);
+
+        //feedback sonore
+        var soundsFail = [
+            "../src/sounds/fail.mp3"
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random() * soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("failSound");
+        x.play();
+    }
 }
 
-function feedbackNegatif() {
-    var imageFeedback = document.createElement("img");
-    imageFeedback.src = chatonTriste;
-    document.body.appendChild(imageFeedback);
+function afficherRegles() {
+    if (document.getElementById("affichageRegles").style.display === "none") {
+        restartFadeInOutTexte();
+        launchFadeInTexte();
+
+        document.getElementById("boutonAfficherRegles").innerHTML = "Masquer les règles";
+        document.getElementById("affichageRegles").style.display = "block";
+
+
+    } else if (document.getElementById("affichageRegles").style.display === "block") {
+        restartFadeInOutTexte();
+        launchFadeOutTexte();
+
+        setTimeout(function effacerRegles() {
+            document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
+            document.getElementById("affichageRegles").style.display = "none";
+        }, 500);
+
+    }
+}
+
+// ----------------------------feedback visuels et sonores--------------------
+function launchAnimateScoreMoutonsGagnes() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
+    animMoutonsWin.classList.add('tada');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function launchAnimateScoreMoutonsPerdus() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsPerdus');
+    animMoutonsWin.classList.add('flash');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function restartAnimateScoreMoutons() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
+    animMoutonsWin.classList.remove('tada');
+    animMoutonsWin.classList.add('reset');
+
+    var animMoutonsFail = document.querySelector('.compteurMoutonsPerdus');
+    animMoutonsFail.classList.remove('flash');
+    animMoutonsFail.classList.add('reset');
+}
+
+function feedbackSonore() {
+    if (winState === true) {
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+
+        var tirageSon = soundsWin[Math.floor(Math.random() * soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("winSound");
+        x.play();
+    } else {
+        var soundsFail = [
+            "../src/sounds/fail.mp3"
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random() * soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+
+    if (tours === 0) {
+        var x = document.getElementById("sheepSound");
+        x.play();
+    }
 }
 
 function colorButton() {
-    document.getElementById('boutonLancerBarre').style.backgroundColor="373b3d";
+    document.getElementById('boutonLancerBarre').style.backgroundColor = "373b3d";
 }
 
 function uncolorButton() {
-    document.getElementById('boutonLancerBarre').style.backgroundColor="757575";
+    document.getElementById('boutonLancerBarre').style.backgroundColor = "757575";
 }
 
+function colorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "757575";
+}
+
+function uncolorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
+}
+
+function launchFadeOutTexte() {
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.add('fadeOut');
+    animTexte.classList.remove('reset');
+}
+
+function launchFadeInTexte() {
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.add('fadeIn');
+    animTexte.classList.remove('reset');
+}
+
+function restartFadeInOutTexte() {
+    var animTexteIn = document.querySelector('.texte');
+    animTexteIn.classList.remove('fadeIn');
+    animTexteIn.classList.add('reset');
+
+    var animTexteOut = document.querySelector('.texte');
+    animTexteOut.classList.remove('fadeOut');
+    animTexteOut.classList.add('reset');
+}
+
+function launchFadeInLeftBox() {
+    var animTexte = document.querySelector('.leftsite');
+    animTexte.classList.add('fadeInLeft');
+}
+
+function launchFadeInRightBox() {
+    var animTexte = document.querySelector('.rightsite');
+    animTexte.classList.add('fadeInRight');
+}
+
+function launchFadeOutUpLeftBox() {
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.add('fadeOutUp');
+    animFadeOutWin.classList.remove('reset');
+}
+
+function launchFadeOutUpRightBox() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.add('fadeOutUp');
+    animFadeOutFail.classList.remove('reset');
+}
+
+function restartFadeOutUpBoxes() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.remove('fadeOutUp');
+    animFadeOutFail.classList.add('reset');
+
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.remove('fadeOutUp');
+    animFadeOutWin.classList.add('reset');
+}
+
+function launchFadeOutMise() {
+    var animMise = document.querySelector('.zonemise');
+    animMise.classList.add('fadeOut');
+    animMise.classList.remove('reset');
+}
+
+function launchFadeInMise() {
+    var animMise = document.querySelector('.zonemise');
+    animMise.classList.add('fadeIn');
+    animMise.classList.remove('reset');
+}
+
+function restartFadeInOutMise() {
+    var animMiseIn = document.querySelector('.zonemise');
+    animMiseIn.classList.remove('fadeIn');
+    animMiseIn.classList.add('reset');
+
+    var animMiseOut = document.querySelector('.zonemise');
+    animMiseOut.classList.remove('fadeOut');
+    animMiseOut.classList.add('reset');
+}
+
+// ----------------------------fin de partie et enregistrement des données--------------------
 function finDePartie() {
-    if (tours === 0){
+    if (tours === 0) {
         //récupérer score final du joueur
         scoreJoueurTom = score;
         localStorage.scoreJoueurTom = scoreJoueurTom;
         console.log(scoreJoueurTom);
-        
+
         // enregistrer les données du joueur
-        enregistrerDonnees(1,resultatJoueur);
+        enregistrerDonnees(1, resultatJoueur);
         var jeuMotriceTermine = true;
         localStorage.setItem("tomcruise", jeuMotriceTermine);
-        
+
         //renvoyer le joueur vers le hub
         var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
-            if (messageFinPartie === true) {
-                // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
-            } else {
-                // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
-            }
-        
+        if (messageFinPartie === true) {
+            // open it in a new window / tab (depends on browser setting)
+            window.open("hub.html", '_self', false);
+        } else {
+            // open it in a new window / tab (depends on browser setting)
+            window.open("hub.html", '_self', false);
+        }
+
         //créer le bouton
         /*var boutton = document.createElement("input");
         boutton.type = "button";
@@ -409,11 +674,10 @@ function finDePartie() {
         }
         boutton.onclick = results;
         document.body.appendChild(boutton);*/
-    } else{
+    } else {
 
     }
 }
-
 
 // enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
 function enregistrerDonnees (type, data) {

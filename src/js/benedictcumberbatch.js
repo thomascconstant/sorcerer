@@ -120,7 +120,7 @@ function goNew() {
     launchFadeOutMise();
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "none";
-    }, 500);
+    }, 490);
 }
 
 //récupérer mise
@@ -222,7 +222,6 @@ function win(ijFind){
             winState = true;
 
             moutonsGagnes += mise;
-            console.log(moutonsGagnes + "moutons gagnes")
             compteurMoutonsGagnes += moutonsGagnes;
 
             score += mise;
@@ -285,7 +284,6 @@ function fail(){
         winState = false;
 
         moutonsPerdus += mise;
-        console.log(moutonsPerdus + "moutons perdus")
         compteurMoutonsPerdus += moutonsPerdus;
         
         score -= mise;

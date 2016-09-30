@@ -123,7 +123,7 @@ function goNew() {
     launchFadeOutMise();
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "none";
-    }, 500);
+    }, 490);
     document.getElementById("mise").innerHTML = mise;
 }
 
