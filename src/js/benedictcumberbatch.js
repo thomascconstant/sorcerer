@@ -220,11 +220,11 @@ function win(ijFind){
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
             winState = true;
+
             moutonsGagnes += mise;
             console.log(moutonsGagnes + "moutons gagnes")
             compteurMoutonsGagnes += moutonsGagnes;
-            
-            console.log(compteurMoutonsGagnes + "moutons gagnes winState");
+
             score += mise;
             actionDeJeu++;
 
@@ -283,11 +283,11 @@ function win(ijFind){
 function fail(){
     if (miseValide === true && countDownToZero === true) {
         winState = false;
+
         moutonsPerdus += mise;
         console.log(moutonsPerdus + "moutons perdus")
         compteurMoutonsPerdus += moutonsPerdus;
         
-        console.log(compteurMoutonsPerdus + "moutons perdus winState");
         score -= mise;
         actionDeJeu++;
 

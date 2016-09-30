@@ -24,12 +24,12 @@
     width: 100%;
 }
 
-.zonemise {                                                                                                    
-    background-color: #616161; 
-    color: #000000;
-    padding: auto;   
+.zonemise {
+    color: #fafafa;
+    padding: auto;
     margin: auto;
     width: 100%;
+    display: inline-block;
 }
 
 .zonefeedback {
@@ -121,8 +121,8 @@ body {
 }
 
 .button:hover {
-  -webkit-transform: scale(1.25, 1.25);
-  transform: scale(1.25, 1.25);
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
 }
 
 .button:hover::after {
@@ -180,6 +180,18 @@ body {
     text-align:center;
 }
 
+.messageFeedbackMise {
+    background-color: #757575;
+    color: #fafafa;
+    height: 2.3vw;
+    font-size: 1.5vw;
+    display: inline-block;
+    width: 100%;
+    padding: auto;
+    margin: auto;
+    text-align:center;
+}
+
 .tdGame {
     width: 20px;
     height: 20px;
@@ -201,7 +213,6 @@ body {
     margin-left : auto;
     margin-right : auto;
     text-align: center;
-    
 }
 
 .leftsite {
@@ -213,7 +224,7 @@ body {
     position: relative;
     display: none;
     font-family: 'Raleway', sans-serif;
-    font-size: 1.8vw;
+    font-size: 1.5vw;
     border: 0px solid black;
     margin-left : 1vw;
     margin-right : auto;
@@ -232,7 +243,7 @@ body {
     position: relative;
     display: none;
     font-family: 'Raleway', sans-serif;
-    font-size: 1.8vw;
+    font-size: 1.5vw;
     border: 0px solid black;
     margin-left : auto;
     margin-right : 1vw;
@@ -247,6 +258,7 @@ body {
     padding-left: 1vw;
     padding-right: 1vw;
     padding-bottom: 0;
+    display: table;
     border: 1px solid black;
     margin-left: auto;
     margin-right: auto;
@@ -280,6 +292,7 @@ body {
 .board {
     padding: 0px;
     margin: 0px;
+    //display: inline-block;
     border: 1px solid white;
     border-collapse: collapse;
 }
@@ -297,6 +310,7 @@ body {
     margin: 0px;
     border: 0px solid white;
     border-collapse: collapse;
+    text-align:center;
 }
 
 .tr2, td2 {
@@ -305,6 +319,78 @@ body {
     margin: 0px;
     border: 5px solid white;
     border-collapse: collapse;
+}
+
+#imageMoutonGagne {
+    width: 200px;
+    height: 140px;
+    padding-top: 0.9vw;
+    position: relative;
+    left: 50px;
+    border: 0px solid red;
+}
+
+#imageMoutonPerdu {
+    width: 200px;
+    height: 140px;
+    padding-top: 0.9vw;
+    position: relative;
+    left: 50px;
+    border: 0px solid red;
+}
+
+.compteurMoutonsGagnes {
+    width: 6vw;
+    height: 6vw;
+    position: relative;
+    left: 35%;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 3vw;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.addMoutonsGagnes {
+    width: 5vw;
+    height: 5vw;
+    left: 35%;
+    z-index: 10;
+    position: absolute;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    color: lightgrey;
+    text-align: center;
+}
+
+.compteurMoutonsPerdus {
+    width: 5vw;
+    height: 6vw;
+    position: relative;
+    left: 35%;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 3vw;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.addMoutonsPerdus {
+    width: 5vw;
+    height: 5vw;
+    left: 35%;
+    z-index: 10;
+    position: absolute;
+    //background-color: red;
+    font-family: 'Raleway', sans-serif;
+    font-size: 2vw;
+    font-weight: bold;
+    color: lightgrey;
+    text-align: center;
 }
 
 .doAnimZoomdiv {
@@ -596,8 +682,8 @@ body {
             <div class="zonefeedback">
                 <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer une grille.</div>
             </div>
-            <div class='zonemise'>
-                <div class="messageFeedback">
+            <div class="messageFeedbackMise">
+                <div class='zonemise' id="boutonsMise" style="display:none">
                     <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
@@ -610,41 +696,50 @@ body {
         </div>
     </div>
     <div class="overSite">
-        <br /><div class="site">
+        <br />
+        <div class="leftsite" id="boxMoutonsGagnes" style="display:none">
+            Moutons sauvés<br />
+            <div id="imageMoutonGagne"></div> <div class="addMoutonsGagnes" id="addMoutonsGagnes" style="display:block"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div>
+        </div>
+        <div class="rightsite" id="boxMoutonsPerdus" style="display:none">
+            Moutons embrochés<br />
+            <div id="imageMoutonPerdu"></div> <div class="addMoutonsPerdus" id="addMoutonsPerdus" style="display:block"></div> <div class="compteurMoutonsPerdus" id="compteurMoutonsPerdus"></div>
+        </div>
+        <div class="site">
             <div class="inSite">
                 <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
                 <div id="board"></div>
                 <div class="textefeedback" id="res"></div>
                 <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer une grille</button><br />
                 <table id="tableMise">
-                    <tr><td class="textefeedback" style="text-align:center">Tours</td><td class="textefeedback" style="text-align:center">Mise</td><td class="textefeedback" style="text-align:center">Mouton(s)</td></tr>
-                    <tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td><td id="score" class="big">0</td></tr>
+                    <tr><td class="textefeedback" style="text-align:center">Tours restants</td><td class="textefeedback" style="text-align:center">Mouton(s) misé(s)</td></tr>
+                    <tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td></tr>
                 </table>
                 <br />
             </div><br /><br />
         </div>
-        </div>
-        <div class="fondtexte">
-            <div class="centerize">
-                <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>
+    </div>
+    <div class="fondtexte">
+        <div class="centerize">
+            <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>
 
-                <div class="texte" id="affichageRegles" style="display:none">
-                    <b>
-                        Sur une grille de couleur uniforme, 5 cases de luminosité légèrement différente vont clignoter à la fin du décompte.<br />
-                        Vous disposez d'un nombre de tours limités. Si vous trouvez les cases, vous gagnez.<br />
-                        Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br />
-                    </b>
-                    <p class="texte">
-                        Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br />
-                        A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !
-                    </p><br />
-                </div>
-            </div>
-            <div>
-                <audio id="winSound" autoplay></audio>
-                <audio id="failSound" autoplay></audio>
+            <div class="texte" id="affichageRegles" style="display:none">
+                <b>
+                    Sur une grille de couleur uniforme, 5 cases de luminosité légèrement différente vont clignoter à la fin du décompte.<br />
+                    Vous disposez d'un nombre de tours limités. Si vous trouvez les cases, vous gagnez.<br />
+                    Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br />
+                </b>
+                <p class="texte">
+                    Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br />
+                    A la fin d'un tour de jeu, de nouveaux moutons vous sont présentés. Rendez la Reine fière !
+                </p><br />
             </div>
         </div>
+        <div>
+            <audio id="winSound" autoplay></audio>
+            <audio id="failSound" autoplay></audio>
+        </div>
+    </div>
 </body>
 
 </html>
