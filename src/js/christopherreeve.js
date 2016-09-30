@@ -1010,7 +1010,7 @@ function feedbackSonore() {
          setTimeout(function effacerRegles() {
              document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
              document.getElementById("affichageRegles").style.display = "none";
-         }, 500);
+         }, 490);
 
      }
  }
