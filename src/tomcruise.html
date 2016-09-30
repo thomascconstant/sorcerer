@@ -655,15 +655,24 @@ body {
             <div class="zonefeedback">
                 <div class="messageFeedback" id="affichageFeedback" style="display:block">Choisissez le nombre de moutons que vous voulez miser sur vos chances de gagner :</div>
             </div>
-            <div class='messageFeedbackMise'>
-                <div class='zonemise' id="boutonsMise" style="display:block">
-                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()" />&nbsp; 4 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()" />&nbsp; 5 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()" />&nbsp; 6 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()" />&nbsp; 7
+            <div class="messageFeedbackMise">
+                <div class='zonemise' id="boutonsMise" style="display:block;cursor:default">
+                    <div class="button" id="mise1" onclick="recupMise(1)">1</div>
+                    <div class="button" id="mise1" onclick="recupMise(2)">2</div>
+                    <div class="button" id="mise1" onclick="recupMise()">3</div>
+                    <div class="button" id="mise1" onclick="recupMise()">4</div>
+                    <div class="button" id="mise1" onclick="recupMise()">5</div>
+                    <div class="button" id="mise1" onclick="recupMise()">6</div>
+                    <div class="button" id="mise1" onclick="recupMise()">7</div>
+
+                    <!--<input type="radio" name="mises" id="mise1" value="1" style="cursor:pointer" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise2" value="2" style="cursor:pointer" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise3" value="3" style="cursor:pointer" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise4" value="4" style="cursor:pointer" onclick="recupMise()" />&nbsp; 4 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise5" value="5" style="cursor:pointer" onclick="recupMise()" />&nbsp; 5 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise6" value="6" style="cursor:pointer" onclick="recupMise()" />&nbsp; 6 &nbsp; &nbsp;
+             <input type="radio" name="mises" id="mise7" value="7" style="cursor:pointer" onclick="recupMise()" />&nbsp; 7 -->
+                </div>
                 </div>
             </div>
         </div>

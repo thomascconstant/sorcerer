@@ -77,8 +77,10 @@ function accessMise() {
 }
 
 //récupérer mise
-function recupMise () {
-    if(document.getElementById('mise1').checked) {
+function recupMise(numeroMise) {
+    mise = numeroMise;
+    console.log(mise);
+    /*if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
         document.getElementById("mise").innerHTML = mise;
@@ -100,18 +102,19 @@ function recupMise () {
     } else if(document.getElementById('mise7').checked) {
         mise = 7;
         document.getElementById("mise").innerHTML = mise;
-    }
+    }*/
+
     //afficher boutton
     showButton();
     
     //verrouiller boutons de mise
-    document.getElementById("mise1").disabled = true;
+    /*document.getElementById("mise1").disabled = true;
     document.getElementById("mise2").disabled = true;
     document.getElementById("mise3").disabled = true;
     document.getElementById("mise4").disabled = true;
     document.getElementById("mise5").disabled = true;
     document.getElementById("mise6").disabled = true;
-    document.getElementById("mise7").disabled = true;
+    document.getElementById("mise7").disabled = true;*/
     
     //afficher le target
     if(hideTarget) {
