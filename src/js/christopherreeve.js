@@ -878,16 +878,154 @@ function feedbackSonore() {
     } 
 
     countdown();  
+ }
+
+ function afficherRegles() {
+     if (document.getElementById("affichageRegles").style.display === "none") {
+         restartFadeInOutTexte();
+         launchFadeInTexte();
+
+         document.getElementById("boutonAfficherRegles").innerHTML = "Masquer les règles";
+         document.getElementById("affichageRegles").style.display = "block";
+
+
+     } else if (document.getElementById("affichageRegles").style.display === "block") {
+         restartFadeInOutTexte();
+         launchFadeOutTexte();
+
+         setTimeout(function effacerRegles() {
+             document.getElementById("boutonAfficherRegles").innerHTML = "Relire les règles";
+             document.getElementById("affichageRegles").style.display = "none";
+         }, 500);
+
+     }
+ }
+
+// ----------------------------feedback visuels et sonores--------------------
+function launchAnimateScoreMoutonsGagnes() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
+    animMoutonsWin.classList.add('tada');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function launchAnimateScoreMoutonsPerdus() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsPerdus');
+    animMoutonsWin.classList.add('flash');
+    animMoutonsWin.classList.remove('reset');
+}
+
+function restartAnimateScoreMoutons() {
+    var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
+    animMoutonsWin.classList.remove('tada');
+    animMoutonsWin.classList.add('reset');
+
+    var animMoutonsFail = document.querySelector('.compteurMoutonsPerdus');
+    animMoutonsFail.classList.remove('flash');
+    animMoutonsFail.classList.add('reset');
+}
+
+function feedbackSonore() {
+    if (winState === true) {
+        var soundsWin = [
+            "../src/sounds/baaaa1.mp3",
+            "../src/sounds/baaaa2.mp3",
+            "../src/sounds/baaaa3.mp3",
+            "../src/sounds/baaaa4.mp3"
+        ];
+
+        var tirageSon = soundsWin[Math.floor(Math.random() * soundsWin.length)];
+        document.getElementById("winSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("winSound");
+        x.play();
+    } else {
+        var soundsFail = [
+            "../src/sounds/fail.mp3"
+        ];
+        var tirageSon = soundsFail[Math.floor(Math.random() * soundsFail.length)];
+        document.getElementById("failSound").innerHTML = '<source src="' + tirageSon + '" type="audio/mpeg">';
+
+        var x = document.getElementById("failSound");
+        x.play();
+    }
+
+    if (tours === 0) {
+        var x = document.getElementById("sheepSound");
+        x.play();
+    }
 }
 
 function colorButton() {
-    document.getElementById('boutonGenererGrille').style.backgroundColor="373b3d";
+    document.getElementById('boutonGenererGrille').style.backgroundColor = "373b3d";
 }
 
 function uncolorButton() {
-    document.getElementById('boutonGenererGrille').style.backgroundColor="757575";
+    document.getElementById('boutonGenererGrille').style.backgroundColor = "757575";
 }
 
+function colorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "757575";
+}
+
+function uncolorButtonRules() {
+    document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
+}
+
+function launchFadeOutTexte() {
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.add('fadeOut');
+    animTexte.classList.remove('reset');
+}
+
+function launchFadeInTexte() {
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.add('fadeIn');
+    animTexte.classList.remove('reset');
+}
+
+function restartFadeInOutTexte() {
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.remove('fadeIn');
+    animTexte.classList.add('reset');
+
+    var animTexte = document.querySelector('.texte');
+    animTexte.classList.remove('fadeOut');
+    animTexte.classList.add('reset');
+}
+
+function launchFadeInLeftBox() {
+    var animTexte = document.querySelector('.leftsite');
+    animTexte.classList.add('fadeInLeft');
+}
+
+function launchFadeInRightBox() {
+    var animTexte = document.querySelector('.rightsite');
+    animTexte.classList.add('fadeInRight');
+}
+
+function launchFadeOutUpLeftBox() {
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.add('fadeOutUp');
+    animFadeOutWin.classList.remove('reset');
+}
+
+function launchFadeOutUpRightBox() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.add('fadeOutUp');
+    animFadeOutFail.classList.remove('reset');
+}
+
+function restartFadeOutUpBoxes() {
+    var animFadeOutFail = document.querySelector('.addMoutonsPerdus');
+    animFadeOutFail.classList.remove('fadeOutUp');
+    animFadeOutFail.classList.add('reset');
+
+    var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
+    animFadeOutWin.classList.remove('fadeOutUp');
+    animFadeOutWin.classList.add('reset');
+}
+
+// ----------------------------fin de partie et enregistrement des données--------------------
 function finDePartie() {
     if (tours === 0){
         //récupérer score final du joueur
