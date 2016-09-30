@@ -37,6 +37,7 @@ var countDownToZero = false; //statut du compte à rebours
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var tours = 30; //Nombre de tours restants
+var toursTraining = 5; //Nombre du tours d'entraînement restant
 var resultatJoueur = [];
 
 var running = false;
