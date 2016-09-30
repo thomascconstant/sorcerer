@@ -117,7 +117,10 @@ function goNew() {
     startTimer();
 
     //cacher les boutons de mise
-    document.getElementById("boutonsMise").style.display = "none";
+    launchFadeOutMise();
+    setTimeout(function eraseZoneMise() {
+        document.getElementById("boutonsMise").style.display = "none";
+    }, 500);
 }
 
 //récupérer mise
@@ -191,6 +194,7 @@ function activateMise() {
 
     //afficher boutons de mise
     document.getElementById("boutonsMise").style.display = "block";
+    launchFadeInMise();
 }
 
 function showMise() {
@@ -686,6 +690,7 @@ function addSheep() {
         //feedback visuel
         launchAnimateScoreMoutonsGagnes(); //le rechargement de l'animation se fait plus tard, lorsque la mise est récupérée pour laisser le temps à l'anim de se terminer
         launchFadeOutUpLeftBox();
+        restartFadeInOutMise();
         setTimeout(function eraseText() {
             document.getElementById("addMoutonsGagnes").style.display = "none";
         }, 2800);
@@ -727,6 +732,7 @@ function addSheep() {
         //feedback visuel
         launchAnimateScoreMoutonsPerdus(); //le rechargement de l'animation se fait plus tard, pour un goNew()
         launchFadeOutUpRightBox();
+        restartFadeInOutMise();
         setTimeout(function eraseText() {
             document.getElementById("addMoutonsPerdus").style.display = "none";
         }, 2800);
@@ -848,13 +854,13 @@ function launchFadeInTexte() {
 }
 
 function restartFadeInOutTexte() {
-    var animTexte = document.querySelector('.texte');
-    animTexte.classList.remove('fadeIn');
-    animTexte.classList.add('reset');
+    var animTexteIn = document.querySelector('.texte');
+    animTexteIn.classList.remove('fadeIn');
+    animTexteIn.classList.add('reset');
 
-    var animTexte = document.querySelector('.texte');
-    animTexte.classList.remove('fadeOut');
-    animTexte.classList.add('reset');
+    var animTexteOut = document.querySelector('.texte');
+    animTexteOut.classList.remove('fadeOut');
+    animTexteOut.classList.add('reset');
 }
 
 function launchFadeInLeftBox() {
@@ -887,6 +893,28 @@ function restartFadeOutUpBoxes() {
     var animFadeOutWin = document.querySelector('.addMoutonsGagnes');
     animFadeOutWin.classList.remove('fadeOutUp');
     animFadeOutWin.classList.add('reset');
+}
+
+function launchFadeOutMise() {
+    var animMise = document.querySelector('.zonemise');
+    animMise.classList.add('fadeOut');
+    animMise.classList.remove('reset');
+}
+
+function launchFadeInMise() {
+    var animMise = document.querySelector('.zonemise');
+    animMise.classList.add('fadeIn');
+    animMise.classList.remove('reset');
+}
+
+function restartFadeInOutMise() {
+    var animMiseIn = document.querySelector('.zonemise');
+    animMiseIn.classList.remove('fadeIn');
+    animMiseIn.classList.add('reset');
+
+    var animMiseOut = document.querySelector('.zonemise');
+    animMiseOut.classList.remove('fadeOut');
+    animMiseOut.classList.add('reset');
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
