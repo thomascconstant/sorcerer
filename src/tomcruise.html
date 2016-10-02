@@ -182,7 +182,7 @@ body {
 .messageFeedbackMise {
     background-color: #757575;
     color: #fafafa;
-    height: 2.3vw;
+    height: 5.2vw;
     font-size: 1.5vw;
     display: inline-block;
     width: 100%;
@@ -293,6 +293,15 @@ body {
     font-size: 3vw;
     width: 10vw;
     text-align: center;
+}
+
+.table, tr, td {
+    color: #212121;
+    font-size: 2vw;
+    padding: 0px;
+    margin: 0px;
+    border: 0px solid white;
+    border-collapse: collapse;
 }
 
 #imageMoutonGagne {
@@ -657,13 +666,13 @@ body {
             </div>
             <div class="messageFeedbackMise">
                 <div class='zonemise' id="boutonsMise" style="display:block;cursor:default">
-                    <div class="button" id="mise1" onclick="recupMise(1)">1</div>
-                    <div class="button" id="mise1" onclick="recupMise(2)">2</div>
-                    <div class="button" id="mise1" onclick="recupMise()">3</div>
-                    <div class="button" id="mise1" onclick="recupMise()">4</div>
-                    <div class="button" id="mise1" onclick="recupMise()">5</div>
-                    <div class="button" id="mise1" onclick="recupMise()">6</div>
-                    <div class="button" id="mise1" onclick="recupMise()">7</div>
+                    <div class="button" id="mise1" onmouseover="colorButtonMise(1)" onmouseout="uncolorButtonMise(1)" onclick="recupMise(1)">1</div>
+                    <div class="button" id="mise2" onmouseover="colorButtonMise(2)" onmouseout="uncolorButtonMise(2)" onclick="recupMise(2)">2</div>
+                    <div class="button" id="mise3" onmouseover="colorButtonMise(3)" onmouseout="uncolorButtonMise(3)" onclick="recupMise(3)">3</div>
+                    <div class="button" id="mise4" onmouseover="colorButtonMise(4)" onmouseout="uncolorButtonMise(4)" onclick="recupMise(4)">4</div>
+                    <div class="button" id="mise5" onmouseover="colorButtonMise(5)" onmouseout="uncolorButtonMise(5)" onclick="recupMise(5)">5</div>
+                    <div class="button" id="mise6" onmouseover="colorButtonMise(6)" onmouseout="uncolorButtonMise(6)" onclick="recupMise(6)">6</div>
+                    <div class="button" id="mise7" onmouseover="colorButtonMise(7)" onmouseout="uncolorButtonMise(7)" onclick="recupMise(7)">7</div>
 
                     <!--<input type="radio" name="mises" id="mise1" value="1" style="cursor:pointer" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
              <input type="radio" name="mises" id="mise2" value="2" style="cursor:pointer" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;

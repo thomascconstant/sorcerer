@@ -79,7 +79,7 @@ function accessMise() {
 //récupérer mise
 function recupMise(numeroMise) {
     mise = numeroMise;
-    console.log(mise);
+    console.log(mise + " de mise");
     /*if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
@@ -555,6 +555,20 @@ function colorButtonRules() {
 
 function uncolorButtonRules() {
     document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
+}
+
+function colorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function uncolorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "757575";
 }
 
 function launchFadeOutTexte() {
