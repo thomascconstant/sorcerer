@@ -72,7 +72,6 @@ function animate(){
         cells[i].style.backgroundColor = toHexColor(colorCurrent,colorCurrent,colorCurrent);
     }
     
-  
 }
 
 function init() {
@@ -128,8 +127,11 @@ function goNew() {
 }
 
 //récupérer mise
-function recupMise() {
-    if(document.getElementById('mise1').checked) {
+function recupMise(numeroMise) {
+    mise = numeroMise;
+    console.log(mise + " de mise");
+
+    /*if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
     } else if(document.getElementById('mise2').checked) {
@@ -144,7 +146,8 @@ function recupMise() {
         mise = 6;
     } else if(document.getElementById('mise7').checked) {
         mise = 7;
-    }
+    }*/
+
     //afficher mise
     showMise();
     
@@ -1084,6 +1087,21 @@ function colorButtonRules() {
 function uncolorButtonRules() {
     document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
 }
+
+function colorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function uncolorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "757575";
+}
+
 
 function launchFadeOutTexte() {
     var animTexte = document.querySelector('.texte');
