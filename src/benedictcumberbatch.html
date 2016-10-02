@@ -182,9 +182,10 @@ body {
 }
 
 .messageFeedbackMise {
-    background-color: #757575;
+    //background-color: #757575;
+    background-color: #F5F5F5;
     color: #fafafa;
-    height: 2.3vw;
+    height: 5.2vw;
     font-size: 1.5vw;
     display: inline-block;
     width: 100%;
@@ -670,19 +671,28 @@ body {
                 <div class="messageFeedback" id="affichageFeedback" style="display:block">Cliquez sur le bouton pour générer un plateau de jeu.</div>
             </div>
             <div class="messageFeedbackMise">
-                <div class='zonemise' id="boutonsMise" style="display:none">
-                    <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
+                <div class='zonemise' id="boutonsMise" style="display:none;cursor:default">
+                    <div class="button" id="mise1" onmouseover="colorButtonMise(1)" onmouseout="uncolorButtonMise(1)" onclick="recupMise(1)">1</div>
+                    <div class="button" id="mise2" onmouseover="colorButtonMise(2)" onmouseout="uncolorButtonMise(2)" onclick="recupMise(2)">2</div>
+                    <div class="button" id="mise3" onmouseover="colorButtonMise(3)" onmouseout="uncolorButtonMise(3)" onclick="recupMise(3)">3</div>
+                    <div class="button" id="mise4" onmouseover="colorButtonMise(4)" onmouseout="uncolorButtonMise(4)" onclick="recupMise(4)">4</div>
+                    <div class="button" id="mise5" onmouseover="colorButtonMise(5)" onmouseout="uncolorButtonMise(5)" onclick="recupMise(5)">5</div>
+                    <div class="button" id="mise6" onmouseover="colorButtonMise(6)" onmouseout="uncolorButtonMise(6)" onclick="recupMise(6)">6</div>
+                    <div class="button" id="mise7" onmouseover="colorButtonMise(7)" onmouseout="uncolorButtonMise(7)" onclick="recupMise(7)">7</div>
+
+                    <!-- <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()" />&nbsp; 4 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()" />&nbsp; 5 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()" />&nbsp; 6 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()" />&nbsp; 7
+                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()" />&nbsp; 7 -->
                 </div>
             </div>
         </div>
     </div>
-    <div class="overSite"><br />
+    <div class="overSite">
+        <br />
         <div class="leftsite" id="boxMoutonsGagnes" style="display:none">
             Moutons sauvés<br />
             <div id="imageMoutonGagne"></div> <div class="addMoutonsGagnes" id="addMoutonsGagnes" style="display:block"></div> <div class="compteurMoutonsGagnes" id="compteurMoutonsGagnes"></div>
@@ -705,11 +715,9 @@ body {
             </div>
         </div><br /><br />
     </div>
-
     <div class="fondtexte">
         <div class="centerize">
             <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>
-
             <div class="texte" id="affichageRegles" style="display:none">
                 <b>
                     Votre objectif est de remettre les cases du plateau de jeu dans l'ordre (en partant de 1).<br />

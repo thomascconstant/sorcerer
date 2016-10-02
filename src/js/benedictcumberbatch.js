@@ -42,6 +42,7 @@ var resultatJoueur = [];
 
 var running = false;
 var animationReset = false; //état de l'animation
+var fadeOutOver = false; //état animation fadeOut
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -117,15 +118,21 @@ function goNew() {
     startTimer();
 
     //cacher les boutons de mise
-    launchFadeOutMise();
+    /*launchFadeOutMise();
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "none";
-    }, 490);
+    }, 490);*/
 }
 
 //récupérer mise
-function recupMise() {
-    if(document.getElementById('mise1').checked) {
+function recupMise(numeroMise) {
+    mise = numeroMise;
+    console.log(mise + " de mise");
+
+    //recharger l'animation
+    restartAnimateScoreMoutons();
+
+    /*if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
     } else if(document.getElementById('mise2').checked) {
@@ -140,7 +147,8 @@ function recupMise() {
         mise = 6;
     } else if(document.getElementById('mise7').checked) {
         mise = 7;
-    }
+    }*/
+
     //afficher mise
     showMise();
 
@@ -171,8 +179,14 @@ function recupMise() {
     g_timer_coup_id = setInterval(timerCoups,1000);
     showGrid(true);
 
-    //recharger l'animation
-    restartAnimateScoreMoutons();
+    //cacher les boutons de mise
+    restartFadeInOutMise();
+    setTimeout(launchFadeOutMise(), 100);
+    setTimeout(function eraseZoneMise() {
+        document.getElementById("boutonsMise").style.display = "none";
+    }, 490);
+
+    //recharger l'animation des boites de moutons
     restartFadeOutUpBoxes();
 
 }
@@ -839,6 +853,20 @@ function uncolorButtonRules() {
     document.getElementById('boutonAfficherRegles').style.backgroundColor = "373b3d";
 }
 
+function colorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function uncolorButtonMise(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'mise' + x;
+
+    document.getElementById(name).style.backgroundColor = "757575";
+}
+
 function launchFadeOutTexte() {
     var animTexte = document.querySelector('.texte');
     animTexte.classList.add('fadeOut');
@@ -897,6 +925,7 @@ function launchFadeOutMise() {
     var animMise = document.querySelector('.zonemise');
     animMise.classList.add('fadeOut');
     animMise.classList.remove('reset');
+    fadeOutOver = true;
 }
 
 function launchFadeInMise() {
