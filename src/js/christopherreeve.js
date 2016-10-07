@@ -1220,6 +1220,12 @@ function finDePartie() {
         
         //renvoyer le joueur vers le hub avec popup
         setTimeout(function launchPopup() {
+            window.open("#popup1", '_self', false); //ouvre la popup
+            document.getElementById("popupTitre").innerHTML = "Votre partie est terminée.";
+            document.getElementById("popup").innerHTML = "Vous avez sauvé " + compteurMoutonsGagnes + " moutons !<br />" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !<br />" + "Votre score total pour ce jeu est de " + score + ".";
+        }, 2000);
+
+        /*setTimeout(function launchPopup() {
             var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             //var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
@@ -1229,28 +1235,8 @@ function finDePartie() {
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html", '_self', false);
             }
-        }, 2000);
+        }, 2000);*/
         
-        //créer le bouton
-        /*var boutton = document.createElement("input");
-        boutton.type = "button";
-        boutton.value = "Fin de partie.";
-        boutton.name = "FIN";
-        var results = function resultat(){
-            var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score +" Cliquez pour passer au jeu suivant.");
-            if (messageFinPartie===true) {
-                x = "Prototype en cours de développement, veuillez patienter.";
-                enregistrerDonnees(1,nomDuJeu + ";" + resultatJoueur);
-                var jeuSensoTermine = true;
-                localStorage.getItem("christopherreeve", jeuSensoTermine);
-           
-            } else {
-                x = "Ah, d'accord.";
-            }
-            document.getElementById("retourProto").innerHTML = x;
-        }
-        boutton.onclick = results;
-        document.body.appendChild(boutton);*/
     } else{
 
     }
