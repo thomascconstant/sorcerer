@@ -13,7 +13,9 @@ var colorTransitionSpeed = 0.1;
 var modePoussin = true;
 var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
+
 var modeTest = 3;
+var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var score = 0;
 var anim = 0;
@@ -110,29 +112,31 @@ function go() {
 }
 
 function goNew() {
-    //lancer tours de test
-    while (modeTest <= 3) {
-        launchModeTest();
-        modeTest++;
+    if (modeFinDePartie === false) {
+        //lancer tours de test
+        while (modeTest <= 3) {
+            launchModeTest();
+            modeTest++;
+        }
+
+        casesFound = [];
+        casesNotFound = [];
+        casesClicked = [];
+        document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+        document.getElementById("affichageFeedback").innerHTML = "Les cases vont clignoter dans...";
+        //document.getElementById("affichageFeedback").style.display = "none"; 
+
+        makeGameNoColors(width, nbCells, 1 - difficulty); //afficher la grille sans cases à trouver
+
+        startTimer();
+
+        //cacher les boutons de mise
+        launchFadeOutMise();
+        setTimeout(function eraseZoneMise() {
+            document.getElementById("boutonsMise").style.display = "none";
+        }, 490);
+        document.getElementById("mise").innerHTML = mise;
     }
-
-    casesFound = [];
-    casesNotFound = [];
-    casesClicked = [];
-    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
-    document.getElementById("affichageFeedback").innerHTML = "Les cases vont clignoter dans...";
-    //document.getElementById("affichageFeedback").style.display = "none"; 
-
-    makeGameNoColors(width, nbCells, 1 - difficulty); //afficher la grille sans cases à trouver
-
-    startTimer();
-
-    //cacher les boutons de mise
-    launchFadeOutMise();
-    setTimeout(function eraseZoneMise() {
-        document.getElementById("boutonsMise").style.display = "none";
-    }, 490);
-    document.getElementById("mise").innerHTML = mise;
 }
 
 //récupérer mise
@@ -454,6 +458,7 @@ function win() {
             
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
+                modeFinDePartie = true;
                 finDePartie();
             } else {
                 //makeGame(width,nbCells,1-difficulty);
@@ -578,6 +583,7 @@ function fail(){
             makeGame(width,nbCells,1-difficulty);*/
            
         } else {
+            modeFinDePartie = true;
             finDePartie();
         }
 
@@ -1212,15 +1218,18 @@ function finDePartie() {
         var jeuSensoTermine = true;
         localStorage.setItem("christopherreeve", jeuSensoTermine);
         
-        //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+        //renvoyer le joueur vers le hub avec popup
+        setTimeout(function launchPopup() {
+            var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+            //var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
                 // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
+                window.open("hub.html", '_self', false);
             } else {
                 // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
+                window.open("hub.html", '_self', false);
             }
+        }, 2000);
         
         //créer le bouton
         /*var boutton = document.createElement("input");
