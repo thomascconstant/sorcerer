@@ -359,8 +359,6 @@ function win() {
             actionDeJeu++;
             
             addSheep(); //faire apparaître un mouton sur la page
-
-            moutonsGagnes = 0;
             
             afficherCasesGagnantes();
             
@@ -376,10 +374,11 @@ function win() {
             console.log(nbCasesToFind + "to go");
             
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
             //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
             
-            //Un tour de moins, reset de la mise
+            //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
+            moutonsGagnes = 0;
             tours--;
             mise = "?";
             document.getElementById("tours").innerHTML = tours;
@@ -471,8 +470,6 @@ function fail(){
         afficherCasesGagnantes();
                 
         addSheep(); //faire apparaître un mouton sur la page
-
-        moutonsPerdus = 0;
         
         //message de feedback 
         if (mise === 1) {
@@ -484,10 +481,11 @@ function fail(){
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + score + ";" + winState + ";" + "\n";
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
         
-        //Un tour de moins, reset de la mise
+        //Un tour de moins, reset de la mise, et du nbre de moutons perdus
+        moutonsPerdus = 0;
         tours--;
         mise = "?";
         document.getElementById("tours").innerHTML = tours;
@@ -1193,7 +1191,7 @@ function finDePartie() {
         localStorage.setItem("christopherreeve", jeuSensoTermine);
         
         //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+        var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
                 // open it in a new window / tab (depends on browser setting)
                 window.open("hub.html",'_self',false);
