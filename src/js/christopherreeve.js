@@ -11,6 +11,7 @@ var colorTransitionSpeed = 0.1;
 var modePoussin = true;
 var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
+var modeTest = 3;
 
 var score = 0;
 var anim = 0;
@@ -107,6 +108,12 @@ function go() {
 }
 
 function goNew() {
+    //lancer tours de test
+    while (modeTest <= 3) {
+        launchModeTest();
+        modeTest++;
+    }
+
     casesFound = [];
     casesNotFound = [];
     casesClicked = [];
@@ -1175,6 +1182,11 @@ function restartFadeInOutMise() {
     var animMiseOut = document.querySelector('.zonemise');
     animMiseOut.classList.remove('fadeOut');
     animMiseOut.classList.add('reset');
+}
+
+// ----------------------------mode test en début de partie--------------------
+function launchModeTest() {
+
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
