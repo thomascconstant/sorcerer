@@ -60,26 +60,25 @@ function init(){
 
 function accessMise() {
     if (modeFinDePartie === false) {
+        //afficher boutons mise
+        setTimeout(function eraseZoneMise() {
+            document.getElementById("boutonsMise").style.display = "block";
+        }, 10);
+        launchFadeInMise();
 
-    //afficher boutons mise
-    setTimeout(function eraseZoneMise() {
-        document.getElementById("boutonsMise").style.display = "block";
-    }, 10);
-    launchFadeInMise();
-
-    //déverrouiller boutons de sélection de mise
-    document.getElementById("mise1").disabled = false;
-    document.getElementById("mise2").disabled = false;
-    document.getElementById("mise3").disabled = false;
-    document.getElementById("mise4").disabled = false;
-    document.getElementById("mise5").disabled = false;
-    document.getElementById("mise6").disabled = false;
-    document.getElementById("mise7").disabled = false;
+        //déverrouiller boutons de sélection de mise
+        document.getElementById("mise1").disabled = false;
+        document.getElementById("mise2").disabled = false;
+        document.getElementById("mise3").disabled = false;
+        document.getElementById("mise4").disabled = false;
+        document.getElementById("mise5").disabled = false;
+        document.getElementById("mise6").disabled = false;
+        document.getElementById("mise7").disabled = false;
     
-    //reset affichage mise
-    document.getElementById("mise").innerHTML = mise;
+        //reset affichage mise
+        document.getElementById("mise").innerHTML = mise;
 
-    run();
+        run();
     }
 }
 

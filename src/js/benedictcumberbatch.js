@@ -14,6 +14,8 @@ var modePoussin = true;
 var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
+var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
+
 var score = 0;
 var anim = 0;
 var colorTarget =  0;
@@ -106,24 +108,26 @@ function go() {
 }
 
 function goNew() {
-    casesFound = [];
-    document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
-    document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu va apparaître dans...";
+    if (modeFinDePartie === false) {
+        casesFound = [];
+        document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
+        document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu va apparaître dans...";
 
-    //changer affichage mise
-    mise = '?';
-    document.getElementById("mise").innerHTML = mise;
-    //document.getElementById("affichageFeedback").style.display = "none";
+        //changer affichage mise
+        mise = '?';
+        document.getElementById("mise").innerHTML = mise;
+        //document.getElementById("affichageFeedback").style.display = "none";
 
-    makeGame(width, nbCells, 0); //afficher la grille sans cases à trouver
+        makeGame(width, nbCells, 0); //afficher la grille sans cases à trouver
 
-    startTimer();
+        startTimer();
 
-    //cacher les boutons de mise
-    /*launchFadeOutMise();
-    setTimeout(function eraseZoneMise() {
-        document.getElementById("boutonsMise").style.display = "none";
-    }, 490);*/
+        //cacher les boutons de mise
+        /*launchFadeOutMise();
+        setTimeout(function eraseZoneMise() {
+            document.getElementById("boutonsMise").style.display = "none";
+        }, 490);*/
+    }
 }
 
 //récupérer mise
@@ -282,6 +286,7 @@ function win(ijFind){
 
             //lancer nouveau jeu sauf si plus de tours
             if (tours === 0 && miseValide === false) {
+                modeFinDePartie = true;
                 finDePartie();
             } else {
                 //makeGame(width,nbCells,1-difficulty);
@@ -341,6 +346,7 @@ function fail(){
             document.getElementById("boutonGenererGrille").style.visibility = "visible";
 
         } else {
+            modeFinDePartie = true;
             finDePartie();
         }
 
@@ -965,15 +971,18 @@ function finDePartie() {
         var jeuLogicTermine = true;
         localStorage.setItem("benedictcumberbatch", jeuLogicTermine);
 
-        //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé "+ compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche "+ compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+        //renvoyer le joueur vers le hub avec popup
+        setTimeout(function launchPopup() {
+            var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+            //var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
             if (messageFinPartie === true) {
                 // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
+                window.open("hub.html", '_self', false);
             } else {
                 // open it in a new window / tab (depends on browser setting)
-                window.open("hub.html",'_self',false);
+                window.open("hub.html", '_self', false);
             }
+        }, 2000);
 
         //créer le bouton
         /*var boutton = document.createElement("input");
