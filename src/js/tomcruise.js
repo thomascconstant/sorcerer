@@ -281,7 +281,7 @@ function stop() {
     tours--;
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";"+ gameSpeed + ";" + score + ";" + winState + ";" + "\n";
+    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
     console.log(resultatJoueur + "résultats");
     console.log(winState);
     //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
@@ -661,7 +661,7 @@ function finDePartie() {
         localStorage.setItem("tomcruise", jeuMotriceTermine);
 
         //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Votre score est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+        var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
         if (messageFinPartie === true) {
             // open it in a new window / tab (depends on browser setting)
             window.open("hub.html", '_self', false);
