@@ -31,6 +31,8 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
+var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
+
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
@@ -57,6 +59,8 @@ function init(){
 }
 
 function accessMise() {
+    if (modeFinDePartie === false) {
+
     //afficher boutons mise
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "block";
@@ -76,6 +80,7 @@ function accessMise() {
     document.getElementById("mise").innerHTML = mise;
 
     run();
+    }
 }
 
 //récupérer mise
@@ -309,6 +314,7 @@ function stop() {
     hideTarget = true;
     document.getElementById("boutonLancerBarre").disabled = false;
     } else {
+        modeFinDePartie = true;
         finDePartie();
     }
     changeTexteBouton();
@@ -670,16 +676,19 @@ function finDePartie() {
         var jeuMotriceTermine = true;
         localStorage.setItem("tomcruise", jeuMotriceTermine);
 
-        //renvoyer le joueur vers le hub
-        var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
-        if (messageFinPartie === true) {
-            // open it in a new window / tab (depends on browser setting)
-            window.open("hub.html", '_self', false);
-        } else {
-            // open it in a new window / tab (depends on browser setting)
-            window.open("hub.html", '_self', false);
-        }
-
+        //renvoyer le joueur vers le hub avec popup
+        setTimeout(function launchPopup() {
+            var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+            //var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
+            if (messageFinPartie === true) {
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html", '_self', false);
+            } else {
+                // open it in a new window / tab (depends on browser setting)
+                window.open("hub.html", '_self', false);
+            }
+        }, 2000);
+        
         //créer le bouton
         /*var boutton = document.createElement("input");
         boutton.type = "button";
