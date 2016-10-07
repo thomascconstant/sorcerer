@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
     <title>Sorcerer</title>
 	
@@ -59,7 +59,7 @@ body {
     background-color: #03A9F4; 
     color: #000000;
     position: absolute;
-    text-align:center; 
+    text-align: center; 
     padding: auto;   
     margin: auto;
     width: 100%;
@@ -88,7 +88,7 @@ body {
     font-family: 'Uncial Antiqua', cursive;                                             
     color: #fafafa;
     text-align:left; 
-    font-size: 1.5vw;
+    font-size: 1.2vw;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
@@ -98,7 +98,7 @@ body {
     font-family: 'Raleway', sans-serif;                                            
     color: #fafafa;
     text-align:left;
-    font-size: 1.5vw;
+    font-size: 1.1vw;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
@@ -114,6 +114,12 @@ body {
     font-weight: bold;
 }
 	
+.centerize {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+	
 .button {
     background-color: #757575;
     font-family: 'Uncial Antiqua', cursive;
@@ -126,6 +132,78 @@ body {
     font-size: 1vw;
     margin: 1vw;
     cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.button::after {
+    content: "";
+    border-radius: 5px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.button:hover {
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
+}
+
+.button:hover::after {
+    opacity: 1;
+}
+
+.buttonRegles {
+    background-color: #373b3d;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin: 1vw;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.buttonRegles::after {
+    content: "";
+    border-radius: 5px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.buttonRegles:hover {
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
+}
+
+.buttonRegles:hover::after {
+    opacity: 1;
 }
 
 .big {
@@ -139,43 +217,57 @@ body {
 </head>
 
 <body onload="feedbackScore(),ambianceSonore(),afficherResults()">
-
     <div class="fondtexte">
         <p class="textetitre" align="center">L'antre du Sorcier</p>
-        <div class="texte" align="center">Entre deux épreuves, le Sorcier vous reçoit dans son salon.<br/>
-		« Installez-vous près de la cheminée et prenez un instant pour penser à vos actions... » Le Sorcier laissa échapper un petit rire moqueur.<br/>
-		<b>Vos résultats pour les différents jeux s'affichent ici.<br/>
-                    Pensez en effet aux moutons que vous avez pu sauver... et à ceux que vous avez condamnés.</b></div><br/>
-    
-		<div class='zonefeedback'>
-                    <div class="textescore" style="display:none" id="affichageTom">Votre score pour le jeu d'adresse est de :</div>
-                        <div class="texteresults" style="display:none" id="resultTom"></div>	
-                    <div class="textescore" style="display:none" id="affichageChristopher">Votre score pour le jeu de perception visuelle est de :</div>
-			<div class="texteresults" style="display:none" id="resultChristopher"></div>
-                    <div class="textescore" style="display:none" id="affichageBenedict">Votre score pour le jeu de déduction est de :</div>
-			<div class="texteresults" style="display:none" id="resultBenedict"></div><br/>
+        <div class="texte" align="center">
+            Entre deux épreuves, le Sorcier vous reçoit dans son salon.<br />
+            « Installez-vous près de la cheminée et prenez un instant pour penser à vos actions... », dit-il en souriant.<br />
+            <b>
+                Vos résultats pour les différents jeux s'affichent ici.<br />
+                Pensez en effet aux moutons que vous avez pu sauver... et à ceux que vous avez condamnés.
+            </b>
+        </div><br />
 
-    <div class="zonebutton">
-        <button class="button" type="button" id="commencerJeu" value="disable" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="lancerJeu()">Poursuivre l'aventure !</button>
-    </div></div></div>
-    
-    <div><audio loop id="ambientSound">
+        <div class='zonefeedback'>
+            <p>
+                <div class="textescore" style="display:none" id="resultTom"></div>
+                <div class="texteresults" style="display:none" id="resultTomSauves"></div>
+                <div class="texteresults" style="display:none" id="resultTomPerdus"></div>
+
+                <div class="textescore" style="display:none" id="resultChristopher"></div>
+                <div class="texteresults" style="display:none" id="resultChristopherSauves"></div>
+                <div class="texteresults" style="display:none" id="resultChristopherPerdus"></div>
+
+                <div class="textescore" style="display:none" id="resultBenedict"></div>
+                <div class="texteresults" style="display:none" id="resultBenedictSauves"></div>
+                <div class="texteresults" style="display:none" id="resultBenedictPerdus"></div>
+            </p>
+            <div class="zonebutton">
+                <button class="button" type="button" id="commencerJeu" value="disable" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="lancerJeu()">Poursuivre l'aventure !</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <audio loop id="ambientSound">
             <source src="sounds/feu.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
-	</audio>
+        </audio>
     </div>
-	
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-<script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='https://www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-</script>
-<script src="js/score.js"></script>
-<script src="js/main.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+        (function (b, o, i, l, e, r) {
+            b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+                    function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+            e = o.createElement(i); r = o.getElementsByTagName(i)[0];
+            e.src = 'https://www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e, r)
+        }(window, document, 'script', 'ga'));
+        ga('create', 'UA-XXXXX-X', 'auto'); ga('send', 'pageview');
+    </script>
+    <script src="js/score.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
 

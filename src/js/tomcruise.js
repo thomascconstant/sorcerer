@@ -3,6 +3,8 @@ var nomDuJeu = "Motrice";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
 var scoreJoueurTom = 0; //Score du joueur à renseigner en fin de session de jeu
+var moutonsSauvesJoueurTom = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
+var moutonsPerdusJoueurTom = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
 
 var barSpeed = 1; //Vitesse de la barre : pixels par frame
 var direction = 1; //direction actuelle du deplacement de la barre
@@ -13,7 +15,7 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
-var tours = 30; //Nombre de tours restants
+var tours = 3; //Nombre de tours restants
 var resultatJoueur = [];
 
 var winState = false; //statut du joueur, false pour perdant
@@ -653,7 +655,15 @@ function finDePartie() {
         //récupérer score final du joueur
         scoreJoueurTom = score;
         localStorage.scoreJoueurTom = scoreJoueurTom;
-        console.log(scoreJoueurTom);
+        console.log(scoreJoueurTom + " score général");
+
+        moutonsSauvesJoueurTom = compteurMoutonsGagnes;
+        localStorage.moutonsSauvesJoueurTom = moutonsSauvesJoueurTom;
+        console.log(moutonsSauvesJoueurTom + " moutons sauvés total");
+
+        moutonsPerdusJoueurTom = compteurMoutonsPerdus;
+        localStorage.moutonsPerdusJoueurTom = moutonsPerdusJoueurTom;
+        console.log(moutonsPerdusJoueurTom + " moutons perdus total");
 
         // enregistrer les données du joueur
         enregistrerDonnees(1, resultatJoueur);

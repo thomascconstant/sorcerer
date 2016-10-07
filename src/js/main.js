@@ -131,18 +131,24 @@ function afficherResults() {
     var jeuLogicTermine = localStorage.getItem("benedictcumberbatch");
 
     if (jeuMotriceTermine) {
-        document.getElementById("affichageTom").style.display = "block"; 
-        document.getElementById("resultTom").style.display = "block"; 
+        //document.getElementById("affichageTom").style.display = "block"; 
+        document.getElementById("resultTom").style.display = "block";
+        document.getElementById("resultTomSauves").style.display = "block";
+        document.getElementById("resultTomPerdus").style.display = "block";
     }
     
     if (jeuSensoTermine) {
-        document.getElementById("affichageChristopher").style.display = "block"; 
+        //document.getElementById("affichageChristopher").style.display = "block"; 
         document.getElementById("resultChristopher").style.display = "block";
+        document.getElementById("resultChristopherSauves").style.display = "block";
+        document.getElementById("resultChristopherPerdus").style.display = "block";
     }
     
     if (jeuLogicTermine) {
-        document.getElementById("affichageBenedict").style.display = "block"; 
+        //document.getElementById("affichageBenedict").style.display = "block"; 
         document.getElementById("resultBenedict").style.display = "block";
+        document.getElementById("resultBenedictSauves").style.display = "block";
+        document.getElementById("resultBenedictPerdus").style.display = "block";
     }
 }
 

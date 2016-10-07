@@ -1,13 +1,30 @@
 var scoreJeuChristopher = parseInt(localStorage.scoreJoueurChristopher);
+var moutonsSauvesJoueurChristopher = parseInt(localStorage.moutonsSauvesJoueurChristopher);
+var moutonsPerdusJoueurChristopher = parseInt(localStorage.moutonsPerdusJoueurChristopher);
+
 var scoreJeuTom = parseInt(localStorage.scoreJoueurTom);
+var moutonsSauvesJoueurTom = parseInt(localStorage.moutonsSauvesJoueurTom);
+var moutonsPerdusJoueurTom = parseInt(localStorage.moutonsPerdusJoueurTom);
+
 var scoreJeuBenedict = parseInt(localStorage.scoreJoueurBenedict);
+var moutonsSauvesJoueurBenedict = parseInt(localStorage.moutonsSauvesJoueurBenedict);
+var moutonsPerdusJoueurBenedict = parseInt(localStorage.moutonsPerdusJoueurBenedict);
 
 var scoreGlobal = scoreJeuChristopher + scoreJeuTom + scoreJeuBenedict;
 
 function feedbackScore () {
-    document.getElementById("resultTom").innerHTML = localStorage.scoreJoueurTom;
-    document.getElementById("resultChristopher").innerHTML = localStorage.scoreJoueurChristopher;
-    document.getElementById("resultBenedict").innerHTML = localStorage.scoreJoueurBenedict;
+    document.getElementById("resultTom").innerHTML = "Votre score pour le jeu d'adresse est de : " + localStorage.scoreJoueurTom;
+    document.getElementById("resultTomSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurTom + " moutons sauvés !";
+    document.getElementById("resultTomPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurTom + " moutons embrochés !";
+
+    document.getElementById("resultChristopher").innerHTML = "Votre score pour le jeu d'adresse est de : " + localStorage.scoreJoueurChristopher;
+    document.getElementById("resultChristopherSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurChristopher + " moutons sauvés !";
+    document.getElementById("resultChristopherPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurChristopher + " moutons embrochés !";
+
+    document.getElementById("resultBenedict").innerHTML = "Votre score pour le jeu d'adresse est de : " + localStorage.scoreJoueurBenedict;
+    document.getElementById("resultBenedictSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurBenedict + " moutons sauvés !";
+    document.getElementById("resultBenedictPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurBenedict + " moutons embrochés !";
+
 }
 
 function feedbackScoreGeneral () {

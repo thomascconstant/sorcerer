@@ -2,6 +2,8 @@ var nomDuJeu = "Sensoriel";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
 var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
+var moutonsSauvesJoueurChristopher = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
+var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
 var width = 300;
@@ -1195,7 +1197,15 @@ function finDePartie() {
         //récupérer score final du joueur
         scoreJoueurChristopher = score;
         localStorage.scoreJoueurChristopher = scoreJoueurChristopher;
-        console.log(scoreJoueurChristopher);
+        console.log(scoreJoueurChristopher + " score général");
+
+        moutonsSauvesJoueurChristopher = compteurMoutonsGagnes;
+        localStorage.moutonsSauvesJoueurChristopher = moutonsSauvesJoueurChristopher;
+        console.log(moutonsSauvesJoueurChristopher + " moutons sauvés total");
+
+        moutonsPerdusJoueurChristopher = compteurMoutonsPerdus;
+        localStorage.moutonsPerdusJoueurChristopher = moutonsPerdusJoueurChristopher;
+        console.log(moutonsPerdusJoueurChristopher + " moutons perdus total");
         
         // enregistrer les données du joueur
         enregistrerDonnees(1,resultatJoueur);

@@ -2,6 +2,8 @@ var nomDuJeu = "Logique2";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
 var scoreJoueurBenedict = 0; //Score du joueur à renseigner en fin de session de jeu
+var moutonsSauvesJoueurBenedict = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
+var moutonsPerdusJoueurBenedict = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
 
 var nbCells = 4;
 var width = 300;
@@ -948,7 +950,15 @@ function finDePartie() {
         //récupérer score final du joueur
         scoreJoueurBenedict = score;
         localStorage.scoreJoueurBenedict = scoreJoueurBenedict;
-        console.log(scoreJoueurBenedict);
+        console.log(scoreJoueurBenedict + " score général");
+
+        moutonsSauvesJoueurBenedict = compteurMoutonsGagnes;
+        localStorage.moutonsSauvesJoueurBenedict = moutonsSauvesJoueurBenedict;
+        console.log(moutonsSauvesJoueurBenedict + " moutons sauvés total");
+
+        moutonsPerdusJoueurBenedict = compteurMoutonsPerdus;
+        localStorage.moutonsPerdusJoueurBenedict = moutonsPerdusJoueurBenedict;
+        console.log(moutonsPerdusJoueurBenedict + " moutons perdus total");
 
         // enregistrer les données du joueur
         enregistrerDonnees(1,resultatJoueur);
