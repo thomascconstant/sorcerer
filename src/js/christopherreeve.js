@@ -87,18 +87,6 @@ function init() {
     //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
 
-    //verrouiller boutons de mise
-    document.getElementById("mise1").disabled = true;
-    document.getElementById("mise2").disabled = true;
-    document.getElementById("mise3").disabled = true;
-    document.getElementById("mise4").disabled = true;
-    document.getElementById("mise5").disabled = true;
-    document.getElementById("mise6").disabled = true;
-    document.getElementById("mise7").disabled = true;
-    
-    //makeGame(width,nbCells, difficulty);
-    //anim = setInterval(animate,20);
-
     //lancer tours de test
     launchModeTest();
 }
@@ -136,6 +124,10 @@ function goNew() {
             document.getElementById("boutonsMise").style.display = "none";
         }, 490);
         document.getElementById("mise").innerHTML = mise;
+
+        //activer les boutons de mise
+        unblockMise();
+
     }
 }
 
@@ -144,34 +136,8 @@ function recupMise(numeroMise) {
     mise = numeroMise;
     console.log(mise + " de mise");
 
-    /*if(document.getElementById('mise1').checked) {
-        //boutton de mise 1 est validé
-        mise = 1;
-    } else if(document.getElementById('mise2').checked) {
-        mise = 2;
-    } else if(document.getElementById('mise3').checked) {
-        mise = 3;
-    } else if(document.getElementById('mise4').checked) {
-        mise = 4;
-    } else if(document.getElementById('mise5').checked) {
-        mise = 5;
-    } else if(document.getElementById('mise6').checked) {
-        mise = 6;
-    } else if(document.getElementById('mise7').checked) {
-        mise = 7;
-    }*/
-
     //afficher mise
     showMise();
-    
-    //verrouiller boutons de mise
-    document.getElementById("mise1").disabled = true;
-    document.getElementById("mise2").disabled = true;
-    document.getElementById("mise3").disabled = true;
-    document.getElementById("mise4").disabled = true;
-    document.getElementById("mise5").disabled = true;
-    document.getElementById("mise6").disabled = true;
-    document.getElementById("mise7").disabled = true;
     
     //enregistrer mise dans csv
     //enregistrerDonnees(0, mise);
@@ -182,19 +148,43 @@ function recupMise(numeroMise) {
     //faire apparaître le compte à rebours et le lancer
     document.getElementById("affichageFeedback").innerHTML = "Les cases gagnantes vont s'afficher.";
     
+    //cacher les boutons de mise
+    setTimeout (function erazeMise() {
+        launchFadeOutMise();
+        }, 500);
+
+    setTimeout(function eraseZoneMise() {
+        document.getElementById("boutonsMise").style.display = "none";
+    }, 1000);
+
     results();
+
+    blockMise();
+}
+
+function blockMise() {
+    //verrouiller boutons de mise
+    document.getElementById("mise1").onclick = "";
+    document.getElementById("mise2").onclick = "";
+    document.getElementById("mise3").onclick = "";
+    document.getElementById("mise4").onclick = "";
+    document.getElementById("mise5").onclick = "";
+    document.getElementById("mise6").onclick = "";
+    document.getElementById("mise7").onclick = "";
+}
+
+function unblockMise() {
+    //déverrouiller boutons de sélection de mise
+    document.getElementById("mise1").onclick = function () { recupMise(1); };
+    document.getElementById("mise2").onclick = function () { recupMise(2); };
+    document.getElementById("mise3").onclick = function () { recupMise(3); };
+    document.getElementById("mise4").onclick = function () { recupMise(4); };
+    document.getElementById("mise5").onclick = function () { recupMise(5); };
+    document.getElementById("mise6").onclick = function () { recupMise(6); };
+    document.getElementById("mise7").onclick = function () { recupMise(7); };
 }
 
 function activateMise() {
-   //déverrouiller boutons de sélection de mise
-    document.getElementById("mise1").disabled = false;
-    document.getElementById("mise2").disabled = false;
-    document.getElementById("mise3").disabled = false;
-    document.getElementById("mise4").disabled = false;
-    document.getElementById("mise5").disabled = false;
-    document.getElementById("mise6").disabled = false;
-    document.getElementById("mise7").disabled = false;
-
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise pour valider votre sélection.";
@@ -210,16 +200,6 @@ function showMise() {
     document.getElementById("tours").innerHTML = tours;
     //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
-}
-
-function cleanMise() {
-    document.getElementById("mise1").checked = false;
-    document.getElementById("mise2").checked = false;
-    document.getElementById("mise3").checked = false;
-    document.getElementById("mise4").checked = false;
-    document.getElementById("mise5").checked = false;
-    document.getElementById("mise6").checked = false;
-    document.getElementById("mise7").checked = false;
 }
 
 function selectWin(ijFind) {
@@ -421,9 +401,6 @@ function win() {
             miseValide = false;
             countDownToZero = false;
 
-            //nettoyer historique des boutons mises
-            cleanMise();
-
             if (tours > 0) {
                 //faire apparaitre bouton pour générer la grille
                 document.getElementById("boutonGenererGrille").style.visibility = "visible";
@@ -516,9 +493,6 @@ function fail(){
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         miseValide = false;
         countDownToZero = false;
-
-        //nettoyer historique des boutons mises
-        cleanMise();
 
         if (tours > 0) {                       
             //faire apparaitre bouton pour générer la grille
