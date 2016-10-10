@@ -1,202 +1,245 @@
-<html>
+﻿<html>
 <head>
     <title>Sorcerer</title>
-    
-    <meta charset="utf-8">
 
+    <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     <script src="js/score.js"></script>
-    <script>function ambianceSonore() {
-                var x = document.getElementById("ambientSound");
-                x.play();
-            }
+    <script>
+        function ambianceSonore() {
+            var x = document.getElementById("ambientSound");
+            x.play();
+        }
+        function colorButton() {
+            document.getElementById('commencerJeu').style.backgroundColor = "373b3d";
+        }
+
+        function uncolorButton() {
+            document.getElementById('commencerJeu').style.backgroundColor = "03A9F4";
+        }
     </script>
+    <style>
+        #fin1 {
+            background-image: url("img/intro2fond.jpg");
+            background-color: #373b3d;
+        }
 
-<style>
+        #fin2 {
+            background-image: url("img/intro5fond.jpg");
+            background-color: #373b3d;
+        }
 
-#fin1 {
-  background-image: url("img/intro2fond.jpg");
-  background-color: #373b3d;
-}
+        #fin3 {
+            background-image: url("img/intro13fond.jpg");
+            background-color: #373b3d;
+        }
 
-#fin2 {
-  background-image: url("img/intro5fond.jpg");
-  background-color: #373b3d;
-}
+        #fin4 {
+            background-image: url("img/intro1Xfond.jpg");
+            background-color: #373b3d;
+        }
 
-#fin3 {
-  background-image: url("img/intro13fond.jpg");
-  background-color: #373b3d;
-}
+        .slide {
+            background-attachment: fixed;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            min-height: 100%;
+            background-repeat: no-repeat;
+            margin: 0px;
+            -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+            background-size: cover;
+        }
 
-#fin4 {
-  background-image: url("img/intro1Xfond.jpg");
-  background-color: #373b3d;
-}
+        body {
+            background-color: #373b3d;
+            font-family: Baskerville, 'Uncial Antiqua', cursive;
+            font-size: 1vw;
+            color: #fafafa;
+            margin: 0;
+        }
 
-.slide {
-  background-attachment: fixed;
-  width: 100%;
-  height: 100vh;
-  position: relative;
-  min-height: 100%;
-  background-repeat: no-repeat;
-  margin: 0px;
-  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-  background-size: cover;
-}
+        .hfill {
+            height: 45vh;
+        }
 
-body {                                                                                                   
-    background-color: #373b3d;                                                                    
-    font-family: Baskerville, 'Uncial Antiqua', cursive;                                                  
-    font-size: 1vw;                                                                          
-    color: #fafafa;                                                                            
-    margin: 0;                                                                                 
-}
+        .slidetitle {
+            width: 100%;
+            text-align: center;
+            font-size: +3em;
+            font-weight: bold;
+        }
 
-.hfill {
-    height: 45vh;
-}
+        .zonefeedback {
+            background-color: #03A9F4;
+            color: #000000;
+            position: absolute;
+            padding: auto;
+            margin: auto;
+            width: 100%;
+        }
 
-.slidetitle {
-    width: 100%; 
-    text-align:center; 
-    font-size: +3em;
-    font-weight:bold;
-}
+        .textetitre {
+            font-family: 'Uncial Antiqua', cursive;
+            color: #fafafa;
+            text-align: center;
+            font-size: 3.5vw;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.zonefeedback {
-    background-color: #03A9F4; 
-    color: #000000;
-    position: absolute;
-    padding: auto;   
-    margin: auto;
-    width: 100%;
-}
+        .texte {
+            font-family: 'Raleway', sans-serif;
+            color: #fafafa;
+            text-align: center;
+            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+            font-size: 2.5vw;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.textetitre {
-    font-family: 'Uncial Antiqua', cursive;                                                
-    color: #fafafa;
-    text-align:center; 
-    font-size: 3.5vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
+        .textepetit {
+            font-family: 'Raleway', sans-serif;
+            color: #fafafa;
+            text-align: center;
+            font-size: 1.1vw;
+            font-style: italic;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.texte {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #fafafa;
-    text-align:center; 
-    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-    font-size: 2.5vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
+        .textelien {
+            font-family: 'Raleway', sans-serif;
+            color: #fafafa;
+            text-align: center;
+            font-size: 1.1vw;
+            font-style: italic;
+            text-decoration: underline;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.textepetit {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #fafafa;
-    text-align:center; 
-    font-size: 1.1vw;
-    font-style: italic;
-    font-variant: normal;
-    font-weight: bold;
-}
+        .textepurewhite {
+            font-family: 'Raleway', sans-serif;
+            color: #FFFFFF;
+            text-align: center;
+            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+            font-size: 2vw;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.textelien {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #fafafa;
-    text-align:center; 
-    font-size: 1.1vw;
-    font-style: italic;
-    text-decoration: underline;
-    font-variant: normal;
-    font-weight: bold;
-}
+        .textepureblack {
+            font-family: 'Raleway', sans-serif;
+            color: #212121;
+            text-align: center;
+            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+            font-size: 2vw;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: bold;
+        }
 
-.textepurewhite {
-    font-family: 'Raleway', sans-serif;                                               
-    color: #FFFFFF;
-    text-align:center; 
-    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-    font-size: 2vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
+        .button {
+            background-color: #757575;
+            font-family: 'Raleway', sans-serif;
+            border: none;
+            color: white;
+            padding: 1vw;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1vw;
+            margin: 1vw;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
 
-.textepureblack {
-    font-family: 'Raleway', sans-serif;                                                 
-    color: #212121;
-    text-align:center;
-    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-    font-size: 2vw;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: bold;
-}
+            .button::after {
+                content: "";
+                border-radius: 5px;
+                position: absolute;
+                z-index: -1;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
 
-</style>
+            .button:hover {
+                -webkit-transform: scale(1.25, 1.25);
+                transform: scale(1.25, 1.25);
+            }
+
+                .button:hover::after {
+                    opacity: 1;
+                }
+    </style>
 </head>
-<body onload = "feedbackScoreGeneral(),ambianceSonore()">
-
-	<div class="slide"  style="background-position: 0% 0px;">
+<body onload="feedbackScoreGeneral(),ambianceSonore()">
+    <div class="slide" style="background-position: 0% 0px;">
         <div class="hfill"> &nbsp;</div>
         <div class="slidetitle">
-            <a class="texte">« Vous avez passé les trois épreuves. Je vais être privé de dessert. »<br/>Le Sorcier vous raccompagne à l’entrée de son antre...</a><br/>
-        <div class="zonefeedback"><a class="textepetit">Utilisez la roulette de votre souris ou appuyez sur la flèche bas pour faire défiler la page.</a></div>
+            <a class="texte">« Vous avez passé les trois épreuves. Je vais être privé de dessert. »<br />Le Sorcier vous raccompagne à l’entrée de son antre...</a><br />
+            <div class="zonefeedback"><a class="textepetit">Utilisez la roulette de votre souris ou appuyez sur la flèche bas pour faire défiler la page.</a></div>
         </div>
     </div>
-	
+
     <div class="slide" id="fin1" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-            <a class="texte">« Je transmettrai vos résultats à la Reine par pigeon à la première heure.<br/>Du balai, Super Berger ! », ajouta t-il avant de vous laissez prendre le chemin du château.</a>
-	</div>
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+            <a class="texte">« Je transmettrai vos résultats à la Reine par pigeon à la première heure.<br />Du balai, Super Berger ! », ajouta t-il avant de vous laissez prendre le chemin du château.</a>
+        </div>
     </div>
-
     <div class="slide" id="fin2" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Vous faites face à la Reine.<br/>Elle tient dans ses mains le parchemin décrivant le résultat de vos aventures.</a>
-	</div>
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+            <a class="texte">Vous faites face à la Reine.<br />Elle tient dans ses mains le parchemin décrivant le résultat de vos aventures.</a>
+        </div>
     </div>
-
     <div class="slide" id="fin3" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte" id="feedbacks"></a>
-	</div>
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+            <a class="texte" id="feedbacks"></a>
+        </div>
     </div>
-
     <div class="slide" id="fin4" style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="texte">Sur ces mots, vous quittez le château. Mais ne partez pas trop loin...<br/><br/>Le bruit court que la Reine a rendez-vous ce soir avec le Sorcier,<br/>pour une nouvelle partie de poker.</a>
-	</div>
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+            <a class="texte">Sur ces mots, vous quittez le château. Mais ne partez pas trop loin...<br /><br />Le bruit court que la Reine a rendez-vous ce soir avec le Sorcier,<br />pour une nouvelle partie de poker.</a>
+        </div>
+    </div>
+    <div class="slide" style="background-position: 0% 0px;">
+        <div class="hfill"> &nbsp;</div>
+        <div class="slidetitle">
+            <a class="textetitre">FIN</a><br />
+            <div class="zonebutton">
+                <button class="button" type="button" id="commencerJeu" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="parent.location='credits.html'">Crédits du jeu</button>
+            </div>
+        </div>
     </div>
 
-    <div class="slide"  style="background-position: 0% 0px;">
-	<div class="hfill"> &nbsp;</div>
-	<div class="slidetitle">
-		<a class="textetitre">FIN</a><br/>
-                <div class="zonefeedback"><!--<a class="textelien" onclick="parent.location='index.html'" style="cursor:pointer">Pour recommencer à jouer, cliquez ici.</a><br/>--><a class="textelien" onclick="parent.location='credits.html'" style="cursor:pointer">Crédits du jeu</a></div>
-	</div>
-    </div>
-    
-    <div><audio id="ambientSound">
+    <div>
+        <audio id="ambientSound">
             <source src="sounds/end.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
-	</audio>
+        </audio>
     </div>
-
 </body>
 </html>
