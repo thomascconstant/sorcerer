@@ -31,6 +31,10 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
+var modeTest = true;
+var activateModeTest = false; //Vérifier si mode test est activé
+var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
+var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -55,7 +59,8 @@ function init(){
     //afficher mise
     showMise();
     
-    //testFile(document.getElementById("res"));
+    //lancer tours de test
+    launchModeTest();
 }
 
 function accessMise() {
@@ -134,6 +139,8 @@ function recupMise(numeroMise) {
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
     hideTarget = false;
+
+    document.getElementById("mise").innerHTML = mise;
 
     changeTexteBouton();
 
@@ -258,8 +265,7 @@ function stop() {
         document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";    
         //document.getElementById("res").innerHTML = "Vous avez sauvé " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackPositif();
-    }
-    else {
+    } else {
         winState = false;
 
         moutonsPerdus += mise;
@@ -286,11 +292,10 @@ function stop() {
     //Un tour de moins
     tours--;
     
-    //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
-    console.log(resultatJoueur + "résultats");
-    console.log(winState);
-    //enregistrerDonnees(1, mise + ";" + tours + ";" + gameSpeed + ";" + score + ";" + res );
+    if (modeTest === false) {
+        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+    }
     
     //mise a jour de la difficulte selon le modele
     var nextDiff = diffModel.nextDifficulty(res);
@@ -307,15 +312,23 @@ function stop() {
     //nettoyer historique des boutons mises
     cleanMise();
 
-    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
-    if (tours > 0) {
     miseValide = false;
     hideTarget = true;
-    document.getElementById("boutonLancerBarre").disabled = false;
-    } else {
+
+    //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
+    if (tours > 0) {
+        document.getElementById("boutonLancerBarre").disabled = false;
+
+    } else if (tours === 0 && modeTest === true) {
+        hideButton()
+        launchModeTest();
+
+    } else if (tours === 0 && modeTest === false) {
         modeFinDePartie = true;
         finDePartie();
+
     }
+
     changeTexteBouton();
 }
 
@@ -342,12 +355,14 @@ function run() {
     
     if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
-    //document.getElementById("target").style.left = (Math.random()*30+35)+'%';
+        //document.getElementById("target").style.left = (Math.random()*30+35)+'%';
     }
+
     //On calcule la frequence d'update de l'anim et le nombre de pixel de deplacement par frame
     //pour avoir l'anim la plus fluide possible tout en atteignant des hautes vitesses
     //sinon le max c'est un pixel par milliseconde, c'est pas tant que ca
     console.log("new speed :" + gameSpeed);
+
     if(tours > 0) {
 
         var pixelsPerSec = 40 * (gameSpeed + 0.5) + 0.001;
@@ -652,6 +667,64 @@ function restartFadeInOutMise() {
     var animMiseOut = document.querySelector('.zonemise');
     animMiseOut.classList.remove('fadeOut');
     animMiseOut.classList.add('reset');
+}
+
+// ----------------------------mode test en début de partie--------------------
+function launchModeTest() {
+    if (activateModeTest === false) {
+        console.log("test mode activated");
+
+        //modifier affichage contenu popup
+        document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
+        document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
+
+        //modifier affichage variables de jeu
+        tours = toursTest;
+        document.getElementById("tours").innerHTML = tours;
+
+        window.open("#popup2", '_self', false); //ouvre la popup
+
+        activateModeTest = true;
+    }
+
+    if (tours === 0) {
+        //modifier affichage contenu popup
+        document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
+        document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
+
+        setTimeout(function launchPopup() {
+            //restart game
+            score = 0;
+            gameSpeed = 1;
+            tours = toursDeJeu;
+            moutonsGagnes = 0;
+            moutonsPerdus = 0;
+            compteurMoutonsGagnes = 0;
+            compteurMoutonsPerdus = 0;
+            difficulty = 0;
+
+            barSpeed = 1; //Vitesse de la barre : pixels par frame
+            direction = 1; //direction actuelle du deplacement de la barre
+            anim = 0; //Handle du timer d'anim de la barre
+            running = false; //Si la barre est en cours d'anim
+
+            //mise à zéro interface
+            document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+            document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+            document.getElementById("tours").innerHTML = tours;
+            document.getElementById("mise").innerHTML = mise;
+
+            //faire apparaitre bouton pour générer la grille
+            document.getElementById("boutonLancerBarre").style.visibility = "visible";
+
+            window.open("#popup2", '_self', false); //ouvre la popup
+
+        }, 1500);
+
+        modeTest = false;
+        console.log("test mode desactivated");
+
+    }
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
