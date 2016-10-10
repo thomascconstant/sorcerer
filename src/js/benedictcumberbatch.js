@@ -14,6 +14,10 @@ var modePoussin = true;
 var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
+var modeTest = true;
+var activateModeTest = false; //Vérifier si mode test est activé
+var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
+var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var score = 0;
@@ -89,8 +93,8 @@ function init() {
     document.getElementById("mise6").disabled = true;
     document.getElementById("mise7").disabled = true;
 
-    //makeGame(width,nbCells, difficulty);
-    //anim = setInterval(animate,20);
+    //lancer tours de test
+    launchModeTest();
 }
 
 function go() {
@@ -260,9 +264,10 @@ function win(ijFind){
 
             //console.log(nbCasesToFind + "to go");
 
-            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
-            //enregistrerDonnees(1, mise + ";" + tours + ";" + difficulty + ";" + score + ";" + winState );
+            if (modeTest === false) {
+                //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            }
 
             //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
             moutonsGagnes = 0;
@@ -281,15 +286,15 @@ function win(ijFind){
             //nettoyer historique des boutons mises
             cleanMise();
 
-            //faire apparaitre bouton pour générer la grille
-            document.getElementById("boutonGenererGrille").style.visibility = "visible";
-
             //lancer nouveau jeu sauf si plus de tours
-            if (tours === 0 && miseValide === false) {
+            if (tours > 0) {
+                //faire apparaitre bouton pour générer la grille
+                document.getElementById("boutonGenererGrille").style.visibility = "visible";
+            } else if (tours === 0 && miseValide === false) {
                 modeFinDePartie = true;
                 finDePartie();
-            } else {
-                //makeGame(width,nbCells,1-difficulty);
+            } else if (tours === 0 && modeTest === true) {
+                launchModeTest();
             }
 
         }
@@ -334,18 +339,21 @@ function fail(){
 
         difficulty = Math.max(0,difficulty-0.1);
 
+        miseValide = false;
+        countDownToZero = false;
+
+        //nettoyer historique des boutons mises
+        cleanMise();
+
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
         if (tours > 0) {
-            miseValide = false;
-            countDownToZero = false;
-
-            //nettoyer historique des boutons mises
-            cleanMise();
-
             //faire apparaitre bouton pour générer la grille
             document.getElementById("boutonGenererGrille").style.visibility = "visible";
 
-        } else {
+        } else if (tours === 0 && modeTest === true) {                       
+            launchModeTest();
+
+        } else if (tours === 0 && modeTest === false) {
             modeFinDePartie = true;
             finDePartie();
         }
@@ -948,6 +956,66 @@ function restartFadeInOutMise() {
     var animMiseOut = document.querySelector('.zonemise');
     animMiseOut.classList.remove('fadeOut');
     animMiseOut.classList.add('reset');
+}
+
+// ----------------------------mode test en début de partie--------------------
+function launchModeTest() {
+    if (activateModeTest === false) {
+        console.log("test mode activated");
+
+        //modifier affichage contenu popup
+        document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
+        document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
+
+        //modifier affichage variables de jeu
+        tours = toursTest;
+        document.getElementById("tours").innerHTML = tours;
+
+        window.open("#popup2", '_self', false); //ouvre la popup
+
+        activateModeTest = true;
+    }
+
+    if (tours === 0) {
+        //modifier affichage contenu popup
+        document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
+        document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
+
+        setTimeout(function launchPopup() {
+            //restart game
+            score = 0;
+            tours = toursDeJeu;
+            moutonsGagnes = 0;
+            moutonsPerdus = 0;
+            compteurMoutonsGagnes = 0;
+            compteurMoutonsPerdus = 0;
+            difficulty = 0;
+
+            nbCells = 4;
+            width = 300;
+
+            colorTransitionSpeed = 0.1;
+            modePoussin = true;
+            modeNormal = false;
+            modeViolent = false;
+
+            //mise à zéro interface
+            document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+            document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+            document.getElementById("tours").innerHTML = tours;
+            document.getElementById("mise").innerHTML = mise;
+
+            //faire apparaitre bouton pour générer la grille
+            document.getElementById("boutonGenererGrille").style.visibility = "visible";
+
+            window.open("#popup2", '_self', false); //ouvre la popup
+
+        }, 1500);
+
+        modeTest = false;
+        console.log("test mode desactivated");
+
+    }
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
