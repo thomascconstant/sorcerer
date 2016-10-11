@@ -38,11 +38,11 @@ var diffModel = {
 
     curve: [0.3,0.35,0.3,0.5,0.55,0.5],
     currentStep: 0,
-    mode:0, ///0:courbe,1:dda,2:random
+    mode:0, //0:courbe,1:dda,2:random
     currentDiff: 0.2,
     setCurrentDiff: function(d) {this.currentDiff = d},
-    setMode:function(m){this.mode = m},
-    setStepInCurve:function(s){this.currentStep=s},
+    setMode:function(m) {this.mode = m},
+    setStepInCurve:function(s) {this.currentStep=s},
 
     //win : resultat du dernier coup win / loss
     nextDifficulty:function(win) {
