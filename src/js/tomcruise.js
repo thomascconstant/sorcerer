@@ -15,6 +15,8 @@ var miseValide = false; //Si la mise n'est pas validée par le joueur
 var score = 0; //Score actuel
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
 var mise = 0; //Combien le joueur a misé
+var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
+var toursDeJeu = 30; //Nbre de tours de jeu total
 var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
@@ -33,8 +35,6 @@ var hideTarget = true; //Si on doit cacher la target a chaque tour
 
 var modeTest = true;
 var activateModeTest = false; //Vérifier si mode test est activé
-var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
-var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne

@@ -17,11 +17,11 @@ function feedbackScore () {
     document.getElementById("resultTomSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurTom + " moutons sauvés !";
     document.getElementById("resultTomPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurTom + " moutons embrochés !";
 
-    document.getElementById("resultChristopher").innerHTML = "Votre score pour le jeu d'adresse est de : " + localStorage.scoreJoueurChristopher;
+    document.getElementById("resultChristopher").innerHTML = "Votre score pour le jeu de perception visuelle est de : " + localStorage.scoreJoueurChristopher;
     document.getElementById("resultChristopherSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurChristopher + " moutons sauvés !";
     document.getElementById("resultChristopherPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurChristopher + " moutons embrochés !";
 
-    document.getElementById("resultBenedict").innerHTML = "Votre score pour le jeu d'adresse est de : " + localStorage.scoreJoueurBenedict;
+    document.getElementById("resultBenedict").innerHTML = "Votre score pour le jeu de déduction est de : " + localStorage.scoreJoueurBenedict;
     document.getElementById("resultBenedictSauves").innerHTML = "avec " + localStorage.moutonsSauvesJoueurBenedict + " moutons sauvés !";
     document.getElementById("resultBenedictPerdus").innerHTML = "et " + localStorage.moutonsPerdusJoueurBenedict + " moutons embrochés !";
 
