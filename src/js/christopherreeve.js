@@ -1152,6 +1152,7 @@ function launchModeTest() {
             //restart game
             score = 0;
             tours = toursDeJeu;
+            actionDeJeu = 0;
             moutonsGagnes = 0;
             moutonsPerdus = 0;
             compteurMoutonsGagnes = 0;

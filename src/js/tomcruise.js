@@ -697,6 +697,7 @@ function launchModeTest() {
             score = 0;
             gameSpeed = 1;
             tours = toursDeJeu;
+            actionDeJeu = 0;
             moutonsGagnes = 0;
             moutonsPerdus = 0;
             compteurMoutonsGagnes = 0;

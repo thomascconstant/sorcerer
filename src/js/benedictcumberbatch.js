@@ -286,7 +286,7 @@ function win(ijFind){
             if (tours > 0) {
                 //faire apparaitre bouton pour générer la grille
                 document.getElementById("boutonGenererGrille").style.visibility = "visible";
-            } else if (tours === 0 && miseValide === false) {
+            } else if (tours === 0 && miseValide === false && modeTest === false) {
                 modeFinDePartie = true;
                 finDePartie();
             } else if (tours === 0 && modeTest === true) {
@@ -979,6 +979,7 @@ function launchModeTest() {
             //restart game
             score = 0;
             tours = toursDeJeu;
+            actionDeJeu = 0;
             moutonsGagnes = 0;
             moutonsPerdus = 0;
             compteurMoutonsGagnes = 0;
