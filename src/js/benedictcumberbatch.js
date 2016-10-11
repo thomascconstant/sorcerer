@@ -314,9 +314,9 @@ function fail(){
 
         //message de feedback
         if (mise === 1) {
-            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" mouton. Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " + mise + " mouton. Cliquez sur le bouton pour générer un plateau de jeu.";
         } else {
-            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " +mise+" moutons. Choisissez votre mise pour relancer le jeu.";
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez tué " + mise + " moutons. Cliquez sur le bouton pour générer un plateau de jeu.";
         }
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
