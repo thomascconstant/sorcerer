@@ -11,6 +11,7 @@
 var lastWinFail = [];
 var cumulWin = [];
 var cumulFail = [];
+var bondDiff = [0.1, 0.3, 0.7];
 var win = "true";
 var fail = "false";
 var compteurTroisTours = 0; //compteur qui augmente après chaque tour
@@ -36,21 +37,45 @@ function clearArray() {
 
 function checkWinFail() {
     var idx = lastWinFail.indexOf(win);
-    while (idx != -1) {
+    var i = 0;
+    while (idx != -1 && i >= 3) {
         cumulWin.push(idx);
         idx = lastWinFail.indexOf(win, idx + 1);
+        i++;
     }
     console.log(cumulWin);
-    // que se passe t-il s'il n'y a pas de win ? le while continue ?
 }
 
-var indices = [];
-var tableau = ['a', 'b', 'a', 'c', 'a', 'd'];
-var élément = 'a';
-var idx = tableau.indexOf(élément);
-while (idx != -1) {
-    indices.push(idx);
-    idx = tableau.indexOf(élément, idx + 1);
+var compareArrayWin = function (lastWinFail, cumulWin) {
+    if (lastWinFail === cumulWin)
+        return true;
+    if (lastWinFail.length !== cumulWin.length)
+        return false;
+    for (var i = 0; i < lastWinFail.length; i++) {
+        if (!equal(lastWinFail[i], cumulWin[i])) return false;
+    };
+    return true;
+};
+
+var compareArrayFail = function (lastWinFail, cumulFail) {
+    if (lastWinFail === cumulFail)
+        return true;
+    if (lastWinFail.length !== cumulFail.length)
+        return false;
+    for (var i = 0; i < lastWinFail.length; i++) {
+        if (!equal(lastWinFail[i], cumulFail[i])) return false;
+    };
+    return true;
+};
+
+function changeDifficulty() {
+    if (compareArrayWin === true) {
+        newDiff = Math.random(bondDiff);
+        difficulty = newDiff;
+    } else if (compareArrayFail === false) {
+        newDiff = Math.random(bondDiff);
+        difficulty = (- newDiff);
+    } else {
+
+    }
 }
-console.log(indices);
-// [0, 2, 4]
