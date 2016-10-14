@@ -8,6 +8,7 @@ var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joue
 var nbCells = 4;
 var width = 300;
 
+var mode = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -15,7 +16,7 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = false; //Vérifier si mode test est activé
+var activateModeTest = true; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
@@ -307,6 +308,19 @@ function afficherCasesGagnantes() {
     }
 }
 
+function changeMetaDiff() {
+    if (mode === 0) {
+        // reprendre code actuel fonctionnement diff
+        difficulty = Math.max(0, difficulty - 0.1);
+    } else if (mode === 1) {
+        // envoyer vers contenu de courbeDiff.js
+        cumulTours();
+        difficulty = newDiff;
+    }
+
+    console.log("difficulté du jeu:" + difficulty);
+}
+
 function difficultyGame() {
     if (difficulty < 0.3) {
         modeNormal = false;
@@ -378,7 +392,7 @@ function win() {
             //document.getElementById("score").innerHTML = score;
             //document.getElementById("mise").innerHTML = mise;
             
-            difficulty = Math.min(1,difficulty+0.1);
+            changeMetaDiff();
             difficultyGame();
             
             /*if(Math.random() < 0.7) {
@@ -432,12 +446,12 @@ function win() {
             
         }
         
-        console.log(difficulty + "difficulté win");  
+        console.log("difficulté du prochain tour suite à win :" + difficulty);
     }
     
 }
 
-function fail(){
+function fail() {
     if (miseValide) {
         winState = false;
         score -= mise;
@@ -472,8 +486,8 @@ function fail(){
         document.getElementById("tours").innerHTML = tours;
         //document.getElementById("score").innerHTML = score;
         //document.getElementById("mise").innerHTML = mise;
-        
-        difficulty = Math.max(0,difficulty-0.1);
+
+        changeMetaDiff();
         difficultyGame();
         
         /*if(Math.random() < 0.7) {
@@ -521,7 +535,7 @@ function fail(){
             finDePartie();
         }
 
-        console.log(difficulty + "difficulté fail");
+        console.log("difficulté du prochain tour suite à fail :" + difficulty);
     }
 }
 
