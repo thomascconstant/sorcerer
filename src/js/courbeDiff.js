@@ -1,5 +1,5 @@
 ﻿var difficulty = 0;
-var mode = 0; //à intégrer dans chaque jeu, 0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var mode = 0; //à intégrer dans chaque jeu, 0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds, 2 pour aléatoire total
 
 /* variables à récupérer : 
  * winState
@@ -100,7 +100,11 @@ function changeDifficulty() {
         return true;
     };
 
-    //modifier la difficulté en fonction
+    behaviorDiff();
+    
+}
+
+function behaviorDiff() {
     if (compareArrayWin === true) {
         newDiff = Math.random(bondDiff);
         difficulty = difficulty + newDiff;
@@ -108,7 +112,6 @@ function changeDifficulty() {
         newDiff = Math.random(bondDiff);
         difficulty = difficulty - newDiff;
     } else {
-
 
     }
 }
