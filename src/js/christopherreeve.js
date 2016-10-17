@@ -8,7 +8,7 @@ var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joue
 var nbCells = 4;
 var width = 300;
 
-var mode = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -16,7 +16,7 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = true; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
+var activateModeTest = false; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
@@ -309,10 +309,15 @@ function afficherCasesGagnantes() {
 }
 
 function changeMetaDiff() {
-    if (mode === 0) {
+    if (modeDifficulty === 0) {
         // reprendre code actuel fonctionnement diff
-        difficulty = Math.max(0, difficulty - 0.1);
-    } else if (mode === 1) {
+        if (winState === true) {
+            difficulty = Math.min(1, difficulty + 0.1);
+        } else {
+            difficulty = Math.max(0, difficulty - 0.1);
+        }
+        
+    } else if (modeDifficulty === 1) {
         // envoyer vers contenu de courbeDiff.js
         cumulTours();
         difficulty = newDiff;
