@@ -3,7 +3,7 @@
     <title>Sorcerer</title>
 
     <meta charset="utf-8">
-    <link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css?family=Raleway|Uncial+Antiqua" rel="stylesheet">-->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,174 +23,204 @@
             document.getElementById('commencerJeu').style.backgroundColor = "03A9F4";
         }
     </script>
-    <style>
-        #fin1 {
-            background-image: url("img/intro2fond.jpg");
-            background-color: #373b3d;
+<style>
+/* Fonts */
+@font-face {
+    font-family: ''Raleway', sans-serif';
+    src: url('../fonts/Raleway-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: ''Raleway', sans-serif';
+    src: url('../fonts/Raleway-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: ''Uncial Antiqua', cursive';
+    src: url('../fonts/UncialAntiqua-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: ''Roboto', sans-serif';
+    src: url('../fonts/Roboto-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Decorum */
+#fin1 {
+    background-image: url("img/intro2fond.jpg");
+    background-color: #373b3d;
+}
+
+#fin2 {
+    background-image: url("img/intro5fond.jpg");
+    background-color: #373b3d;
+}
+
+#fin3 {
+    background-image: url("img/intro13fond.jpg");
+    background-color: #373b3d;
+}
+
+#fin4 {
+    background-image: url("img/intro1Xfond.jpg");
+    background-color: #373b3d;
+}
+
+.slide {
+    background-attachment: fixed;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    min-height: 100%;
+    background-repeat: no-repeat;
+    margin: 0px;
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover;
+}
+
+body {
+    background-color: #373b3d;
+    font-family: Baskerville, 'Uncial Antiqua', cursive;
+    font-size: 1vw;
+    color: #fafafa;
+    margin: 0;
+}
+
+.hfill {
+    height: 45vh;
+}
+
+.slidetitle {
+    width: 100%;
+    text-align: center;
+    font-size: +3em;
+    font-weight: bold;
+}
+
+.zonefeedback {
+    background-color: #03A9F4;
+    color: #000000;
+    position: absolute;
+    padding: auto;
+    margin: auto;
+    width: 100%;
+}
+
+.textetitre {
+    font-family: 'Uncial Antiqua', cursive;
+    color: #fafafa;
+    text-align: center;
+    font-size: 3.5vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.texte {
+    font-family: 'Raleway', sans-serif;
+    color: #fafafa;
+    text-align: center;
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+    font-size: 2.5vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.textepetit {
+    font-family: 'Raleway', sans-serif;
+    color: #fafafa;
+    text-align: center;
+    font-size: 1.1vw;
+    font-style: italic;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.textelien {
+    font-family: 'Raleway', sans-serif;
+    color: #fafafa;
+    text-align: center;
+    font-size: 1.1vw;
+    font-style: italic;
+    text-decoration: underline;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.textepurewhite {
+    font-family: 'Raleway', sans-serif;
+    color: #FFFFFF;
+    text-align: center;
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+    font-size: 2vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.textepureblack {
+    font-family: 'Raleway', sans-serif;
+    color: #212121;
+    text-align: center;
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+    font-size: 2vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+}
+
+.button {
+    background-color: #757575;
+    font-family: 'Raleway', sans-serif;
+    border: none;
+    color: white;
+    padding: 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin: 1vw;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+    .button::after {
+        content: "";
+        border-radius: 5px;
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .button:hover {
+        -webkit-transform: scale(1.25, 1.25);
+        transform: scale(1.25, 1.25);
+    }
+
+        .button:hover::after {
+            opacity: 1;
         }
-
-        #fin2 {
-            background-image: url("img/intro5fond.jpg");
-            background-color: #373b3d;
-        }
-
-        #fin3 {
-            background-image: url("img/intro13fond.jpg");
-            background-color: #373b3d;
-        }
-
-        #fin4 {
-            background-image: url("img/intro1Xfond.jpg");
-            background-color: #373b3d;
-        }
-
-        .slide {
-            background-attachment: fixed;
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            min-height: 100%;
-            background-repeat: no-repeat;
-            margin: 0px;
-            -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-            background-size: cover;
-        }
-
-        body {
-            background-color: #373b3d;
-            font-family: Baskerville, 'Uncial Antiqua', cursive;
-            font-size: 1vw;
-            color: #fafafa;
-            margin: 0;
-        }
-
-        .hfill {
-            height: 45vh;
-        }
-
-        .slidetitle {
-            width: 100%;
-            text-align: center;
-            font-size: +3em;
-            font-weight: bold;
-        }
-
-        .zonefeedback {
-            background-color: #03A9F4;
-            color: #000000;
-            position: absolute;
-            padding: auto;
-            margin: auto;
-            width: 100%;
-        }
-
-        .textetitre {
-            font-family: 'Uncial Antiqua', cursive;
-            color: #fafafa;
-            text-align: center;
-            font-size: 3.5vw;
-            font-style: normal;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .texte {
-            font-family: 'Raleway', sans-serif;
-            color: #fafafa;
-            text-align: center;
-            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-            font-size: 2.5vw;
-            font-style: normal;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .textepetit {
-            font-family: 'Raleway', sans-serif;
-            color: #fafafa;
-            text-align: center;
-            font-size: 1.1vw;
-            font-style: italic;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .textelien {
-            font-family: 'Raleway', sans-serif;
-            color: #fafafa;
-            text-align: center;
-            font-size: 1.1vw;
-            font-style: italic;
-            text-decoration: underline;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .textepurewhite {
-            font-family: 'Raleway', sans-serif;
-            color: #FFFFFF;
-            text-align: center;
-            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-            font-size: 2vw;
-            font-style: normal;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .textepureblack {
-            font-family: 'Raleway', sans-serif;
-            color: #212121;
-            text-align: center;
-            text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
-            font-size: 2vw;
-            font-style: normal;
-            font-variant: normal;
-            font-weight: bold;
-        }
-
-        .button {
-            background-color: #757575;
-            font-family: 'Raleway', sans-serif;
-            border: none;
-            color: white;
-            padding: 1vw;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 1vw;
-            margin: 1vw;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-            .button::after {
-                content: "";
-                border-radius: 5px;
-                position: absolute;
-                z-index: -1;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                opacity: 0;
-                -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-                transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-            }
-
-            .button:hover {
-                -webkit-transform: scale(1.25, 1.25);
-                transform: scale(1.25, 1.25);
-            }
-
-                .button:hover::after {
-                    opacity: 1;
-                }
-    </style>
+</style>
 </head>
 <body onload="feedbackScoreGeneral(),ambianceSonore()">
     <div class="slide" style="background-position: 0% 0px;">
