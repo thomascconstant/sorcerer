@@ -24,7 +24,7 @@ function changeMetaDiff() {
 var lastWinFail = [];
 var cumulWin = [];
 var cumulFail = [];
-var bondDiff = [0.1, 0.3, 0.7];
+var bondDiff = [0.1, 0.3, 0.6];
 
 var newDiff = 0;
 
@@ -32,8 +32,7 @@ var compareArrayWin = 0;
 var compareArrayFail = 0;
 
 var compteurTours = 0; //compteur qui augmente après chaque tour
-var toursBeforeChange = 3; //nbre de tours avant changement de comportement de la courbe de difficulté
-var toursGagnantsDaffile = 0; //à incrémenter, dés que c'est égal à toursBeforeChange, modifier courbe /!\ PAS UTILISé
+var toursBeforeChange = 2; //nbre de tours avant changement de comportement de la courbe de difficulté
 
 function cumulTours() {
     if (winState === true) {
@@ -82,12 +81,10 @@ function checkWinFail() {
 compareArrayWin = function (lastWinFail, cumulWin) {
     if (lastWinFail.length !== cumulWin.length) {
         return false;
-        console.log("coucou2");
     } else if (lastWinFail.length === cumulWin.length) {
         for (var i = 0; i < lastWinFail.length; i++) {
             if (lastWinFail[i] !== cumulWin[i]) {
                 return false;
-                console.log("coucou3");
             }
         }
     console.log("coucou1");
@@ -99,12 +96,13 @@ compareArrayWin = function (lastWinFail, cumulWin) {
 compareArrayFail = function (lastWinFail, cumulFail) {
     if (lastWinFail.length !== cumulFail.length) {
         return false;
-    } else  if (lastWinFail === cumulFail) {
+    } else if (lastWinFail.length === cumulFail.length) {
         for (var i = 0; i < lastWinFail.length; i++) {
             if (lastWinFail[i] !== cumulFail[i]) {
                 return true;
             }
         }
+    console.log("coucou2");
     return true;
     }
 };
@@ -112,7 +110,7 @@ compareArrayFail = function (lastWinFail, cumulFail) {
 function behaviorDiff() {
     if (compareArrayWin(lastWinFail, cumulWin) === true && compteurTours === toursBeforeChange) {
         var tailleBondDiff = bondDiff[Math.floor(bondDiff.length * Math.random())];
-        console.log("bond de difficulté win" + tailleBondDiff);
+        console.log("taille du bond de difficulté win" + tailleBondDiff);
         newDiff = difficulty + tailleBondDiff;
         console.log("newDiff = " + newDiff);
 
@@ -123,7 +121,7 @@ function behaviorDiff() {
 
     } else if (compareArrayFail(lastWinFail, cumulFail) === true && compteurTours === toursBeforeChange) {
         var tailleBondDiff = bondDiff[Math.floor(bondDiff.length * Math.random())];
-        console.log("bond de difficulté fail" + tailleBondDiff);
+        console.log("taille du bond de difficulté fail" + tailleBondDiff);
         newDiff = difficulty - tailleBondDiff;
         console.log("newDiff = " + newDiff);
 
