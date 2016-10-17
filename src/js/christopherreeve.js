@@ -152,6 +152,7 @@ function recupMise(numeroMise) {
     //cacher les boutons de mise
     setTimeout (function erazeMise() {
         launchFadeOutMise();
+        restartAnimateScoreMoutons();
         }, 500);
 
     setTimeout(function eraseZoneMise() {

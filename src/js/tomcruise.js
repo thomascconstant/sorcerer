@@ -12,8 +12,9 @@ var anim = 0; //Handle du timer d'anim de la barre
 var running = false; //Si la barre est en cours d'anim
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
-var score = 0; //Score actuel
+var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
+var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
@@ -28,7 +29,7 @@ var moutonsPerdus = 0;
 var compteurMoutonsGagnes = 0;
 var compteurMoutonsPerdus = 0;
 
-var moutonAffiche = false; //vérifier affichage du mouton vivant
+var moutonAffiche = false; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
 var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
@@ -91,6 +92,10 @@ function accessMise() {
 function recupMise(numeroMise) {
     mise = numeroMise;
     console.log(mise + " de mise");
+
+    //recharger l'animation
+    restartAnimateScoreMoutons();
+
     /*if(document.getElementById('mise1').checked) {
         //boutton de mise 1 est validé
         mise = 1;
@@ -297,10 +302,12 @@ function stop() {
         resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
     }
     
+    //modification de la difficulté (à décommenter pour nvelle courbe de diff)
+    //changeMetaDiff();
+
     //mise a jour de la difficulte selon le modele
     var nextDiff = diffModel.nextDifficulty(res);
     gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
-
     console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
 
     //Reset de la mise
@@ -381,6 +388,21 @@ function run() {
         anim = setInterval(animBar, framelength);
     }
     changeTexteBouton();
+}
+
+function changeMetaDiff() {
+    if (modeDifficulty === 0) {
+        //mise a jour de la difficulte selon le modele
+        var nextDiff = diffModel.nextDifficulty(res);
+        gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
+        console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+
+    } else if (modeDifficulty === 1) {
+        // envoyer vers contenu de courbeDiff.js
+        cumulTours();
+        difficulty = newDiff;
+        console.log("difficulté du jeu:" + difficulty);
+    }
 }
 
 /**
