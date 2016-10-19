@@ -16,7 +16,7 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = true; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
+var activateModeTest = false; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
