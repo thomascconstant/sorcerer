@@ -356,7 +356,7 @@ function difficultyGame() {
         modePoussin = false;
         
         if (winState === true) {
-            nbCells = Math.min(9, nbCells + 1);
+            nbCells = Math.max(9, nbCells + 1);
         } else if (winState === false) {
             nbCells = Math.min(9, nbCells - 1);
         }
