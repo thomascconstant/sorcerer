@@ -16,7 +16,7 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = false; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
+var activateModeTest = true; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
@@ -342,7 +342,11 @@ function difficultyGame() {
         modeViolent = false;
         modePoussin = false;
         
-        nbCells = Math.max(5, nbCells+1);
+        if (winState === true) {
+            nbCells = Math.min(7, nbCells + 1);
+        } else if (winState === false) {
+            nbCells = Math.min(7, nbCells - 1);
+        }
         
         console.log("mode normal: "+ modeNormal);
         
@@ -351,7 +355,11 @@ function difficultyGame() {
         modeViolent = true;
         modePoussin = false;
         
-        nbCells = Math.max(5, nbCells+1);
+        if (winState === true) {
+            nbCells = Math.min(9, nbCells + 1);
+        } else if (winState === false) {
+            nbCells = Math.min(9, nbCells - 1);
+        }
         
         console.log("mode violent: "+ modeViolent);
     }
