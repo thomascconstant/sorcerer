@@ -235,11 +235,9 @@ function selectWin(ijFind) {
         console.log("nombre de cases à trouver" + nbCasesToFind);
 
         if (nbDeClics <= 0 && nbCasesToFind <= 0) {
-            winState = true;
             activateMise();
             console.log("nombre de clics restant : " + nbDeClics);
         } else if (nbDeClics <= 0) {
-            winState = false;
             activateMise();
             console.log("nombre de clics restant : " + nbDeClics);
         }
@@ -375,104 +373,98 @@ function difficultyGame() {
 }
 
 function win() {
-    if(miseValide) {
-      //nbCasesToFind--;
-      //casesFound.push(ijFind);
-        if(nbCasesToFind <= 0) {
-            winState = true;
+    if (miseValide && nbCasesToFind <= 0) {
+        winState = true;
 
-            moutonsGagnes += mise;
-            compteurMoutonsGagnes += moutonsGagnes;
+        moutonsGagnes += mise;
+        compteurMoutonsGagnes += moutonsGagnes;
 
-            score += mise;
-            actionDeJeu++;
+        score += mise;
+        actionDeJeu++;
             
-            addSheep(); //faire apparaître un mouton sur la page
+        addSheep(); //faire apparaître un mouton sur la page
             
-            afficherCasesGagnantes();
+        afficherCasesGagnantes();
             
-            //message de feedback
-             if (mise === 1) {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour générer une nouvelle grille.";
-            } else {
-                document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour générer une nouvelle grille.";   
-            }
-            document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
-            //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
-            
-            console.log(nbCasesToFind + "to go");
-            
-            if (modeTest === false) {
-                //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
-            }
-            
-            //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
-            moutonsGagnes = 0;
-            tours--;
-            mise = "?";
-            document.getElementById("tours").innerHTML = tours;
-            //document.getElementById("score").innerHTML = score;
-            //document.getElementById("mise").innerHTML = mise;
-            
-            changeMetaDiff();
-            difficultyGame();
-            
-            /*if(Math.random() < 0.7) {
-                if(difficulty >= 0.95) {
-                    difficulty = Math.min(0.99,difficulty + 0.02);
-                    modeViolent = true;
-                    modeNormal = false;
-                    console.log("mode violent: "+ modeViolent);
-                } else {
-                    difficulty = Math.min(0.95,difficulty + 0.05);
-                    modeNormal = true;
-                    modeViolent = false;
-                    modePoussin = false;
-                }
-            } else {
-                nbCells = Math.min(8, nbCells+1);
-            }*/
-            
-            //bloquer jeu
-            miseValide = false;
-            countDownToZero = false;
-
-            if (tours > 0) {
-                //faire apparaitre bouton pour générer la grille
-                document.getElementById("boutonGenererGrille").style.visibility = "visible";
-
-                /*
-                //déverrouiller boutons de sélection de mise
-                document.getElementById("mise1").disabled = false;
-                document.getElementById("mise2").disabled = false;
-                document.getElementById("mise3").disabled = false;
-                document.getElementById("mise4").disabled = false;
-                document.getElementById("mise5").disabled = false;
-                document.getElementById("mise6").disabled = false;
-                document.getElementById("mise7").disabled = false;
-                
-                //afficher message de choix de mise
-                document.getElementById("affichageFeedback").style.display = "block";*/
-
-                //casesFound = [];
-
-                //lancer nouveau jeu sauf si plus de tours
-
-            } else if (tours === 0 && miseValide === false && modeTest === false) {
-                modeFinDePartie = true;
-                finDePartie();
-
-            } else if (tours === 0 && modeTest === true) {
-                launchModeTest();
-            }
-            
+        //message de feedback
+            if (mise === 1) {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" mouton. Cliquez sur le bouton pour générer une nouvelle grille.";
+        } else {
+            document.getElementById("affichageFeedback").innerHTML = "Vous avez sauvé " +mise+" moutons. Cliquez sur le bouton pour générer une nouvelle grille.";   
         }
-        
+        document.getElementById("affichageFeedback").style.backgroundColor = "#00E676";
+        //document.getElementById("res").innerHTML = "Vous avez sauvé "+mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
+            
+        console.log(nbCasesToFind + "to go");
+            
+        if (modeTest === false) {
+            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        }
+            
+        //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
+        moutonsGagnes = 0;
+        tours--;
+        mise = "?";
+        document.getElementById("tours").innerHTML = tours;
+        //document.getElementById("score").innerHTML = score;
+        //document.getElementById("mise").innerHTML = mise;
+            
+        changeMetaDiff();
+        difficultyGame();
+            
+        /*if(Math.random() < 0.7) {
+            if(difficulty >= 0.95) {
+                difficulty = Math.min(0.99,difficulty + 0.02);
+                modeViolent = true;
+                modeNormal = false;
+                console.log("mode violent: "+ modeViolent);
+            } else {
+                difficulty = Math.min(0.95,difficulty + 0.05);
+                modeNormal = true;
+                modeViolent = false;
+                modePoussin = false;
+            }
+        } else {
+            nbCells = Math.min(8, nbCells+1);
+        }*/
+            
+        //bloquer jeu
+        miseValide = false;
+        countDownToZero = false;
+
+        if (tours > 0) {
+            //faire apparaitre bouton pour générer la grille
+            document.getElementById("boutonGenererGrille").style.visibility = "visible";
+
+            /*
+            //déverrouiller boutons de sélection de mise
+            document.getElementById("mise1").disabled = false;
+            document.getElementById("mise2").disabled = false;
+            document.getElementById("mise3").disabled = false;
+            document.getElementById("mise4").disabled = false;
+            document.getElementById("mise5").disabled = false;
+            document.getElementById("mise6").disabled = false;
+            document.getElementById("mise7").disabled = false;
+                
+            //afficher message de choix de mise
+            document.getElementById("affichageFeedback").style.display = "block";*/
+
+            //casesFound = [];
+
+            //lancer nouveau jeu sauf si plus de tours
+
+        } else if (tours === 0 && miseValide === false && modeTest === false) {
+            modeFinDePartie = true;
+            finDePartie();
+
+        } else if (tours === 0 && modeTest === true) {
+            launchModeTest();
+        }
+
         console.log("difficulté du prochain tour suite à win :" + difficulty);
-    }
-    
-}
+        }
+    } 
 
 function fail() {
     if (miseValide) {
