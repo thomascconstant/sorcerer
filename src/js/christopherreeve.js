@@ -136,34 +136,37 @@ function goNew() {
 
 //récupérer mise
 function recupMise(numeroMise) {
-    mise = numeroMise;
-    console.log(mise + " de mise");
+    if (nbDeClics <= 0) {
+        mise = numeroMise;
+        console.log(mise + " de mise");
 
-    //afficher mise
-    showMise();
-    
-    //enregistrer mise dans csv
-    //enregistrerDonnees(0, mise);
+        //afficher mise
+        showMise();
 
-    //acter la mise du joueur pour déverouiller jeu
-    miseValide = true;
-    
-    //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageFeedback").innerHTML = "Les cases gagnantes vont s'afficher.";
-    
-    //cacher les boutons de mise
-    setTimeout (function erazeMise() {
-        launchFadeOutMise();
-        restartAnimateScoreMoutons();
+        //enregistrer mise dans csv
+        //enregistrerDonnees(0, mise);
+
+        //acter la mise du joueur pour déverouiller jeu
+        miseValide = true;
+
+        //faire apparaître le compte à rebours et le lancer
+        document.getElementById("affichageFeedback").innerHTML = "Les cases gagnantes vont s'afficher.";
+
+        //cacher les boutons de mise
+        setTimeout(function erazeMise() {
+            launchFadeOutMise();
+            restartAnimateScoreMoutons();
         }, 500);
 
-    setTimeout(function eraseZoneMise() {
-        document.getElementById("boutonsMise").style.display = "none";
-    }, 1000);
+        setTimeout(function eraseZoneMise() {
+            document.getElementById("boutonsMise").style.display = "none";
+        }, 1000);
 
-    results();
+        results();
 
-    blockMise();
+        blockMise();
+    }
+
 }
 
 function blockMise() {
@@ -235,9 +238,11 @@ function selectWin(ijFind) {
         console.log("nombre de cases à trouver" + nbCasesToFind);
 
         if (nbDeClics <= 0 && nbCasesToFind <= 0) {
+            winState = true;
             activateMise();
             console.log("nombre de clics restant : " + nbDeClics);
         } else if (nbDeClics <= 0) {
+            winState = false;
             activateMise();
             console.log("nombre de clics restant : " + nbDeClics);
         }
@@ -318,6 +323,7 @@ function afficherCasesGagnantes() {
 
 function changeMetaDiff() {
     if (modeDifficulty === 0) {
+        console.log("winstate =" + winState);
         // reprendre code actuel fonctionnement diff
         if (winState === true) {
             difficulty = Math.min(1, difficulty + 0.1);
