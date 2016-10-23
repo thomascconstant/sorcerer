@@ -25,8 +25,8 @@ var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
-var toursDeJeu = 30; //Nbre de tours de jeu total
-var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu
+var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
+var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
 var resultatJoueur = [];
 
 var winState = false; //statut du joueur, false pour perdant
