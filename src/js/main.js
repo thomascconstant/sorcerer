@@ -1,5 +1,6 @@
 var IDjoueur = ""; //donner une ID au joueur
 var nomJoueur = ""; //nom entré par le joueur
+var connexionJoueur = new Date(); //date en ms de la connexion du joueur au système
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
@@ -16,6 +17,9 @@ function verifierNom() {
         localStorage.setItem("name",nomJoueur);
         console.log("nom du joueur : " + nomJoueur);
         
+        //récupérer date de lancement du jeu
+        localStorage.setItem("time", connexionJoueur);
+
         //document.getElementById("commencerJeu").style.display = "block";
         //document.getElementById("commencerJeu").disabled = false;
         
@@ -40,7 +44,7 @@ function donnerID () {
 
     //enregistrerDonnees(0, "nomJoueur" + ";" + IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
     enregistrerDonnees(1,"\n");
-    //lancerJeu();
+
     window.open("intro.html",'_self',false); 
     
 }
