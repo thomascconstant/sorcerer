@@ -6,7 +6,7 @@ var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de sessio
 var moutonsSauvesJoueurChristopher = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
 var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
 
-var nbCells = 5;
+var nbCells = 4;
 var width = 300;
 
 var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
@@ -350,15 +350,21 @@ function changeMetaDiff() {
 }
 
 function difficultyGame() {
-    if (difficulty < 0.3) {
+    if (difficulty === 0) {
         modeNormal = false;
         modeViolent = false;
         modePoussin = true;
-        
-        nbCells = Math.max(5, nbCells-1);
-        
-        console.log("mode poussin: "+ modePoussin);
-        
+
+        console.log("mode poussin: " + modePoussin);
+
+        nbCells = 4;
+
+    } else if (difficulty === 1) {
+        nbCells = 4;
+
+    } else if (difficulty === 2) {
+        nbCells = 5;
+
     } else if (difficulty === 0.3) {
         modeNormal = true;
         modeViolent = false;
@@ -389,8 +395,11 @@ function difficultyGame() {
     } else if (difficulty === 0.8) {
         nbCells = 11;
 
-    } else if (difficulty >= 0.9) {
-        nbCells = Math.max(12, nbCells + 1);
+    } else if (difficulty === 0.9) {
+        nbCells = 12;
+
+    } else if (difficulty === 1) {
+        nbCells = 13;
     }
 
     /*else if (difficulty >= 0.3 && difficulty < 0.6) {
