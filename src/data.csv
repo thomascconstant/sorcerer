@@ -1,1 +1,1 @@
-nom_du_joueur;IDjoueur;nom_du_jeu;action_de_jeu;mise;difficulty;moutons_sauves;moutons_tues;score;gagnant;
+nom_du_joueur;IDjoueur;temps_joueur;nom_du_jeu;action_de_jeu;mise;difficulty;bond_diff;moutons_sauves;moutons_tues;score;gagnant;
