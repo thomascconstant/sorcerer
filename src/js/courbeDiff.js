@@ -1,22 +1,20 @@
-﻿//var mode = 0; //à intégrer dans chaque jeu, 0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds, 2 pour aléatoire total
-
-/* variables à récupérer des jeux : 
- * winState
- * mise
- * tours
- * difficulty (gameSpeed dans tomcruise.js)
- */
-
+﻿
 /* à intégrer dans chaque jeu
+var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+
 function changeMetaDiff() {
-    if (mode === 0) {
+    if (modeDifficulty === 0) {
         // reprendre code actuel fonctionnement diff
-    } else if (mode === 1) {
+
+    } else if (modeDifficulty === 1 && modeTest === true) {
+        // reprendre code actuel fonctionnement diff
+
+    } else if (modeDifficulty === 1 && modeTest === false) {
         // envoyer vers contenu de courbeDiff.js
-        selectFirstBondDiff();
-        selectNewBondDiff();
+        selectbondDiff();
         difficulty = newDiff;
     }
+    console.log("difficulté du jeu:" + difficulty);
 }
 */
 
@@ -36,9 +34,9 @@ var bondDiffNoLittle = [0.3, 0.6];
 var bondDiffNoMedium = [0.1, 0.6];
 var bondDiffNoHigh = [0.3, 0.6];
 var bondDiffAll = [0.1, 0.3, 0.6];
-
+ 
 var newDiff = 0;
-var newBondDiff = 0;
+var bondDiff = 0;
 
 var compareArrayWin = 0;
 var compareArrayFail = 0;
@@ -50,22 +48,30 @@ var toursBeforeChange = 2; //nbre de tours avant changement de comportement de l
 function selectFirstBondDiff() {
     if (modeTest === false && firstBondDiff === false) {
         bondDiffActual = bondDiffAll[Math.floor(bondDiffAll.length * Math.random())];
+
+        bondDiff = bondDiffActual;
+        newDiff = bondDiff;
+
         firstBondDiff = true;
-        console.log("premier bond de difficulté: " + bondDiffActual);
+        console.log("premier bond de difficulté: " + bondDiff);
     }
 }
 
-function selectNewBondDiff() {
-    if (bondDiffActual === bondDiffLittle) {
-        newBondDiff = bondDiffNoLittle[Math.floor(bondDiffNoLittle.length * Math.random())];
-    } else if (bondDiffActual === bondDiffMedium) {
-        newBondDiff = bondDiffNoMedium[Math.floor(bondDiffNoMedium.length * Math.random())];
-    } else if (bondDiffActual === bondDiffHigh) {
-        newBondDiff = bondDiffNoHigh[Math.floor(bondDiffNoHigh.length * Math.random())];
-    }
-    console.log("nouveau bond de difficulté: " + newBondDiff);
+function selectbondDiff() {
+    if (modeTest === false && firstBondDiff === true) {
+        if (bondDiffActual === bondDiffLittle) {
+            bondDiff = bondDiffNoLittle[Math.floor(bondDiffNoLittle.length * Math.random())];
+        } else if (bondDiffActual === bondDiffMedium) {
+            bondDiff = bondDiffNoMedium[Math.floor(bondDiffNoMedium.length * Math.random())];
+        } else if (bondDiffActual === bondDiffHigh) {
+            bondDiff = bondDiffNoHigh[Math.floor(bondDiffNoHigh.length * Math.random())];
+        }
+        console.log("nouveau bond de difficulté: " + bondDiff);
 
-    changeDifficulty();
+        changeDifficulty();
+    }
+    selectFirstBondDiff();
+
 }
 
 function changeDifficulty() {
@@ -74,7 +80,7 @@ function changeDifficulty() {
     console.log("progression de la difficulté: " + addOrSub);
 
     if (addOrSub === 0) { //changement de difficulté par soustraction
-        newDiff = difficulty - newBondDiff;
+        newDiff = difficulty - bondDiff;
         console.log("newDiff = " + newDiff);
 
         if (newDiff < 0) {
@@ -82,7 +88,7 @@ function changeDifficulty() {
             console.log("newDiff corrected = " + newDiff);
         }
     } else if (addOrSub === 1) { //changement de difficulté par addition
-        newDiff = difficulty + newBondDiff;
+        newDiff = difficulty + bondDiff;
         console.log("newDiff = " + newDiff);
 
         if (newDiff >= 1) {
