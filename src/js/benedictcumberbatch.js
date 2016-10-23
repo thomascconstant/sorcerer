@@ -1,6 +1,7 @@
 var nomDuJeu = "Logique2";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
+var connexionJoueur = localStorage.getItem("time");
 var scoreJoueurBenedict = 0; //Score du joueur à renseigner en fin de session de jeu
 var moutonsSauvesJoueurBenedict = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
 var moutonsPerdusJoueurBenedict = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
@@ -8,6 +9,7 @@ var moutonsPerdusJoueurBenedict = 0; //Nbre de moutons embrochés par le joueur 
 var nbCells = 4;
 var width = 300;
 
+var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0.1;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -15,9 +17,11 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = false; //Vérifier si mode test est activé
+var activateModeTest = false;
+var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
+var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var score = 0;
@@ -44,7 +48,6 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 30; //Nombre de tours restants
 var resultatJoueur = [];
 
 var running = false;
@@ -236,6 +239,32 @@ function showMise() {
     document.getElementById("mise").innerHTML = mise;
 }
 
+function changeMetaDiff() {
+    if (modeDifficulty === 0) {
+        console.log("winstate =" + winState);
+        // reprendre code actuel fonctionnement diff
+        if (winState === true) {
+            difficulty = Math.min(1, difficulty + 0.1);
+        } else {
+            difficulty = Math.max(0, difficulty - 0.1);
+        }
+
+    } else if (modeDifficulty === 1 && modeTest === true) {
+        if (winState === true) {
+            difficulty = Math.min(1, difficulty + 0.1);
+        } else {
+            difficulty = Math.max(0, difficulty - 0.1);
+        }
+
+    } else if (modeDifficulty === 1 && modeTest === false) {
+        // envoyer vers contenu de courbeDiff.js
+        selectbondDiff();
+        difficulty = newDiff;
+    }
+
+    console.log("difficulté du jeu:" + difficulty);
+}
+
 function win(ijFind){
     if (miseValide === true && countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
       nbCasesToFind--;
@@ -264,7 +293,7 @@ function win(ijFind){
 
             if (modeTest === false) {
                 //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
             }
 
             //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
@@ -275,7 +304,8 @@ function win(ijFind){
             //document.getElementById("score").innerHTML = score;
             //document.getElementById("mise").innerHTML = mise;
 
-            difficulty = Math.min(1,difficulty+0.1);
+            changeMetaDiff();
+            //difficulty = Math.min(1,difficulty+0.1);
 
             //bloquer jeu
             miseValide = false;
@@ -294,7 +324,7 @@ function win(ijFind){
 
         }
 
-        console.log("Nouvelle difficulte:",difficulty);
+        console.log("difficulté du prochain tour suite à win :" + difficulty);
     }
 
 }
@@ -322,7 +352,7 @@ function fail(){
 
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         }
 
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
@@ -333,7 +363,8 @@ function fail(){
         //document.getElementById("score").innerHTML = score;
         //document.getElementById("mise").innerHTML = mise;
 
-        difficulty = Math.max(0,difficulty-0.1);
+        changeMetaDiff();
+        //difficulty = Math.max(0,difficulty-0.1);
 
         miseValide = false;
         countDownToZero = false;
@@ -351,7 +382,7 @@ function fail(){
             finDePartie();
         }
 
-        console.log("Nouvelle difficulte:",difficulty);
+        console.log("difficulté du prochain tour suite à fail :" + difficulty);
     }
 
 }
@@ -953,63 +984,71 @@ function restartFadeInOutMise() {
 
 // ----------------------------mode test en début de partie--------------------
 function launchModeTest() {
-    if (activateModeTest === false) {
-        console.log("test mode activated");
+    if (overideTestMode === true) {
+        console.log("test mode bypass");
+        modeTest = false;
+    } else {
+        if (activateModeTest === false) {
+            console.log("test mode activated");
 
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
-        document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
+            document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
 
-        //modifier affichage variables de jeu
-        tours = toursTest;
-        document.getElementById("tours").innerHTML = tours;
-
-        window.open("#popup2", '_self', false); //ouvre la popup
-
-        activateModeTest = true;
-    }
-
-    if (tours === 0) {
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
-        document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
-
-        setTimeout(function launchPopup() {
-            //restart game
-            score = 0;
-            tours = toursDeJeu;
-            actionDeJeu = 0;
-            moutonsGagnes = 0;
-            moutonsPerdus = 0;
-            compteurMoutonsGagnes = 0;
-            compteurMoutonsPerdus = 0;
-            difficulty = 0;
-
-            nbCells = 4;
-            width = 300;
-
-            colorTransitionSpeed = 0.1;
-            modePoussin = true;
-            modeNormal = false;
-            modeViolent = false;
-
-            //mise à zéro interface
-            document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
-            document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+            //modifier affichage variables de jeu
+            tours = toursTest;
             document.getElementById("tours").innerHTML = tours;
-            document.getElementById("mise").innerHTML = mise;
-
-            //faire apparaitre bouton pour générer la grille
-            document.getElementById("boutonGenererGrille").style.visibility = "visible";
 
             window.open("#popup2", '_self', false); //ouvre la popup
 
-        }, 1500);
+            activateModeTest = true;
+        } else if (activateModeTest === true) {
+            console.log("test mode bypass");
+        }
 
-        modeTest = false;
-        console.log("test mode desactivated");
+        if (tours === 0) {
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
+            document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
 
+            setTimeout(function launchPopup() {
+                //restart game
+                score = 0;
+                tours = toursDeJeu;
+                actionDeJeu = 0;
+                moutonsGagnes = 0;
+                moutonsPerdus = 0;
+                compteurMoutonsGagnes = 0;
+                compteurMoutonsPerdus = 0;
+                difficulty = 0;
+
+                nbCells = 4;
+                width = 300;
+
+                colorTransitionSpeed = 0.1;
+                modePoussin = true;
+                modeNormal = false;
+                modeViolent = false;
+
+                //mise à zéro interface
+                document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+                document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+                document.getElementById("tours").innerHTML = tours;
+                document.getElementById("mise").innerHTML = mise;
+
+                //faire apparaitre bouton pour générer la grille
+                document.getElementById("boutonGenererGrille").style.visibility = "visible";
+
+                window.open("#popup2", '_self', false); //ouvre la popup
+
+            }, 1500);
+
+            modeTest = false;
+            console.log("test mode desactivated");
+
+        }
     }
+    
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------

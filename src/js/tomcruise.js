@@ -2,6 +2,7 @@
 var nomDuJeu = "Motrice";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
+var connexionJoueur = localStorage.getItem("time");
 var scoreJoueurTom = 0; //Score du joueur à renseigner en fin de session de jeu
 var moutonsSauvesJoueurTom = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
 var moutonsPerdusJoueurTom = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
@@ -12,13 +13,20 @@ var anim = 0; //Handle du timer d'anim de la barre
 var running = false; //Si la barre est en cours d'anim
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
-var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
-var gameSpeed = 1; //Vitesse du jeu (notre param de challenge)
+var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var gameSpeed = 1; //Vitesse du jeu (notre param de la difficulté)
+var difficulty = 0; //Utilisée pour la mise en place de la courbe de difficulté
+
+var modeTest = true;
+var activateModeTest = false; 
+var overideTestMode = true; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
+var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
+
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
-var tours = 30; //Nombre de tours restants
+var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu
 var resultatJoueur = [];
 
 var winState = false; //statut du joueur, false pour perdant
@@ -34,9 +42,7 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
-var modeTest = true;
-var activateModeTest = false; //Vérifier si mode test est activé
-var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
+
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -299,11 +305,11 @@ function stop() {
     
     if (modeTest === false) {
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
     }
     
     //modification de la difficulté (à décommenter pour nvelle courbe de diff)
-    //changeMetaDiff();
+    changeMetaDiff();
 
     //mise a jour de la difficulte selon le modele
     var nextDiff = diffModel.nextDifficulty(res);
@@ -397,12 +403,18 @@ function changeMetaDiff() {
         gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
         console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
 
-    } else if (modeDifficulty === 1) {
+    } else if (modeDifficulty === 1 && modeTest === true) {
+        // reprendre code actuel fonctionnement diff
+        var nextDiff = diffModel.nextDifficulty(res);
+        gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
+        console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+
+    } else if (modeDifficulty === 1 && modeTest === false) {
         // envoyer vers contenu de courbeDiff.js
-        cumulTours();
-        difficulty = newDiff;
-        console.log("difficulté du jeu:" + difficulty);
+        selectbondDiff();
+        gameSpeed = newDiff;
     }
+    console.log("difficulté du jeu:" + gameSpeed);
 }
 
 /**
@@ -693,61 +705,67 @@ function restartFadeInOutMise() {
 
 // ----------------------------mode test en début de partie--------------------
 function launchModeTest() {
-    if (activateModeTest === false) {
-        console.log("test mode activated");
+    if (overideTestMode === true) {
+        console.log("test mode bypass");
+        modeTest = false;
+    } else {
+        if (activateModeTest === false) {
+            console.log("test mode activated");
 
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
-        document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
+            document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
 
-        //modifier affichage variables de jeu
-        tours = toursTest;
-        document.getElementById("tours").innerHTML = tours;
-
-        window.open("#popup2", '_self', false); //ouvre la popup
-
-        activateModeTest = true;
-    }
-
-    if (tours === 0) {
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
-        document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
-
-        setTimeout(function launchPopup() {
-            //restart game
-            score = 0;
-            gameSpeed = 1;
-            tours = toursDeJeu;
-            actionDeJeu = 0;
-            moutonsGagnes = 0;
-            moutonsPerdus = 0;
-            compteurMoutonsGagnes = 0;
-            compteurMoutonsPerdus = 0;
-            difficulty = 0;
-
-            barSpeed = 1; //Vitesse de la barre : pixels par frame
-            direction = 1; //direction actuelle du deplacement de la barre
-            anim = 0; //Handle du timer d'anim de la barre
-            running = false; //Si la barre est en cours d'anim
-
-            //mise à zéro interface
-            document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
-            document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+            //modifier affichage variables de jeu
+            tours = toursTest;
             document.getElementById("tours").innerHTML = tours;
-            document.getElementById("mise").innerHTML = mise;
-
-            //faire apparaitre bouton pour générer la grille
-            document.getElementById("boutonLancerBarre").style.visibility = "visible";
 
             window.open("#popup2", '_self', false); //ouvre la popup
 
-        }, 1500);
+            activateModeTest = true;
+        }
 
-        modeTest = false;
-        console.log("test mode desactivated");
+        if (tours === 0) {
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
+            document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
 
+            setTimeout(function launchPopup() {
+                //restart game
+                score = 0;
+                gameSpeed = 1;
+                tours = toursDeJeu;
+                actionDeJeu = 0;
+                moutonsGagnes = 0;
+                moutonsPerdus = 0;
+                compteurMoutonsGagnes = 0;
+                compteurMoutonsPerdus = 0;
+                difficulty = 0;
+
+                barSpeed = 1; //Vitesse de la barre : pixels par frame
+                direction = 1; //direction actuelle du deplacement de la barre
+                anim = 0; //Handle du timer d'anim de la barre
+                running = false; //Si la barre est en cours d'anim
+
+                //mise à zéro interface
+                document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+                document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+                document.getElementById("tours").innerHTML = tours;
+                document.getElementById("mise").innerHTML = mise;
+
+                //faire apparaitre bouton pour générer la grille
+                document.getElementById("boutonLancerBarre").style.visibility = "visible";
+
+                window.open("#popup2", '_self', false); //ouvre la popup
+
+            }, 1500);
+
+            modeTest = false;
+            console.log("test mode desactivated");
+
+        }
     }
+    
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------

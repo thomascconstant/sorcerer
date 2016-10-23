@@ -1,14 +1,15 @@
 var nomDuJeu = "Sensoriel";
 var IDjoueur = localStorage.getItem("joueur");
 var nomJoueur = localStorage.getItem("name");
+var connexionJoueur = localStorage.getItem("time");
 var scoreJoueurChristopher = 0; //Score du joueur à renseigner en fin de session de jeu
 var moutonsSauvesJoueurChristopher = 0; //Nbre de moutons sauvés par le joueur à renseigner en fin de session de jeu
 var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joueur à renseigner en fin de session de jeu
 
-var nbCells = 4;
+var nbCells = 5;
 var width = 300;
 
-var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -16,9 +17,11 @@ var modeNormal = false;
 var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
-var activateModeTest = false; //Vérifier si mode test est activé, à passer en true pour ne pas avoir les tours de chauffe
+var activateModeTest = false;
+var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nbre de tours de jeu total
+var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var score = 0;
@@ -51,7 +54,6 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
-var tours = 0; //Affichage nombre de tours restants
 var resultatJoueur = [];
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
@@ -64,12 +66,12 @@ function animate(){
 
     var cells = document.getElementsByName("cellWin");
     //console.log(colorTarget+'/'+colorBase);
-    if(colorCurrent - colorBase > step)
+    /*if(colorCurrent - colorBase > step)
         colorCurrent -= step;
     else {
         colorCurrent = colorBase;
         clearInterval(anim);
-    }
+    }*/
     
     for(var i=0;i<cells.length;i++){
         //console.log(cells[i].id);
@@ -331,9 +333,16 @@ function changeMetaDiff() {
             difficulty = Math.max(0, difficulty - 0.1);
         }
         
+    } else if (modeDifficulty === 1 && modeTest === true) {
+        if (winState === true) {
+            difficulty = Math.min(1, difficulty + 0.1);
+        } else {
+            difficulty = Math.max(0, difficulty - 0.1);
+        }
+
     } else if (modeDifficulty === 1) {
         // envoyer vers contenu de courbeDiff.js
-        cumulTours();
+        selectbondDiff();
         difficulty = newDiff;
     }
 
@@ -350,7 +359,41 @@ function difficultyGame() {
         
         console.log("mode poussin: "+ modePoussin);
         
-    } else if (difficulty >= 0.3 && difficulty < 0.6) {
+    } else if (difficulty === 0.3) {
+        modeNormal = true;
+        modeViolent = false;
+        modePoussin = false;
+        
+        nbCells = 6;
+
+        console.log("mode normal: " + modeNormal);
+
+    } else if (difficulty === 0.4) {
+        nbCells = 7;
+
+    } else if (difficulty === 0.5) {
+        nbCells = 8;
+
+    } else if (difficulty === 0.6) {
+        modeNormal = false;
+        modeViolent = true;
+        modePoussin = false;
+
+        nbCells = 9;
+        
+        console.log("mode violent: " + modeViolent);
+
+    } else if (difficulty === 0.7) {
+        nbCells = 10;
+
+    } else if (difficulty === 0.8) {
+        nbCells = 11;
+
+    } else if (difficulty >= 0.9) {
+        nbCells = Math.max(12, nbCells + 1);
+    }
+
+    /*else if (difficulty >= 0.3 && difficulty < 0.6) {
         modeNormal = true;
         modeViolent = false;
         modePoussin = false;
@@ -375,7 +418,7 @@ function difficultyGame() {
         }
         
         console.log("mode violent: "+ modeViolent);
-    }
+    }*/
 }
 
 function win() {
@@ -405,7 +448,7 @@ function win() {
             
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         }
             
         //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
@@ -497,7 +540,7 @@ function fail() {
 
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         }
         
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
@@ -1162,63 +1205,71 @@ function restartFadeInOutMise() {
 
 // ----------------------------mode test en début de partie--------------------
 function launchModeTest() {
-    if (activateModeTest === false) {
-        console.log("test mode activated");
+    if (overideTestMode === true) {
+        console.log("test mode bypass");
+        modeTest = false;
+    } else {
+        if (activateModeTest === false) {
+            console.log("test mode activated");
 
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
-        document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Tours de chauffe";
+            document.getElementById("popup3").innerHTML = "Le Sorcier vous laisse trois tours de jeu pour vous entraîner. Profitez-en !";
 
-        //modifier affichage variables de jeu
-        tours = toursTest;
-        document.getElementById("tours").innerHTML = tours;
-
-        window.open("#popup2", '_self', false); //ouvre la popup
-
-        activateModeTest = true;
-    }
-
-    if (tours === 0) {
-        //modifier affichage contenu popup
-        document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
-        document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
-
-        setTimeout(function launchPopup() {
-            //restart game
-            score = 0;
-            tours = toursDeJeu;
-            actionDeJeu = 0;
-            moutonsGagnes = 0;
-            moutonsPerdus = 0;
-            compteurMoutonsGagnes = 0;
-            compteurMoutonsPerdus = 0;
-            difficulty = 0;
-
-            nbCells = 4;
-            width = 300;
-
-            colorTransitionSpeed = 0.1;
-            modePoussin = true;
-            modeNormal = false;
-            modeViolent = false;
-
-            //mise à zéro interface
-            document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
-            document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+            //modifier affichage variables de jeu
+            tours = toursTest;
             document.getElementById("tours").innerHTML = tours;
-            document.getElementById("mise").innerHTML = mise;
-
-            //faire apparaitre bouton pour générer la grille
-            document.getElementById("boutonGenererGrille").style.visibility = "visible";
 
             window.open("#popup2", '_self', false); //ouvre la popup
 
-        }, 1500);
+            activateModeTest = true;
+        } else if (activateModeTest === true) {
+            console.log("test mode bypass");
+        }
 
-        modeTest = false;
-        console.log("test mode desactivated");
+        if (tours === 0) {
+            //modifier affichage contenu popup
+            document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
+            document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
 
+            setTimeout(function launchPopup() {
+                //restart game
+                score = 0;
+                tours = toursDeJeu;
+                actionDeJeu = 0;
+                moutonsGagnes = 0;
+                moutonsPerdus = 0;
+                compteurMoutonsGagnes = 0;
+                compteurMoutonsPerdus = 0;
+                difficulty = 0;
+
+                nbCells = 4;
+                width = 300;
+
+                colorTransitionSpeed = 0.1;
+                modePoussin = true;
+                modeNormal = false;
+                modeViolent = false;
+
+                //mise à zéro interface
+                document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;
+                document.getElementById("compteurMoutonsPerdus").innerHTML = compteurMoutonsPerdus;
+                document.getElementById("tours").innerHTML = tours;
+                document.getElementById("mise").innerHTML = mise;
+
+                //faire apparaitre bouton pour générer la grille
+                document.getElementById("boutonGenererGrille").style.visibility = "visible";
+
+                window.open("#popup2", '_self', false); //ouvre la popup
+
+            }, 1500);
+
+            modeTest = false;
+            console.log("test mode desactivated");
+
+        }
     }
+    
 }
 
 // ----------------------------fin de partie et enregistrement des données--------------------
