@@ -59,25 +59,30 @@ function selectFirstBondDiff() {
 
 function selectbondDiff() {
     if (modeTest === false && firstBondDiff === true) {
-        if (bondDiffActual === bondDiffLittle) {
+        if (bondDiff === bondDiffLittle) {
             bondDiff = bondDiffNoLittle[Math.floor(bondDiffNoLittle.length * Math.random())];
-        } else if (bondDiffActual === bondDiffMedium) {
+        } else if (bondDiff === bondDiffMedium) {
             bondDiff = bondDiffNoMedium[Math.floor(bondDiffNoMedium.length * Math.random())];
-        } else if (bondDiffActual === bondDiffHigh) {
+        } else if (bondDiff === bondDiffHigh) {
             bondDiff = bondDiffNoHigh[Math.floor(bondDiffNoHigh.length * Math.random())];
         }
         console.log("nouveau bond de difficulté: " + bondDiff);
 
         changeDifficulty();
+    } else {
+        selectFirstBondDiff();
     }
-    selectFirstBondDiff();
-
+    
 }
 
 function changeDifficulty() {
     var array = [0, 1];
     var addOrSub = array[Math.floor(array.length * Math.random())];
-    console.log("progression de la difficulté: " + addOrSub);
+    if (addOrSub === 1) {
+        console.log("progression de la difficulté vers le haut");
+    } else {
+        console.log("progression de la difficulté vers le bas");
+    }
 
     if (addOrSub === 0) { //changement de difficulté par soustraction
         newDiff = difficulty - bondDiff;
