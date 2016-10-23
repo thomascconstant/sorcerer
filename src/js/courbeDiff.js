@@ -13,9 +13,9 @@ function changeMetaDiff() {
         // reprendre code actuel fonctionnement diff
     } else if (mode === 1) {
         // envoyer vers contenu de courbeDiff.js
-        cumulTours();
-        checkWinFail();
-        changeDifficulty();
+        selectFirstBondDiff();
+        selectNewBondDiff();
+        difficulty = newDiff;
     }
 }
 */
@@ -24,9 +24,21 @@ function changeMetaDiff() {
 var lastWinFail = [];
 var cumulWin = [];
 var cumulFail = [];
-var bondDiff = [0.1, 0.3, 0.6];
+
+var firstBondDiff = false; //false : premier bond de difficulté non sélectionné ; true, premier bond sélectionné
+
+var bondDiffLittle = 0.1;
+var bondDiffMedium = 0.3;
+var bondDiffHigh = 0.6;
+var bondDiffActual = 0;
+
+var bondDiffNoLittle = [0.3, 0.6];
+var bondDiffNoMedium = [0.1, 0.6];
+var bondDiffNoHigh = [0.3, 0.6];
+var bondDiffAll = [0.1, 0.3, 0.6];
 
 var newDiff = 0;
+var newBondDiff = 0;
 
 var compareArrayWin = 0;
 var compareArrayFail = 0;
@@ -34,7 +46,54 @@ var compareArrayFail = 0;
 var compteurTours = 0; //compteur qui augmente après chaque tour
 var toursBeforeChange = 2; //nbre de tours avant changement de comportement de la courbe de difficulté
 
-function cumulTours() {
+//générer aléatoirement premier bond de difficulté après la fin des tours de chauffe
+function selectFirstBondDiff() {
+    if (modeTest === false && firstBondDiff === false) {
+        bondDiffActual = bondDiffAll[Math.floor(bondDiffAll.length * Math.random())];
+        firstBondDiff = true;
+        console.log("premier bond de difficulté: " + bondDiffActual);
+    }
+}
+
+function selectNewBondDiff() {
+    if (bondDiffActual === bondDiffLittle) {
+        newBondDiff = bondDiffNoLittle[Math.floor(bondDiffNoLittle.length * Math.random())];
+    } else if (bondDiffActual === bondDiffMedium) {
+        newBondDiff = bondDiffNoMedium[Math.floor(bondDiffNoMedium.length * Math.random())];
+    } else if (bondDiffActual === bondDiffHigh) {
+        newBondDiff = bondDiffNoHigh[Math.floor(bondDiffNoHigh.length * Math.random())];
+    }
+    console.log("nouveau bond de difficulté: " + newBondDiff);
+
+    changeDifficulty();
+}
+
+function changeDifficulty() {
+    var array = [0, 1];
+    var addOrSub = array[Math.floor(array.length * Math.random())];
+    console.log("progression de la difficulté: " + addOrSub);
+
+    if (addOrSub === 0) { //changement de difficulté par soustraction
+        newDiff = difficulty - newBondDiff;
+        console.log("newDiff = " + newDiff);
+
+        if (newDiff < 0) {
+            newDiff = 0;
+            console.log("newDiff corrected = " + newDiff);
+        }
+    } else if (addOrSub === 1) { //changement de difficulté par addition
+        newDiff = difficulty + newBondDiff;
+        console.log("newDiff = " + newDiff);
+
+        if (newDiff >= 1) {
+            newDiff = 1;
+            console.log("newDiff corrected = " + newDiff);
+        }
+    }
+    
+}
+
+/*function cumulTours() {
     if (winState === true) {
         lastWinFail.push("true");
         compteurTours++;
@@ -137,5 +196,5 @@ function behaviorDiff() {
     cumulWin = [];
     cumulFail = [];
     clearArray();
-}
+}*/
 
