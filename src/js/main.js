@@ -1,10 +1,36 @@
 var IDjoueur = ""; //donner une ID au joueur
 var nomJoueur = ""; //nom entré par le joueur
-var connexionJoueur = new Date(); //date en ms de la connexion du joueur au système
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
-console.log(connexionJoueur.getHour());
+//----------------------------récupérer date et heure de connexion au jeu-----------------
+var today = new Date();
+var hh = today.getHours();
+var mn = today.getMinutes();
+var ss = today.getSeconds();
+var dd = today.getDate();
+var mm = today.getMonth() + 1; //January is 0!
+var yyyy = today.getFullYear();
+
+if (dd < 10) {
+    dd = '0' + dd;
+}
+
+if (mm < 10) {
+    mm = '0' + mm;
+}
+
+if (mn < 10) {
+    mn = '0' + mn;
+}
+
+if (ss < 10) {
+    ss = '0' + ss;
+}
+
+today = mm + '_' + dd + '_' + yyyy + '_' + hh + 'h' + mn + 'm' + ss + 's';
+var connexionJoueur = today;
+//----------------------------récupérer date et heure de connexion au jeu-----------------
 
 //récupérer identité joueur
 function recupererNom(event) {
@@ -16,11 +42,12 @@ function recupererNom(event) {
 
 function verifierNom() {
     if (isNaN(nomJoueur)) {
-        localStorage.setItem("name",nomJoueur);
+        localStorage.setItem("name", nomJoueur);
         console.log("nom du joueur : " + nomJoueur);
         
         //récupérer date de lancement du jeu
         localStorage.setItem("time", connexionJoueur);
+        console.log("heure de connexion au jeu : " + connexionJoueur);
 
         //document.getElementById("commencerJeu").style.display = "block";
         //document.getElementById("commencerJeu").disabled = false;
