@@ -532,7 +532,7 @@ function drawGrid(){
 
           var border = '';
           if(g_casesNum[i*g_nbCellX+j] < 0)
-            color = "#AAAAFF";
+              color = "#64B5F6";
 
 
 
