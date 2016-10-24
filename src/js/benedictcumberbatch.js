@@ -9,7 +9,7 @@ var moutonsPerdusJoueurBenedict = 0; //Nbre de moutons embrochés par le joueur 
 var nbCells = 4;
 var width = 300;
 
-var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0.1;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -82,6 +82,15 @@ function animate(){
 }
 
 function init() {
+    diffModel.setStepInCurve(0);
+    diffModel.setMode(diffModel.MODE_DDA_SAUT);
+    diffModel.setDiffStep(0.1);
+    diffModel.setCurrentDiff(0.0);
+    diffModel.setChallengeMinMax(1, 11);
+    diffModel.setDdaJump(20, 0.3);
+    diffModel.resetDdaJump();
+    g_nbPerm = Math.floor(diffModel.getChallengeFromDiffLinear(diffModel.currentDiff));
+
     document.getElementById("tours").innerHTML = tours;
     //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
@@ -101,7 +110,7 @@ function init() {
 
 function go() {
     casesFound = [];
-    makeGame(width,nbCells,1-difficulty);
+    makeGame(width, nbCells, g_nbPerm);
     anim = setInterval(animate,20);
     document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
     /*document.getElementById("tours").innerHTML = tours;
@@ -240,7 +249,10 @@ function showMise() {
 }
 
 function changeMetaDiff() {
-    if (modeDifficulty === 0) {
+    difficulty = diffModel.nextDifficulty(winState);
+    g_nbPerm = Math.floor(diffModel.getChallengeFromDiffLinear(difficulty));
+
+    /*if (modeDifficulty === 0) {
         console.log("winstate =" + winState);
         // reprendre code actuel fonctionnement diff
         if (winState === true) {
@@ -262,7 +274,7 @@ function changeMetaDiff() {
         difficulty = newDiff;
     }
 
-    console.log("difficulté du jeu:" + difficulty);
+    console.log("difficulté du jeu:" + difficulty);*/
 }
 
 function win(ijFind){
@@ -324,7 +336,7 @@ function win(ijFind){
 
         }
 
-        console.log("difficulté du prochain tour suite à win :" + difficulty);
+        //console.log("difficulté du prochain tour suite à win :" + difficulty);
     }
 
 }
@@ -382,7 +394,7 @@ function fail(){
             finDePartie();
         }
 
-        console.log("difficulté du prochain tour suite à fail :" + difficulty);
+        //console.log("difficulté du prochain tour suite à fail :" + difficulty);
     }
 
 }
@@ -402,9 +414,10 @@ var g_lastCoup = 5;
 var g_nb_coups = 0;
 var g_timer_coup_id = 0;
 var g_temps_coups = 0;
+var g_nbPerm = 0;
 const g_duree_coup = 20;
 
-function makeGame(width,nbCellX,diff) {
+function makeGame(width,nbCellX,nbPerm) {
 
     g_nbCellX = nbCellX = 3;
     g_width = width;
@@ -424,8 +437,6 @@ function makeGame(width,nbCellX,diff) {
     g_casesNum[Math.floor(i)] = -1;*/
 
     //On permiet
-    var nbPermMax = 10;
-    var nbPerm = Math.max(1, Math.floor(nbPermMax * diff));
     g_nb_coups = nbPerm;
     document.getElementById("nbCoups").innerHTML = g_nb_coups;
     console.log("Making grid with "+nbPerm+ " permutations");
@@ -693,7 +704,7 @@ function timerCoups(){
         seconds = parseInt(seconds, 10);
 
         if (seconds === 1) {
-            makeGame(width,nbCells,difficulty);
+            makeGame(width,nbCells,g_nbPerm);
             anim = setInterval(animate,20);
             //console.log(anim + "anim");
             activateMise();
@@ -1020,7 +1031,10 @@ function launchModeTest() {
                 moutonsPerdus = 0;
                 compteurMoutonsGagnes = 0;
                 compteurMoutonsPerdus = 0;
+               
                 difficulty = 0;
+                diffModel.setCurrentDiff(difficulty);
+                g_nbPerm = Math.floor(diffModel.getChallengeFromDiffLinear(diffModel.currentDiff));
 
                 nbCells = 4;
                 width = 300;

@@ -13,13 +13,14 @@ var anim = 0; //Handle du timer d'anim de la barre
 var running = false; //Si la barre est en cours d'anim
 var miseValide = false; //Si la mise n'est pas validée par le joueur
 
-var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var gameSpeed = 1; //Vitesse du jeu (notre param de la difficulté)
 var difficulty = 0; //Utilisée pour la mise en place de la courbe de difficulté
+var nextDiff = 0;
 
 var modeTest = true;
 var activateModeTest = false; 
-var overideTestMode = true; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
+var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
 var score = 0; //Score actuel
@@ -42,18 +43,20 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
-
-
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
 function init(){
     diffModel.setStepInCurve(0);
-    diffModel.setParams(3,-0.4);
-    diffModel.setMode(1);
+    diffModel.setMode(diffModel.MODE_DDA_SAUT);
+    diffModel.setDiffStep(0.1);
+    diffModel.setCurrentDiff(0.2);
+    diffModel.setChallengeMinMax(2, 10);
+    diffModel.setDdaJump(20, 0.3);
+    diffModel.resetDdaJump();
 
     var diff = diffModel.currentDiff;
-    gameSpeed = diffModel.getChallengeFromDiff(diff);
+    gameSpeed = diffModel.getChallengeFromDiffLinear(diff);
 
     document.getElementById("tours").innerHTML = tours;
     //document.getElementById("score").innerHTML = score;
@@ -68,6 +71,9 @@ function init(){
     
     //lancer tours de test
     launchModeTest();
+
+    //Show FPS
+    setInterval(showPerf, 10000);
 }
 
 function accessMise() {
@@ -209,6 +215,8 @@ function moveBar(object, direction) {
 /**
  Appellé par le timer d'anim toutes les n millisecondes
  */
+var nbCall = 0;
+var timeCall = 0;
 function animBar() {
     var slider = document.getElementById("slider");
     var leftSlider = parseInt(readStyle(slider,"left").slice(0,-2));
@@ -222,7 +230,19 @@ function animBar() {
     if(leftSlider <= 0)
         direction = 1;
 
+    if (nbCall === 0) {
+        timeCall = window.performance.now();
+    }
+    nbCall++;
+    
     moveBar(slider,direction);
+}
+
+function showPerf() {
+    var fps = (1000*(nbCall / (window.performance.now() - timeCall))).toFixed(2);
+    console.log("FPS: " + fps);
+    nbCall = 0;
+    timeCall = 0;
 }
 
 /**
@@ -312,9 +332,9 @@ function stop() {
     changeMetaDiff();
 
     //mise a jour de la difficulte selon le modele
-    var nextDiff = diffModel.nextDifficulty(res);
+    /*var nextDiff = diffModel.nextDifficulty(res);
     gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
-    console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+    console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);*/
 
     //Reset de la mise
     mise = "?";
@@ -374,20 +394,25 @@ function run() {
     //On calcule la frequence d'update de l'anim et le nombre de pixel de deplacement par frame
     //pour avoir l'anim la plus fluide possible tout en atteignant des hautes vitesses
     //sinon le max c'est un pixel par milliseconde, c'est pas tant que ca
-    console.log("new speed :" + gameSpeed);
+    //console.log("new speed :" + gameSpeed);
 
     if(tours > 0) {
 
         var pixelsPerSec = 40 * (gameSpeed + 0.5) + 0.001;
-        var framelength = Math.floor(1000.0 / pixelsPerSec);
+        var framelength = 1000.0 / pixelsPerSec;
 
-        console.log("new framelength :" + framelength);
-        barSpeed = 1;
-        while (framelength <= 2) {
-            barSpeed *= 2;
-            framelength *= 2;
+        
+        barSpeed = 1.0;
+        while (framelength <= 1000.0/200.0) {
+            console.log("Games at :" + (1000.0 / framelength).toFixed(2) + "fps, pellet speed wanted is " + pixelsPerSec.toFixed(2) + "pps actual is " + ((1000.0 * barSpeed) / framelength).toFixed(2) + "pps");
+            barSpeed += 1;
+            framelength *= 1.0+1.0/(barSpeed-1);
         }
-        console.log('Speed: '+gameSpeed.toFixed(1)+' Diff: '+diffModel.getDiffFromChallenge(gameSpeed).toFixed(2)+' Frame Length: '+framelength+ ' Bar Speed: '+barSpeed);
+
+        barSpeed = Math.floor(barSpeed);
+
+        console.log("Games at :" + (1000.0 / framelength).toFixed(2) + "fps, pellet speed wanted is " + pixelsPerSec.toFixed(2) + "pps actual is " + ((1000.0 * barSpeed) / framelength).toFixed(2) + "pps, " + barSpeed+" pix per frame");
+        //console.log('Speed: '+gameSpeed.toFixed(1)+' Diff: '+diffModel.getDiffFromChallenge(gameSpeed).toFixed(2)+' Frame Length: '+framelength+ ' Bar Speed: '+barSpeed);
     }
     //On lance l'anim
     if(tours > 0) {
@@ -399,22 +424,31 @@ function run() {
 function changeMetaDiff() {
     if (modeDifficulty === 0) {
         //mise a jour de la difficulte selon le modele
-        var nextDiff = diffModel.nextDifficulty(res);
-        gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
-        console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+        nextDiff = diffModel.nextDifficulty(winState);
+        gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
+        //console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
 
     } else if (modeDifficulty === 1 && modeTest === true) {
         // reprendre code actuel fonctionnement diff
-        var nextDiff = diffModel.nextDifficulty(res);
-        gameSpeed = diffModel.getChallengeFromDiff(nextDiff);
-        console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
+        nextDiff = diffModel.nextDifficulty(winState);
+        gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
+        //console.log("nextdiff : " + nextDiff + "-> speed :" + gameSpeed);
 
     } else if (modeDifficulty === 1 && modeTest === false) {
-        // envoyer vers contenu de courbeDiff.js
+        // envoyer vers contenu de courbeDiff.js  
         selectbondDiff();
-        gameSpeed = newDiff;
+        difficulty = newDiff;
+
+        //modifier la valeur de la difficulté si elle est égale à 1 ; pour ce jeu, la diff max ne peut être que je 0.99
+        if (newDiff >= 1) {
+            newDiff = 0.99;
+            //console.log("newDiff corrected for tomcruise = " + newDiff);
+        }
+        nextDiff = newDiff;
+
+        gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
     }
-    console.log("difficulté du jeu:" + gameSpeed);
+    //console.log("difficulté du jeu:" + gameSpeed.toFixed(2));
 }
 
 /**

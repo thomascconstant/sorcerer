@@ -18,7 +18,7 @@ var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
 var activateModeTest = false;
-var overideTestMode = true; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
+var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
@@ -66,12 +66,12 @@ function animate(){
 
     var cells = document.getElementsByName("cellWin");
     //console.log(colorTarget+'/'+colorBase);
-    /*if(colorCurrent - colorBase > step)
+    if(colorCurrent - colorBase > step)
         colorCurrent -= step;
     else {
         colorCurrent = colorBase;
         clearInterval(anim);
-    }*/
+    }
     
     for(var i=0;i<cells.length;i++){
         //console.log(cells[i].id);
@@ -87,6 +87,15 @@ function animate(){
 }
 
 function init() {
+
+    diffModel.setStepInCurve(0);
+    diffModel.setMode(diffModel.MODE_DDA_SAUT);
+    diffModel.setDiffStep(0.1);
+    diffModel.setCurrentDiff(0.0);
+    diffModel.setChallengeMinMax(4, 14);
+    diffModel.setDdaJump(20, 0.3);
+    diffModel.resetDdaJump();
+
     document.getElementById("tours").innerHTML = tours;
     //document.getElementById("score").innerHTML = score;
     document.getElementById("mise").innerHTML = mise;
@@ -324,7 +333,11 @@ function afficherCasesGagnantes() {
 }
 
 function changeMetaDiff() {
-    if (modeDifficulty === 0) {
+
+
+    difficulty = diffModel.nextDifficulty(winState);
+
+    /*if (modeDifficulty === 0) {
         console.log("winstate =" + winState);
         // reprendre code actuel fonctionnement diff
         if (winState === true) {
@@ -346,60 +359,29 @@ function changeMetaDiff() {
         difficulty = newDiff;
     }
 
-    console.log("difficulté du jeu:" + difficulty);
+    console.log("difficulté du jeu:" + difficulty);*/
 }
 
 function difficultyGame() {
 
+    modePoussin = false;
+    modeNormal = false;
+    modeViolent = true;
     
-    if (difficulty < 0.1) {
-        modeNormal = false;
-        modeViolent = false;
-        modePoussin = true;
+    nbCells = Math.floor(diffModel.getChallengeFromDiffLinear(difficulty));
 
-        console.log("mode poussin: " + modePoussin);
+    /*if (difficulty < 0.1) { nbCells = 4; }
+    else if (difficulty < 0.2) { nbCells = 5; }
+    else if (difficulty < 0.3) { nbCells = 6; }
+    else if (difficulty < 0.4) { nbCells = 7; }
+    else if (difficulty < 0.5) { nbCells = 8; }
+    else if (difficulty < 0.6) { nbCells = 9; }
+    else if (difficulty < 0.7) { nbCells = 10; }
+    else if (difficulty < 0.8) { nbCells = 11; }
+    else if (difficulty < 0.9) { nbCells = 12; }
+    else { nbCells = 13; }*/
 
-        nbCells = 4;
 
-    } else if (difficulty < 0.2) {
-        nbCells = 4;
-
-    } else if (difficulty < 0.3) {
-        nbCells = 5;
-
-    } else if (difficulty < 0.4) {
-        modeNormal = true;
-        modeViolent = false;
-        modePoussin = false;
-        
-        nbCells = 6;
-
-        console.log("mode normal: " + modeNormal);
-
-    } else if (difficulty < 0.5) {
-        nbCells = 7;
-
-    } else if (difficulty < 0.6) {
-        nbCells = 8;
-
-    } else if (difficulty < 0.7) {
-        modeNormal = false;
-        modeViolent = true;
-        modePoussin = false;
-
-        nbCells = 9;
-        
-        console.log("mode violent: " + modeViolent);
-
-    } else if (difficulty < 0.8) {
-        nbCells = 10;
-
-    } else if (difficulty < 0.9) {
-        nbCells = 11;
-
-    } else {
-        nbCells = 12;
-    } 
     /*else if (difficulty >= 0.3 && difficulty < 0.6) {
         modeNormal = true;
         modeViolent = false;
@@ -455,7 +437,7 @@ function win() {
             
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         }
             
         //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
@@ -547,7 +529,7 @@ function fail() {
 
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + difficulty + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         }
         
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
@@ -618,7 +600,7 @@ function toHexColor(R,V,B){
     return "#"+toHex(R)+toHex(V)+toHex(B);
 }
 
-function makeGame(width,nbCellsX,diffColor) {
+function buildGrid(width, nbCellsX, diffColor) {
     //nbCellsX = 5;
 
     //Calc des props
@@ -641,8 +623,8 @@ function makeGame(width,nbCellsX,diffColor) {
     colorTarget = colorFindB;
     colorCurrent = colorTarget;
 
-    var colorBaseHex = toHexColor(colorBaseR,colorBaseV,colorBaseB);
-    var colorFindHex = toHexColor(colorFindR,colorFindV,colorFindB);
+    var colorBaseHex = toHexColor(colorBaseR, colorBaseV, colorBaseB);
+    var colorFindHex = toHexColor(colorFindR, colorFindV, colorFindB);
 
     //console.log(colorBaseHex);
     //console.log(colorFindHex);
@@ -688,104 +670,113 @@ function makeGame(width,nbCellsX,diffColor) {
 
     }*/
 
-    if (modePoussin || modeNormal || modeViolent) {
-        console.log("mode poussin: "+ modePoussin);
-        
-        for(var i=0;i<nbCells;i++) {
-            var ijFind = 0;
-            do {
-                ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
-            } while(casesInterdites.indexOf(ijFind) >= 0)
-            cases.push(ijFind);
-        
-        console.log("cases gagnantes :"+cases);
- 
-            var posx = ijFind % nbCellsX;
-            var posy = Math.floor(ijFind / nbCellsX);
+    //console.log("mode poussin: "+ modePoussin);
 
-            //On interdit la case actuelle comme nouvelle case win
-            casesInterdites.push(ijFind);
-            
-            if(modeNormal || modeViolent) {
-                console.log("mode normal: "+ modeNormal);
-                //On interdit les voisins directs comme cases gagnantes
-                if(posx > 0){
-                    casesInterdites.push(ijFind-1);
-                }
-                if(posx < nbCellsX-1){
-                    casesInterdites.push(ijFind+1);
-                }
-                if(posy > 0){
-                    casesInterdites.push(ijFind-nbCellsX);
-                }
-                if(posy < nbCellsX-1){
-                    casesInterdites.push(ijFind+nbCellsX);
-                }
+
+    //On genere la grille des cases à trouver ! (cases)
+    for (var i = 0; i < nbCells; i++) {
+        //On cherche une case pas interdite
+        var nbEssais = 200;
+        var ijFind = 0;
+        do {
+            ijFind = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+        } while (casesInterdites.indexOf(ijFind) >= 0 && --nbEssais >= 0)
+
+        //On a tout interdit, on s'en sort pas, on fail 
+        if (nbEssais < 0) {
+            return -1;
+        }
+
+        //On ajoute cette case aux cases à trouver
+        cases.push(ijFind);
+        //console.log("cases gagnantes :" + cases);
+
+        //On interdit la case actuelle comme nouvelle case win
+        casesInterdites.push(ijFind);
+
+        var posx = ijFind % nbCellsX;
+        var posy = Math.floor(ijFind / nbCellsX);
+
+        if (modeNormal || modeViolent) {
+            //console.log("Interdit voisins directs");
+            //On interdit les voisins directs comme cases gagnantes
+            if (posx > 0) {
+                casesInterdites.push(ijFind - 1);
             }
+            if (posx < nbCellsX - 1) {
+                casesInterdites.push(ijFind + 1);
+            }
+            if (posy > 0) {
+                casesInterdites.push(ijFind - nbCellsX);
+            }
+            if (posy < nbCellsX - 1) {
+                casesInterdites.push(ijFind + nbCellsX);
+            }
+        }
 
-            //On interdit aussi en diagonales
-            if(modeViolent) {
-                console.log("mode violent");
+        //On interdit aussi en diagonales
+        if (modeViolent) {
+            //console.log("Interdits voisins diagonale");
 
-                if(posx > 0 && posy > 0){
-                    casesInterdites.push((posy-1)*nbCellsX + (posx-1));
-                }
-                if(posx < nbCellsX-1 && posy > 0){
-                    casesInterdites.push((posy-1)*nbCellsX + (posx+1));
-                }
-                if(posy < nbCellsX-1 && posx > 0){
-                    casesInterdites.push((posy+1)*nbCellsX + (posx-1));
-                }
-                if(posy < nbCellsX-1 && posx < nbCellsX-1){
-                    casesInterdites.push((posy+1)*nbCellsX + (posx+1));
-                }
+            if (posx > 0 && posy > 0) {
+                casesInterdites.push((posy - 1) * nbCellsX + (posx - 1));
+            }
+            if (posx < nbCellsX - 1 && posy > 0) {
+                casesInterdites.push((posy - 1) * nbCellsX + (posx + 1));
+            }
+            if (posy < nbCellsX - 1 && posx > 0) {
+                casesInterdites.push((posy + 1) * nbCellsX + (posx - 1));
+            }
+            if (posy < nbCellsX - 1 && posx < nbCellsX - 1) {
+                casesInterdites.push((posy + 1) * nbCellsX + (posx + 1));
             }
         }
     }
-    
+
+
     var z = (nbCellsX * nbCellsX) - (cases.length);
 
-    for(var i=0;i<z;i++) {
+    for (var i = 0; i < z; i++) {
         var ijFake = 0;
-            do {
-                ijFake = Math.floor(Math.random() * (nbCellsX * nbCellsX));
-            } while(cases.indexOf(ijFake) >= 0)
-                casesFake.push(ijFake);
+        do {
+            ijFake = Math.floor(Math.random() * (nbCellsX * nbCellsX));
+        } while (cases.indexOf(ijFake) >= 0)
+        casesFake.push(ijFake);
     }
 
     var iFind = Math.floor(Math.random() * nbCellsX);
     var jFind = Math.floor(Math.random() * nbCellsX);
-    
+
     var iFake = Math.floor(Math.random() * nbCellsX);
     var jFake = Math.floor(Math.random() * nbCellsX);
 
     var strHtml = '';
     strHtml += '<table>';
-    for(var i=0;i<nbCellsX;i++) {
+    for (var i = 0; i < nbCellsX; i++) {
         strHtml += '<tr>';
-        for(var j=0;j<nbCellsX;j++) {
+        for (var j = 0; j < nbCellsX; j++) {
             var color = colorBaseHex;
             var clickFun = 0;
             var name = 0;
-            
+
             var ijFind = i + j * nbCellsX;
-            
-            if(casesFake.indexOf(ijFake) >= 0) {
+
+            if (casesFake.indexOf(ijFake) >= 0) {
                 color = colorBaseHex;
                 //var clickFun = "fail()";
                 clickFun = "selectFail(" + ijFind + ")";
                 name = "cellFail";
             }
-            
+
             var ijFind = i + j * nbCellsX;
 
-            if(cases.indexOf(ijFind) >= 0) {
+            if (cases.indexOf(ijFind) >= 0) {
                 color = colorFindHex;
                 //clickFun = "win(" + ijFind + ")";
                 clickFun = "selectWin(" + ijFind + ")";
                 name = "cellWin";
             }
-            
+
             strHtml += '<td class="borderCase" id="' + ijFind + '" name="' + name + '" style="background-color:' + color + '; width:' + widthCell + 'px; height:' + widthCell + 'px" onclick="' + clickFun + '">&nbsp;';
             strHtml += '</td>';
         }
@@ -794,6 +785,29 @@ function makeGame(width,nbCellsX,diffColor) {
     strHtml += '</table>';
 
     document.getElementById("board").innerHTML = strHtml;
+
+    return 0;
+}
+
+function makeGame(width,nbCellsX,diffColor) {
+    modePoussin = false;
+    modeNormal = false;
+    modeViolent = true;
+    if (buildGrid(width, nbCellsX, diffColor) < 0) {
+        console.log("violent fail, mode normal...");
+        modePoussin = false;
+        modeNormal = true;
+        modeViolent = false;
+        if (buildGrid(width, nbCellsX, diffColor) < 0) {
+            console.log("normal fail, mode poussin...");
+            modePoussin = true;
+            modeNormal = false;
+            modeViolent = false;
+            if (buildGrid(width, nbCellsX, diffColor) < 0) {
+                console.log("meme en poussin, je m'en sors pas, c'est la fin...");
+            }
+        }
+    }
 
 }
 
@@ -873,6 +887,8 @@ function makeGameNoColors(width,nbCellsX,diffColor) {
     document.getElementById("board").innerHTML = strHtml;
 
 }
+
+
 
 function feedbackSonore() {
     if(winState === true) {
@@ -1254,9 +1270,6 @@ function launchModeTest() {
                 width = 300;
 
                 colorTransitionSpeed = 0.1;
-                modePoussin = true;
-                modeNormal = false;
-                modeViolent = false;
 
                 //mise à zéro interface
                 document.getElementById("compteurMoutonsGagnes").innerHTML = compteurMoutonsGagnes;

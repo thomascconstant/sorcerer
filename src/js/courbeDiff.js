@@ -66,11 +66,14 @@ function selectbondDiff() {
         } else if (bondDiff === bondDiffHigh) {
             bondDiff = bondDiffNoHigh[Math.floor(bondDiffNoHigh.length * Math.random())];
         }
+        bondDiff = parseFloat(bondDiff);
         console.log("nouveau bond de difficulté: " + bondDiff);
 
         changeDifficulty();
+
     } else {
         selectFirstBondDiff();
+
     }
     
 }
@@ -78,134 +81,43 @@ function selectbondDiff() {
 function changeDifficulty() {
     var array = [0, 1];
     var addOrSub = array[Math.floor(array.length * Math.random())];
+
+    // annoncer le sens de la progression de la difficulté
     if (addOrSub === 1) {
         console.log("progression de la difficulté vers le haut");
     } else {
         console.log("progression de la difficulté vers le bas");
     }
-
+    
+    // calculer la nouvelle valeur de la difficulté
     if (addOrSub === 0) { //changement de difficulté par soustraction
-        newDiff = difficulty - bondDiff;
+        console.log("var difficulty = " + difficulty);
+
+        var computeDiff = parseFloat(difficulty) - parseFloat(bondDiff);
+        console.log("computeDiff =" + computeDiff);
+
+        newDiff = (Math.round(computeDiff * 100) / 100).toFixed(1);
         console.log("newDiff = " + newDiff);
 
         if (newDiff < 0) {
             newDiff = 0;
             console.log("newDiff corrected = " + newDiff);
         }
+
     } else if (addOrSub === 1) { //changement de difficulté par addition
-        newDiff = difficulty + bondDiff;
+        console.log("var difficulty = " + difficulty);
+        
+        var computeDiff = parseFloat(difficulty) + parseFloat(bondDiff);
+        console.log("computeDiff =" + computeDiff);
+
+        newDiff = (Math.round(computeDiff * 100) / 100).toFixed(1);
         console.log("newDiff = " + newDiff);
 
         if (newDiff >= 1) {
             newDiff = 1;
             console.log("newDiff corrected = " + newDiff);
         }
+
     }
     
 }
-
-/*function cumulTours() {
-    if (winState === true) {
-        lastWinFail.push("true");
-        compteurTours++;
-
-        console.log("dernier win:" + lastWinFail)
-
-    } else if (winState === false) {
-        lastWinFail.push("fail");
-        compteurTours++;
-
-        console.log("dernier fail:" + lastWinFail)
-
-    }
-
-    checkWinFail();
-}
-
-function clearArray() {
-    if (compteurTours === toursBeforeChange) {
-        lastWinFail = [];
-        compteurTours = 0;
-    }
-}
-
-function checkWinFail() {
-    var idx = lastWinFail.indexOf("true");
-    while (idx != -1) {
-        cumulWin.push("true");
-        idx = lastWinFail.indexOf("true", idx + 1);
-    }
-    console.log("cumul des win:" + cumulWin);
-
-    var idx2 = lastWinFail.indexOf("fail");
-    while (idx2 != -1) {
-        cumulFail.push("fail");
-        idx2 = lastWinFail.indexOf("fail", idx2 + 1);
-    }
-    console.log("cumul des fail:" + cumulFail);
-
-    behaviorDiff();
-}
-
-//comparer les tableaux pour vérifier la présence de trois win
-compareArrayWin = function (lastWinFail, cumulWin) {
-    if (lastWinFail.length !== cumulWin.length) {
-        return false;
-    } else if (lastWinFail.length === cumulWin.length) {
-        for (var i = 0; i < lastWinFail.length; i++) {
-            if (lastWinFail[i] !== cumulWin[i]) {
-                return false;
-            }
-        }
-    console.log("coucou1");
-    return true;
-    }
-};
-
-//comparer les tableaux pour vérifier la présence de trois fail
-compareArrayFail = function (lastWinFail, cumulFail) {
-    if (lastWinFail.length !== cumulFail.length) {
-        return false;
-    } else if (lastWinFail.length === cumulFail.length) {
-        for (var i = 0; i < lastWinFail.length; i++) {
-            if (lastWinFail[i] !== cumulFail[i]) {
-                return true;
-            }
-        }
-    console.log("coucou2");
-    return true;
-    }
-};
-
-function behaviorDiff() {
-    if (compareArrayWin(lastWinFail, cumulWin) === true && compteurTours === toursBeforeChange) {
-        var tailleBondDiff = bondDiff[Math.floor(bondDiff.length * Math.random())];
-        console.log("taille du bond de difficulté win" + tailleBondDiff);
-        newDiff = difficulty + tailleBondDiff;
-        console.log("newDiff = " + newDiff);
-
-        if (newDiff >= 1) {
-            newDiff = 1;
-            //difficulty = newDiff;
-        }
-
-    } else if (compareArrayFail(lastWinFail, cumulFail) === true && compteurTours === toursBeforeChange) {
-        var tailleBondDiff = bondDiff[Math.floor(bondDiff.length * Math.random())];
-        console.log("taille du bond de difficulté fail" + tailleBondDiff);
-        newDiff = difficulty - tailleBondDiff;
-        console.log("newDiff = " + newDiff);
-
-        if (newDiff < 0) {
-            newDiff = 0;
-            //difficulty = newDiff;
-        }
-
-    } else {
-
-    }
-
-    cumulWin = [];
-    cumulFail = [];
-    clearArray();
-}*/
-

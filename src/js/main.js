@@ -4,6 +4,8 @@ var connexionJoueur = new Date(); //date en ms de la connexion du joueur au syst
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
+console.log(connexionJoueur.getHour());
+
 //récupérer identité joueur
 function recupererNom(event) {
     if (event.keyCode === 13) {
