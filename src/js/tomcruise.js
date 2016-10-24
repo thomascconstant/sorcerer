@@ -325,7 +325,7 @@ function stop() {
     
     if (modeTest === false) {
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + bondDiff + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
     }
     
     //modification de la difficulté (à décommenter pour nvelle courbe de diff)
@@ -422,7 +422,11 @@ function run() {
 }
 
 function changeMetaDiff() {
-    if (modeDifficulty === 0) {
+
+    nextDiff = diffModel.nextDifficulty(winState);
+    gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
+
+    /*if (modeDifficulty === 0) {
         //mise a jour de la difficulte selon le modele
         nextDiff = diffModel.nextDifficulty(winState);
         gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
@@ -448,7 +452,7 @@ function changeMetaDiff() {
 
         gameSpeed = diffModel.getChallengeFromDiffLinear(nextDiff);
     }
-    //console.log("difficulté du jeu:" + gameSpeed.toFixed(2));
+    console.log("difficulté du jeu:" + gameSpeed.toFixed(2));*/
 }
 
 /**
