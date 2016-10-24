@@ -9,7 +9,7 @@ var moutonsPerdusJoueurChristopher = 0; //Nbre de moutons embrochés par le joue
 var nbCells = 4;
 var width = 300;
 
-var modeDifficulty = 1; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
+var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var difficulty = 0;
 var colorTransitionSpeed = 0.1;
 var modePoussin = true;
@@ -18,7 +18,7 @@ var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
 var activateModeTest = false;
-var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
+var overideTestMode = true; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
@@ -350,7 +350,9 @@ function changeMetaDiff() {
 }
 
 function difficultyGame() {
-    if (difficulty === 0) {
+
+    
+    if (difficulty < 0.1) {
         modeNormal = false;
         modeViolent = false;
         modePoussin = true;
@@ -359,13 +361,13 @@ function difficultyGame() {
 
         nbCells = 4;
 
-    } else if (difficulty === 1) {
+    } else if (difficulty < 0.2) {
         nbCells = 4;
 
-    } else if (difficulty === 2) {
+    } else if (difficulty < 0.3) {
         nbCells = 5;
 
-    } else if (difficulty === 0.3) {
+    } else if (difficulty < 0.4) {
         modeNormal = true;
         modeViolent = false;
         modePoussin = false;
@@ -374,13 +376,13 @@ function difficultyGame() {
 
         console.log("mode normal: " + modeNormal);
 
-    } else if (difficulty === 0.4) {
+    } else if (difficulty < 0.5) {
         nbCells = 7;
 
-    } else if (difficulty === 0.5) {
+    } else if (difficulty < 0.6) {
         nbCells = 8;
 
-    } else if (difficulty === 0.6) {
+    } else if (difficulty < 0.7) {
         modeNormal = false;
         modeViolent = true;
         modePoussin = false;
@@ -389,19 +391,15 @@ function difficultyGame() {
         
         console.log("mode violent: " + modeViolent);
 
-    } else if (difficulty === 0.7) {
+    } else if (difficulty < 0.8) {
         nbCells = 10;
 
-    } else if (difficulty === 0.8) {
+    } else if (difficulty < 0.9) {
         nbCells = 11;
 
-    } else if (difficulty === 0.9) {
+    } else {
         nbCells = 12;
-
-    } else if (difficulty === 1) {
-        nbCells = 13;
-    }
-
+    } 
     /*else if (difficulty >= 0.3 && difficulty < 0.6) {
         modeNormal = true;
         modeViolent = false;
