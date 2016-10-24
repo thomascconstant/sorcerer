@@ -1253,7 +1253,7 @@ function launchModeTest() {
         if (tours === 0) {
             //modifier affichage contenu popup
             document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
-            document.getElementById("popup3").innerHTML = "L'entraînement est terminé ! A partir de maintenant, de vrais moutons sont utilisés !";
+            document.getElementById("popup3").innerHTML = "L'entraînement est terminé. A partir de maintenant, les moutons risquent de passer à la broche ! Prenez garde !";
 
             setTimeout(function launchPopup() {
                 //restart game
