@@ -765,7 +765,6 @@ body {
                     <div class="button" id="mise5" onmouseover="colorButtonMise(5)" onmouseout="uncolorButtonMise(5)" onclick="recupMise(5)">5</div>
                     <div class="button" id="mise6" onmouseover="colorButtonMise(6)" onmouseout="uncolorButtonMise(6)" onclick="recupMise(6)">6</div>
                     <div class="button" id="mise7" onmouseover="colorButtonMise(7)" onmouseout="uncolorButtonMise(7)" onclick="recupMise(7)">7</div>
-
                     <!-- <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
                     <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
@@ -794,14 +793,13 @@ body {
                 <div class="textefeedback" id="res"></div>
                 <button class="button" style="display:inline;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer un plateau de jeu</button><br />
                 <table id="tableMise">
-                    <tr><td class="textefeedback" style="text-align:center">Temps restant</td><td class="textefeedback" style="text-align:center">Coups restants</td><td class="textefeedback" style="text-align:center">Tours restants</td><td class="textefeedback" style="text-align:center">Mouton(s) misé(s)</td></tr>
+                    <tr><td class="textefeedback" style="text-align:center">Temps restant</td><td class="textefeedback" style="text-align:center">Déplacements de la case bleue restants</td><td class="textefeedback" style="text-align:center">Tours de jeu restants</td><td class="textefeedback" style="text-align:center">Mouton(s) misé(s)</td></tr>
                     <tr><td id="temps" class="big">0</td><td id="nbCoups" class="big">0</td><td id="tours" class="big">0</td><td id="mise" class="big">0</td></tr>
                 </table>
                 <br />
             </div>
         </div><br /><br />
     </div>
-
     <div id="popup1" class="overlay">
         <div class="popup">
             <div class="textetitre" id="popupTitre"></div>
@@ -811,7 +809,6 @@ body {
             </div>
         </div>
     </div>
-
     <div id="popup2" class="overlay">
         <div class="popup">
             <div class="textetitre" id="popupTitre3"></div>
@@ -821,17 +818,17 @@ body {
             </div>
         </div>
     </div>
-
     <div class="fondtexte">
         <div class="centerize">
             <button class="buttonRegles" href="#" style="display:visible;cursor:pointer" type="button" id="boutonAfficherRegles" onmouseover="colorButtonRules()" onmouseout="uncolorButtonRules()" onclick="afficherRegles()">Relire les règles</button>
             <div class="texte" id="affichageRegles" style="display:none">
                 <b>
-                    Votre objectif est de remettre les cases du plateau de jeu dans l'ordre (de 1 à 9).<br />
+                    Votre objectif est de remettre les cases du plateau de jeu dans l'ordre de numérotation, de 1 à 9, dans un temps limité.<br />
                     Pour cela, déplacez la case bleue en cliquant sur une case adjacente.<br />
-                    Vous disposez d'abord d'un temps limité pour observer le plateau de jeu, avant que celui-ci ne disparaisse. <br>
+                    La case bleue prendra la place de cette case, et inversement. Une flèche jaune indique le sens de déplacement de la case bleue.<br />
+                    Vous disposez d'abord de 20 secondes pour observer le plateau de jeu, avant que celui-ci ne disparaisse. <br>
                     Pour chaque tour, vous devez miser 1 à 7 moutons sur vos chances de gagner.<br />
-                    Après avoir misé, le nombre de coups et le temps sont à nouveau limités.<br />
+                    Après avoir misé, vous pouvez déplacer la case bleue. Attention au temps et aux nombre de déplacement !<br />
                 </b>
                 <p class="texte">
                     Si vous perdez, les moutons meurent. Si vous gagnez, ils sont libérés.<br />
