@@ -325,7 +325,8 @@ function stop() {
     
     if (modeTest === false) {
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + gameSpeed + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + diffModel.currentDiff.toFixed(2) + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
     }
     
     //modification de la difficulté (à décommenter pour nvelle courbe de diff)
@@ -412,7 +413,6 @@ function run() {
         barSpeed = Math.floor(barSpeed);
 
         console.log("Games at :" + (1000.0 / framelength).toFixed(2) + "fps, pellet speed wanted is " + pixelsPerSec.toFixed(2) + "pps actual is " + ((1000.0 * barSpeed) / framelength).toFixed(2) + "pps, " + barSpeed+" pix per frame");
-        //console.log('Speed: '+gameSpeed.toFixed(1)+' Diff: '+diffModel.getDiffFromChallenge(gameSpeed).toFixed(2)+' Frame Length: '+framelength+ ' Bar Speed: '+barSpeed);
     }
     //On lance l'anim
     if(tours > 0) {
@@ -778,7 +778,9 @@ function launchModeTest() {
                 moutonsPerdus = 0;
                 compteurMoutonsGagnes = 0;
                 compteurMoutonsPerdus = 0;
+
                 difficulty = 0;
+                diffModel.setCurrentDiff(0.2);
 
                 barSpeed = 1; //Vitesse de la barre : pixels par frame
                 direction = 1; //direction actuelle du deplacement de la barre
