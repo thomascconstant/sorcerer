@@ -333,8 +333,6 @@ function afficherCasesGagnantes() {
 }
 
 function changeMetaDiff() {
-
-
     difficulty = diffModel.nextDifficulty(winState);
 
     /*if (modeDifficulty === 0) {
