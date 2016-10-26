@@ -91,7 +91,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   resLisseCur <- 0
   DTResLisse <- cbind(DTResLisse,data.table(resLisse=resLisseCur))
   
-  alpha <- 0.7;
+  alpha <- 0.8;
   
   for(i in 2:nrow(DTLoc)){
     res <- DTLoc[i-1,gagnant]*2-1
@@ -128,7 +128,7 @@ lienErreurEvalDiffResLisse <- function(DTLoc){
     #abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     print(summary(fitl));
     
-    return(fitl);
+    return(fit);
 }
 
 lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
@@ -184,7 +184,7 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 
   }
 
-  return(fitl)
+  return(fit)
 }
 
 #plot les courbes de diff
@@ -207,7 +207,22 @@ description <- function(DTLoc){
   print(p)
 }
 
-
+echoPValue <- function(pv){
+  
+  pv = signif(pv,digits=2)
+   
+  if(pv<0.001) {
+    return(paste(pv,"***"));
+  }else if(pv<0.01){ 
+    return(paste(pv,"**"));
+  }else  if(pv<0.05){ 
+    return(paste(pv,"*"));
+  }else{
+    return(paste(pv,":("));
+  }
+  
+  return("");
+}
 ```
 
 ```{r echo=FALSE}
@@ -301,8 +316,11 @@ if(removeTenFirst)
 
 #lien erreur d'eval diff (exces confiance ?) et fails ou succes répétés
 fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
+pvalDTFails = unlist(summary(fit))["Pr(>F)1"]
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
+pvalDTWins = unlist(summary(fit))["Pr(>F)1"]
 fit <- lienErreurEvalDiffResLisse(DT)
+pvalDTLisse = unlist(summary(fit))["Pr(>F)1"]
 
 
 ```
@@ -312,6 +330,7 @@ fit <- lienErreurEvalDiffResLisse(DT)
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Jeu de déduction (difficulté logique)")
+pvalDTLFails = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -320,6 +339,7 @@ plot(fit)
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Jeu de déduction (difficulté logique)")
+pvalDTLWins = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -329,6 +349,7 @@ plot(fit)
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffResLisse(DTL)
+pvalDTLLisse = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -347,6 +368,7 @@ void <- DTL[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDj
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Jeu d'adresse (difficulté motrice)")
+pvalDTMFails = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -355,6 +377,7 @@ plot(fit)
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Jeu d'adresse (difficulté motrice)")
+pvalDTMWins = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -363,6 +386,7 @@ plot(fit)
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffResLisse(DTM)
+pvalDTMLisse = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -381,6 +405,7 @@ void <- DTM[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDj
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Jeu de perception visuelle (difficulté sensorielle)")
+pvalDTSFails = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -390,6 +415,7 @@ plot(fit)
 
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Jeu de perception visuelle (difficulté sensorielle)")
+pvalDTSWins = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -398,6 +424,7 @@ plot(fit)
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
 fit <- lienErreurEvalDiffResLisse(DTS)
+pvalDTSLisse = unlist(summary(fit))["Pr(>F)1"]
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
@@ -409,6 +436,23 @@ plot(fit)
 ```{r echo=FALSE}
 void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
 ```
+
+#### Summary des pvalues
+
+- All lissee `r echoPValue(pvalDTLisse);`
+- Motrice lissee `r echoPValue(pvalDTMLisse)`
+- Senso lissee `r echoPValue(pvalDTSLisse)`
+- Logique lissee `r echoPValue(pvalDTLLisse)`
+
+- All NBWin `r echoPValue(pvalDTWins)`
+- Motrice NBWin `r echoPValue(pvalDTMWins)`
+- Senso NBWin `r echoPValue(pvalDTSWins)`
+- Logique NBWin `r echoPValue(pvalDTLWins)`
+
+- All NBFails `r echoPValue(pvalDTFails)`
+- Motrice NBFails `r echoPValue(pvalDTMFails)`
+- Senso NBFails `r echoPValue(pvalDTSFails)`
+- Logique NBFails `r echoPValue(pvalDTLFails)`
 
 ### Analyses complémentaires
 

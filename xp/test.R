@@ -1,5 +1,5 @@
   
-file = "./log_thomas_XPFINALES.txt"
+file = "./log_thomas_XPFINALES_ENCOURS.txt"
 
 
 csv.data <- read.csv(file,header=TRUE,sep=";")
@@ -95,6 +95,8 @@ print("Anova nbFail")
 fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
 sum_fit3 = unlist(summary(fit))
 #print(summary(fit))
+
+
 
 print(sum_fit1["Pr(>F)1"]);
 print(sum_fit2["Pr(>F)1"]);
