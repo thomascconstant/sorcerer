@@ -24,7 +24,7 @@ useSensorielle = TRUE
 useLogique = TRUE
 drawLogit = TRUE
 removeTenFirst = FALSE
-file = "./log_thomas_XPFINALES.txt"
+file = "./log_thomas_XPFINALES_ENCOURS.txt"
 #file = "./log_thomas_correct_motrice.txt"
 
 #---------------------------------- fonctions
