@@ -1,6 +1,8 @@
 ---
 title: "Analyse des données des joueurs (expérimentations finales)"
-output: html_document
+output: 
+  html_document:
+    theme: lumen
 ---
 
 ```{r include = FALSE}
@@ -17,13 +19,16 @@ require(ggplot2)
 ```
 
 
-```{r echo=FALSE}
+```{r setup, echo=FALSE}
 #----------------------------------- configuration
 useMotrice = TRUE
 useSensorielle = TRUE
 useLogique = TRUE
 drawLogit = TRUE
 removeTenFirst = FALSE
+plotDiffCurves = FALSE
+plotLinModels = FALSE
+echoModels = FALSE
 file = "./log_thomas_XPFINALES_ENCOURS.txt"
 #file = "./log_thomas_correct_motrice.txt"
 
@@ -67,6 +72,10 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
     }else{
       nbFailCpt = 0;
     }
+    
+    #if(nbFailCpt > 5)
+    #  nbFailCpt = 5
+    
     DTNbFail <- rbind(DTNbFail,cbind(DTLoc[i,],data.table(nbFail=nbFailCpt)))
   }
   DTLoc <- DTNbFail
@@ -82,6 +91,10 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
     }else{
       nbWinCpt = 0;
     }
+    
+    #if(nbWinCpt > 5)
+    #  nbWinCpt = 5
+    
     DTNbWin <- rbind(DTNbWin,cbind(DTLoc[i,],data.table(nbWin=nbWinCpt)))
   }
   DTLoc <- DTNbWin
@@ -117,16 +130,29 @@ removeHeadTail <- function(DTLoc,nb,bHead=TRUE){
   return(DTLoc)
 }
 
-lienErreurEvalDiffResLisse <- function(DTLoc){
+lienErreurEvalDiffResLisse <- function(DTLoc,titre="title"){
+  
+  plot(x=DTLoc$resLisse, y=DTLoc$erreurdiff, main=titre, xlab="Indice de confiance lissé", ylab="Erreur d'estimation de la difficulté")
+    # TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbFail]
+    # TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbFail]
+    # TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbFail]
+    # setkey(TMP,nbFail)
+    # setkey(TMP2,nbFail)
+    # setkey(TMP3,nbFail)
+    # points(y=TMP$meanDiffEstimated, x=TMP$nbFail, col="red", type="o")
+    # points(y=TMP2$varUpDiffEstimated, x=TMP2$nbFail, col="blue", type="o")
+    # points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
     
     print("Anova res lisse");
     fit <- aov(erreurdiff ~ resLisse, data=DTLoc);
-    print(summary(fit));
+    if(echoModels)
+      print(summary(fit));
     
     print("Regression linéaire");
     fitl <- glm(DTLoc$erreurdiff ~ DTLoc$resLisse);
-    #abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
-    print(summary(fitl));
+    abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
+    if(echoModels)
+      print(summary(fitl));
     
     return(fit);
 }
@@ -150,12 +176,14 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     
     print("Anova")
     fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
-    print(summary(fit))
+    if(echoModels)
+      print(summary(fit))
     
     print("Regression linéaire")
     fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbFail)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
-    print(summary(fitl))
+    if(echoModels)
+      print(summary(fitl))
     
   }
   else{
@@ -175,12 +203,14 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     
     print("Anova")
     fit <- aov(erreurdiff ~ nbWin, data=DTLoc)
-    print(summary(fit))
+    if(echoModels)
+      print(summary(fit))
     
     fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbWin)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     print("Regression linéaire")
-    print(summary(fitl))
+    if(echoModels)
+      print(summary(fitl))
 
   }
 
@@ -225,7 +255,7 @@ echoPValue <- function(pv){
 }
 ```
 
-```{r echo=FALSE}
+```{r get_data, echo=FALSE}
 #---------------------------------- traitement
 
 #Prepa plot
@@ -236,7 +266,7 @@ echoPValue <- function(pv){
 csv.data <- read.csv(file,header=TRUE,sep=";")
 ```
 
-## Cadre des expérimentations pilotes
+# Cadre des expérimentations pilotes
 <p align = "justify" >&nbsp;&nbsp; Les expérimentations pilotes ont pu être menés du 6 au 10 septembre, dans les mêmes conditions que celles prévues pour les expérimentations finales, à savoir dans les locaux du Living Lab auprès du public cible. Sur cette période, 32 personnes ont participé aux expérimentations, mais seulement 8 d'entre-elles ont pu tester la version finalisée du jeu (le prototype ayant évolué au cours de ces expérimentations). Ces huit personnes ont expérimenté les trois jeux de manière aléatoire (pour éviter tout effet d'ordre et de fatigue), réalisant 30 tours de jeu pour chaque tâche dédiée à un type de difficulté (logique, sensorielle et motrice). Au total, nous obtenons 240 observations pour un jeu, soit 720 observations recouvrant l'ensemble des trois types de difficulté.</p>
 
 <p align = "justify" >&nbsp;&nbsp; Les données traitées et présentées ici sont tirées des 8 participants qui ont pu jouer aux versions finales des trois épreuves où la difficulté évolue suivant si le joueur est en condition d'échec ou de réussite, et non une courbe prédéfinie. Autrement dit, la difficulté augmente lorsque le joueur gagne ; puis baisse lorsque le joueur perd.</p>
@@ -248,24 +278,24 @@ csv.data <- read.csv(file,header=TRUE,sep=";")
 * la **difficulté** du jeu à un tour de jeu donné (comprise entre 0 -facile- et 1 -très difficile-) ;
 * l'**état de réussite** du joueur en sortie de tour, à savoir s'il est gagnant (1) ou perdant (0).
 
-## Estimation de la difficulté objective
+# Estimation de la difficulté objective
 <p align = "justify" >&nbsp;&nbsp; Une première étape d'analyse des données récupérée consiste à vérifier si la difficulté du jeu prévue a priori par le concepteur (difficulté hypothétique) est calibrée avec celle vécue par les joueurs. Le calcul de cette difficulté "objective" est basé sur l'observation du nombre d'échec de chaque joueur pour un niveau donné de difficulté. Les trois figures suivantes permettent d'observer l'écart qui existe entre la difficulté heuristique et celle observée lors des expérimentations, et ce pour les trois jeux. Par exemple, dans le cas du jeu de déduction, pour une difficulté hypothétique a priori de 0%, la difficulté objective serait de 20%.</p>
 
-```{r echo=FALSE}
+```{r prepare_logique, echo=FALSE}
 #difficulte logique
 DTL <- csv.data[which(csv.data$nom_du_jeu=="Logique2"),]
 DTL <- as.data.table(DTL)
 DTL <- addVariables(DTL,drawLogit,titre="Jeu de déduction (difficulté logique)")
 ```
 
-```{r echo=FALSE}
+```{r prepare_senso, echo=FALSE}
 #difficulte sensorielle
 DTS <- csv.data[which(csv.data$nom_du_jeu=="Sensoriel"),]
 DTS <- as.data.table(DTS)
 DTS <- addVariables(DTS,drawLogit,titre="Jeu de perception visuelle (difficulté sensorielle)")
 ```
 
-```{r echo=FALSE}
+```{r prepare_motrice, echo=FALSE}
 #difficulte motrice
 DTM <- csv.data[which(csv.data$nom_du_jeu=="Motrice"),]
 DTM <- as.data.table(DTM)
@@ -273,20 +303,51 @@ DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation dif
 DTM <- addVariables(DTM,drawLogit,titre="Jeu d'adresse (difficulté motrice)")
 ```
 
-## Description datas (recherche outliers)
+# Description datas (recherche outliers)
+
+##Ecart type de la mise
+
 ```{r echo=FALSE}
 DTDesc = data.table();
 DTDesc = DTM[,.(type="Moteur",sdMise=sd(miseNorm)),by=IDjoueur]
-DTDesc = rbind(DTDesc,DTS[,.(type="Senso",sdMise=sd(miseNorm)),by=IDjoueur])
+DTDesc = rbind(DTDesc,DTS[,.(type="Sensorielle",sdMise=sd(miseNorm)),by=IDjoueur])
 DTDesc = rbind(DTDesc,DTL[,.(type="Logique",sdMise=sd(miseNorm)),by=IDjoueur])
 p <- ggplot(DTDesc, aes(type,sdMise))
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
-#outlier <- boxplot.stats(DTDesc$sdMise)$out
+outliers <- boxplot.stats(DTDesc$sdMise)$out
+print(paste("Out:",outliers))
 ```
 
+## Moyenne de la mise
 
-## Estimation de l'excès et du manque de confiance
+```{r echo=FALSE}
+DTDesc = data.table();
+DTDesc = DTM[,.(type="Moteur",mMise=mean(miseNorm)),by=IDjoueur]
+DTDesc = rbind(DTDesc,DTS[,.(type="Sensorielle",mMise=mean(miseNorm)),by=IDjoueur])
+DTDesc = rbind(DTDesc,DTL[,.(type="Logique",mMise=mean(miseNorm)),by=IDjoueur])
+p <- ggplot(DTDesc, aes(type,mMise))
+p <- p + geom_boxplot() + geom_point(shape=1) 
+print(p)
+outliers <- boxplot.stats(DTDesc$mMise)$out
+print(paste("Out:",outliers))
+```
+
+##Difficulte constatée $\sum(win)$
+
+```{r echo=FALSE}
+DTDesc = data.table();
+DTDesc = DTM[,.(type="Moteur",dConst=sum(gagnant)),by=IDjoueur]
+DTDesc = rbind(DTDesc,DTS[,.(type="Sensorielle",dConst=sum(gagnant)),by=IDjoueur])
+DTDesc = rbind(DTDesc,DTL[,.(type="Logique",dConst=sum(gagnant)),by=IDjoueur])
+p <- ggplot(DTDesc, aes(type,dConst))
+p <- p + geom_boxplot() + geom_point(shape=1) 
+print(p)
+outliers <- boxplot.stats(DTDesc$dConst)$out
+print(paste("Out:",outliers))
+```
+
+# Estimation de l'excès et du manque de confiance
 <p align = "justify" >&nbsp;&nbsp; Une deuxième étape consiste à vérifier si l'évolution de la difficulté du jeu a un impact sur la difficulté ressentie par les joueurs, la mise servant ici de référence. L'analyse précédente a permis de pouvoir obtenir la difficulté réelle de chaque jeu, nouvelle variable qui sert dorénavant de mesure de base pour observer les variations de la difficulté ressentie par le joueur.</p>
 &nbsp;&nbsp; Deux nouvelles mesures sont ajoutées :
 
@@ -300,7 +361,7 @@ print(p)
 
 <p align = "justify" >&nbsp;&nbsp; Les figures suivantes présentent ainsi, pour tous les jeux puis pour chacun d'entre-eux (et donc pour chaque type de difficulté), le nombre d'échecs consécutifs (nbFail) et de succès consécutifs (nbWin) par rapport à l'erreur d'appréciation de la difficulté par le joueur. Chaque figure est accompagnée des conclusions d'une analyse de la variance (ANOVA) et de la régression linéaire, tracée en vert. La courbe rouge correspond aux valeurs médianes, les bleues mesurent quant à elles deux fois l'écart type, signifiant le faible nombre de participants. Malgré cette limite, il est possible de commenter ces données, en attendant de les confronter à celles qui vont être récupérées sur une population plus importante lors des expérimentations finales.</p>
 
-### Résultats pour les trois jeux
+## Tous jeux confondus
 <p align = "justify" >&nbsp;&nbsp; Pour l'ensemble des données tirées des trois jeux, on observe dans le cas d'échecs consécutifs une sur-estimation de la difficulté du jeu, laissant à penser que le joueur développe un manque de confiance quant à ses chances de réussir. A l'inverse, lorsque le joueur cumule les succès, il aurait tendance à sous-estimer la difficulté du jeu, bien que l'effet soit moins visible pour les échecs. Le manque de données pour ce cas peut en être à l'origine.</p>
 
 ```{r echo=FALSE}
@@ -313,131 +374,216 @@ if(useSensorielle) DT <- rbind(DT,DTS)
 #supprimer le debut ou la fin
 if(removeTenFirst)
   DT <- removeHeadTail(DT,10);
+```
 
+### Nombre d'échecs consécutifs
+
+```{r echo=FALSE}
 #lien erreur d'eval diff (exces confiance ?) et fails ou succes répétés
 fit <- lienErreurEvalDiffFailsRepetes(DT,TRUE,"Tous les jeux")
 pvalDTFails = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTFails);
+```
+
+### Nombre de réussites consécutives
+
+```{r echo=FALSE}
 fit <- lienErreurEvalDiffFailsRepetes(DT,FALSE,"Tous les jeux")
 pvalDTWins = unlist(summary(fit))["Pr(>F)1"]
-fit <- lienErreurEvalDiffResLisse(DT)
-pvalDTLisse = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTWins);
+```
 
+### Indice de confiance lissé
+
+```{r echo=FALSE}
+fit <- lienErreurEvalDiffResLisse(DT,"Tous les jeux")
+pvalDTLisse = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTLisse);
 
 ```
 
-### Résultats pour la difficulté logique
+## Difficulté logique
 <p align = "justify" >&nbsp;&nbsp; Indépendamment pour le jeu de déduction, le nombre d'échecs consécutifs ne semble pas avoir un trop important impact sur l'estimation de la difficulté par le joueur, et ne conduirait pas à un manque de confiance. Une hypothèse serait que, face à ce type de difficulté, le joueur aurait plus de temps pour apprécier son aptitude à résoudre le problème donné et donc une meilleure appréciation de la difficulté. A l'inverse, il ferait preuve d'un léger excès de confiance dans le cas de succès répétés. De nouvelles données permettront de mieux cerner ces comportements.</p>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Jeu de déduction (difficulté logique)")
+fit <- lienErreurEvalDiffFailsRepetes(DTL,TRUE,"Difficulté logique")
 pvalDTLFails = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTLFails);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Jeu de déduction (difficulté logique)")
+fit <- lienErreurEvalDiffFailsRepetes(DTL,FALSE,"Difficulté logique")
 pvalDTLWins = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTLWins);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffResLisse(DTL)
+fit <- lienErreurEvalDiffResLisse(DTL,"Difficulté logique")
 pvalDTLLisse = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTLLisse);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 
-#### Courbes de difficulte
+### Courbes de difficulte
 ```{r echo=FALSE}
-void <- DTL[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+if(plotDiffCurves){
+  void <- DTL[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+}else{
+  print("plotDiffCurves == FALSE")
+}
 ```
 
 
-### Résultats pour la difficulté motrice
+## Difficulté motrice
 <p align = "justify" >&nbsp;&nbsp; Le jeu d'adresse ne montre qu'une légère sous-estimation de la difficulté dans le cas d'échecs consécutifs, qui tendrait à disparaître. Les résultats sont plus probants dans le cas de succès consécutifs. Là aussi, de nouvelles données permettront d'étoffer cette analyse, mais une modification de la conception du jeu pourrait permettre d'isoler les comportements. De tous, le jeu d'adresse est le plus rapide à réaliser (les tours de jeu s'enchaînant vite), ce qui peut entraîner une plus grande inattention de la part du joueur (là où la tâche de perception visuelle en requiert énormément, et celle de logique pouvant provoquer une rapide saturation cognitive).</p>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Jeu d'adresse (difficulté motrice)")
+fit <- lienErreurEvalDiffFailsRepetes(DTM,TRUE,"Difficulté motrice")
 pvalDTMFails = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTMFails);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Jeu d'adresse (difficulté motrice)")
+fit <- lienErreurEvalDiffFailsRepetes(DTM,FALSE,"Difficulté motrice")
 pvalDTMWins = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTMWins);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffResLisse(DTM)
+fit <- lienErreurEvalDiffResLisse(DTM,"Difficulté motrice")
 pvalDTMLisse = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTMLisse);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 
 
-#### Courbes de difficulte
+### Courbes de difficulte
 ```{r echo=FALSE}
-void <- DTM[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+if(plotDiffCurves){
+  void <- DTM[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+}else{
+  print("plotDiffCurves == FALSE")
+}
 ```
 
-### Résultats pour la difficulté sensorielle
+## Difficulté sensorielle
 <p align = "justify" >&nbsp;&nbsp; Reste le jeu de perception visuelle, dont les résultats semblent le mieux confirmer nos hypothèses, mettant en évidence un excès de confiance de la part du joueur lorsqu'il cumule les succès, et un manque de confiance lorsqu'il cumule les échecs.</p>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Jeu de perception visuelle (difficulté sensorielle)")
+fit <- lienErreurEvalDiffFailsRepetes(DTS,TRUE,"Difficulté sensorielle")
 pvalDTSFails = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTSFails);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Jeu de perception visuelle (difficulté sensorielle)")
+fit <- lienErreurEvalDiffFailsRepetes(DTS,FALSE,"Difficulté sensorielle")
 pvalDTSWins = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTSWins);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 ```{r echo=FALSE}
-fit <- lienErreurEvalDiffResLisse(DTS)
+fit <- lienErreurEvalDiffResLisse(DTS,"Difficulté sensorielle")
 pvalDTSLisse = unlist(summary(fit))["Pr(>F)1"]
+print("pvalue anova")
+  echoPValue(pvalDTSLisse);
 ```
 
 ```{r fig.width=4, fig.height=4,echo=FALSE,out.extra=' style="float:left"'}
-plot(fit)
+if(plotLinModels){
+  plot(fit);
+}else{
+  print("plotLinModels == FALSE")
+}
 ```
 <div style="clear:both">&nbsp;</div>
 
-#### Courbes de difficulte
+### Courbes de difficulte
 ```{r echo=FALSE}
-void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+if(plotDiffCurves){
+  void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDjoueur)]
+}else{
+  print("plotDiffCurves == FALSE")
+}
 ```
 
-#### Summary des pvalues
+# Summary des pvalues
 
 - All lissee `r echoPValue(pvalDTLisse);`
 - Motrice lissee `r echoPValue(pvalDTMLisse)`
@@ -454,12 +600,12 @@ void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse);NULL},by=.(IDj
 - Senso NBFails `r echoPValue(pvalDTSFails)`
 - Logique NBFails `r echoPValue(pvalDTLFails)`
 
-### Analyses complémentaires
+# Analyses complémentaires
 
 <p align = "justify" >&nbsp;&nbsp; On teste ici une faiblesse éventuelle du modèle. Nous considérons qu'un joueur a une perception faussée de la difficultée si la difficulté objective globale $d_{og}$ est différente de la difficulté subjective $d_{s}$. $d_{og}$ est calculée sur l'ensemble du groupe . $d_{s}$ correspond à la mise du joueur normalisée. Nous étudions le rapport entre nombre d'échecs consécutifs $n_{fail}$ ou nombre de réussites consécutifs $n_{win}$ et l'erreur d'estimation $\epsilon = d_{s} - d_{og}$. </p>
 
 <p align = "justify" >&nbsp;&nbsp; $d_{og}$ a une faiblesse: elle est calculée sur l'ensemble du groupe et donc ne tient pas compte du niveau spécifique de chaque joueur, elle s'éloigne donc de la difficulté réelle $d_{r}$ pour les joueurs qui sortent de la moyenne du groupe, bons ou mauvais. Donc plus un joueur s'éloigne de la moyenne des joueurs, plus l'erreur d'évaluation de la difficulté va être importante: même si $d_{s}$ est parfaite, $\mid d_{s}-d_{og} \mid$ va augmenter car $d_{og}$ devient de plus en plus fausse. Autrement dit, la correlation entre $n_{win}$ et $\epsilon$ provient elle d'une erreur sur la difficulté subjective (exces de confiance) ou sur la difficulté objective. Car justement, plus un joueur est bon (ou mauvais) plus il a de chance d'avoir des suites de succès (ou d'échecs), avant que la difficulté se soit adaptée, ce qui pourrait expliquer une corrélation entre $d_{og}$ et $n_{win}$.</p>
 
-### Idees
-- somme smooth des succes et echecs au lieu de n precedents
+# Idees
+
 
