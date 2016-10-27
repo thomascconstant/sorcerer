@@ -30,8 +30,8 @@ removeOutliers = TRUE
 plotDiffCurves = TRUE
 plotDiffCurvesOutliers = TRUE
 plotLinModels = FALSE
-echoModels = FALSE
-file = "./log_thomas_XPFINALES_ENCOURS.txt"
+echoModels = TRUE
+file = "./log_thomas_XPFINALES.txt"
 #file = "./log_thomas_correct_motrice.txt"
 
 #---------------------------------- fonctions
@@ -50,6 +50,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   #On ajoute une colonne de la difficulte estimee, a partir d'un 
   #logit de la difficulte supposée sur l'échec constaté
   mylogit <- glm(perdant ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
+  print(summary(mylogit));
   sample = data.frame(difficulty=DTLoc$difficulty);
   DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
   
