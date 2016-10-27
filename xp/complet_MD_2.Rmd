@@ -122,7 +122,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   DTResLisse <- cbind(DTResLisse,data.table(resLisse=resLisseCur))
   
   lastID <- DTLoc[1]$IDjoueur;
-  alpha <- 0.2;
+  alpha <- 0.45;
   
   for(i in 2:nrow(DTLoc)){
     if(DTLoc[i]$IDjoueur != lastID){
