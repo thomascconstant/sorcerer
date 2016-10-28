@@ -122,7 +122,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   DTResLisse <- cbind(DTResLisse,data.table(resLisse=resLisseCur))
   
   lastID <- DTLoc[1]$IDjoueur;
-  alpha <- 0.45;
+  alpha <- 0.6;
   
   for(i in 2:nrow(DTLoc)){
     if(DTLoc[i]$IDjoueur != lastID){
@@ -158,7 +158,7 @@ removeHeadTail <- function(DTLoc,nb,bHead=TRUE){
 
 lienErreurEvalDiffResLisse <- function(DTLoc,titre="title"){
   
-  plot(x=DTLoc$resLisse, y=DTLoc$evalDiff, main=titre, xlab="Indice de confiance lissé", ylab="Erreur d'estimation de la difficulté")
+  plot(x=DTLoc$resLisse, y=DTLoc$erreurdiff, main=titre, xlab="Indice de confiance lissé", ylab="Erreur d'estimation de la difficulté")
     # TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurdiff)),by=nbFail]
     # TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurdiff)+2*sd(erreurdiff)),by=nbFail]
     # TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurdiff)-2*sd(erreurdiff)),by=nbFail]
@@ -170,12 +170,12 @@ lienErreurEvalDiffResLisse <- function(DTLoc,titre="title"){
     # points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
     
     print("Anova res lisse");
-    fit <- aov(evalDiff ~ resLisse, data=DTLoc);
+    fit <- aov(erreurdiff ~ resLisse, data=DTLoc);
     if(echoModels)
       print(summary(fit));
     
     print("Regression linéaire");
-    fitl <- glm(DTLoc$evalDiff ~ DTLoc$resLisse);
+    fitl <- glm(DTLoc$erreurdiff ~ DTLoc$resLisse);
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     if(echoModels)
       print(summary(fitl));
@@ -201,12 +201,12 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
     
     print("Anova")
-    fit <- aov(evalDiff ~ nbFail, data=DTLoc)
+    fit <- aov(erreurdiff ~ nbFail, data=DTLoc)
     if(echoModels)
       print(summary(fit))
     
     print("Regression linéaire")
-    fitl <- glm(DTLoc$evalDiff ~ DTLoc$nbFail)
+    fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbFail)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     if(echoModels)
       print(summary(fitl))
@@ -228,11 +228,11 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     #ggplot(data=DTLoc, aes(factor(DTLoc$nbWin),erreurdiff)) + geom_boxplot()
     
     print("Anova")
-    fit <- aov(evalDiff ~ nbWin, data=DTLoc)
+    fit <- aov(erreurdiff ~ nbWin, data=DTLoc)
     if(echoModels)
       print(summary(fit))
     
-    fitl <- glm(DTLoc$evalDiff ~ DTLoc$nbWin)
+    fitl <- glm(DTLoc$erreurdiff ~ DTLoc$nbWin)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="purple")
     print("Regression linéaire")
     if(echoModels)
@@ -332,7 +332,11 @@ DTM$difficulty <-  (DTM$difficulty)/ abs(max(DTM$difficulty)) #normalisation dif
 DTM <- addVariables(DTM,drawLogit,titre="Jeu d'adresse (difficulté motrice)")
 ```
 
-# Description datas (recherche outliers)
+# Description datas 
+
+Au total, **`r length(unique(DTM$IDjoueur))`** joueurs dans le dataset avant suppression des outliers, donc  `r length(DTM$IDjoueur)` lignes dans la table.
+
+##Recherche Outliers
 
 ##Ecart type de la mise
 
@@ -520,6 +524,9 @@ if(removeOutliers){
 }
 
 ```
+
+
+Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(unique(DTL$IDjoueur))`** en logique et **`r length(unique(DTL$IDjoueur))`** joueurs en senso.
 
 # Estimation de l'excès et du manque de confiance
 <p align = "justify" >&nbsp;&nbsp; Une deuxième étape consiste à vérifier si l'évolution de la difficulté du jeu a un impact sur la difficulté ressentie par les joueurs, la mise servant ici de référence. L'analyse précédente a permis de pouvoir obtenir la difficulté réelle de chaque jeu, nouvelle variable qui sert dorénavant de mesure de base pour observer les variations de la difficulté ressentie par le joueur.</p>
