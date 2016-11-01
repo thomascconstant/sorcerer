@@ -31,10 +31,9 @@ plotDiffCurves = TRUE
 plotDiffCurvesOutliers = TRUE
 plotLinModels = FALSE
 echoModels = TRUE
-file = "./log_thomas_XPFINALES_WEEK2.txt"
-#file = "./log_thomas_XPFINALES_WEEK1.txt"
-#file = "./log_thomas_XPFINALES_WEEK1ANDWEEK2.txt"
+file = "./log_thomas_XPFINALES_ENCOURS.txt"
 #file = "./log_thomas_correct_motrice.txt"
+#file = "./log_thomas_XPFINALES_ENCOURS.txt"
 
 #---------------------------------- fonctions
 
