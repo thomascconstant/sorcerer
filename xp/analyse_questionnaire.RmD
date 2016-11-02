@@ -1,0 +1,45 @@
+---
+title: "Analyse des données des joueurs (retours questionnaires)"
+output: 
+  html_document:
+    theme: lumen
+---
+
+```{r include = FALSE}
+#setwd("C:/Users/Thomas Constant/Source/Repos/sorcerer/xp")
+#install.packages("rmarkdown")
+```
+
+
+```{r include = FALSE}
+#install.packages("data.table")
+#install.packages("ggplot2")
+#install.packages("xlsx")
+library("xlsx")
+require(xlsx)
+require(data.table)
+require(ggplot2)
+```
+
+
+```{r setup, echo=FALSE}
+#----------------------------------- configuration
+#useMotrice = TRUE
+#useSensorielle = TRUE
+#useLogique = TRUE
+file = "./log_questionnaire_XP_WEEK1ANDWEEK2.xlsx"
+
+#---------------------------------- fonctions
+data <- read.xlsx(file,sheetIndex=1,header=TRUE)
+
+Unaccent <- function(text) {
+  text <- gsub("['`^~\"]", " ", text)
+  text <- iconv(text, to="ASCII//TRANSLIT//IGNORE")
+  text <- gsub("['`^~\"]", "", text)
+  return(text)
+}
+
+#data2 <- Unaccent(data)
+
+euro <- "\u20AC"
+euro
