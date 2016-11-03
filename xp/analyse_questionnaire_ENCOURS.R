@@ -27,6 +27,50 @@ clean <- function(ttt){
   as.numeric( gsub('Feminin', '1', gsub('Masculin', '0', ttt)))
 }
 
+pyramide <- function(data,laxis,raxis) {
+  par(cex=0.8)
+  a<-as.character(data$A); m<-data$M; f<-data$F
+  ff<- -f
+  ll<- -laxis
+  op<-par(mfrow=c(1,2),omi=c(0,0,0,0),ps=18,xaxt="s",cex=0.8)
+  
+  par(mar=c(4,2,3,1.5))
+  
+  barplot(ff,
+          horiz=T,main="Femmes",
+          space=0,
+          col="grey",
+          xlim=c(min(ll),0),
+          axes=F,
+          axisnames=F,
+          cex.axis =0.7,
+          xaxt="n")
+  
+  axis(1,
+       at=ll,
+       labels=formatC(laxis,format="d"), 
+       cex.axis =0.7)
+  
+  par(mar=c(4,2,3,2), xaxt="s")
+  
+  barplot(m,
+          horiz=T,
+          main="Hommes",
+          space=0,col="grey",
+          xlim=c(0,max(raxis)),
+          axes=T,axisnames=T, 
+          cex.axis =0.7)
+  
+  axis(2,
+       at=c(1:NROW(a))-0.5,
+       labels=formatC(a,format="s"),
+       pos=-2,
+       las=1,tcl=0,
+       lty=0, 
+       cex.axis =0.5) 
+  par(op)
+}
+
 #---------------------------------- code
 data <- read.xlsx(file,sheetIndex=1,header=TRUE)
 data2 <- data.frame(data$Sexe)
