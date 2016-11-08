@@ -27,12 +27,36 @@ View(perdant[perdant$nom_du_jeu=="Logique2",])
 #normalisation resLisseBase
 DT2$resLisseBaseNorm <- DT2$resLisseBase / 2.5
 
+#limiter set de données au 15 premiers tours
+DT15t <- DT[which(DT$action_de_jeu <= 15),]
+
+#limiter set de données au 15 derniers tours
+DT15tH <- DT[which(DT$action_de_jeu >= 15),]
+
+#erreur d'estimation de la difficulte par le joueur sur les 15 premiers tours (exces de confiance ?)
+DT15t$erreurdiff <- DT15t$evalDiff - DT15t$estDiff
+
+#ne garder que l'erreur de diff positive
+excesconfiance <- DT[which(DT$erreurdiff > 0),]
 library(glm2)
-model <- glm2(formula = estDiff ~ erreurdiff + gagnant, data = DT)
+modelEDC <- glm2(formula = gagnant ~ evalDiff + nbWin, data = excesconfiance)
+summary(modelEDC)
+anova(modelEDC)
+
+#ne garder que l'erreur de diff negative
+manqueconfiance <- DT[which(DT$erreurdiff < 0),]
+library(glm2)
+modelMDC <- glm2(formula = gagnant ~ evalDiff + nbFail, data = manqueconfiance)
+summary(modelMDC)
+anova(modelMDC)
+
+#=====================other stuff
+library(glm2)
+model <- glm(estDiff ~ evalDiff + nbWin, data = DT, family = "quasibinomial"(link = "logit"))
 print(model)
 summary(model)
 coef(model)
-anova(model)
+aov(model)
 plot(model)
 plot(anova(model))
 
