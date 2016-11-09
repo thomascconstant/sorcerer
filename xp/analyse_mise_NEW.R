@@ -40,6 +40,15 @@ plot(anova(model))
 library(ResourceSelection)
 hoslem.test(DT$gagnant, fitted(model))
 
-model2 <- glm2(gagnant ~ estDiff + nb, data = DT, family = "binomial"(link = "logit"))
+DTM1P <- DTM[DTM$IDjoueur==DTM$IDjoueur[31]]
+
+model2 <- glm(perdant ~ difficulty, data = DTM1P, family = "binomial"(link = "logit"))
 print(model2)
 summary(model2)
+plot(model2)
+
+sample = data.frame(difficulty=seq(0, 1, 0.05))
+newres = predict(model2, newdata = sample, type = "response")
+plot(DTM1P$difficulty, DTM1P$perdant, xlab="Difficulté hypothétique",  ylab="Difficulté objective (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
+points(data.frame(sample,newres), type="o")
+
