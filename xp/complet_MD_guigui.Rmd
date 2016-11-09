@@ -32,11 +32,11 @@ removeOutliers = TRUE
 
 plotLogit = TRUE
 plotDiffCurves = FALSE
-plotDiffCurvesOutliers = FALSE
+plotDiffCurvesOutliers = TRUE
 plotLinModels = TRUE
 echoModels = TRUE
 
-file = "./log_thomas_XPFINALES_ENCOURS.txt"
+file = "./log_thomas_XPFINALES_WEEK2.txt"
 #file = "./log_thomas_correct_motrice.txt"
 #file = "./log_thomas_XPFINALES_ENCOURS.txt"
 
@@ -56,6 +56,23 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   #difficulte évaluée par le joueur
   DTLoc$evalDiff <- 1 - DTLoc$miseNorm;
   
+  #difficulte evaluee par le joueur : logit approach
+  DTLoc[,miseBin := 0][mise >= 4, miseBin := 1]
+  DTLoc[,evalDiffBin := 1][mise >= 4, evalDiffBin := 0]
+  
+  
+  mylogit <- glm(evalDiffBin ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
+  print(summary(mylogit));
+  sample = data.frame(difficulty=DTLoc$difficulty);
+  DTLoc$evalDiff =  predict(mylogit, newdata = sample, type = "response");
+  
+  if(trace){
+    sample = data.frame(difficulty=seq(0, 1, 0.05))
+    newres = predict(mylogit, newdata = sample, type = "response")
+    plot(DTLoc$difficulty, DTLoc$evalDiffBin, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté estimée (mise)",  col=rgb(0,100,0,100,maxColorValue=255))
+    points(data.frame(sample,newres), type="o")
+  }
+  
   #On ajoute une colonne de la difficulte estimee, a partir d'un 
   #logit de la difficulte supposée sur l'échec constaté
   mylogit <- glm(perdant ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
@@ -71,7 +88,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   }
   
   #erreur d'estimation de la difficulte par le joueur (exces de confiance ?)
-  DTLoc$erreurDiff <- DTLoc$evalDiff - DTLoc$estDiff;
+  DTLoc$erreurDiffConfiance <- DTLoc$estDiff - DTLoc$evalDiff;
   
   #nombre de fails
   temps <- proc.time()[1];
@@ -189,10 +206,10 @@ removeHeadTail <- function(DTLoc,nb,bHead=TRUE){
 
 lienErreurEvalDiffResLisse <- function(DTLoc,titre="title"){
   
-  plot(x=DTLoc$resLisse, y=DTLoc$erreurDiff, main=titre, xlab="Indice de confiance lissé", ylab="Erreur d'estimation de la difficulté")
-    # TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiff)),by=nbFail]
-    # TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiff)+2*sd(erreurDiff)),by=nbFail]
-    # TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiff)-2*sd(erreurDiff)),by=nbFail]
+  plot(x=DTLoc$resLisse, y=DTLoc$erreurDiffConfiance, main=titre, xlab="Indice de confiance lissé", ylab="Erreur d'estimation de la difficulté")
+    # TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiffConfiance)),by=nbFail]
+    # TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiffConfiance)+2*sd(erreurDiffConfiance)),by=nbFail]
+    # TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiffConfiance)-2*sd(erreurDiffConfiance)),by=nbFail]
     # setkey(TMP,nbFail)
     # setkey(TMP2,nbFail)
     # setkey(TMP3,nbFail)
@@ -201,12 +218,12 @@ lienErreurEvalDiffResLisse <- function(DTLoc,titre="title"){
     # points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
     
     print("Anova res lisse");
-    fit <- aov(erreurDiff ~ resLisse, data=DTLoc);
+    fit <- aov(erreurDiffConfiance ~ resLisse, data=DTLoc);
     if(echoModels)
       print(summary(fit));
     
     print("Regression linéaire");
-    fitl <- glm(DTLoc$erreurDiff ~ DTLoc$resLisse);
+    fitl <- glm(DTLoc$erreurDiffConfiance ~ DTLoc$resLisse);
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     if(echoModels)
       print(summary(fitl));
@@ -220,10 +237,10 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     
     
     
-    plot(x=DTLoc$nbFail, y=DTLoc$erreurDiff, main=titre, xlab="Nombre d'échecs consécutifs (nbFail)", ylab="Erreur d'estimation de la difficulté")
-    TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiff)),by=nbFail]
-    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiff)+2*sd(erreurDiff)),by=nbFail]
-    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiff)-2*sd(erreurDiff)),by=nbFail]
+    plot(x=DTLoc$nbFail, y=DTLoc$erreurDiffConfiance, main=titre, xlab="Nombre d'échecs consécutifs (nbFail)", ylab="Erreur d'estimation de la difficulté")
+    TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiffConfiance)),by=nbFail]
+    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiffConfiance)+2*sd(erreurDiffConfiance)),by=nbFail]
+    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiffConfiance)-2*sd(erreurDiffConfiance)),by=nbFail]
     setkey(TMP,nbFail)
     setkey(TMP2,nbFail)
     setkey(TMP3,nbFail)
@@ -232,12 +249,12 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
     points(y=TMP3$varDownDiffEstimated, x=TMP3$nbFail, col="blue", type="o")
     
     print("Anova")
-    fit <- aov(erreurDiff ~ nbFail, data=DTLoc)
+    fit <- aov(erreurDiffConfiance ~ nbFail, data=DTLoc)
     if(echoModels)
       print(summary(fit))
     
     print("Regression linéaire")
-    fitl <- glm(DTLoc$erreurDiff ~ DTLoc$nbFail)
+    fitl <- glm(DTLoc$erreurDiffConfiance ~ DTLoc$nbFail)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="green")
     if(echoModels)
       print(summary(fitl))
@@ -246,24 +263,24 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
   else{
     
     
-    plot(x=DTLoc$nbWin, y=DTLoc$erreurDiff, main=titre, xlab="Nombre de succès consécutifs (nbWin)", ylab="Erreur d'estimation de la difficulté")
-    TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiff)),by=nbWin]
-    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiff)+2*sd(erreurDiff)),by=nbWin]
-    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiff)-2*sd(erreurDiff)),by=nbWin]
+    plot(x=DTLoc$nbWin, y=DTLoc$erreurDiffConfiance, main=titre, xlab="Nombre de succès consécutifs (nbWin)", ylab="Erreur d'estimation de la difficulté")
+    TMP <- DTLoc[, .(meanDiffEstimated=mean(erreurDiffConfiance)),by=nbWin]
+    TMP2 <- DTLoc[, .(varUpDiffEstimated=mean(erreurDiffConfiance)+2*sd(erreurDiffConfiance)),by=nbWin]
+    TMP3 <- DTLoc[, .(varDownDiffEstimated=mean(erreurDiffConfiance)-2*sd(erreurDiffConfiance)),by=nbWin]
     setkey(TMP,nbWin)
     setkey(TMP2,nbWin)
     setkey(TMP3,nbWin)
     points(y=TMP$meanDiffEstimated, x=TMP$nbWin, col="red", type="o")
     points(y=TMP2$varUpDiffEstimated, x=TMP2$nbWin, col="blue", type="o")
     points(y=TMP3$varDownDiffEstimated, x=TMP3$nbWin, col="blue", type="o")
-    #ggplot(data=DTLoc, aes(factor(DTLoc$nbWin),erreurDiff)) + geom_boxplot()
+    #ggplot(data=DTLoc, aes(factor(DTLoc$nbWin),erreurDiffConfiance)) + geom_boxplot()
     
     print("Anova")
-    fit <- aov(erreurDiff ~ nbWin, data=DTLoc)
+    fit <- aov(erreurDiffConfiance ~ nbWin, data=DTLoc)
     if(echoModels)
       print(summary(fit))
     
-    fitl <- glm(DTLoc$erreurDiff ~ DTLoc$nbWin)
+    fitl <- glm(DTLoc$erreurDiffConfiance ~ DTLoc$nbWin)
     abline(a =fitl$coefficients[1], b=fitl$coefficients[2], col="purple")
     print("Regression linéaire")
     if(echoModels)
@@ -275,15 +292,18 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 }
 
 #plot les courbes de diff
-plotCurves <- function (numStep,diffSubj,diffObj,confiance,id,nbWin,nbFail,error){
-  #print(diffSubj);
+plotCurves <- function (numStep,diffSubj,diffObj,confiance,id,nbWin,nbFail,error,mise){
   df <- data.frame(ns=numStep,do=diffObj,ds=diffSubj,c=confiance)
-  pl <- ggplot(df,aes(x=ns,y=diffObj)) + ggtitle(id[1]);
-  pl <- pl + geom_point(size=1);
-  pl <- pl + geom_line(size=0.5,colour="#992299");
-  pl <- pl + geom_line(aes(x=ns,y=diffSubj),size=0.5,colour="#992222");
-  pl <- pl + geom_line(aes(x=ns,y=confiance),size=0.5,colour="#229922");
-  pl <- pl + geom_line(aes(x=ns,y=error),size=0.5,colour="#555555");
+  pl <- ggplot(df,aes(x=ns)) # + ggtitle(id[1]);
+  pl <- pl + geom_point(aes(y=diffObj,colour="DiffObj"),size=1);
+  pl <- pl + geom_line(aes(y=diffObj,colour="DiffObj"));
+  pl <- pl + geom_line(aes(y=diffSubj,colour="DiffSubj"));
+  pl <- pl + geom_line(aes(y=confiance,colour="Confiance"));
+  pl <- pl + geom_line(aes(y=mise,colour="Mise"));
+  pl <- pl + ylim(0, 1)
+  pl <- pl + scale_colour_manual(
+    values = c("DiffObj" = "red","DiffSubj" = "blue","Confiance" = "green", "Mise" = "black"))
+  
   #pl <- pl + geom_line(aes(x=ns,y=nbWin),size=0.5,colour="#555555");
   #pl <- pl + geom_line(aes(x=ns,y=nbFail),size=0.5,colour="#000000");
   #pl <- pl + coord_fixed(ratio = 20);
@@ -307,6 +327,8 @@ echoPValue <- function(pv){
     return(paste(pv,"**"));
   }else  if(pv<0.05){ 
     return(paste(pv,"*"));
+  }else if(pv<0.1){ 
+    return(paste(pv,"."));
   }else{
     return(paste(pv,":("));
   }
@@ -397,11 +419,11 @@ print(paste("Id out logique sdMise:",toString(idOutliersL)))
 
 if(plotDiffCurvesOutliers){
   if(!length(idOutliersM)==0)
-    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersS) == 0)
-    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersL) == 0)
-    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurvesOutliers == FALSE")
 }
@@ -444,11 +466,11 @@ print(paste("Id out logique mMise:",toString(idOutliersL)))
 
 if(plotDiffCurvesOutliers){
   if(!length(idOutliersM )==0)
-    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersS) == 0)
-    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersL) == 0)
-    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurvesOutliers == FALSE")
 }
@@ -491,11 +513,11 @@ print(paste("Id out logique sum Mise:",toString(idOutliersL)))
 
 if(plotDiffCurvesOutliers){
   if(!length(idOutliersM )==0)
-    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersS) == 0)
-    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersL) == 0)
-    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurvesOutliers == FALSE")
 }
@@ -537,11 +559,11 @@ print(paste("Id out logique sum win:",toString(idOutliersL)))
 
 if(plotDiffCurvesOutliers){
   if(!length(idOutliersM)==0)
-    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersS) == 0)
-    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersL) == 0)
-    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurvesOutliers == FALSE")
 }
@@ -584,11 +606,58 @@ print(paste("Id out logique moutons:",toString(idOutliersL)))
 
 if(plotDiffCurvesOutliers){
   if(!length(idOutliersM )==0)
-    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersS) == 0)
-    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
   if(!length(idOutliersL) == 0)
-    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
+}else{
+  print("plotDiffCurvesOutliers == FALSE")
+}
+
+if(removeOutliers){
+  DTM <- DTM[!IDjoueur %in% idOutliersM]
+  DTS <- DTS[!IDjoueur %in% idOutliersS]
+  DTL <- DTL[!IDjoueur %in% idOutliersL]
+}else{
+  print("NOT REMOVING OUTLIERS (removeOutliers == FALSE)")
+}
+```
+
+
+##Comportement stratégique (moutons perdus)
+
+```{r echo=FALSE}
+DTDesc = data.table();
+DTDescM = data.table();
+DTDescS = data.table();
+DTDescL = data.table();
+DTDescM = DTM[,.(type="Moteur",totalMoutons=max(moutons_tues)),by=IDjoueur]
+DTDescS = DTS[,.(type="Sensorielle",totalMoutons=max(moutons_tues)),by=IDjoueur]
+DTDescL = DTL[,.(type="Logique",totalMoutons=max(moutons_tues)),by=IDjoueur]
+DTDesc = DTDescM;
+DTDesc = rbind(DTDesc,DTDescS);
+DTDesc = rbind(DTDesc,DTDescL);
+p <- ggplot(DTDesc, aes(type,totalMoutons))
+p <- p + geom_boxplot() + geom_point(shape=1) 
+print(p)
+outliersMMiseM <- boxplot.stats(DTDescM$totalMoutons)$out
+outliersMMiseS <- boxplot.stats(DTDescS$totalMoutons)$out
+outliersMMiseL <- boxplot.stats(DTDescL$totalMoutons)$out
+idOutliersM = DTDescM[totalMoutons %in% outliersMMiseM]$IDjoueur
+idOutliersS = DTDescS[totalMoutons %in% outliersMMiseS]$IDjoueur
+idOutliersL = DTDescL[totalMoutons %in% outliersMMiseL]$IDjoueur
+print(paste("Id out motrice moutons:",toString(idOutliersM)))
+print(paste("Id out senso moutons:",toString(idOutliersS)))
+print(paste("Id out logique moutons:",toString(idOutliersL)))
+
+if(plotDiffCurvesOutliers){
+  if(!length(idOutliersM )==0)
+    void <- DTM[IDjoueur %in% idOutliersM,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
+  if(!length(idOutliersS) == 0)
+    void <- DTS[IDjoueur %in% idOutliersS,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
+  if(!length(idOutliersL) == 0)
+    void <- DTL[IDjoueur %in% idOutliersL,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurvesOutliers == FALSE")
 }
@@ -621,43 +690,112 @@ Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(u
 
 ```{r echo=FALSE}
 
+# DTLoc1 = DTL;
+# 
+# res <- numeric(11)
+# nb <- numeric(11)
+# i = 0;
+# while(i<=10){
+#   diff=i/10;
+#   print(diff)
+#   DTLoc = DTLoc1[which(difficulty >= diff-0.01 & difficulty <= diff+0.01  & action_de_jeu > 5)]
+#   if(nrow(DTLoc) > 20){
+#     plot(x=DTLoc$resLisse, y=DTLoc$erreurDiffConfiance, main=paste(diff,signif(unique(DTLoc$estDiff),digits=2)))
+#     fit <- glm(DTLoc$erreurDiffConfiance ~ DTLoc$resLisse);
+#     DTLoc$miseBin = ifelse(DTLoc$mise>4, 1, 0)
+#     fitg <- glm(miseBin ~ resLisse, data = DTLoc, family = "binomial"(link = "logit"))
+#     sample = data.frame(resLisse=seq(0, 1, 0.05))
+#     newres = predict(fitg, newdata = sample, type = "response")
+#     points(x=sample$resLisse,y=newres,col="red")
+#     print(summary(fitg))
+#     abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")
+#     res[i+1] = fit$coefficients[2];
+#     nb[i+1] = nrow(DTLoc);
+#   }else{
+#     res[i+1] = NA;
+#   }
+# 
+#   i=i+1
+# }
+# print(nb)
+# print(res)
 
-DTLoc1 = DTM;
-
-res <- numeric(11)
-nb <- numeric(11)
-i = 0;
-while(i<=10){
-  diff=i/10;
-  print(diff)
-  DTLoc = DTLoc1[which(difficulty >= diff-0.01 & difficulty <= diff+0.01  & action_de_jeu > 5)]
-  if(nrow(DTLoc) > 20){
-    plot(x=DTLoc$resLisse, y=DTLoc$miseNorm, main=paste(diff,signif(unique(DTLoc$estDiff),digits=2)))
-    fit <- glm(DTLoc$miseNorm ~ DTLoc$resLisse);
-    DTLoc$miseBin = ifelse(DTLoc$mise>4, 1, 0)
-    fitg <- glm(miseBin ~ resLisse, data = DTLoc, family = "binomial"(link = "logit"))
-    sample = data.frame(resLisse=seq(0, 1, 0.05))
-    newres = predict(fitg, newdata = sample, type = "response")
-    points(x=sample$resLisse,y=newres,col="red")
-    print(summary(fitg))
-    abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")  
-    res[i+1] = fit$coefficients[2];
+analyseParDifficute <- function(DTParam){
+  res <- numeric(11)
+  nb <- numeric(11)
+  nb2 <- numeric(11)
+  pv1 <- numeric(11)
+  pv2 <- numeric(11)
+  dObj <- numeric(11)
+  i = 0;
+  while(i<=10){
+    diff=i/10;
+    print(diff)
+    DTLoc = DTParam[which(difficulty >= diff-0.01 & difficulty <= diff+0.01  & action_de_jeu > 2)]
+    
+    DTLoc$miseBin = ifelse(DTLoc$mise>4, 1, 0);
+    # DTLoc[,miseBin:= -1]; 
+    # DTLoc[mise > 4,miseBin := 1];
+    # DTLoc[mise < 4,miseBin := 0];
+    # DTLoc = DTLoc[miseBin != -1];
+    # 
+    if(nrow(DTLoc) > 30){
+      plot(x=DTLoc$resLisse, y=DTLoc$miseNorm, main=paste(diff,signif(unique(DTLoc$estDiff),digits=2)))
+      fit <- glm(DTLoc$miseNorm ~ DTLoc$resLisse);
+        
+      fitg <- glm(miseBin ~ resLisse, data = DTLoc, family = "binomial"(link = "logit"))
+      sample = data.frame(resLisse=seq(0, 1, 0.05))
+      newres = predict(fitg, newdata = sample, type = "response")
+      points(x=sample$resLisse,y=newres,col="red")
+      print(summary(fitg))
+      abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")
+      res[i+1] = signif(fit$coefficients[2],digits=2);
+      
+      #print(unlist(summary(fit)));
+      pv1[i+1] = echoPValue(unlist(summary(fitg))$coefficients7)
+      pv2[i+1] = echoPValue(unlist(summary(fitg))$coefficients8)
+    }else{
+      res[i+1] = NA;
+      pv1[i+1] = NA;
+      pv2[i+1] = NA;
+    }
+    
     nb[i+1] = nrow(DTLoc);
-  }else{
-    res[i+1] = NA;
+    nb2[i+1] = length(unique(DTLoc$IDjoueur))
+    dObj[i+1] = DTLoc$estDiff[1];
+  
+    i=i+1
   }
   
-  i=i+1
+  resTable = data.table(NbObservations = nb);
+#  resTable[,NbObservations := nb];
+  resTable[,DiffObj := dObj];
+  resTable[,NbJoueurs := nb2];
+  resTable[,Coeffs := res];
+  resTable[,Interecept := pv1];
+  resTable[,resLisse := pv2];
+  
+
+  return(resTable)
 }
-print(nb)
-print(res)
-#   
+
+
+print("Logique")
+resLog = analyseParDifficute(DTL);
+print("Motrice")
+resMot = analyseParDifficute(DTM);
+print("Senso")
+resSenso = analyseParDifficute(DTS);
+
+
+
+
 # 
 # DTS2 = DTS[which(action_de_jeu > 10)]
 # hist(DTS2$difficulty)
 # DTS2 = DTS[which(difficulty == 0.3 & action_de_jeu > 10)]
 # hist(DTS2$resLisse)
-# hist(DTS2$erreurDiff)
+# hist(DTS2$erreurDiffConfiance)
 # shapiro.test(DTS2$resLisse)
 # shapiro.test(DTS2$mise)
 # qqnorm(DTS2$resLisse)
@@ -674,6 +812,16 @@ print(res)
 # fit <- lm(mise ~ resLisse, data=DTS2);
 # plot(fit)
 # summary(fit);
+```
+##Resume des essais 
+
+```{r echo=FALSE}
+print("Logique")
+print(resLog);
+print("Motrice")
+print(resMot);
+print("Senso")
+print(resSenso );
 ```
 
 
@@ -776,7 +924,7 @@ if(plotLinModels){
 ### Courbes de difficulte
 ```{r echo=FALSE}
 if(plotDiffCurves){
-  void <- DTL[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+  void <- DTL[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurves == FALSE")
 }
@@ -836,7 +984,7 @@ if(plotLinModels){
 ### Courbes de difficulte
 ```{r echo=FALSE}
 if(plotDiffCurves){
-  void <- DTM[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+  void <- DTM[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurves == FALSE")
 }
@@ -895,7 +1043,7 @@ if(plotLinModels){
 ### Courbes de difficulte
 ```{r echo=FALSE}
 if(plotDiffCurves){
-  void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiff);NULL},by=.(IDjoueur)]
+  void <- DTS[,{plotCurves(action_de_jeu,evalDiff,estDiff,resLisse,IDjoueur,nbWin,nbFail,erreurDiffConfiance,miseNorm);NULL},by=.(IDjoueur)]
 }else{
   print("plotDiffCurves == FALSE")
 }
