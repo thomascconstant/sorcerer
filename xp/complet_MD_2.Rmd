@@ -25,6 +25,7 @@ useMotrice = TRUE
 useSensorielle = TRUE
 useLogique = TRUE
 drawLogit = TRUE
+
 removeTenFirst = FALSE
 removeOutliers = TRUE
 plotDiffCurves = TRUE
@@ -48,6 +49,20 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   
   #difficulte évaluée par le joueur
   DTLoc$evalDiff <- 1 - DTLoc$miseNorm;
+  
+  #On définit mise binarisée
+  DTLoc[,miseBin := 0][mise>=4,miseBin:=1]
+  mylogit <- glm(miseBin ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
+  print(summary(mylogit));
+  sample = data.frame(difficulty=DTLoc$difficulty);
+  DTLoc$estDiffPlayer =  predict(mylogit, newdata = sample, type = "response");
+  
+  if(trace){
+    sample = data.frame(difficulty=seq(0, 1, 0.05))
+    newres = predict(mylogit, newdata = sample, type = "response")
+    plot(DTLoc$difficulty, DTLoc$miseBin, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté estimée par le joueur",  col=rgb(0,100,0,100,maxColorValue=255))
+    points(data.frame(sample,newres), type="o")
+  }
   
   #On ajoute une colonne de la difficulte estimee, a partir d'un 
   #logit de la difficulte supposée sur l'échec constaté

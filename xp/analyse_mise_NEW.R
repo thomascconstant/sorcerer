@@ -8,6 +8,10 @@ DT2[, passage:=1:.N, by=c("difficulty", "nom_du_jeu", "IDjoueur")]
 #           fileEncoding = "CP1252")
 
 
+#================calculs mises
+DTMb
+
+
 library(reshape2)
 joueur <- DT2[DT2$IDjoueur==DT2$IDjoueur[1]]
 DT3 <- dcast(joueur,  nom_du_jeu + passage ~ difficulty, value.var = "mise",fun.aggregate=sum)
