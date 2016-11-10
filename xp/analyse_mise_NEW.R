@@ -7,6 +7,95 @@ DT2[, passage:=1:.N, by=c("difficulty", "nom_du_jeu", "IDjoueur")]
 #           eol = "\n", na = "NA", row.names = TRUE,
 #           fileEncoding = "CP1252")
 
+#================vérifier si différence de niveau entre les joueurs par le nombre de moutons sauvés et tués
+library(lme4) #nécessite package Matrix
+require(data.table)
+require(ggplot2)
+
+#DT2maxMoutons <- pmax(DT2$moutons_sauves:DT2$IDjoueur, na.rm = FALSE)
+
+#logique <- DT2[DT2$nom_du_jeu == "Logique2",]
+#senso <- DT2[DT2$nom_du_jeu == "Sensoriel",]
+#motrice <- DT2[DT2$nom_du_jeu == "Motrice",]
+
+motriceNiveauxJoueurs = data.table();
+motriceNiveauxJoueurs = DTM[,.(type="Moteur",totalMoutonsSauves=max(moutons_sauves),totalMoutonsTues=max(moutons_tues)),by=IDjoueur]
+sensoNiveauxJoueurs = data.table();
+sensoNiveauxJoueurs = DTM[,.(type="Sensorielle",totalMoutonsSauves=max(moutons_sauves),totalMoutonsTues=max(moutons_tues)),by=IDjoueur]
+logiqueNiveauxJoueurs = data.table();
+logiqueNiveauxJoueurs = DTM[,.(type="Logique",totalMoutonsSauves=max(moutons_sauves),totalMoutonsTues=max(moutons_tues)),by=IDjoueur]
+
+#calcul niveau des joueurs par jeu Senso
+niveauxJoueursSenso <- glmer(cbind(totalMoutonsSauves,totalMoutonsTues) ~ 1 + (1|IDjoueur),
+                       data = sensoNiveauxJoueurs, family = binomial)
+
+summary(niveauxJoueursSenso)
+fixef(niveauxJoueursSenso)
+ranef(niveauxJoueursSenso, condVar = TRUE) #permet d'observer les différences de niveau
+
+#calcul niveau des joueurs par jeu Logique
+niveauxJoueursLogique <- glmer(cbind(totalMoutonsSauves,totalMoutonsTues) ~ 1 + (1|IDjoueur),
+                             data = logiqueNiveauxJoueurs, family = binomial)
+
+summary(niveauxJoueursLogique)
+fixef(niveauxJoueursLogique)
+ranef(niveauxJoueursLogique, condVar = TRUE) #permet d'observer les différences de niveau
+
+#calcul niveau des joueurs par jeu Motrice
+niveauxJoueursMotrice <- glmer(cbind(totalMoutonsSauves,totalMoutonsTues) ~ 1 + (1|IDjoueur),
+                             data = motriceNiveauxJoueurs, family = binomial)
+
+summary(niveauxJoueursMotrice)
+fixef(niveauxJoueursMotrice)
+ranef(niveauxJoueursMotrice, condVar = TRUE) #permet d'observer les différences de niveau
+
+#================vérifier si différence de niveau entre les joueurs par le nombre de win et fail
+library(lme4) #nécessite package Matrix
+require(data.table)
+require(ggplot2)
+
+niveauxJoueursWF = data.table();
+niveauxJoueursWF = DT[,.(totalWin=sum(gagnant),totalFail=sum(perdant)),by=c("IDjoueur","nom_du_jeu")]
+
+#calcul niveau des joueurs par jeu
+niveauxJoueursALLWF <- glmer(cbind(1*totalWin,1*totalFail) ~ nom_du_jeu + (1|IDjoueur),
+                               data = niveauxJoueursWF, family = binomial)
+
+summary(niveauxJoueursALLWF)
+ranef(niveauxJoueursALLWF, condVar = TRUE)
+
+motriceNiveauxJoueursWF = data.table();
+motriceNiveauxJoueursWF = DTM[,.(type="Moteur",totalWin=sum(gagnant),totalFail=sum(perdant)),by=IDjoueur]
+sensoNiveauxJoueursWF = data.table();
+sensoNiveauxJoueursWF = DTM[,.(type="Sensorielle",totalWin=sum(gagnant),totalFail=sum(perdant)),by=IDjoueur]
+logiqueNiveauxJoueursWF = data.table();
+logiqueNiveauxJoueursWF = DTM[,.(type="Logique",totalWin=sum(gagnant),totalFail=sum(perdant)),by=IDjoueur]
+
+#calcul niveau des joueurs par jeu Senso
+niveauxJoueursSensoWF <- glmer(cbind(10*totalWin,10*totalFail) ~ (1|IDjoueur),
+                             data = sensoNiveauxJoueursWF, family = binomial)
+
+summary(niveauxJoueursSensoWF)
+fixef(niveauxJoueursSensoWF)
+ranef(niveauxJoueursSensoWF, condVar = TRUE) #permet d'observer les différences de niveau
+
+#calcul niveau des joueurs par jeu Logique
+niveauxJoueursLogiqueWF <- glmer(cbind(totalWin,totalFail) ~ 1 + (1|IDjoueur),
+                               data = logiqueNiveauxJoueursWF, family = binomial)
+
+summary(niveauxJoueursLogiqueWF)
+fixef(niveauxJoueursLogiqueWF)
+ranef(niveauxJoueursLogiqueWF, condVar = TRUE) #permet d'observer les différences de niveau
+
+#calcul niveau des joueurs par jeu Motrice
+niveauxJoueursMotriceWF <- glmer(cbind(totalWin,totalFail) ~ 1 + (1|IDjoueur),
+                               data = motriceNiveauxJoueursWF, family = binomial)
+
+summary(niveauxJoueursMotriceWF)
+fixef(niveauxJoueursMotriceWF)
+ranef(niveauxJoueursMotriceWF, condVar = TRUE) #permet d'observer les différences de niveau
+
+
 
 #================calculs mises
 DTMb
