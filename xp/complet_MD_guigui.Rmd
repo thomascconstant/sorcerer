@@ -17,7 +17,11 @@ output:
 #install.packages("car")
 require(data.table)
 require(ggplot2)
+require(lme4)
 library(car)
+#library(lme4)
+require(lmerTest)
+require(matrix)
 ```
 
 
@@ -690,6 +694,17 @@ Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(u
 
 ```{r echo=FALSE}
 
+DTLoc <- DTS
+DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
+#fit <- glm(DTLoc$newErr ~ DTLoc$resLisse + DTLoc$difficulty, family = "binomial"(link = "logit"));
+fit <- glm(newErr ~ resLisse + difficulty, data=DTLoc);
+fit <- lmer(miseNorm ~ resLisse + difficulty + (1 | IDjoueur), data=DTLoc);
+summary(fit)
+ranef(fit)
+length(unlist((ranef(fit))))
+plot(fit)
+
+
 # DTLoc1 = DTL;
 # 
 # res <- numeric(11)
@@ -742,7 +757,7 @@ analyseParDifficute <- function(DTParam){
     if(nrow(DTLoc) > 30){
       plot(x=DTLoc$resLisse, y=DTLoc$miseNorm, main=paste(diff,signif(unique(DTLoc$estDiff),digits=2)))
       fit <- glm(DTLoc$miseNorm ~ DTLoc$resLisse);
-        
+
       fitg <- glm(miseBin ~ resLisse, data = DTLoc, family = "binomial"(link = "logit"))
       sample = data.frame(resLisse=seq(0, 1, 0.05))
       newres = predict(fitg, newdata = sample, type = "response")
@@ -750,10 +765,19 @@ analyseParDifficute <- function(DTParam){
       print(summary(fitg))
       abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")
       res[i+1] = signif(fit$coefficients[2],digits=2);
-      
+
       #print(unlist(summary(fit)));
       pv1[i+1] = echoPValue(unlist(summary(fitg))$coefficients7)
       pv2[i+1] = echoPValue(unlist(summary(fitg))$coefficients8)
+      # 
+      # DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
+      # fitg <- glm(DTLoc$gagnant ~ DTLoc$newErr + DTLoc$resLisse);
+      # print(summary(fitg))
+      # #print(unlist(summary(fit)));
+      # pv1[i+1] = echoPValue(unlist(summary(fitg))$coefficients7)
+      # pv2[i+1] = echoPValue(unlist(summary(fitg))$coefficients8)
+      
+      
     }else{
       res[i+1] = NA;
       pv1[i+1] = NA;
