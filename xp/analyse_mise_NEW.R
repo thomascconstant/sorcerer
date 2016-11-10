@@ -7,6 +7,7 @@ DT2[, passage:=1:.N, by=c("difficulty", "nom_du_jeu", "IDjoueur")]
 #           eol = "\n", na = "NA", row.names = TRUE,
 #           fileEncoding = "CP1252")
 
+
 #================vérifier si différence de niveau entre les joueurs par le nombre de moutons sauvés et tués
 library(lme4) #nécessite package Matrix
 require(data.table)

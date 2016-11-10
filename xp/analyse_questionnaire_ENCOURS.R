@@ -7,6 +7,7 @@ require(xlsx)
 require(data.table)
 require(ggplot2)
 
+#setwd("C:/Users/Thomas Constant/Source/Repos/sorcerer/xp")
 file = "./log_questionnaire_XP_WEEK1ANDWEEK2.xlsx"
 
 #---------------------------------- fonctions
@@ -72,7 +73,7 @@ pyramide <- function(data,laxis,raxis) {
 }
 
 #---------------------------------- code
-data <- read.xlsx(file,sheetIndex=1,header=TRUE)
+data <- read.xlsx(file,sheetIndex=1,header=TRUE,)
 data2 <- data.frame(data$Sexe)
 data.sexeMasculin = data[which(data$Sexe=="Masculin"),]
 data.sexeFeminin = data[which(data$Sexe=="Feminin"),]
@@ -117,6 +118,14 @@ barplot(data.sexeFeminin)
 barplot(data.sexeFeminin, data.sexeMasculin, xlab="feminin",  ylab="masculin")
 
 #data2 <- Unaccent(data)
+
+
+#================Tests likert
+require(likert)
+
+question1 <- data.frame(data$column8)
+likert(data, summary, grouping = NULL, factors = NULL, importance,
+       nlevels = length(levels(items[, 1])))
 
 euro <- "\u20AC"
 euro
