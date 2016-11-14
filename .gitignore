@@ -12,3 +12,8 @@ gulpfile.js
 /src/log.txt
 /xp/*.RData
 /xp/.Rhistory
+
+xp/.RData
+xp/.Rhistory
+*.RData
+*.Rhistory

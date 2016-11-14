@@ -15,9 +15,10 @@ output:
 #install.packages("data.table")
 #install.packages("ggplot2")
 #install.packages("car")
+#install.packages("lmerTest")
 require(data.table)
 require(ggplot2)
-require(lme4)
+#require(lme4)
 library(car)
 #library(lme4)
 require(lmerTest)
@@ -103,15 +104,20 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   lastID <- id[1];
   res <- numeric(nrow(DTLoc))
   res[1] = 0;
+  resLastFail <- numeric(nrow(DTLoc))
+  resLastFail[1] = 0;
   
   for(i in 2:nrow(DTLoc)){
     if(id[i] != lastID){
       nbFailCpt = 0;
+      resLastFail[i] = 0;
     }else{
       if(gagnant[i-1] == 0){
         nbFailCpt = nbFailCpt+1;
+        resLastFail[i] = 1;
       }else{
         nbFailCpt = 0;
+        resLastFail[i] = 0;
       }
     }
     
@@ -124,25 +130,32 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   }
   
   DTLoc$nbFail = res;
+  DTLoc$lastFail = res;
 
   print(paste("Fails:",toString(proc.time()[1]-temps)))
   temps <- proc.time()[1];
   
   nbWinCpt = 0;
+  lastWin = 0;
   lastID <- id[1];
   res <- numeric(nrow(DTLoc))
   res[1] = 0;
+  resLastWin <- numeric(nrow(DTLoc))
+  resLastWin[1] = 0;
   
   
   for(i in 2:nrow(DTLoc)){
     
     if(id[i] != lastID){
       nbWinCpt = 0;
+      resLastWin[i] = 0;
     }else{
       if(gagnant[i-1] == 1){
         nbWinCpt = nbWinCpt+1;
+        resLastWin[i] = 1;
       }else{
         nbWinCpt = 0;
+        resLastWin[i] = 0;
       }
     }
     lastID = id[i];
@@ -154,6 +167,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   }
   
   DTLoc$nbWin = res;
+  DTLoc$lastWin = resLastWin;
 
   print(paste("Wins:",toString(proc.time()[1]-temps)))
   temps <- proc.time()[1];
@@ -164,6 +178,7 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   lastID <- id[1];
   res <- numeric(nrow(DTLoc))
   res[1] = 0;
+  
   diffObj = DTLoc$estDiff;
   
   alpha <- 0.9;
@@ -694,16 +709,57 @@ Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(u
 
 ```{r echo=FALSE}
 
+DTLoc <- DTS[action_de_jeu==8]
 DTLoc <- DTS
 DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
 #fit <- glm(DTLoc$newErr ~ DTLoc$resLisse + DTLoc$difficulty, family = "binomial"(link = "logit"));
 fit <- glm(newErr ~ resLisse + difficulty, data=DTLoc);
-fit <- lmer(miseNorm ~ resLisse + difficulty + (1 | IDjoueur), data=DTLoc);
+fit <- glm(newErr ~  nbWin + nbFail + difficulty, data=DTLoc);
+
+
+fit <- lmer(gagnant ~ resLisse + difficulty + (1 | IDjoueur), data=DTLoc);
+
+
+fit <- lmer(miseNorm ~ resLisse + difficulty + (difficulty | IDjoueur), data=DTLoc);
+
+fit <- glm(miseNorm ~ nbWin + nbFail + difficulty, data=DTLoc);
+
+fit <- lm(mise ~ difficulty + nbFail + nbWin,  data=DTLoc);
+fit <- glm(miseBin ~ difficulty, family="binomial"(link = "logit"),  data=DTLoc);
+
+hist(DTLoc$estDiff,breaks=30)
+
+
+
+
+
+#resumé
+summary(fit)
+#normality of residuals
+test <- residuals(fit);
+hist(test,breaks=30)
+shapiro.test(test);
+
+#homoscedasticity
+ncvTest(fit)
+#colinear predictors
+vif(fit)
+
+
+
+
+
+fit <- glm(miseBin ~ nbWin + nbFail + difficulty, data=DTLoc);
+fit <- glm(miseNorm ~ lastWin + lastFail + difficulty, data=DTLoc);
+confint(fit)
+fit <- glm(miseNorm ~ resLisse + difficulty, data=DTLoc);
+
 summary(fit)
 ranef(fit)
+fixef(fit)
 length(unlist((ranef(fit))))
-plot(fit)
 
+plot(fit, which=1)
 
 # DTLoc1 = DTL;
 # 
