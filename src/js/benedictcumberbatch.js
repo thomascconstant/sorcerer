@@ -32,6 +32,7 @@ var colorBase =  0;
 var nbCasesToFind = 0;
 var casesFound = []; //tableau des cases trouvées
 var miseValide = false; //Si la mise n'est pas validée par le joueur
+var confianceValide = false; //Si la confiance n'est pas validée par le joueur
 
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
@@ -46,13 +47,21 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var countDownToZero = false; //statut du compte à rebours
 
+var miseFirst = 0; //si 0, mise en premier ; si 1, confiance en premier
+console.log("Si 0 c'est la mise, t'as combien là ? " + miseFirst);
+
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
+var confiance = 0; //Indice de confiance renseigné par le joueur
 var resultatJoueur = [];
 
 var running = false;
 var animationReset = false; //état de l'animation
 var fadeOutOver = false; //état animation fadeOut
+
+var playTimeBefore = 0; //temps au début du tour
+var playTimeAfter = 0; //temps au moment de la validation de la mise
+var differencePlayTime = 0; //différence entre playTimeBefore et playTimeAfter en mn:ss
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -144,7 +153,23 @@ function goNew() {
         }, 490);*/
 
         //activer les boutons de mise
+        //unblockMise();
+
+        //enregistrer temps début tour
+        getPlayTimeBefore();
+    }
+}
+
+//lancement choix mise ou confiance en premier
+function miseOuConfiance() {
+    if (miseFirst === 0) {
+        //activer les boutons de mise
+        activateMise();
         unblockMise();
+    } else {
+        //activer les boutons de confiance
+        activateConfiance();
+        unblockConfiance();
     }
 }
 
@@ -156,23 +181,6 @@ function recupMise(numeroMise) {
     //recharger l'animation
     restartAnimateScoreMoutons();
 
-    /*if(document.getElementById('mise1').checked) {
-        //boutton de mise 1 est validé
-        mise = 1;
-    } else if(document.getElementById('mise2').checked) {
-        mise = 2;
-    } else if(document.getElementById('mise3').checked) {
-        mise = 3;
-    } else if(document.getElementById('mise4').checked) {
-        mise = 4;
-    } else if(document.getElementById('mise5').checked) {
-        mise = 5;
-    } else if(document.getElementById('mise6').checked) {
-        mise = 6;
-    } else if(document.getElementById('mise7').checked) {
-        mise = 7;
-    }*/
-
     //afficher mise
     showMise();
 
@@ -181,31 +189,66 @@ function recupMise(numeroMise) {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
-
-    //faire apparaître le compte à rebours et le lancer
-    document.getElementById("affichageFeedback").innerHTML = "Déplacez le carré bleu pour ranger le plateau dans l'ordre.";
-    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
-    //startTimer();
-
-    //On reset le temps
-    g_temps_coups = g_duree_coup;
-    document.getElementById("temps").innerHTML = g_temps_coups;
-    clearInterval(g_timer_coup_id);
-    g_timer_coup_id = setInterval(timerCoups,1000);
-    showGrid(true);
+    blockMise();
 
     //cacher les boutons de mise
     restartFadeInOutMise();
     setTimeout(launchFadeOutMise(), 100);
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "none";
+        //lancer récupération de confiance si non fait
+        if (miseValide && confianceValide) {
+            launchGame();
+        } else if (miseValide) {
+            activateConfiance();
+            unblockConfiance();
+        }
     }, 490);
+}
 
-    //recharger l'animation des boites de moutons
-    restartFadeOutUpBoxes();
+//récupérer confiance
+function recupConfiance(indiceConfiance) {
+    confiance = indiceConfiance;
+    console.log("le joueur est confiant de " + confiance);
 
-    blockMise();
+    //acter la confiance du joueur pour déverouiller jeu
+    confianceValide = true;
+    blockConfiance();
+    
 
+    //cacher les boutons de confiance
+    restartFadeInOutConfiance();
+    setTimeout(launchFadeOutConfiance(), 100);
+    setTimeout(function eraseZoneConfiance() {
+        document.getElementById("boutonsConfiance").style.display = "none";
+        //lancer récupération de mise si non fait
+        if (miseValide && confianceValide) {
+            launchGame();
+        } else if (confianceValide) {
+            activateMise();
+            unblockMise();
+        }
+    }, 490);
+}
+
+//lancer jeu après mise et confiance
+function launchGame() {
+    if (miseValide && confianceValide) {
+        //faire apparaître le compte à rebours et le lancer
+        document.getElementById("affichageFeedback").innerHTML = "Déplacez le carré bleu pour ranger le plateau dans l'ordre.";
+        document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+        //startTimer();
+
+        //On reset le temps
+        g_temps_coups = g_duree_coup;
+        document.getElementById("temps").innerHTML = g_temps_coups;
+        clearInterval(g_timer_coup_id);
+        g_timer_coup_id = setInterval(timerCoups, 1000);
+        showGrid(true);
+
+        //recharger l'animation des boites de moutons
+        restartFadeOutUpBoxes();
+    }
 }
 
 function blockMise() {
@@ -230,6 +273,28 @@ function unblockMise() {
     document.getElementById("mise7").onclick = function () { recupMise(7); };
 }
 
+function blockConfiance() {
+    //verrouiller boutons de mise
+    document.getElementById("confiance1").onclick = "";
+    document.getElementById("confiance2").onclick = "";
+    document.getElementById("confiance3").onclick = "";
+    document.getElementById("confiance4").onclick = "";
+    document.getElementById("confiance5").onclick = "";
+    document.getElementById("confiance6").onclick = "";
+    document.getElementById("confiance7").onclick = "";
+}
+
+function unblockConfiance() {
+    //déverrouiller boutons de sélection de mise
+    document.getElementById("confiance1").onclick = function () { recupConfiance(1); };
+    document.getElementById("confiance2").onclick = function () { recupConfiance(2); };
+    document.getElementById("confiance3").onclick = function () { recupConfiance(3); };
+    document.getElementById("confiance4").onclick = function () { recupConfiance(4); };
+    document.getElementById("confiance5").onclick = function () { recupConfiance(5); };
+    document.getElementById("confiance6").onclick = function () { recupConfiance(6); };
+    document.getElementById("confiance7").onclick = function () { recupConfiance(7); };
+}
+
 function activateMise() {
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
@@ -239,6 +304,17 @@ function activateMise() {
     //afficher boutons de mise
     document.getElementById("boutonsMise").style.display = "block";
     launchFadeInMise();
+}
+
+function activateConfiance() {
+    //afficher message de choix de mise
+    document.getElementById("affichageFeedback").style.display = "block";
+    document.getElementById("affichageFeedback").innerHTML = "Renseignez votre confiance.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+
+    //afficher boutons de confiance
+    document.getElementById("boutonsConfiance").style.display = "block";
+    launchFadeInConfiance();
 }
 
 function showMise() {
@@ -278,7 +354,7 @@ function changeMetaDiff() {
 }
 
 function win(ijFind){
-    if (miseValide === true && countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
+    if (miseValide === true && confianceValide === true && countDownToZero === true && casesFound.indexOf(ijFind) < 0) {
       nbCasesToFind--;
       casesFound.push(ijFind);
         if(nbCasesToFind <= 0) {
@@ -289,6 +365,9 @@ function win(ijFind){
 
             score += mise;
             actionDeJeu++;
+
+            //enregistrer temps fin tour
+            getPlayTimeAfter();
 
             addSheep(); //faire apparaître un mouton sur la page
 
@@ -305,8 +384,9 @@ function win(ijFind){
 
             if (modeTest === false) {
                 //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + diffModel.currentDiff.toFixed(2) + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+                resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + g_nb_coups + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
                 console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
+                console.log(resultatJoueur);
             }
 
             //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
@@ -322,6 +402,7 @@ function win(ijFind){
 
             //bloquer jeu
             miseValide = false;
+            confianceValide = false;
             countDownToZero = false;
 
             //lancer nouveau jeu sauf si plus de tours
@@ -343,7 +424,7 @@ function win(ijFind){
 }
 
 function fail(){
-    if (miseValide === true && countDownToZero === true) {
+    if (miseValide === true && confianceValide === true && countDownToZero === true) {
         winState = false;
 
         moutonsPerdus += mise;
@@ -351,6 +432,9 @@ function fail(){
         
         score -= mise;
         actionDeJeu++;
+
+        //enregistrer temps fin tour
+        getPlayTimeAfter();
 
         addSheep(); //faire apparaître un mouton sur la page
 
@@ -365,8 +449,9 @@ function fail(){
 
         if (modeTest === false) {
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + mise + ";" + diffModel.currentDiff.toFixed(2) + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + g_nb_coups + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
             console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
+            console.log(resultatJoueur);
         }
 
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
@@ -381,6 +466,7 @@ function fail(){
         //difficulty = Math.max(0,difficulty-0.1);
 
         miseValide = false;
+        confianceValide = false;
         countDownToZero = false;
 
         //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
@@ -624,7 +710,7 @@ function clickCase(x,y){
         return;*/
 
     //vérifier état de mise pour animation instruction de jeu
-    if (miseValide === false) {
+    if (miseValide === false && confianceValide === false) {
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
 
         setTimeout(function changerCouleur() {
@@ -709,7 +795,8 @@ function timerCoups(){
             makeGame(width,nbCells,g_nbPerm);
             anim = setInterval(animate,20);
             //console.log(anim + "anim");
-            activateMise();
+            //activateMise();
+            miseOuConfiance();
         }
 
         if (seconds === 1) {
@@ -834,6 +921,31 @@ function afficherRegles() {
     }
 }
 
+//----------------------------récupérer date et heure de connexion au jeu------------
+function getPlayTimeBefore() {
+    var playNow = new Date();
+    var playNowMs = playNow.getTime();
+
+    playTimeBefore = playNowMs;
+    console.log(playTimeBefore + " début tour");
+}
+
+function getPlayTimeAfter() {
+    var playNow = new Date();
+    var playNowMs = playNow.getTime();
+
+    playTimeAfter = playNowMs;
+    console.log(playTimeBefore + " fin tour");
+
+    getDifferencePlayTime();
+}
+
+function getDifferencePlayTime() {
+    differencePlayTime = playTimeAfter - playTimeBefore;
+    console.log(differencePlayTime + " ms entre tour");
+}
+
+
 // ----------------------------feedback visuels et sonores--------------------
 function launchAnimateScoreMoutonsGagnes() {
     var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
@@ -915,7 +1027,21 @@ function uncolorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
-    document.getElementById(name).style.backgroundColor = "757575";
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function colorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
+    document.getElementById(name).style.backgroundColor = "00C853";
+}
+
+function uncolorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
 }
 
 function launchFadeOutTexte() {
@@ -991,6 +1117,29 @@ function restartFadeInOutMise() {
     animMiseIn.classList.add('reset');
 
     var animMiseOut = document.querySelector('.zonemise');
+    animMiseOut.classList.remove('fadeOut');
+    animMiseOut.classList.add('reset');
+}
+
+function launchFadeOutConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeOut');
+    animMise.classList.remove('reset');
+    fadeOutOver = true;
+}
+
+function launchFadeInConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeIn');
+    animMise.classList.remove('reset');
+}
+
+function restartFadeInOutConfiance() {
+    var animMiseIn = document.querySelector('.zoneconfiance');
+    animMiseIn.classList.remove('fadeIn');
+    animMiseIn.classList.add('reset');
+
+    var animMiseOut = document.querySelector('.zoneconfiance');
     animMiseOut.classList.remove('fadeOut');
     animMiseOut.classList.add('reset');
 }
