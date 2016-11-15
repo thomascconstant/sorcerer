@@ -950,7 +950,6 @@ function getDifferencePlayTime() {
     console.log(differencePlayTime + " ms entre tour");
 }
 
-
 // ----------------------------feedback visuels et sonores--------------------
 function launchAnimateScoreMoutonsGagnes() {
     var animMoutonsWin = document.querySelector('.compteurMoutonsGagnes');
