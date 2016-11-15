@@ -1240,6 +1240,29 @@ function restartFadeInOutMise() {
     animMiseOut.classList.add('reset');
 }
 
+function launchFadeOutConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeOut');
+    animMise.classList.remove('reset');
+    fadeOutOver = true;
+}
+
+function launchFadeInConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeIn');
+    animMise.classList.remove('reset');
+}
+
+function restartFadeInOutConfiance() {
+    var animMiseIn = document.querySelector('.zoneconfiance');
+    animMiseIn.classList.remove('fadeIn');
+    animMiseIn.classList.add('reset');
+
+    var animMiseOut = document.querySelector('.zoneconfiance');
+    animMiseOut.classList.remove('fadeOut');
+    animMiseOut.classList.add('reset');
+}
+
 // ----------------------------mode test en début de partie--------------------
 function launchModeTest() {
     if (overideTestMode === true) {
