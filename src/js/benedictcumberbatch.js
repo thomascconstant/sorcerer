@@ -47,7 +47,7 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var countDownToZero = false; //statut du compte à rebours
 
-var miseFirst = 0; //si 0, mise en premier ; si 1, confiance en premier
+var miseFirst = 1; //si 0, mise en premier ; si 1, confiance en premier
 console.log("Si 0 c'est la mise, t'as combien là ? " + miseFirst);
 
 var score = 0; //Score actuel
@@ -757,10 +757,19 @@ function timerCoups(){
     if(g_temps_coups <= 0){
         clearInterval(g_timer_coup_id);
         
-        if(!miseValide) {
-            document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu a disparu. Choisissez votre mise pour continuer.";
+        if(!miseValide || !confianceValide) {
+
+            if (!miseValide) {
+                document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu a disparu. Choisissez votre mise pour continuer.";
+            }
+
+            if (!confianceValide) {
+                document.getElementById("affichageFeedback").innerHTML = "Le plateau de jeu a disparu. Renseignez votre confiance pour continuer.";
+            }
+                
             document.getElementById("affichageFeedback").style.backgroundColor = "#FF5722";
-            showGrid(false);  
+            showGrid(false);
+
         } else {
             fail();
          
