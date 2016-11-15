@@ -62,6 +62,14 @@
     display: inline-block;
 }
 
+.zoneconfiance {
+    color: #fafafa;
+    padding: auto;
+    margin: auto;
+    width: 100%;
+    display: inline-block;
+}
+
 .zonefeedback {
     background-color: #03A9F4; 
     color: #000000;
@@ -156,6 +164,49 @@ body {
 }
 
 .button:hover::after {
+    opacity: 1;
+}
+
+.buttonGame {
+    background-color: #373b3d;
+    font-family: 'Uncial Antiqua', cursive;
+    border: none;
+    color: white;
+    padding: 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin: 1vw;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.buttonGame::after {
+    content: "";
+    border-radius: 5px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.buttonGame:hover {
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
+}
+
+.buttonGame:hover::after {
     opacity: 1;
 }
 
@@ -774,14 +825,15 @@ body {
                     <div class="button" id="mise5" onmouseover="colorButtonMise(5)" onmouseout="uncolorButtonMise(5)" onclick="recupMise(5)">5</div>
                     <div class="button" id="mise6" onmouseover="colorButtonMise(6)" onmouseout="uncolorButtonMise(6)" onclick="recupMise(6)">6</div>
                     <div class="button" id="mise7" onmouseover="colorButtonMise(7)" onmouseout="uncolorButtonMise(7)" onclick="recupMise(7)">7</div>
-
-                    <!-- <input type="radio" name="mises" id="mise1" value="1" onclick="recupMise()" />&nbsp; 1 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise2" value="2" onclick="recupMise()" />&nbsp; 2 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise3" value="3" onclick="recupMise()" />&nbsp; 3 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise4" value="4" onclick="recupMise()" />&nbsp; 4 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise5" value="5" onclick="recupMise()" />&nbsp; 5 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise6" value="6" onclick="recupMise()" />&nbsp; 6 &nbsp; &nbsp;
-                    <input type="radio" name="mises" id="mise7" value="7" onclick="recupMise()" />&nbsp; 7 -->
+                </div>
+                <div class='zoneconfiance' id="boutonsConfiance" style="display:none;cursor:default">
+                    <div class="button" id="confiance1" onmouseover="colorButtonConfiance(1)" onmouseout="uncolorButtonConfiance(1)" onclick="recupConfiance(1)">Pas confiant</div>
+                    <div class="button" id="confiance2" onmouseover="colorButtonConfiance(2)" onmouseout="uncolorButtonConfiance(2)" onclick="recupConfiance(2)">Très peu confiant</div>
+                    <div class="button" id="confiance3" onmouseover="colorButtonConfiance(3)" onmouseout="uncolorButtonConfiance(3)" onclick="recupConfiance(3)">Peu confiant</div>
+                    <div class="button" id="confiance4" onmouseover="colorButtonConfiance(4)" onmouseout="uncolorButtonConfiance(4)" onclick="recupConfiance(4)">Confiant</div>
+                    <div class="button" id="confiance5" onmouseover="colorButtonConfiance(5)" onmouseout="uncolorButtonConfiance(5)" onclick="recupConfiance(5)">Moyennement confiant</div>
+                    <div class="button" id="confiance6" onmouseover="colorButtonConfiance(6)" onmouseout="uncolorButtonConfiance(6)" onclick="recupConfiance(6)">Très confiant</div>
+                    <div class="button" id="confiance7" onmouseover="colorButtonConfiance(7)" onmouseout="uncolorButtonConfiance(7)" onclick="recupConfiance(7)">Absolument confiant</div>
                 </div>
             </div>
         </div>
@@ -801,7 +853,7 @@ body {
                 <div class="compteur" id="affichageCompteur" style="display:none"><span id="timer">5</span></div>
                 <div id="board"></div>
                 <div class="textefeedback" id="res"></div>
-                <button class="button" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer une grille</button><br />
+                <button class="buttonGame" style="display:visible;cursor:pointer" type="button" id="boutonGenererGrille" onmouseover="colorButton()" onmouseout="uncolorButton()" onclick="goNew()">Générer une grille</button><br />
                 <table id="tableMise">
                     <tr><td class="textefeedback" style="text-align:center">Tours de jeu restants</td><td class="textefeedback" style="text-align:center">Mouton(s) misé(s)</td></tr>
                     <tr><td id="tours" class="big">0</td><td id="mise" class="big">0</td></tr>
