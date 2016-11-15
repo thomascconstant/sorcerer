@@ -92,7 +92,7 @@ function animate(){
 
 function init() {
     diffModel.setStepInCurve(0);
-    diffModel.setMode(diffModel.MODE_DDA_SAUT);
+    diffModel.setMode(diffModel.MODE_RANDOM);
     diffModel.setDiffStep(0.1);
     diffModel.setCurrentDiff(0.0);
     diffModel.setChallengeMinMax(1, 11);
@@ -1020,7 +1020,7 @@ function colorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
-    document.getElementById(name).style.backgroundColor = "373b3d";
+    document.getElementById(name).style.backgroundColor = "757575";
 }
 
 function uncolorButtonMise(numeroBouton) {
@@ -1034,7 +1034,7 @@ function colorButtonConfiance(numeroBouton) {
     var x = numeroBouton;
     var name = 'confiance' + x;
 
-    document.getElementById(name).style.backgroundColor = "00C853";
+    document.getElementById(name).style.backgroundColor = "757575";
 }
 
 function uncolorButtonConfiance(numeroBouton) {
