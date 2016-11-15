@@ -1140,14 +1140,28 @@ function colorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
-    document.getElementById(name).style.backgroundColor = "373b3d";
+    document.getElementById(name).style.backgroundColor = "757575";
 }
 
 function uncolorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function colorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
     document.getElementById(name).style.backgroundColor = "757575";
+}
+
+function uncolorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
 }
 
 function launchFadeOutTexte() {
