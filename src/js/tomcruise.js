@@ -12,6 +12,7 @@ var direction = 1; //direction actuelle du deplacement de la barre
 var anim = 0; //Handle du timer d'anim de la barre
 var running = false; //Si la barre est en cours d'anim
 var miseValide = false; //Si la mise n'est pas validée par le joueur
+var confianceValide = false; //Si la confiance n'est pas validée par le joueur
 
 var modeDifficulty = 0; //0 pour adaptation de la difficulté en fonction win/fail, 1 pour courbe bonds
 var gameSpeed = 1; //Vitesse du jeu (notre param de la difficulté)
@@ -25,6 +26,8 @@ var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
+var confiance = 0; //Indice de confiance renseigné par le joueur
+
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
@@ -32,6 +35,9 @@ var resultatJoueur = [];
 
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
+
+var miseFirst = 0; //si 0, mise en premier ; si 1, confiance en premier
+console.log("Si 0 c'est la mise d'abord, t'as combien là ? " + miseFirst);
 
 var moutonsGagnes = 0;
 var moutonsPerdus = 0;
@@ -66,8 +72,8 @@ function init(){
     }
     document.getElementById("tableMise").style.visibility = "hidden";
     
-    //afficher mise
-    showMise();
+    //afficher mise ou confiance
+    miseOuConfiance();
     
     //lancer tours de test
     launchModeTest();
@@ -76,27 +82,22 @@ function init(){
     setInterval(showPerf, 10000);
 }
 
-function accessMise() {
-    if (modeFinDePartie === false) {
-        //afficher boutons mise
-        setTimeout(function eraseZoneMise() {
-            document.getElementById("boutonsMise").style.display = "block";
-        }, 10);
-        launchFadeInMise();
+//lancement choix mise ou confiance en premier
+function miseOuConfiance() {
+    //lancer barre
+    run();
 
-        //déverrouiller boutons de sélection de mise
-        document.getElementById("mise1").disabled = false;
-        document.getElementById("mise2").disabled = false;
-        document.getElementById("mise3").disabled = false;
-        document.getElementById("mise4").disabled = false;
-        document.getElementById("mise5").disabled = false;
-        document.getElementById("mise6").disabled = false;
-        document.getElementById("mise7").disabled = false;
-    
-        //reset affichage mise
-        document.getElementById("mise").innerHTML = mise;
+    //reset affichage mise
+    document.getElementById("mise").innerHTML = mise;
 
-        run();
+    if (miseFirst === 0) {
+        //activer les boutons de mise
+        activateMise();
+        unblockMise();
+    } else {
+        //activer les boutons de confiance
+        activateConfiance();
+        unblockConfiance();
     }
 }
 
@@ -107,42 +108,6 @@ function recupMise(numeroMise) {
 
     //recharger l'animation
     restartAnimateScoreMoutons();
-
-    /*if(document.getElementById('mise1').checked) {
-        //boutton de mise 1 est validé
-        mise = 1;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise2').checked) {
-        mise = 2;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise3').checked) {
-        mise = 3;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise4').checked) {
-        mise = 4;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise5').checked) {
-        mise = 5;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise6').checked) {
-        mise = 6;
-        document.getElementById("mise").innerHTML = mise;
-    } else if(document.getElementById('mise7').checked) {
-        mise = 7;
-        document.getElementById("mise").innerHTML = mise;
-    }*/
-
-    //afficher boutton
-    showButton();
-    
-    //verrouiller boutons de mise
-    /*document.getElementById("mise1").disabled = true;
-    document.getElementById("mise2").disabled = true;
-    document.getElementById("mise3").disabled = true;
-    document.getElementById("mise4").disabled = true;
-    document.getElementById("mise5").disabled = true;
-    document.getElementById("mise6").disabled = true;
-    document.getElementById("mise7").disabled = true;*/
     
     //afficher le target
     if(hideTarget) {
@@ -155,22 +120,135 @@ function recupMise(numeroMise) {
 
     //acter la mise du joueur pour déverouiller jeu
     miseValide = true;
+    blockMise();
     hideTarget = false;
 
     document.getElementById("mise").innerHTML = mise;
-
-    changeTexteBouton();
 
     //cacher les boutons de mise
     restartFadeInOutMise();
     setTimeout(launchFadeOutMise(), 100);
     setTimeout(function eraseZoneMise() {
         document.getElementById("boutonsMise").style.display = "none";
+        //lancer récupération de confiance si non fait
+        if (miseValide && confianceValide) {
+            launchGame();
+        } else if (miseValide) {
+            activateConfiance();
+            unblockConfiance();
+        }
     }, 490);
+}
+
+//récupérer confiance
+function recupConfiance(indiceConfiance) {
+    confiance = indiceConfiance;
+    console.log("le joueur est confiant de " + confiance);
+
+    //acter la confiance du joueur pour déverouiller jeu
+    confianceValide = true;
+    blockConfiance();
+
+
+    //cacher les boutons de confiance
+    restartFadeInOutConfiance();
+    setTimeout(launchFadeOutConfiance(), 100);
+    setTimeout(function eraseZoneConfiance() {
+        document.getElementById("boutonsConfiance").style.display = "none";
+        //lancer récupération de mise si non fait
+        if (miseValide && confianceValide) {
+            launchGame();
+        } else if (confianceValide) {
+            activateMise();
+            unblockMise();
+        }
+    }, 490);
+}
+
+//lancer jeu après mise et confiance
+function launchGame() {
+    if (miseValide && confianceValide) {
+        //afficher boutton
+        showButton();
+
+        changeTexteBouton();
+
+        //recharger l'animation des boites de moutons
+        restartFadeOutUpBoxes();
+    }
+}
+
+function blockMise() {
+    //verrouiller boutons de mise
+    document.getElementById("mise1").onclick = "";
+    document.getElementById("mise2").onclick = "";
+    document.getElementById("mise3").onclick = "";
+    document.getElementById("mise4").onclick = "";
+    document.getElementById("mise5").onclick = "";
+    document.getElementById("mise6").onclick = "";
+    document.getElementById("mise7").onclick = "";
+}
+
+function unblockMise() {
+    //déverrouiller boutons de sélection de mise
+    document.getElementById("mise1").onclick = function () { recupMise(1); };
+    document.getElementById("mise2").onclick = function () { recupMise(2); };
+    document.getElementById("mise3").onclick = function () { recupMise(3); };
+    document.getElementById("mise4").onclick = function () { recupMise(4); };
+    document.getElementById("mise5").onclick = function () { recupMise(5); };
+    document.getElementById("mise6").onclick = function () { recupMise(6); };
+    document.getElementById("mise7").onclick = function () { recupMise(7); };
+}
+
+function blockConfiance() {
+    //verrouiller boutons de mise
+    document.getElementById("confiance1").onclick = "";
+    document.getElementById("confiance2").onclick = "";
+    document.getElementById("confiance3").onclick = "";
+    document.getElementById("confiance4").onclick = "";
+    document.getElementById("confiance5").onclick = "";
+    document.getElementById("confiance6").onclick = "";
+    document.getElementById("confiance7").onclick = "";
+}
+
+function unblockConfiance() {
+    //déverrouiller boutons de sélection de mise
+    document.getElementById("confiance1").onclick = function () { recupConfiance(1); };
+    document.getElementById("confiance2").onclick = function () { recupConfiance(2); };
+    document.getElementById("confiance3").onclick = function () { recupConfiance(3); };
+    document.getElementById("confiance4").onclick = function () { recupConfiance(4); };
+    document.getElementById("confiance5").onclick = function () { recupConfiance(5); };
+    document.getElementById("confiance6").onclick = function () { recupConfiance(6); };
+    document.getElementById("confiance7").onclick = function () { recupConfiance(7); };
+}
+
+function activateMise() {
+    //afficher message de choix de mise
+    document.getElementById("affichageFeedback").style.display = "block";
+    document.getElementById("affichageFeedback").innerHTML = "Choisissez votre mise.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+
+    //afficher boutons de mise
+    document.getElementById("boutonsMise").style.display = "block";
+    launchFadeInMise();
+}
+
+function activateConfiance() {
+    //afficher message de choix de mise
+    document.getElementById("affichageFeedback").style.display = "block";
+    document.getElementById("affichageFeedback").innerHTML = "Renseignez votre confiance.";
+    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+
+    //afficher boutons de confiance
+    document.getElementById("boutonsConfiance").style.display = "block";
+    launchFadeInConfiance();
 }
 
 function showMise() {
     document.getElementById("tableMise").style.visibility = "visible";
+    document.getElementById("tours").innerHTML = tours;
+    //document.getElementById("score").innerHTML = score;
+    document.getElementById("mise").innerHTML = mise;
 }
 
 function cleanMise() {
@@ -194,13 +272,13 @@ function hideButton() {
 function changeTexteBouton() {
     var elem = document.getElementById("boutonLancerBarre");
     
-    if (miseValide && elem.innerHTML==="Lancer la barre") {
+    if (miseValide && confianceValide && elem.innerHTML==="Lancer la barre") {
         elem.innerHTML = "Arrêter la barre";
         document.getElementById("boutonLancerBarre").disabled = false;
         elem.onclick = stop;
     } else {
         elem.innerHTML = "Lancer la barre";
-        elem.onclick = accessMise;
+        elem.onclick = miseOuConfiance;
     }
 }
 
@@ -342,11 +420,9 @@ function stop() {
     document.getElementById("tours").innerHTML = tours;
     //document.getElementById("score").innerHTML = score;
     //document.getElementById("mise").innerHTML = mise;
-    
-    //nettoyer historique des boutons mises
-    cleanMise();
 
     miseValide = false;
+    confianceValide = false;
     hideTarget = true;
 
     //bloquer le jeu pour et déverouiller bouton de mise sauf si plus de tours
@@ -469,10 +545,10 @@ function keypressed(event) {
     }
 
     if(key === 32){
-        if(running && miseValide) {
+        if(running && miseValide && confianceValide) {
             stop();
         } else { 
-            accessMise();
+            miseOuConfiance();
         }
     }
 }
@@ -655,14 +731,28 @@ function colorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
-    document.getElementById(name).style.backgroundColor = "373b3d";
+    document.getElementById(name).style.backgroundColor = "757575";
 }
 
 function uncolorButtonMise(numeroBouton) {
     var x = numeroBouton;
     var name = 'mise' + x;
 
+    document.getElementById(name).style.backgroundColor = "373b3d";
+}
+
+function colorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
     document.getElementById(name).style.backgroundColor = "757575";
+}
+
+function uncolorButtonConfiance(numeroBouton) {
+    var x = numeroBouton;
+    var name = 'confiance' + x;
+
+    document.getElementById(name).style.backgroundColor = "373b3d";
 }
 
 function launchFadeOutTexte() {
@@ -737,6 +827,29 @@ function restartFadeInOutMise() {
     animMiseIn.classList.add('reset');
 
     var animMiseOut = document.querySelector('.zonemise');
+    animMiseOut.classList.remove('fadeOut');
+    animMiseOut.classList.add('reset');
+}
+
+function launchFadeOutConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeOut');
+    animMise.classList.remove('reset');
+    fadeOutOver = true;
+}
+
+function launchFadeInConfiance() {
+    var animMise = document.querySelector('.zoneconfiance');
+    animMise.classList.add('fadeIn');
+    animMise.classList.remove('reset');
+}
+
+function restartFadeInOutConfiance() {
+    var animMiseIn = document.querySelector('.zoneconfiance');
+    animMiseIn.classList.remove('fadeIn');
+    animMiseIn.classList.add('reset');
+
+    var animMiseOut = document.querySelector('.zoneconfiance');
     animMiseOut.classList.remove('fadeOut');
     animMiseOut.classList.add('reset');
 }
