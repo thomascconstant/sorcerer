@@ -54,7 +54,12 @@ var countDownToZero = false; //statut du compte à rebours
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
+var confiance = 0; //Indice de confiance renseigné par le joueur
 var resultatJoueur = [];
+
+var playTimeBefore = 0; //temps au début du tour
+var playTimeAfter = 0; //temps au moment de la validation de la mise
+var differencePlayTime = 0; //différence entre playTimeBefore et playTimeAfter en mn:ss
 
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
@@ -140,6 +145,9 @@ function goNew() {
 
         //activer les boutons de mise
         unblockMise();
+
+        //enregistrer temps début tour
+        getPlayTimeBefore();
 
         endTurn = false;
     }
@@ -417,6 +425,9 @@ function win() {
 
         score += mise;
         actionDeJeu++;
+
+        //enregistrer temps fin tour
+        getPlayTimeAfter();
             
         addSheep(); //faire apparaître un mouton sur la page
             
@@ -506,12 +517,15 @@ function win() {
 function fail() {
     if (miseValide) {
         winState = false;
-        score -= mise;
 
         moutonsPerdus += mise;
         compteurMoutonsPerdus += moutonsPerdus;
 
+        score -= mise;
         actionDeJeu++;
+
+        //enregistrer temps fin tour
+        getPlayTimeAfter();
         
         afficherCasesGagnantes();
                 
@@ -888,8 +902,6 @@ function makeGameNoColors(width,nbCellsX,diffColor) {
 
 }
 
-
-
 function feedbackSonore() {
     if(winState === true) {
         var soundsWin = [
@@ -1064,6 +1076,30 @@ function feedbackSonore() {
          }, 490);
 
      }
+ }
+
+ //----------------------------récupérer date et heure de connexion au jeu------------
+ function getPlayTimeBefore() {
+     var playNow = new Date();
+     var playNowMs = playNow.getTime();
+
+     playTimeBefore = playNowMs;
+     console.log(playTimeBefore + " début tour");
+ }
+
+ function getPlayTimeAfter() {
+     var playNow = new Date();
+     var playNowMs = playNow.getTime();
+
+     playTimeAfter = playNowMs;
+     console.log(playTimeBefore + " fin tour");
+
+     getDifferencePlayTime();
+ }
+
+ function getDifferencePlayTime() {
+     differencePlayTime = playTimeAfter - playTimeBefore;
+     console.log(differencePlayTime + " ms entre tour");
  }
 
 // ----------------------------feedback visuels et sonores--------------------
