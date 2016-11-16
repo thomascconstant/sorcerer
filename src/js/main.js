@@ -30,9 +30,8 @@ if (ss < 10) {
 
 today = mm + '_' + dd + '_' + yyyy + '_' + hh + 'h' + mn + 'm' + ss + 's';
 var connexionJoueur = today;
-//----------------------------récupérer date et heure de connexion au jeu-----------------
 
-//récupérer identité joueur
+//----------------------------récupérer identité joueur-----------------
 function recupererNom(event) {
     if (event.keyCode === 13) {
         nomJoueur = document.getElementById("nomJoueur").value;
@@ -69,7 +68,13 @@ function donnerID () {
     // after the decimal.
     var IDjoueur = Math.random().toString(36).substr(2, 9);
     localStorage.setItem("joueur",IDjoueur);
-        console.log("ID du joueur : " + IDjoueur);
+    console.log("ID du joueur : " + IDjoueur);
+
+    //tirage aléatoire de présentation de mise ou confiance en premier dans les jeux
+    var myArray = [0, 1];
+    var choixMiseOuConfiance = myArray[Math.floor(Math.random() * myArray.length)];
+    localStorage.setItem("miseOuConfiance", choixMiseOuConfiance);
+    console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + choixMiseOuConfiance);
 
     //enregistrerDonnees(0, "nomJoueur" + ";" + IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
     enregistrerDonnees(1,"\n");
@@ -83,7 +88,7 @@ function afficherLien() {
     document.getElementById("affichageLienQuestionnaire").style.display = "none";
 }
 
-//lancer de manière aléatoire ou selon progression le prochain jeu dans une nouvelle fenêtre
+//----------------------------lancer de manière aléatoire ou selon progression le prochain jeu dans une nouvelle fenêtre----------------------------
 function lancerJeu () {
     //récupérer boleen des jeux déjà terminés
     var jeuMotriceTermine = localStorage.getItem("tomcruise");
@@ -150,6 +155,7 @@ function lancerJeu () {
     }
 }
 
+//----------------------------feedback visuels----------------------------
 function colorButton() {
     document.getElementById('commencerJeu').style.backgroundColor="373b3d";
 }
@@ -185,7 +191,7 @@ function afficherResults() {
     }
 }
 
-// enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)
+//----------------------------enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)----------------------------
 function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
