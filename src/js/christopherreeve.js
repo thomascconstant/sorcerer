@@ -281,7 +281,7 @@ function unblockMise() {
 }
 
 function blockConfiance() {
-    //verrouiller boutons de mise
+    //verrouiller boutons de confiance
     document.getElementById("affichageConfiance").onclick = "";
 
     /*document.getElementById("confiance1").onclick = "";
@@ -294,7 +294,7 @@ function blockConfiance() {
 }
 
 function unblockConfiance() {
-    //déverrouiller boutons de sélection de mise
+    //déverrouiller boutons de sélection de confiance
     document.getElementById("affichageConfiance").onclick = function () { recupConfiance(); };
     
     /*document.getElementById("confiance1").onclick = function () { recupConfiance(1); };
@@ -318,7 +318,7 @@ function activateMise() {
 }
 
 function activateConfiance() {
-    //afficher message de choix de mise
+    //afficher message de choix de confiance
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "A quel point êtes-vous confiant dans votre capacité à gagner ?";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
