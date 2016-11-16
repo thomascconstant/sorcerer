@@ -288,9 +288,7 @@ function blockConfiance() {
     document.getElementById("confiance2").onclick = "";
     document.getElementById("confiance3").onclick = "";
     document.getElementById("confiance4").onclick = "";
-    document.getElementById("confiance5").onclick = "";
-    document.getElementById("confiance6").onclick = "";
-    document.getElementById("confiance7").onclick = "";*/
+    document.getElementById("confiance5").onclick = "";*/
 }
 
 function unblockConfiance() {
@@ -301,15 +299,13 @@ function unblockConfiance() {
     document.getElementById("confiance2").onclick = function () { recupConfiance(2); };
     document.getElementById("confiance3").onclick = function () { recupConfiance(3); };
     document.getElementById("confiance4").onclick = function () { recupConfiance(4); };
-    document.getElementById("confiance5").onclick = function () { recupConfiance(5); };
-    document.getElementById("confiance6").onclick = function () { recupConfiance(6); };
-    document.getElementById("confiance7").onclick = function () { recupConfiance(7); };*/
+    document.getElementById("confiance5").onclick = function () { recupConfiance(5); };*/
 }
 
 function activateMise() {
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
-    document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous sur vos chances de gagner ?";
+    document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous de moutons sur vos chances de gagner ?";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 
     //afficher boutons de mise

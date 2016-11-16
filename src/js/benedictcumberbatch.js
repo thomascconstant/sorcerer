@@ -313,7 +313,7 @@ function unblockConfiance() {
 function activateMise() {
     //afficher message de choix de mise
     document.getElementById("affichageFeedback").style.display = "block";
-    document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous sur vos chances de gagner ?";
+    document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous de moutons sur vos chances de gagner ?";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 
     //afficher boutons de mise
