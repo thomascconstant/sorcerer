@@ -36,8 +36,8 @@ var resultatJoueur = [];
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
-var miseFirst = 0; //si 0, mise en premier ; si 1, confiance en premier
-console.log("Si 0 c'est la mise d'abord, t'as combien là ? " + miseFirst);
+var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
+console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + miseFirst);
 
 var moutonsGagnes = 0;
 var moutonsPerdus = 0;
