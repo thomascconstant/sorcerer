@@ -201,25 +201,25 @@ function unblockMise() {
 }
 
 function blockConfiance() {
-    //verrouiller boutons de mise
+    //verrouiller boutons de confiance
     document.getElementById("confiance1").onclick = "";
     document.getElementById("confiance2").onclick = "";
     document.getElementById("confiance3").onclick = "";
     document.getElementById("confiance4").onclick = "";
     document.getElementById("confiance5").onclick = "";
-    document.getElementById("confiance6").onclick = "";
-    document.getElementById("confiance7").onclick = "";
+    //document.getElementById("confiance6").onclick = "";
+    //document.getElementById("confiance7").onclick = "";
 }
 
 function unblockConfiance() {
-    //déverrouiller boutons de sélection de mise
+    //déverrouiller boutons de sélection de confiance
     document.getElementById("confiance1").onclick = function () { recupConfiance(1); };
     document.getElementById("confiance2").onclick = function () { recupConfiance(2); };
     document.getElementById("confiance3").onclick = function () { recupConfiance(3); };
     document.getElementById("confiance4").onclick = function () { recupConfiance(4); };
     document.getElementById("confiance5").onclick = function () { recupConfiance(5); };
-    document.getElementById("confiance6").onclick = function () { recupConfiance(6); };
-    document.getElementById("confiance7").onclick = function () { recupConfiance(7); };
+    //document.getElementById("confiance6").onclick = function () { recupConfiance(6); };
+    //document.getElementById("confiance7").onclick = function () { recupConfiance(7); };
 }
 
 function activateMise() {
@@ -234,7 +234,7 @@ function activateMise() {
 }
 
 function activateConfiance() {
-    //afficher message de choix de mise
+    //afficher message de choix de confiance
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "Renseignez votre confiance.";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
