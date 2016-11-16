@@ -580,6 +580,96 @@ body {
     animation: reset .5s;
 }
 
+input[type=range] {
+    /*removes default webkit styles*/
+    -webkit-appearance: none;
+    
+    /*fix for FF unable to apply focus style bug */
+    border: 1px solid white;
+    
+    /*required for proper track sizing in FF*/
+    width: 300px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -4px;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=range]::-moz-range-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]::-ms-track {
+    width: 300px;
+    height: 5px;
+    
+    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    background: transparent;
+    
+    /*leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
+    border-width: 6px 0;
+
+    /*remove default tick marks*/
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #777;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #888;
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #ccc;
+}
+
 /* zoomdiv Chrome, Safari, Opera */
 @-webkit-keyframes zoomdiv {
     0% {
@@ -828,13 +918,15 @@ body {
                     <div class="button" id="mise7" onmouseover="colorButtonMise(7)" onmouseout="uncolorButtonMise(7)" onclick="recupMise(7)">7</div>
                 </div>
                 <div class='zoneconfiance' id="boutonsConfiance" style="display:none;cursor:default">
-                    <div class="button" id="confiance1" onmouseover="colorButtonConfiance(1)" onmouseout="uncolorButtonConfiance(1)" onclick="recupConfiance(1)">Pas confiant</div>
-                    <div class="button" id="confiance2" onmouseover="colorButtonConfiance(2)" onmouseout="uncolorButtonConfiance(2)" onclick="recupConfiance(2)">Très peu confiant</div>
-                    <div class="button" id="confiance3" onmouseover="colorButtonConfiance(3)" onmouseout="uncolorButtonConfiance(3)" onclick="recupConfiance(3)">Peu confiant</div>
+                    <input type="range" onmousemove="afficherConfiance()" id="echelleConfiance" value="50"> <div class="button" onclick="recupConfiance()" id="affichageConfiance">Vous estimez vos chances de gagner à :<br /> 50% (faites défilez le curseur)</div>
+
+                    <!--<div class="button" id="confiance1" onmouseover="colorButtonConfiance(1)" onmouseout="uncolorButtonConfiance(1)" onclick="recupConfiance(1)">0%</div>
+                    <div class="button" id="confiance2" onmouseover="colorButtonConfiance(2)" onmouseout="uncolorButtonConfiance(2)" onclick="recupConfiance(2)">Peu<br />confiant</div>
+                    <div class="button" id="confiance3" onmouseover="colorButtonConfiance(3)" onmouseout="uncolorButtonConfiance(3)" onclick="recupConfiance(3)">Ni confiant,<br />ni pas confiant</div>
                     <div class="button" id="confiance4" onmouseover="colorButtonConfiance(4)" onmouseout="uncolorButtonConfiance(4)" onclick="recupConfiance(4)">Confiant</div>
-                    <div class="button" id="confiance5" onmouseover="colorButtonConfiance(5)" onmouseout="uncolorButtonConfiance(5)" onclick="recupConfiance(5)">Moyennement confiant</div>
+                    <div class="button" id="confiance5" onmouseover="colorButtonConfiance(5)" onmouseout="uncolorButtonConfiance(5)" onclick="recupConfiance(5)">Très<br />confiant</div>
                     <div class="button" id="confiance6" onmouseover="colorButtonConfiance(6)" onmouseout="uncolorButtonConfiance(6)" onclick="recupConfiance(6)">Très confiant</div>
-                    <div class="button" id="confiance7" onmouseover="colorButtonConfiance(7)" onmouseout="uncolorButtonConfiance(7)" onclick="recupConfiance(7)">Absolument confiant</div>
+                    <div class="button" id="confiance7" onmouseover="colorButtonConfiance(7)" onmouseout="uncolorButtonConfiance(7)" onclick="recupConfiance(7)">Absolument confiant</div>-->
                 </div>
             </div>
         </div>
