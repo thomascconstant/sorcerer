@@ -18,7 +18,7 @@ var modeViolent = false; //decalage entre les cases de 1 meme diagonales
 
 var modeTest = true;
 var activateModeTest = false;
-var overideTestMode = true; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
+var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
 var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
