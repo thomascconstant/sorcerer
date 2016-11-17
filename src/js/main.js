@@ -77,7 +77,7 @@ function donnerID () {
     console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + choixMiseOuConfiance);
 
     //enregistrerDonnees(0, "nomJoueur" + ";" + IDjoueur" + ";" + "nom_du_jeu" + ";" + "action_de_jeu" + ";" + "sequence" + ";" + "mise" + ";" + "difficulty" + ";" + "score" + ";" + "gagnant" + ";" + "\n");
-    enregistrerDonnees(1,"\n");
+    //enregistrerDonnees(1,"\n");
 
     window.open("intro.html",'_self',false); 
     
@@ -192,7 +192,7 @@ function afficherResults() {
 }
 
 //----------------------------enregistrer données du joueur dans fichier csv pour la version local (à commenter pour la version en ligne)----------------------------
-function enregistrerDonnees (type, data) {
+/*function enregistrerDonnees (type, data) {
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
@@ -218,5 +218,5 @@ function enregistrerDonnees (type, data) {
     //xhttp.send("data=15");
 
     console.log("Sent data " + data);
-}
+}*/
 

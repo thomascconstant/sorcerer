@@ -101,7 +101,7 @@ function init() {
     diffModel.setMode(diffModel.MODE_DDA_SAUT);
     diffModel.setDiffStep(0.1);
     diffModel.setCurrentDiff(0.0);
-    diffModel.setChallengeMinMax(4, 14);
+    diffModel.setChallengeMinMax(4, 11);
     diffModel.setDdaJump(20, 0.3);
     diffModel.resetDdaJump();
 
@@ -1435,6 +1435,10 @@ function launchModeTest() {
         }
 
         if (tours === 0) {
+				
+						//Fin du mode DDA, on passe en random
+						diffModel.setMode(diffModel.MODE_RANDOM);
+				
             //modifier affichage contenu popup
             document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
             document.getElementById("popup3").innerHTML = "L'entraînement est terminé. A partir de maintenant, les moutons risquent de passer à la broche ! Prenez garde !";
@@ -1536,11 +1540,11 @@ function enregistrerDonnees (type, data) {
     if (type == 0) {
         xhttp.open("POST", phpFile, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("joueur=" + data);
+        xhttp.send("id="+IDjoueur+"&joueur=" + data);
     } else if (type == 1) {
         xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("data=" + data);
+        xhttp.send("id="+IDjoueur+"&data=" + data);
     }
 
 

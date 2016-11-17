@@ -49,6 +49,8 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var hideTarget = true; //Si on doit cacher la target a chaque tour
 
+var differencePlayTime = 0.0;
+
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
@@ -960,11 +962,11 @@ function finDePartie() {
         localStorage.setItem("tomcruise", jeuMotriceTermine);
 
         //renvoyer le joueur vers le hub via la popup
-        setTimeout(function launchPopup() {
+        /*setTimeout(function launchPopup() {
             window.open("#popup1", '_self', false); //ouvre la popup
             document.getElementById("popupTitre").innerHTML = "Votre partie est terminée.";
             document.getElementById("popup").innerHTML = "Vous avez sauvé " + compteurMoutonsGagnes + " moutons !<br />" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !<br />" + "Votre score total pour ce jeu est de " + score + ".";
-        }, 2000);
+        }, 2000);*/
 
         /*setTimeout(function launchPopup() {
             var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
@@ -996,11 +998,11 @@ function enregistrerDonnees (type, data) {
     if (type == 0) {
         xhttp.open("POST", phpFile, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("joueur=" + data);
+        xhttp.send("id="+IDjoueur+"&joueur=" + data);
     } else if (type == 1) {
         xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("data=" + data);
+        xhttp.send("id="+IDjoueur+"&data=" + data);
     }
 
 

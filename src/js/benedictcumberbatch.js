@@ -98,6 +98,7 @@ function init() {
     diffModel.setChallengeMinMax(1, 11);
     diffModel.setDdaJump(20, 0.3);
     diffModel.resetDdaJump();
+    
     g_nbPerm = Math.floor(diffModel.getChallengeFromDiffLinear(diffModel.currentDiff));
 
     document.getElementById("tours").innerHTML = tours;
@@ -1293,11 +1294,11 @@ function enregistrerDonnees (type, data) {
     if (type == 0) {
         xhttp.open("POST", phpFile, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("joueur=" + data);
+        xhttp.send("id="+IDjoueur+"joueur=" + data);
     } else if (type == 1) {
         xhttp.open("POST", phpFile, true );
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("data=" + data);
+        xhttp.send("id="+IDjoueur+"&data=" + data);
     }
 
 

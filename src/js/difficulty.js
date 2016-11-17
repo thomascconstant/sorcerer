@@ -59,9 +59,9 @@ var diffModel = {
 
     curve: [0.3,0.35,0.3,0.5,0.55,0.5],
     currentStep: 0,
-    ddaStep: 0, //permet d'avoir un sursaut sur la DDA (mode MODE_DDA_SAUT)
+    ddaJumpStep: 0, //permet d'avoir un sursaut sur la DDA (mode MODE_DDA_SAUT)
     currentDdaStep: 0, //increment du step dda (mode MODE_DDA_SAUT)
-    ddaStepJump: 0, //de combien on saut si on est au moment du jump dda (mode MODE_DDA_SAUT)
+    ddaJumpValue: 0, //de combien on saut si on est au moment du jump dda (mode MODE_DDA_SAUT)
     mode: 0, 
     MODE_COURBE: 0,
     MODE_DDA: 1,
@@ -78,10 +78,11 @@ var diffModel = {
     },
     setDiffStep: function (step) { this.stepDiff = step;},
     setMode: function(m) {this.mode = m},
+    setPractice: function(m) {this.practice = m},
     setStepInCurve: function (s) { this.currentStep = s },
-    setDdaJump(ddaStep,ddaStepJump){
-        this.ddaStep = ddaStep;
-        this.ddaStepJump = ddaStepJump;
+    setDdaJump(ddaJumpStep,ddaJumpValue){
+        this.ddaJumpStep = ddaJumpStep;
+        this.ddaJumpValue = ddaJumpValue;
     },
     resetDdaJump: function(){this.currentDdaStep = 0;},
 
@@ -100,15 +101,16 @@ var diffModel = {
         }
 
         if (this.mode == this.MODE_DDA_SAUT) {
-            if (this.currentDdaStep == this.ddaStep)
-                this.currentDiff += win ? this.ddaStepJump : -this.ddaStepJump;
+            if (this.currentDdaStep == this.ddaJumpStep)
+                this.currentDiff += win ? this.ddaJumpValue : -this.ddaJumpValue;
             else
                 this.currentDiff += win ? this.stepDiff : -this.stepDiff;
             this.currentDdaStep++;
         }
 
         if(this.mode == this.MODE_RANDOM) {
-            this.currentDiff = this.normal(0.5, 0.4);
+            //this.currentDiff = this.normal(0.5, 1.0);
+            this.currentDiff = Math.random().toFixed(2);
 
         }
 

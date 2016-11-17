@@ -2,11 +2,15 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-function enregistrer($data) {
+function enregistrerAxel($data) {
     //$dest = "ftp://username:password@ftp.mywebsite.com/path/to/the/file/data.csv"; // à décommenter pour la version en ligne
-    $dest = "../data.csv"; // à commenter pour la version en ligne
+    $dest = "../data"; // à commenter pour la version en ligne
+	$dest .= $_REQUEST["id"];
+	$dest .= ".csv";
     
-    $filedata = file_get_contents($dest);
+    $filedata ='';
+    if(file_exists($dest))
+        $filedata = file_get_contents($dest);
     $filedata.= $data;
 
     $streamcontext = stream_context_create(array('ftp' => array('overwrite' => true)));
@@ -19,6 +23,23 @@ function enregistrer($data) {
     }
 
 }
+
+function enregistrer($data) {
+    //$dest = "ftp://username:password@ftp.mywebsite.com/path/to/the/file/data.csv"; // à décommenter pour la version en ligne
+    $dest = "../data/data"; // à commenter pour la version en ligne
+    $dest .= $_REQUEST["id"];
+    $dest .= ".csv";
+    
+    $handle = fopen($dest, "a");
+    fwrite($handle, $data);
+    fclose($handle);
+
+}
+
+/*echo("request");
+print_r($_REQUEST);
+echo("post");
+print_r($_POST);*/
 
 if (isset($_REQUEST['data'])) {
     enregistrer($_REQUEST['data']);
