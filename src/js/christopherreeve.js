@@ -98,7 +98,7 @@ function animate(){
 function init() {
 
     diffModel.setStepInCurve(0);
-    diffModel.setMode(diffModel.MODE_DDA_SAUT);
+    diffModel.setMode(diffModel.MODE_DDA_SAUT); //le changement du mode de difficulté se fait aussi dans le code associé au mode test
     diffModel.setDiffStep(0.1);
     diffModel.setCurrentDiff(0.0);
     diffModel.setChallengeMinMax(4, 11);

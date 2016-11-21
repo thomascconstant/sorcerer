@@ -92,7 +92,7 @@ function animate(){
 
 function init() {
     diffModel.setStepInCurve(0);
-    diffModel.setMode(diffModel.MODE_RANDOM);
+    diffModel.setMode(diffModel.MODE_DDA_SAUT); //le changement du mode de difficulté se fait aussi dans le code associé au mode test
     diffModel.setDiffStep(0.1);
     diffModel.setCurrentDiff(0.0);
     diffModel.setChallengeMinMax(1, 11);
@@ -1189,6 +1189,9 @@ function launchModeTest() {
         }
 
         if (tours === 0) {
+            //Fin du mode DDA, on passe en random
+            diffModel.setMode(diffModel.MODE_RANDOM);
+
             //modifier affichage contenu popup
             document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
             document.getElementById("popup3").innerHTML = "L'entraînement est terminé. A partir de maintenant, les moutons risquent de passer à la broche ! Prenez garde !";
