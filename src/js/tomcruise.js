@@ -379,6 +379,9 @@ function stop() {
         actionDeJeu++;
         score += mise;
 
+        //enregistrer temps fin tour
+        getPlayTimeAfter();
+
         addSheep(); //faire apparaître un mouton sur la page
 
         moutonsGagnes = 0;
@@ -674,6 +677,30 @@ function afficherRegles() {
         }, 490);
 
     }
+}
+
+//----------------------------récupérer date et heure de connexion au jeu------------
+function getPlayTimeBefore() {
+    var playNow = new Date();
+    var playNowMs = playNow.getTime();
+
+    playTimeBefore = playNowMs;
+    console.log(playTimeBefore + " début tour");
+}
+
+function getPlayTimeAfter() {
+    var playNow = new Date();
+    var playNowMs = playNow.getTime();
+
+    playTimeAfter = playNowMs;
+    console.log(playTimeBefore + " fin tour");
+
+    getDifferencePlayTime();
+}
+
+function getDifferencePlayTime() {
+    differencePlayTime = playTimeAfter - playTimeBefore;
+    console.log(differencePlayTime + " ms entre tour");
 }
 
 // ----------------------------feedback visuels et sonores--------------------
