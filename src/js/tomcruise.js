@@ -256,6 +256,11 @@ function activateConfiance() {
     document.getElementById("affichageFeedback").style.display = "block";
     document.getElementById("affichageFeedback").innerHTML = "A quel point êtes-vous confiant dans votre capacité à gagner ?";
     document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+    
+    //remettre valeur du slider à 50
+    document.getElementById("echelleConfiance").value = 50;
+    var x = document.getElementById("echelleConfiance").value;
+    document.getElementById("affichageConfiance").innerHTML = "Vous estimez vos chances de gagner à :<br />" + x + "% (cliquez pour valider)";
 
     //afficher boutons de confiance
     document.getElementById("boutonsConfiance").style.display = "block";
