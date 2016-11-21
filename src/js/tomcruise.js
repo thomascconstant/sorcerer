@@ -379,9 +379,6 @@ function stop() {
         actionDeJeu++;
         score += mise;
 
-        //enregistrer temps fin tour
-        getPlayTimeAfter();
-
         addSheep(); //faire apparaître un mouton sur la page
 
         moutonsGagnes = 0;
@@ -418,6 +415,9 @@ function stop() {
         //document.getElementById("res").innerHTML = "Vous avez tué " + mise + " " + "mouton(s). Appuyez sur ESPACE ou sur le bouton pour relancer la barre.";
         //feedbackNegatif;
     }
+
+    //enregistrer temps fin tour
+    getPlayTimeAfter();
 
     //Un tour de moins
     tours--;
@@ -474,6 +474,10 @@ function run() {
     
     if(tours > 0) {
         running = true;
+
+        //enregistrer temps début tour
+        getPlayTimeBefore();
+
         document.getElementById("boutonLancerBarre").disabled = true;
         hideButton();
         
