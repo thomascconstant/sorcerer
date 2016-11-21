@@ -962,11 +962,11 @@ function finDePartie() {
         localStorage.setItem("tomcruise", jeuMotriceTermine);
 
         //renvoyer le joueur vers le hub via la popup
-        /*setTimeout(function launchPopup() {
+        setTimeout(function launchPopup() {
             window.open("#popup1", '_self', false); //ouvre la popup
             document.getElementById("popupTitre").innerHTML = "Votre partie est terminée.";
             document.getElementById("popup").innerHTML = "Vous avez sauvé " + compteurMoutonsGagnes + " moutons !<br />" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !<br />" + "Votre score total pour ce jeu est de " + score + ".";
-        }, 2000);*/
+        }, 2000);
 
         /*setTimeout(function launchPopup() {
             var messageFinPartie = confirm("Votre partie est terminée. Vous avez sauvé " + compteurMoutonsGagnes + " moutons !\n" + "Vous avez envoyé à la broche " + compteurMoutonsPerdus + " moutons !\n" + "Votre score total pour ce jeu est de " + score + "\n" + "Cliquez pour passer au jeu suivant.");
