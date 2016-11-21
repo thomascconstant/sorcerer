@@ -1436,8 +1436,8 @@ function launchModeTest() {
 
         if (tours === 0) {
 				
-						//Fin du mode DDA, on passe en random
-						diffModel.setMode(diffModel.MODE_RANDOM);
+			//Fin du mode DDA, on passe en random
+			diffModel.setMode(diffModel.MODE_RANDOM);
 				
             //modifier affichage contenu popup
             document.getElementById("popupTitre3").innerHTML = "Lancement du jeu";
