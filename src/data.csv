@@ -1,1 +1,1 @@
-nom_du_joueur;IDjoueur;heure_connexion_joueur;nom_du_jeu;mise_first_1;action_de_jeu;duree_tour_ms;mise;confiance;difficulty;trueDiff;near_miss;moutons_sauves;moutons_tues;score;gagnant;
+nom_du_joueur;IDjoueur;heure_connexion_joueur;nom_du_jeu;mise_first_1;action_de_jeu;duree_tour_ms;mise;confiance;difficulty;gameDiff;near_miss;moutons_sauves;moutons_tues;score;gagnant;
