@@ -2,14 +2,76 @@
 #install.packages("data.table")
 #install.packages("ggplot2")
 #install.packages("xlsx")
+#install.packages("dplyr")
 library("xlsx")
 require(xlsx)
 require(data.table)
 require(ggplot2)
+require(dplyr)
 
 #setwd("C:/Users/Thomas Constant/Source/Repos/sorcerer/xp")
-file = "./log_questionnaire_XP_WEEK1ANDWEEK2.xlsx"
+file = "./log_questionnaire_XP_WEEK1ANDWEEK2_REWRITED.xlsx"
 
+#========================================TRAITEMENT
+data <- read.xlsx(file,sheetIndex=1,header=TRUE)
+
+#---------------------------------- sexe des participants
+#compter les occurences de chacun
+CumulMasculin <- table(data$sexe==0)
+CumulFeminin <- table(data$sexe==1)
+
+#afficher les résultats
+bpSexe <- barplot(CumulMasculin, 
+              names.arg=c("Feminin", "Masculin"),
+              col = c("lightblue", "lightgreen"),
+              xlab="Genre",  
+              ylab="Nombre de participants", 
+              ylim = c(0, 60))
+text(bpSexe, 0, round(CumulMasculin, 1),cex=1,pos=3) 
+
+#---------------------------------- niveau d'étude des participants
+#compter les occurences de chacun
+counts <- table(data$niveauEtude)
+#old
+# CumulSansDiplome <- table(data$niveauEtude==0)
+# CumulBEPC <- table(data$niveauEtude==1)
+# CumulBEPCAP <- table(data$niveauEtude==2)
+# CumulBAC <- table(data$niveauEtude==3)
+# CumulBAC2 <- table(data$niveauEtude==4)
+# CumulBAC3 <- table(data$niveauEtude==5)
+# CumulBAC4 <- table(data$niveauEtude==6)
+# CumulBAC5 <- table(data$niveauEtude==7)
+# CumulBAC8 <- table(data$niveauEtude==8)
+
+#afficher les résultats
+bpEtudes <- barplot(counts, main="Niveau d'études", horiz=FALSE,
+                    names.arg=c("Aucun", "BEPC", "BEP, CAP", "BAC", "BAC+2", "BAC+3", "BAC+4", "BAC+5", "BAC+8"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    xlab="Diplômes",  
+                    ylab="Répartition selon les participants", 
+                    ylim = c(0, 35))
+text(bpEtudes, 0, round(counts, 1),cex=1,pos=3) 
+
+#---------------------------------- profil de joueur des participants
+dataProfilJoueurs <- data.frame(data$idJoueur, data$profilJoueur1, data$profilJoueur2, data$profilJoueur3, data$profilJoueur4, data$profilJoueur5, data$profilJoueur6, data$profilJoueur7)
+table(data$profilJoueur1)
+data.frame(table(dataProfilJoueurs))
+
+# data$countProfilJoueurIs1 <- ave(data$profilJoueur1, data$idJoueur,  FUN = seq_along)
+# 
+# data %>% group_by(profilJoueur1, profilJoueur2) %>% mutate(count = n())
+# 
+# names(which.max(table(data$profilJoueur2)))
+
+table(data$idJoueur, data$profilJoueur2)
+counts[which.max(data$profilJoueur2)]
+
+# setDT(dataProfilJoueurs)[, count:=.N, by = .(data.idJoueur, data.profilJoueur1)]
+
+#setDT(data)[profilJoueur1==2, count.2:=1:.N, by=idJoueur][]
+
+#========================================OLD MY FRIEND
 #---------------------------------- fonctions
 Unaccent <- function(text) {
   text <- gsub("['`^~\"]", " ", text)
