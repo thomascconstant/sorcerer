@@ -2,23 +2,31 @@
 #install.packages("data.table")
 #install.packages("ggplot2")
 #install.packages("xlsx")
-#install.packages("dplyr")
+#install.packages("plyr")
+#install.packages("likert")
 library("xlsx")
 require(xlsx)
 require(data.table)
 require(ggplot2)
-require(dplyr)
+require(plyr)
+require(likert)
 
 #setwd("C:/Users/Thomas Constant/Source/Repos/sorcerer/xp")
-file = "./log_questionnaire_XP_WEEK1ANDWEEK2_REWRITED.xlsx"
+file = "./log_questionnaire_XP_WEEK2_REWRITED.xlsx"
 
 #========================================TRAITEMENT
-data <- read.xlsx(file,sheetIndex=1,header=TRUE)
+dataQ <- read.xlsx(file,sheetIndex=1,header=TRUE)
+
+#effacer ligne 81 (vide)
+dataQ <- dataQ[-c(81), ]
+
+#effacer colonne 37 (vide)
+dataQ <- subset(dataQ, select = -37)
 
 #---------------------------------- sexe des participants
 #compter les occurences de chacun
-CumulMasculin <- table(data$sexe==0)
-CumulFeminin <- table(data$sexe==1)
+CumulMasculin <- table(dataQ$sexe==0)
+CumulFeminin <- table(dataQ$sexe==1)
 
 #afficher les résultats
 bpSexe <- barplot(CumulMasculin, 
@@ -31,17 +39,17 @@ text(bpSexe, 0, round(CumulMasculin, 1),cex=1,pos=3)
 
 #---------------------------------- niveau d'étude des participants
 #compter les occurences de chacun
-counts <- table(data$niveauEtude)
+counts <- table(dataQ$niveauEtude)
 #old
-# CumulSansDiplome <- table(data$niveauEtude==0)
-# CumulBEPC <- table(data$niveauEtude==1)
-# CumulBEPCAP <- table(data$niveauEtude==2)
-# CumulBAC <- table(data$niveauEtude==3)
-# CumulBAC2 <- table(data$niveauEtude==4)
-# CumulBAC3 <- table(data$niveauEtude==5)
-# CumulBAC4 <- table(data$niveauEtude==6)
-# CumulBAC5 <- table(data$niveauEtude==7)
-# CumulBAC8 <- table(data$niveauEtude==8)
+# CumulSansDiplome <- table(dataQ$niveauEtude==0)
+# CumulBEPC <- table(dataQ$niveauEtude==1)
+# CumulBEPCAP <- table(dataQ$niveauEtude==2)
+# CumulBAC <- table(dataQ$niveauEtude==3)
+# CumulBAC2 <- table(dataQ$niveauEtude==4)
+# CumulBAC3 <- table(dataQ$niveauEtude==5)
+# CumulBAC4 <- table(dataQ$niveauEtude==6)
+# CumulBAC5 <- table(dataQ$niveauEtude==7)
+# CumulBAC8 <- table(dataQ$niveauEtude==8)
 
 #afficher les résultats
 bpEtudes <- barplot(counts, main="Niveau d'études", horiz=FALSE,
@@ -54,9 +62,81 @@ bpEtudes <- barplot(counts, main="Niveau d'études", horiz=FALSE,
 text(bpEtudes, 0, round(counts, 1),cex=1,pos=3) 
 
 #---------------------------------- profil de joueur des participants
-dataProfilJoueurs <- data.frame(data$idJoueur, data$profilJoueur1, data$profilJoueur2, data$profilJoueur3, data$profilJoueur4, data$profilJoueur5, data$profilJoueur6, data$profilJoueur7)
-table(data$profilJoueur1)
+#sélectionner uniquement les données qui nous intéressent pour construire le profil
+dataProfilJoueurs <- dataQ[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6","profilJoueur7")]
+
+#somme de l'ensemble des données profilJoueur et intégration dans tableau
+dataQ$sumProfilJoueur <- rowSums(dataProfilJoueurs, na.rm=TRUE)
+# détail du résultat sumProfilJoueur (7 questions sur échelle de Likert de 1 à 5)
+# de 7 à 14 : non joueur
+# de 15 à 21 : joueur occasionnel
+# de 22 à 28 : joueur régulier
+# de 29 à 35 : pgm
+
+#moyenne de l'ensemble des données profilJoueur et intégration dans tableau
+dataQ$meanProfilJoueur <- rowMeans(dataProfilJoueurs, na.rm=TRUE)
+
+#---------------------------------- sentiment d'auto efficacité (AE) des participants comme joueurs
+#sélectionner uniquement les données qui nous intéressent pour construire le sentiment d'AE
+dataProfilAE <- dataQ[,c("autoEffJoueur1","autoEffJoueur2","autoEffJoueur3","autoEffJoueur4","autoEffJoueur5","autoEffJoueur6","autoEffJoueur7","autoEffJoueur8","autoEffJoueur9","autoEffJoueur10")]
+
+#somme de l'ensemble des données du sentiment d'auto efficacité et intégration dans tableau
+dataQ$sumProfilAE <- rowSums(dataProfilAE, na.rm=TRUE)
+# détail du résultat sumProfilAE (10 questions sur échelle de Likert de 1 à 5)
+# 0 : n'a pas répondu au questionnaire, ne se considère pas comme joueur (réponse à profilJoueur8)
+# de 10 à 20 : sentiment AE faible
+# de 21 à 30 : sentiment AE moyen
+# de 31 à 40 : sentiment AE fort
+# de 41 à 50 : sentiment AE très fort (à regrouper ?)
+
+#moyenne de l'ensemble des données du sentiment d'auto efficacité et intégration dans tableau
+dataQ$meanProfilAE <- rowMeans(dataProfilAE, na.rm=TRUE)
+
+
+#---------------------------------- aversion au risque (RA) des participants
+#sélectionner uniquement les données qui nous intéressent pour construire le sentiment d'AE
+dataProfilRA <- dataQ[,c("loterie1","loterie2","loterie3","loterie4","loterie5","loterie6","loterie7","loterie8","loterie9","loterie10")]
+
+#somme de l'ensemble des données du test d'aversion au risque et intégration dans tableau
+dataQ$sumProfilRA <- rowSums(dataProfilRA, na.rm=TRUE)
+# nombre de choix sûrs
+# 0-1 : highly risk loving
+# 2 : very risk loving
+# 3 : risk loving
+# 4 : risk neutral
+# 5 : slightly risk averse
+# 6 : risk averse
+# 7 : very risk averse
+# 8 : highly risk avers
+# 9-10 : max choix sûr
+
+
+#========================================TESTS A LA C** EN COURS
+dataProfilJoueurs$freq <- apply(dataProfilJoueurs,1,table)
+
+ 
+apply(dataProfilJoueurs,1,table) 
+
+df <- as.data.frame(apply(dataProfilJoueurs,1,table))
+summary(df)
+
+
+
+table(dataProfilJoueurs)
+
+tapply(dataProfilJoueurs, max)
+
+apply(iris.x, 2, function(x) tapply(x, iris.s, mean))
+
+
+attach(dataQ)
+#dataProfilJoueurs <- dataQ[order(idJoueur, profilJoueur2, profilJoueur3, profilJoueur4, profilJoueur5, profilJoueur6, profilJoueur7),]
+
+table(dataProfilJoueurs)
+summary(table)
 data.frame(table(dataProfilJoueurs))
+
+count(data, c('idJoueur', 'profilJoueur1', 'profilJoueur2', 'profilJoueur3', 'profilJoueur4', 'profilJoueur5', 'profilJoueur6', 'profilJoueur7'))
 
 # data$countProfilJoueurIs1 <- ave(data$profilJoueur1, data$idJoueur,  FUN = seq_along)
 # 
