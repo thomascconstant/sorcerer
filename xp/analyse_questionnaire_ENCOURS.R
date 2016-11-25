@@ -130,26 +130,26 @@ apply(iris.x, 2, function(x) tapply(x, iris.s, mean))
 
 
 attach(dataQ)
-#dataProfilJoueurs <- dataQ[order(idJoueur, profilJoueur2, profilJoueur3, profilJoueur4, profilJoueur5, profilJoueur6, profilJoueur7),]
+#dataProfilJoueurs <- dataQ[order(IDjoueur, profilJoueur2, profilJoueur3, profilJoueur4, profilJoueur5, profilJoueur6, profilJoueur7),]
 
 table(dataProfilJoueurs)
 summary(table)
 data.frame(table(dataProfilJoueurs))
 
-count(data, c('idJoueur', 'profilJoueur1', 'profilJoueur2', 'profilJoueur3', 'profilJoueur4', 'profilJoueur5', 'profilJoueur6', 'profilJoueur7'))
+count(data, c('IDjoueur', 'profilJoueur1', 'profilJoueur2', 'profilJoueur3', 'profilJoueur4', 'profilJoueur5', 'profilJoueur6', 'profilJoueur7'))
 
-# data$countProfilJoueurIs1 <- ave(data$profilJoueur1, data$idJoueur,  FUN = seq_along)
+# data$countProfilJoueurIs1 <- ave(data$profilJoueur1, data$IDjoueur,  FUN = seq_along)
 # 
 # data %>% group_by(profilJoueur1, profilJoueur2) %>% mutate(count = n())
 # 
 # names(which.max(table(data$profilJoueur2)))
 
-table(data$idJoueur, data$profilJoueur2)
+table(data$IDjoueur, data$profilJoueur2)
 counts[which.max(data$profilJoueur2)]
 
-# setDT(dataProfilJoueurs)[, count:=.N, by = .(data.idJoueur, data.profilJoueur1)]
+# setDT(dataProfilJoueurs)[, count:=.N, by = .(data.IDjoueur, data.profilJoueur1)]
 
-#setDT(data)[profilJoueur1==2, count.2:=1:.N, by=idJoueur][]
+#setDT(data)[profilJoueur1==2, count.2:=1:.N, by=IDjoueur][]
 
 #========================================OLD MY FRIEND
 #---------------------------------- fonctions
