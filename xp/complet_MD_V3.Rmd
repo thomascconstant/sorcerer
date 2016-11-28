@@ -27,6 +27,7 @@ output:
 #install.packages("MuMIn")
 #install.packages("Matrix")
 #install.packages("psychometric")
+#install.packages("pyramid")
 library("xlsx")
 require(xlsx)
 require(plyr)
@@ -40,6 +41,7 @@ library(usdm)
 require(lattice)
 require(psychometric)
 require(MuMIn)
+require(pyramid)
 
 ```
 
@@ -118,7 +120,48 @@ bpAge <- barplot(counts,
               xlab="Âge",  
               ylab="Répartition selon les participants", 
               ylim = c(0, 15))
-text(bpAge, 0, round(counts, 1),cex=1,pos=3) 
+text(bpAge, 0, round(counts, 1),cex=1,pos=3)
+
+#créer une pyramide des âges
+#au préalable, répartir les âges suivant le sexe
+agesM <- dataQ[which(dataQ$age & dataQ$sexe==0),]
+agesM <- table(agesM$age)
+
+agesF <- dataQ[which(dataQ$age & dataQ$sexe==1),]
+agesF <- table(agesF$age)
+
+ages <- dataQ$age
+
+
+
+agesF <- table(dataQ$age,dataQ$sexe==1)
+
+ages <- table(dataQ$age)
+
+ages <- as.data.frame(ages)
+hommes <- table(dataQ$sexe==0)
+hommes <- as.data.frame(hommes)
+
+femmes <- table(dataQ$sexe==1)
+femmes <- as.data.frame(femmes)
+
+
+ages <- dataQ$age
+ages <- as.data.frame(ages)
+
+hommes <- dataQ$sexe==0
+hommes <- as.data.frame(hommes)
+
+
+
+dataP <- data.frame(agesM,agesF,ages)
+
+pyramid(dataP)
+pyramid(dataP, Laxis=NULL, Raxis=NULL,
+          AxisFM="g", AxisBM="", AxisBI=3, Cgap=0.3, Cstep=1, Csize=1,
+          Llab="Hommes", Rlab="Femmes", Clab="Ages", GL=TRUE, Cadj=-0.03,
+          Lcol="Cyan", Rcol="Pink", Ldens=-1, Rdens=-1, main="")
+
 
 #---------------------------------- niveau d'étude des participants
 #compter les occurences de chacun
@@ -1016,6 +1059,21 @@ if(TEST){
   
   DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
   DTLoc$erreurMise = DTLoc$miseNorm - DTLoc$gagnant;
+  
+  #=================== erreur mise par rapport à la difficulté
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$difficulty + (1 | DTLoc$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model)
+  plot(model)
+  install.packages("multcomp")
+  library(multcomp)
+  tmp <- as.data.frame(confint(glht(model))$confint)
+  tmp$Comparison <- rownames(tmp)
+  ggplot(tmp, aes(x = Comparison, y = Estimate, ymin = lwr, ymax = upr)) + geom_errorbar() + geom_point()
+
+  
+  install.packages("ggplot2")
+  library(ggplot2)
   
   #=================== erreur mise dans le temps
   model <- lmer(DTLoc$erreurMise ~ DTLoc$action_de_jeu + (1 | DTLoc$IDjoueur))
