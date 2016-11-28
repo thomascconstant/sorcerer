@@ -124,43 +124,64 @@ text(bpAge, 0, round(counts, 1),cex=1,pos=3)
 
 #créer une pyramide des âges
 #au préalable, répartir les âges suivant le sexe
-agesM <- dataQ[which(dataQ$age & dataQ$sexe==0),]
-agesM <- table(agesM$age)
-
-agesF <- dataQ[which(dataQ$age & dataQ$sexe==1),]
-agesF <- table(agesF$age)
-
-ages <- dataQ$age
-
-
-
-agesF <- table(dataQ$age,dataQ$sexe==1)
-
-ages <- table(dataQ$age)
-
-ages <- as.data.frame(ages)
-hommes <- table(dataQ$sexe==0)
-hommes <- as.data.frame(hommes)
-
-femmes <- table(dataQ$sexe==1)
-femmes <- as.data.frame(femmes)
-
-
-ages <- dataQ$age
-ages <- as.data.frame(ages)
-
-hommes <- dataQ$sexe==0
-hommes <- as.data.frame(hommes)
-
-
-
-dataP <- data.frame(agesM,agesF,ages)
-
-pyramid(dataP)
-pyramid(dataP, Laxis=NULL, Raxis=NULL,
-          AxisFM="g", AxisBM="", AxisBI=3, Cgap=0.3, Cstep=1, Csize=1,
-          Llab="Hommes", Rlab="Femmes", Clab="Ages", GL=TRUE, Cadj=-0.03,
-          Lcol="Cyan", Rcol="Pink", Ldens=-1, Rdens=-1, main="")
+# 
+# library(plotrix)
+#  xy.pop <- dataQ[which(dataQ$age & dataQ$sexe==0),]
+# 
+#  
+#  xx.pop<-dataQ[which(dataQ$age & dataQ$sexe==1),]
+# 
+#  
+#  agelabels<-c("10-14","15-19","20-24","25-29","30-34",
+#   "35-39","40-44","45-49","50-54","55-59","60-64","65+")
+#  
+#  mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
+#  fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
+#  
+#  par(mar=pyramid.plot(xy.pop,xx.pop,labels=agelabels,
+#   main="Australian population pyramid 2002",lxcol=mcol,rxcol=fcol,
+#   gap=0.5,show.values=TRUE))
+# 
+#  
+#  
+# agesM <- dataQ[which(dataQ$age & dataQ$sexe==0),]
+# agesM <- table(agesM$age)
+# 
+# agesF <- dataQ[which(dataQ$age & dataQ$sexe==1),]
+# agesF <- table(agesF$age)
+# 
+# ages <- dataQ$age
+# 
+# 
+# 
+# # agesF <- table(dataQ$age,dataQ$sexe==1)
+# # 
+# # ages <- table(dataQ$age)
+# # 
+# # ages <- as.data.frame(ages)
+# # hommes <- table(dataQ$sexe==0)
+# # hommes <- as.data.frame(hommes)
+# # 
+# # femmes <- table(dataQ$sexe==1)
+# # femmes <- as.data.frame(femmes)
+# # 
+# # 
+# # ages <- dataQ$age
+# # ages <- as.data.frame(ages)
+# # 
+# # hommes <- dataQ$sexe==0
+# # hommes <- as.data.frame(hommes)
+# 
+# 
+# 
+# dataP <- data.frame(agesM,agesF,ages)
+# 
+# 
+# pyramid(dataP)
+# pyramid(dataP, Laxis=NULL, Raxis=NULL,
+#           AxisFM="g", AxisBM="", AxisBI=3, Cgap=0.3, Cstep=1, Csize=1,
+#           Llab="Hommes", Rlab="Femmes", Clab="Ages", GL=TRUE, Cadj=-0.03,
+#           Lcol="Cyan", Rcol="Pink", Ldens=-1, Rdens=-1, main="")
 
 
 #---------------------------------- niveau d'étude des participants
@@ -179,7 +200,12 @@ text(bpEtudes, 0, round(counts, 1),cex=1,pos=3)
 
 #---------------------------------- profil de joueur des participants
 #sélectionner uniquement les données qui nous intéressent pour construire le profil
-dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6","profilJoueur7")]
+
+#avec question sur les jeux d'argent
+#dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6","profilJoueur7")]
+
+#sans question les jeux d'argent
+dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6")]
 
 
 #somme de l'ensemble des données profilJoueur et intégration dans tableau
@@ -192,6 +218,27 @@ dataQ$sumProfilJoueur <- rowSums(dataProfilJoueurs, na.rm=TRUE)
 
 #moyenne de l'ensemble des données profilJoueur et intégration dans tableau
 dataQ$meanProfilJoueur <- rowMeans(dataProfilJoueurs, na.rm=TRUE)
+
+#afficher les résultats (à appeller en même temps) BARPLOT
+bpProfilJoueur <- barplot(dataQ$meanProfilJoueur, main="Profil de joueurs des participants", horiz=FALSE,
+                    names.arg=c("IDjoueur"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    xlab="Participants",  
+                    ylab="Temps de jeu (jamais = 0 / tous les jours = 5)", 
+                    ylim = c(0, 5))
+abline(h=mean(dataQ$meanProfilJoueur),col = "blue", lwd = 2)
+legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
+
+#afficher les résultats (à appeller en même temps) HISTO
+bpProfilJoueur <- hist(dataQ$meanProfilJoueur,
+                    main="Profil de joueur des participants",
+                    xlab="Temps de jeu moyen (jamais = 0 / tous les jours = 5)",  
+                    ylab="Participants",
+                    xlim = c(1, 5),
+                    ylim = c(0, 25))
+abline(v=mean(dataQ$meanProfilJoueur),col = "blue", lwd = 2)
+legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
 
 #---------------------------------- sentiment d'auto efficacité (AE) des participants comme joueurs
 #sélectionner uniquement les données qui nous intéressent pour construire le sentiment d'AE
@@ -209,6 +256,30 @@ dataQ$sumProfilAE <- rowSums(dataProfilAE, na.rm=TRUE)
 #moyenne de l'ensemble des données du sentiment d'auto efficacité et intégration dans tableau
 dataQ$meanProfilAE <- rowMeans(dataProfilAE, na.rm=TRUE)
 
+#ne garder que les joueurs se considérant comme joueurs
+meanProfilAE <- dataQ
+meanProfilAE <- na.omit(meanProfilAE)
+meanProfilAE <- as.data.frame(meanProfilAE)
+
+#afficher les résultats (à appeller en même temps) BARPLOT
+bpProfilAE <- barplot(meanProfilAE$meanProfilAE, main="Sentiment d'auto-efficacité des participants", horiz=FALSE,
+                    names.arg=c("IDjoueur"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    xlab="Participants se définissant comme joueur",  
+                    ylab="Sentiment d'auto-efficacité (maximum = 5)", 
+                    ylim = c(0, 5))
+abline(h=mean(meanProfilAE$meanProfilAE),col = "blue", lwd = 2)
+
+#afficher les résultats (à appeller en même temps) HISTO
+bpProfilJoueur <- hist(meanProfilAE$meanProfilAE,
+                    main="Sentiment d'auto-efficacité des participants",
+                    xlab="Sentiment d'auto-efficacité (maximum = 5)",  
+                    ylab="Répartition suivant les participants se définissant comme joueur",
+                    xlim = c(1, 5),
+                    ylim = c(0, 20))
+abline(v=mean(meanProfilAE$meanProfilAE),col = "blue", lwd = 2)
+
 #---------------------------------- aversion au risque (RA) des participants
 #sélectionner uniquement les données qui nous intéressent pour construire le sentiment d'AE
 dataProfilRA <- data.frame(dataQ)[,c("loterie1","loterie2","loterie3","loterie4","loterie5","loterie6","loterie7","loterie8","loterie9","loterie10")]
@@ -225,6 +296,29 @@ dataQ$sumProfilRA <- rowSums(dataProfilRA, na.rm=TRUE)
 # 7 : very risk averse
 # 8 : highly risk avers
 # 9-10 : max choix sûr
+
+#afficher les résultats (à appeller en même temps) BARPLOT
+bpProfilRisque <- barplot(dataQ$sumProfilRA, main="Aversion au risque des participants", horiz=FALSE,
+                    names.arg=c("IDjoueur"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    xlab="Participants",  
+                    ylab="Somme des choix sûrs (maximum = 10)", 
+                    ylim = c(0, 11.7))
+abline(h=mean(dataQ$sumProfilRA),col = "blue", lwd = 2)
+legend("top", legend = "0-1 : highly risk loving / 2 : very risk loving / 3 : risk loving / 4 : risk neutral / 5 : slightly risk averse
+       6 : risk averse / 7 : very risk averse / 8 : highly risk avers / 9-10 : stay in bed")
+
+#afficher les résultats (à appeller en même temps) HISTO
+bpProfilJoueur <- hist(dataQ$sumProfilRA,
+                    main="Aversion au risque des participants",
+                    xlab="Somme des choix sûrs (maximum = 10)",  
+                    ylab="Répartition des participants",
+                    xlim = c(0, 10),
+                    ylim = c(0, 25))
+abline(v=mean(dataQ$sumProfilRA),col = "blue", lwd = 2)
+legend("top", legend = "0-1 : highly risk loving / 2 : very risk loving / 3 : risk loving / 4 : risk neutral / 5 : slightly risk averse
+       6 : risk averse / 7 : very risk averse / 8 : highly risk avers / 9-10 : stay in bed")
 
 #---------------------------------- merge des deux tables
 #si nécessaire vérifier que le questionnaire est bien une table
@@ -1064,8 +1158,20 @@ if(TEST){
   model <- lmer(DTLoc$erreurMise ~ DTLoc$difficulty + (1 | DTLoc$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
-  plot(model)
-  install.packages("multcomp")
+  predict(model)
+  
+  install.packages("sjPlot")
+  install.packages("arm")
+  require(sjPlot)
+  require(arm)
+  sjp.lmer(model)
+  
+  plot(x=DTLoc$erreurMise, y=DTLoc$difficulty)
+  abline(h=mean(DTLoc$erreurMise),col = "blue", lwd = 2)
+  
+  ggplot(data=DTLoc, aes(erreurMise,difficulty)) + geom_point()
+  ggplot(model)
+  #install.packages("multcomp")
   library(multcomp)
   tmp <- as.data.frame(confint(glht(model))$confint)
   tmp$Comparison <- rownames(tmp)
@@ -1078,7 +1184,7 @@ if(TEST){
   #=================== erreur mise dans le temps
   model <- lmer(DTLoc$erreurMise ~ DTLoc$action_de_jeu + (1 | DTLoc$IDjoueur))
   summary(model) #nope
-  plot(model)
+  plot(DTLoc$erreurMise ~ DTLoc$action_de_jeu)
   
   #=================== erreur mise selon profil du participant
   model <- lmer(DTLoc$erreurMise ~ DTLoc$meanProfilJoueur + (1 | DTLoc$IDjoueur))
