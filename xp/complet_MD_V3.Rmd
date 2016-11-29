@@ -1175,120 +1175,141 @@ if(TEST){
   DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
   DTLoc$erreurMise = DTLoc$miseNorm - DTLoc$gagnant;
   
-  #=================== erreur mise par rapport à la difficulté
-  model <- lmer(DTLoc$erreurMise ~ DTLoc$difficulty + (1 | DTLoc$IDjoueur))
+  #=================== mise par rapport à la difficulté
+  model <- lmer(DTLoc$mise ~ DTLoc$difficulty + (1 | DTLoc$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
   predict(model)
   
-  #------------------ erreur mise par rapport à la difficulté logique
+  #------------------ mise par rapport à la difficulté logique
   DTLocL <- DTLoc[nom_du_jeu == "Logique2"]
-  model <- lmer(DTLocL$erreurMise ~ DTLocL$difficulty + (1 | DTLocL$IDjoueur))
+  model <- lmer(DTLocL$mise ~ DTLocL$difficulty + (1 | DTLocL$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
   predict(model)
   
-  #------------------ erreur mise par rapport à la difficulté motrice
+  #------------------ mise par rapport à la difficulté motrice
   DTLocM <- DTLoc[nom_du_jeu == "Motrice"]
-  model <- lmer(DTLocM$erreurMise ~ DTLocM$difficulty + (1 | DTLocM$IDjoueur))
+  model <- lmer(DTLocM$mise ~ DTLocM$difficulty + (1 | DTLocM$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
   predict(model)
   
-  #------------------ erreur mise par rapport à la difficulté sensorielle
+  #------------------ mise par rapport à la difficulté sensorielle
   DTLocS <- DTLoc[nom_du_jeu == "Sensoriel"]
-  model <- lmer(DTLocS$erreurMise ~ DTLocS$difficulty + (1 | DTLocS$IDjoueur))
+  model <- lmer(DTLocS$mise ~ DTLocS$difficulty + (1 | DTLocS$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
   predict(model)
   
   
-  install.packages("sjPlot")
-  install.packages("arm")
-  require(sjPlot)
-  require(arm)
-  sjp.lmer(model)
   
-  plot(x=DTLoc$erreurMise, y=DTLoc$difficulty)
-  abline(h=mean(DTLoc$erreurMise),col = "blue", lwd = 2)
-  
-  ggplot(data=DTLoc, aes(miseNorm,difficulty))
-  ggplot(model)
-  #install.packages("multcomp")
-  library(multcomp)
-  tmp <- as.data.frame(confint(glht(model))$confint)
-  tmp$Comparison <- rownames(tmp)
-  ggplot(tmp, aes(x = Comparison, y = Estimate, ymin = lwr, ymax = upr)) + geom_errorbar() + geom_point()
-
-  
-  install.packages("ggplot2")
-  library(ggplot2)
+  # install.packages("sjPlot")
+  # install.packages("arm")
+  # require(sjPlot)
+  # require(arm)
+  # sjp.lmer(model)
+  # 
+  # plot(x=DTLoc$erreurMise, y=DTLoc$difficulty)
+  # abline(h=mean(DTLoc$erreurMise),col = "blue", lwd = 2)
+  # 
+  # ggplot(data=DTLoc, aes(miseNorm,difficulty))
+  # ggplot(model)
+  # #install.packages("multcomp")
+  # library(multcomp)
+  # tmp <- as.data.frame(confint(glht(model))$confint)
+  # tmp$Comparison <- rownames(tmp)
+  # ggplot(tmp, aes(x = Comparison, y = Estimate, ymin = lwr, ymax = upr)) + geom_errorbar() + geom_point()
+  # 
+  # 
+  # install.packages("ggplot2")
+  # library(ggplot2)
   
   #=================== erreur mise dans le temps
   model <- lmer(DTLoc$erreurMise ~ DTLoc$action_de_jeu + (1 | DTLoc$IDjoueur))
   summary(model) #nope
+  r.squaredGLMM(model)
   plot(DTLoc$erreurMise ~ DTLoc$action_de_jeu)
   
   #=================== erreur mise selon profil du participant
   model <- lmer(DTLoc$erreurMise ~ DTLoc$meanProfilJoueur + (1 | DTLoc$IDjoueur))
   summary(model) #nope
+  r.squaredGLMM(model)
   
   #=================== erreur mise selon profil gamer du participant
-  DTLocGamer <- DTLoc[meanProfilJoueur>=3]
-  model <- lmer(DTLocGamer$erreurMise ~ DTLocGamer$meanProfilJoueur + (1 | DTLocGamer$IDjoueur))
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$meanProfilJoueur + (1 | DTLoc$IDjoueur))
   summary(model)
+  r.squaredGLMM(model)
   
-  #glm(erreurMise ~ meanProfilJoueur, data = DTLoc, family = "binomial"(link = "logit"))
-  # plot(lm(formula = DTLoc$erreurMise ~ DTLoc$meanProfilJoueur))
-  # r.squaredGLMM(model)
-  # predict(model)
+  #------------------ erreur mise par rapport à la difficulté (selon profil gamer du participant)
+  DTLocGamer <- DTLoc[meanProfilJoueur>=3]
+  model <- lmer(DTLocGamer$erreurMise ~ DTLocGamer$difficulty + (1 | DTLocGamer$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model)
   
-  #=================== erreur mise selon profil non-gamer du participant
+  #------------------ erreur mise par rapport à la difficulté (selon profil non-gamer du participant)
   DTLocNoGamer <- DTLoc[meanProfilJoueur<3]
-  model <- lmer(DTLocNoGamer$erreurMise ~ DTLocNoGamer$meanProfilJoueur + (1 | DTLocNoGamer$IDjoueur))
+  model <- lmer(DTLocNoGamer$erreurMise ~ DTLocNoGamer$difficulty + (1 | DTLocNoGamer$IDjoueur))
   summary(model) #*, c'est déjà ça
+  r.squaredGLMM(model)
   
-  #=================== erreur mise selon profil risquophobe du participant
+  #=================== erreur mise selon profil risquophobe/risquophile du participant
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$sumProfilRA + (1 | DTLoc$IDjoueur))
+  summary(model) #pas d'impact lié au profil risquophobe/phile
+  r.squaredGLMM(model)
+  
+  #------------------ erreur mise par rapport à la difficulté (selon profil risquophobe du participant)
   DTLocRisk <- DTLoc[sumProfilRA>=6]
-  model <- lmer(DTLocRisk$erreurMise ~ DTLocRisk$sumProfilRA + (1 | DTLocRisk$IDjoueur))
+  model <- lmer(DTLocRisk$erreurMise ~ DTLocRisk$difficulty + (1 | DTLocRisk$IDjoueur))
   summary(model) #rassurant, être risquophobe n'a pas d'impact, on peut garder les données
+  r.squaredGLMM(model)
   
-  #=================== erreur mise selon profil risquophile du participant
+  #------------------ erreur mise par rapport à la difficulté (selon profil risquophile du participant)
   DTLocNoRisk <- DTLoc[sumProfilRA<=5]
-  model <- lmer(DTLocNoRisk$erreurMise ~ DTLocNoRisk$sumProfilRA + (1 | DTLocNoRisk$IDjoueur))
+  model <- lmer(DTLocNoRisk$erreurMise ~ DTLocNoRisk$difficulty + (1 | DTLocNoRisk$IDjoueur))
   summary(model) #rassurant, être risquophile n'a pas d'impact, on peut garder les données
+  r.squaredGLMM(model)
   
   #=================== erreur mise selon sexe du participant
-  DTLocWomen <- DTLoc[sexe==1]
-  model <- lmer(DTLocWomen$erreurMise ~ DTLocWomen$sexe + (1 | DTLocWomen$IDjoueur))
+  model <- aov(DTLoc$erreurMise ~ DTLoc$sexe)
   summary(model) #pas d'impact lié au sexe
+  r.squaredGLMM(model)
+  
+  #------------------ erreur mise par rapport à la difficulté (selon sexe du participant)
+  DTLocWomen <- DTLoc[sexe==1]
+  model <- lmer(DTLocWomen$erreurMise ~ DTLocWomen$difficulty + (1 | DTLocWomen$IDjoueur))
+  summary(model) 
+  r.squaredGLMM(model) #r2 non révélateur
   
   DTLocMen <- DTLoc[sexe==0]
-  model <- lmer(DTLocMen$erreurMise ~ DTLocMen$meanProfilJoueur + (1 | DTLocMen$IDjoueur))
-  summary(model) #pas d'impact lié au sexe
+  model <- lmer(DTLocMen$erreurMise ~ DTLocMen$difficulty + (1 | DTLocMen$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model) #r2 non révélateur
   
   #=================== erreur mise selon niveau d'étude du participant
-  DTLocBac2Plus <- DTLoc[niveauEtude>=4]
-  model <- lmer(DTLocBac2Plus$erreurMise ~ DTLocBac2Plus$meanProfilJoueur + (1 | DTLocBac2Plus$IDjoueur))
-  summary(model) #pas d'impact lié à un niveau d'étude >= à Bac+2
-  
-  DTLocBacPlus <- DTLoc[niveauEtude>=3]
-  model <- lmer(DTLocBacPlus$erreurMise ~ DTLocBacPlus$meanProfilJoueur + (1 | DTLocBacPlus$IDjoueur))
-  summary(model) #pas d'impact lié à un niveau d'étude >= à Bac
-  
-  DTLocNoBac <- DTLoc[niveauEtude<3]
-  model <- lmer(DTLocNoBac$erreurMise ~ DTLocNoBac$meanProfilJoueur + (1 | DTLocNoBac$IDjoueur))
-  summary(model) #pas d'impact lié à un niveau d'étude < au Bac (rassurant, vu le nombre de participants)
-  
+  #A REPRENDRE
+  # DTLocBac2Plus <- DTLoc[niveauEtude>=4]
+  # model <- lmer(DTLocBac2Plus$erreurMise ~ DTLocBac2Plus$meanProfilJoueur + (1 | DTLocBac2Plus$IDjoueur))
+  # summary(model) #pas d'impact lié à un niveau d'étude >= à Bac+2
+  # 
+  # DTLocBacPlus <- DTLoc[niveauEtude>=3]
+  # model <- lmer(DTLocBacPlus$erreurMise ~ DTLocBacPlus$meanProfilJoueur + (1 | DTLocBacPlus$IDjoueur))
+  # summary(model) #pas d'impact lié à un niveau d'étude >= à Bac
+  # 
+  # DTLocNoBac <- DTLoc[niveauEtude<3]
+  # model <- lmer(DTLocNoBac$erreurMise ~ DTLocNoBac$meanProfilJoueur + (1 | DTLocNoBac$IDjoueur))
+  # summary(model) #pas d'impact lié à un niveau d'étude < au Bac (rassurant, vu le nombre de participants)
+  # 
   #=================== erreur mise selon âge du participant
-  DTLocMoins15 <- DTLoc[age<=15]
-  model <- lmer(DTLocMoins15$erreurMise ~ DTLocMoins15$meanProfilJoueur + (1 | DTLocMoins15$IDjoueur))
-  summary(model) #pas d'impact pour les participants de 15ans ou moins (rassurant, c'est la majorité des joueurs)
-  
-  DTLocPlus15 <- DTLoc[age>15]
-  model <- lmer(DTLocPlus15$erreurMise ~ DTLocPlus15$meanProfilJoueur + (1 | DTLocPlus15$IDjoueur))
-  summary(model) #pas d'impact pour les participants strictement > à 15ans
-  
+  #A REPRENDRE
+  # DTLocMoins15 <- DTLoc[age<=15]
+  # model <- lmer(DTLocMoins15$erreurMise ~ DTLocMoins15$meanProfilJoueur + (1 | DTLocMoins15$IDjoueur))
+  # summary(model) #pas d'impact pour les participants de 15ans ou moins (rassurant, c'est la majorité des joueurs)
+  # 
+  # DTLocPlus15 <- DTLoc[age>15]
+  # model <- lmer(DTLocPlus15$erreurMise ~ DTLocPlus15$meanProfilJoueur + (1 | DTLocPlus15$IDjoueur))
+  # summary(model) #pas d'impact pour les participants strictement > à 15ans
+  # 
   
   #=================== autres tests
   fit <- glm(miseBin ~ nbWin + nbFail + difficulty, data=DTLoc);
