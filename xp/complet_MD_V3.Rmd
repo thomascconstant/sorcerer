@@ -625,15 +625,15 @@ lienErreurEvalDiffFailsRepetes <- function(DTLoc,fails = TRUE,titre="title"){
 plotCurves <- function (numStep,difficulty,diffSubj,diffObj,confiance,id,nbWin,nbFail,error,mise,title){
   df <- data.frame(ns=numStep,do=diffObj,ds=diffSubj,c=confiance)
   pl <- ggplot(df,aes(x=ns)) # + ggtitle(id[1]);
-  pl <- pl + geom_point(aes(y=difficulty,colour="DiffBase"),size=1);
-  pl <- pl + geom_line(aes(y=difficulty,colour="DiffBase"));
-  pl <- pl + geom_line(aes(y=diffObj,colour="DiffObj"));
-  pl <- pl + geom_line(aes(y=diffSubj,colour="DiffSubj"));
+  pl <- pl + geom_point(aes(y=difficulty,colour="Difficulté du jeu"),size=1);
+  pl <- pl + geom_line(aes(y=difficulty,colour="Difficulté du jeu"));
+  pl <- pl + geom_line(aes(y=diffObj,colour="Difficulté Objective"));
+  pl <- pl + geom_line(aes(y=diffSubj,colour="Difficulté Subjective"));
   pl <- pl + geom_line(aes(y=confiance,colour="Confiance"));
   pl <- pl + geom_line(aes(y=mise,colour="Mise"));
   pl <- pl + ylim(0, 1)
   pl <- pl + scale_colour_manual(
-    values = c("DiffBase" = "red","DiffObj" = "pink","DiffSubj" = "blue","Confiance" = "green", "Mise" = "black"))
+    values = c("Difficulté du jeu" = "red","Difficulté Objective" = "pink","Difficulté Subjective" = "blue","Confiance" = "green", "Mise" = "black"))
   
   #pl <- pl + geom_line(aes(x=ns,y=nbWin),size=0.5,colour="#555555");
   #pl <- pl + geom_line(aes(x=ns,y=nbFail),size=0.5,colour="#000000");
@@ -725,7 +725,10 @@ DTDescL = DTL[,.(type="Logique",sdMise=sd(miseNorm)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,sdMise))
+p <- ggplot(DTDesc, aes(type,sdMise)) + 
+              xlab("Types de difficulté") + 
+              ylab("Ecart type de la mise") +
+              ggtitle("Isoler les stratégies critiques")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersSdMiseM <- boxplot.stats(DTDescM$sdMise)$out
@@ -772,7 +775,10 @@ DTDescL = DTL[,.(type="Logique",mMise=mean(miseNorm)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,mMise))
+p <- ggplot(DTDesc, aes(type,mMise)) + 
+              xlab("Types de difficulté") + 
+              ylab("Moyenne de la mise") +
+              ggtitle("Isoler les stratégies critiques")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersMMiseM <- boxplot.stats(DTDescM$mMise)$out
@@ -819,7 +825,10 @@ DTDescL = DTL[,.(type="Logique",mMise=sum(miseNorm)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,mMise))
+p <- ggplot(DTDesc, aes(type,mMise)) + 
+              xlab("Types de difficulté") + 
+              ylab("Somme des mises") +
+              ggtitle("Isoler les stratégies critiques")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersMMiseM <- boxplot.stats(DTDescM$mMise)$out
@@ -865,7 +874,10 @@ DTDescL = DTL[,.(type="Logique",sWin=sum(gagnant)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,sWin))
+p <- ggplot(DTDesc, aes(type,sWin)) + 
+              xlab("Types de difficulté") + 
+              ylab("Cumul des succès") +
+              ggtitle("Isoler les joueurs critiques (succès)")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersSWinM <- boxplot.stats(DTDescM$sWin)$out
@@ -912,7 +924,10 @@ DTDescL = DTL[,.(type="Logique",totalMoutons=max(moutons_sauves)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,totalMoutons))
+p <- ggplot(DTDesc, aes(type,totalMoutons)) + 
+              xlab("Types de difficulté") + 
+              ylab("Cumul des moutons gagnés") +
+              ggtitle("Isoler les bons joueurs critiques (mise)")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersMMiseM <- boxplot.stats(DTDescM$totalMoutons)$out
@@ -959,7 +974,10 @@ DTDescL = DTL[,.(type="Logique",totalMoutons=max(moutons_tues)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,totalMoutons))
+p <- ggplot(DTDesc, aes(type,totalMoutons)) + 
+              xlab("Types de difficulté") + 
+              ylab("Cumul des moutons perdus") +
+              ggtitle("Isoler les mauvais joueurs critiques (mise)")
 p <- p + geom_boxplot() + geom_point(shape=1) 
 print(p)
 outliersMMiseM <- boxplot.stats(DTDescM$totalMoutons)$out
@@ -1006,8 +1024,11 @@ DTDescL = DTL[,.(type="Logique",cumul=max(cumulDeltaMise)),by=IDjoueur]
 DTDesc = DTDescM;
 DTDesc = rbind(DTDesc,DTDescS);
 DTDesc = rbind(DTDesc,DTDescL);
-p <- ggplot(DTDesc, aes(type,cumul))
-p <- p + geom_boxplot() + geom_point(shape=1) 
+p <- ggplot(DTDesc, aes(type,cumul)) + 
+              xlab("Types de difficulté") + 
+              ylab("Cumul du delta des mises") +
+              ggtitle("Isoler la stratégie alernance échec/succès")
+p <- p + geom_boxplot() + geom_point(shape=1)
 print(p)
 outliersMMiseM <- boxplot.stats(DTDescM$cumul)$out
 outliersMMiseS <- boxplot.stats(DTDescS$cumul)$out
@@ -1160,6 +1181,28 @@ if(TEST){
   r.squaredGLMM(model)
   predict(model)
   
+  #------------------ erreur mise par rapport à la difficulté logique
+  DTLocL <- DTLoc[nom_du_jeu == "Logique2"]
+  model <- lmer(DTLocL$erreurMise ~ DTLocL$difficulty + (1 | DTLocL$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model)
+  predict(model)
+  
+  #------------------ erreur mise par rapport à la difficulté motrice
+  DTLocM <- DTLoc[nom_du_jeu == "Motrice"]
+  model <- lmer(DTLocM$erreurMise ~ DTLocM$difficulty + (1 | DTLocM$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model)
+  predict(model)
+  
+  #------------------ erreur mise par rapport à la difficulté sensorielle
+  DTLocS <- DTLoc[nom_du_jeu == "Sensoriel"]
+  model <- lmer(DTLocS$erreurMise ~ DTLocS$difficulty + (1 | DTLocS$IDjoueur))
+  summary(model)
+  r.squaredGLMM(model)
+  predict(model)
+  
+  
   install.packages("sjPlot")
   install.packages("arm")
   require(sjPlot)
@@ -1169,7 +1212,7 @@ if(TEST){
   plot(x=DTLoc$erreurMise, y=DTLoc$difficulty)
   abline(h=mean(DTLoc$erreurMise),col = "blue", lwd = 2)
   
-  ggplot(data=DTLoc, aes(erreurMise,difficulty)) + geom_point()
+  ggplot(data=DTLoc, aes(miseNorm,difficulty))
   ggplot(model)
   #install.packages("multcomp")
   library(multcomp)
@@ -1195,24 +1238,29 @@ if(TEST){
   model <- lmer(DTLocGamer$erreurMise ~ DTLocGamer$meanProfilJoueur + (1 | DTLocGamer$IDjoueur))
   summary(model)
   
+  #glm(erreurMise ~ meanProfilJoueur, data = DTLoc, family = "binomial"(link = "logit"))
+  # plot(lm(formula = DTLoc$erreurMise ~ DTLoc$meanProfilJoueur))
+  # r.squaredGLMM(model)
+  # predict(model)
+  
   #=================== erreur mise selon profil non-gamer du participant
   DTLocNoGamer <- DTLoc[meanProfilJoueur<3]
   model <- lmer(DTLocNoGamer$erreurMise ~ DTLocNoGamer$meanProfilJoueur + (1 | DTLocNoGamer$IDjoueur))
   summary(model) #*, c'est déjà ça
   
-  #=================== erreur mise selon profil risquophile du participant
+  #=================== erreur mise selon profil risquophobe du participant
   DTLocRisk <- DTLoc[sumProfilRA>=6]
-  model <- lmer(DTLocRisk$erreurMise ~ DTLocRisk$meanProfilJoueur + (1 | DTLocRisk$IDjoueur))
-  summary(model) #rassurant, être risquophile n'a pas d'impact, on peut garder les données
+  model <- lmer(DTLocRisk$erreurMise ~ DTLocRisk$sumProfilRA + (1 | DTLocRisk$IDjoueur))
+  summary(model) #rassurant, être risquophobe n'a pas d'impact, on peut garder les données
   
   #=================== erreur mise selon profil risquophile du participant
   DTLocNoRisk <- DTLoc[sumProfilRA<=5]
-  model <- lmer(DTLocNoRisk$erreurMise ~ DTLocNoRisk$meanProfilJoueur + (1 | DTLocNoRisk$IDjoueur))
-  summary(model) #rassurant, être risquophobe n'a pas d'impact, on peut garder les données
+  model <- lmer(DTLocNoRisk$erreurMise ~ DTLocNoRisk$sumProfilRA + (1 | DTLocNoRisk$IDjoueur))
+  summary(model) #rassurant, être risquophile n'a pas d'impact, on peut garder les données
   
   #=================== erreur mise selon sexe du participant
   DTLocWomen <- DTLoc[sexe==1]
-  model <- lmer(DTLocWomen$erreurMise ~ DTLocWomen$meanProfilJoueur + (1 | DTLocWomen$IDjoueur))
+  model <- lmer(DTLocWomen$erreurMise ~ DTLocWomen$sexe + (1 | DTLocWomen$IDjoueur))
   summary(model) #pas d'impact lié au sexe
   
   DTLocMen <- DTLoc[sexe==0]
