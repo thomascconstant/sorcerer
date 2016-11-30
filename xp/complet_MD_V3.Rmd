@@ -201,44 +201,88 @@ text(bpEtudes, 0, round(counts, 1),cex=1,pos=3)
 #---------------------------------- profil de joueur des participants
 #sélectionner uniquement les données qui nous intéressent pour construire le profil
 
-#avec question sur les jeux d'argent
-#dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6","profilJoueur7")]
+#joueurs de jeux vidéo (tous supports confondus) /!\ ne garder que le max des réponses
+dataQ$maxProfilJoueurJeuVideo = pmax(dataQ$profilJoueur2,
+                                     dataQ$profilJoueur3,
+                                     dataQ$profilJoueur4,
+                                     dataQ$profilJoueur5,
+                                     dataQ$profilJoueur6)
+countsJoueurJeuVideo <- table(dataQ$maxProfilJoueurJeuVideo)
 
-#sans question les jeux d'argent
-dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6")]
+#joueurs de jeux de plateau /!\ ne garder que le max des réponses
+dataQ$maxProfilJoueurJeuPlateau = pmax(dataQ$profilJoueur1)
+countsJoueurJeuPlateau <- table(dataQ$maxProfilJoueurJeuPlateau)
 
+#joueurs de jeux d'argent /!\ ne garder que le max des réponses
+dataQ$maxProfilJoueurJeuArgent = pmax(dataQ$profilJoueur7)
+countsJoueurJeuArgent <- table(dataQ$maxProfilJoueurJeuArgent)
 
-#somme de l'ensemble des données profilJoueur et intégration dans tableau
-dataQ$sumProfilJoueur <- rowSums(dataProfilJoueurs, na.rm=TRUE)
-# détail du résultat sumProfilJoueur (7 questions sur échelle de Likert de 1 à 5)
-# de 7 à 14 : non joueur
-# de 15 à 21 : joueur occasionnel
-# de 22 à 28 : joueur régulier
-# de 29 à 35 : pgm
-
-#moyenne de l'ensemble des données profilJoueur et intégration dans tableau
-dataQ$meanProfilJoueur <- rowMeans(dataProfilJoueurs, na.rm=TRUE)
-
-#afficher les résultats (à appeller en même temps) BARPLOT
-bpProfilJoueur <- barplot(dataQ$meanProfilJoueur, main="Profil de joueurs des participants", horiz=FALSE,
-                    names.arg=c("IDjoueur"),
-                    legend.text = NULL, beside = TRUE,
-                    axes = TRUE, axisnames = TRUE,
-                    xlab="Participants",  
-                    ylab="Temps de jeu (jamais = 0 / tous les jours = 5)", 
-                    ylim = c(0, 5))
-abline(h=mean(dataQ$meanProfilJoueur),col = "blue", lwd = 2)
+#afficher les résultats (à appeller en même temps) HISTO
+histProfilJoueurJeuVideo <- hist(dataQ$maxProfilJoueurJeuVideo,
+                    breaks=0:5,
+                    main="Profil de joueur de jeux vidéo des participants",
+                    xlab="Type de profil de joueur",  
+                    ylab="Participants",
+                    xlim = c(0, 5),
+                    ylim = c(0, 55),
+                    xaxt="n")
+axis(side=1,at=histProfilJoueurJeuVideo$mids,labels=seq(1,5))
+abline(v=mean(dataQ$maxProfilJoueurJeuVideo),col = "blue", lwd = 2)
 legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
 
 #afficher les résultats (à appeller en même temps) HISTO
-bpProfilJoueur <- hist(dataQ$meanProfilJoueur,
-                    main="Profil de joueur des participants",
-                    xlab="Temps de jeu moyen (jamais = 0 / tous les jours = 5)",  
+histProfilJoueurJeuPlateau <- hist(dataQ$maxProfilJoueurJeuPlateau,
+                    breaks=0:5,
+                    main="Profil de joueur de jeux de société des participants",
+                    xlab="Type de profil de joueur",  
                     ylab="Participants",
-                    xlim = c(1, 5),
-                    ylim = c(0, 25))
-abline(v=mean(dataQ$meanProfilJoueur),col = "blue", lwd = 2)
+                    xlim = c(0, 5),
+                    ylim = c(0, 55),
+                    xaxt="n")
+axis(side=1,at=histProfilJoueurJeuPlateau$mids,labels=seq(1,5))
+abline(v=mean(dataQ$maxProfilJoueurJeuPlateau),col = "blue", lwd = 2)
 legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
+
+#afficher les résultats (à appeller en même temps) HISTO
+histProfilJoueurJeuArgent <- hist(dataQ$maxProfilJoueurJeuArgent,
+                    breaks=0:5,
+                    main="Profil de joueur de jeux d'argent des participants",
+                    xlab="Type de profil de joueur",  
+                    ylab="Participants",
+                    xlim = c(0, 5),
+                    ylim = c(0, 80),
+                    xaxt="n")
+axis(side=1,at=histProfilJoueurJeuArgent$mids,labels=seq(1,5))
+abline(v=mean(dataQ$maxProfilJoueurJeuArgent),col = "blue", lwd = 2)
+legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
+
+# #avec question sur les jeux d'argent
+# #dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6","profilJoueur7")]
+# 
+# #sans question les jeux d'argent
+# dataProfilJoueurs <- data.frame(dataQ)[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4","profilJoueur5","profilJoueur6")]
+# 
+# #somme de l'ensemble des données profilJoueur et intégration dans tableau
+# dataQ$sumProfilJoueur <- rowSums(dataProfilJoueurs, na.rm=TRUE)
+# # détail du résultat sumProfilJoueur (7 questions sur échelle de Likert de 1 à 5)
+# # de 7 à 14 : non joueur
+# # de 15 à 21 : joueur occasionnel
+# # de 22 à 28 : joueur régulier
+# # de 29 à 35 : pgm
+# 
+# #moyenne de l'ensemble des données profilJoueur et intégration dans tableau
+# dataQ$meanProfilJoueur <- rowMeans(dataProfilJoueurs, na.rm=TRUE)
+# 
+# #afficher les résultats (à appeller en même temps) BARPLOT
+# bpProfilJoueur <- barplot(dataQ$meanProfilJoueur, main="Profil de joueurs des participants", horiz=FALSE,
+#                     names.arg=c("IDjoueur"),
+#                     legend.text = NULL, beside = TRUE,
+#                     axes = TRUE, axisnames = TRUE,
+#                     xlab="Participants",  
+#                     ylab="Temps de jeu (jamais = 0 / tous les jours = 5)", 
+#                     ylim = c(0, 5))
+# abline(h=mean(dataQ$meanProfilJoueur),col = "blue", lwd = 2)
+# legend("topright", legend = "1 & 2 : non joueur / 3 : joueur occasionnel / 4 : joueur régulier / 5 : pgm")
 
 #---------------------------------- sentiment d'auto efficacité (AE) des participants comme joueurs
 #sélectionner uniquement les données qui nous intéressent pour construire le sentiment d'AE
@@ -272,12 +316,12 @@ bpProfilAE <- barplot(meanProfilAE$meanProfilAE, main="Sentiment d'auto-efficaci
 abline(h=mean(meanProfilAE$meanProfilAE),col = "blue", lwd = 2)
 
 #afficher les résultats (à appeller en même temps) HISTO
-bpProfilJoueur <- hist(meanProfilAE$meanProfilAE,
+histProfilAE <- hist(meanProfilAE$meanProfilAE,
                     main="Sentiment d'auto-efficacité des participants",
                     xlab="Sentiment d'auto-efficacité (maximum = 5)",  
-                    ylab="Répartition suivant les participants se définissant comme joueur",
+                    ylab="Répartition selon les participants se définissant comme joueur",
                     xlim = c(1, 5),
-                    ylim = c(0, 20))
+                    ylim = c(0, 15))
 abline(v=mean(meanProfilAE$meanProfilAE),col = "blue", lwd = 2)
 
 #---------------------------------- aversion au risque (RA) des participants
@@ -310,15 +354,19 @@ legend("top", legend = "0-1 : highly risk loving / 2 : very risk loving / 3 : ri
        6 : risk averse / 7 : very risk averse / 8 : highly risk avers / 9-10 : stay in bed")
 
 #afficher les résultats (à appeller en même temps) HISTO
-bpProfilJoueur <- hist(dataQ$sumProfilRA,
+histProfilRA <- hist(dataQ$sumProfilRA,
+                    breaks=2:10,
                     main="Aversion au risque des participants",
                     xlab="Somme des choix sûrs (maximum = 10)",  
                     ylab="Répartition des participants",
-                    xlim = c(0, 10),
-                    ylim = c(0, 25))
+                    xlim = c(2, 10),
+                    ylim = c(0, 25),
+                    xaxt="n")
+axis(side=1,at=histProfilRA$mids,labels=seq(2,9))
 abline(v=mean(dataQ$sumProfilRA),col = "blue", lwd = 2)
 legend("top", legend = "0-1 : highly risk loving / 2 : very risk loving / 3 : risk loving / 4 : risk neutral / 5 : slightly risk averse
-       6 : risk averse / 7 : very risk averse / 8 : highly risk avers / 9-10 : stay in bed")
+       6 : risk averse / 7 : very risk averse / 8 : highly risk avers / 9-10 : stay in bed
+       ")
 
 #---------------------------------- merge des deux tables
 #si nécessaire vérifier que le questionnaire est bien une table
@@ -1175,6 +1223,104 @@ if(TEST){
   DTLoc$newErr <- DTLoc$miseNorm - DTLoc$gagnant;
   DTLoc$erreurMise = DTLoc$miseNorm - DTLoc$gagnant;
   
+  #On ajoute une colonne de la difficulte estimee, a partir d'un 
+  #logit de la difficulte supposée sur l'échec constaté
+  mylogit <- glm(perdant ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
+  print(summary(mylogit));
+  sample = data.frame(difficulty=DTLoc$difficulty);
+  DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
+  
+  #=================== hard/easy effect
+  #------------------ difficulté logique
+  maxEstDiff <- max(DTLoc$estDiff)
+  minEstDiff <- min(DTLoc$estDiff)
+  lengthEstDiff <- maxEstDiff - minEstDiff
+  
+  DTLocEvalDiffLogique <- DTLoc[c(nom_du_jeu == "Logique2",evalDiff)]
+  
+  analyseHardEasyEffect <- function(DTParam){
+  res <- numeric(11)
+  coef <- numeric(11)
+  nb <- numeric(11)
+  nb2 <- numeric(11)
+  pv1 <- numeric(11)
+  pv2 <- numeric(11)
+  dObj <- numeric(11)
+  i = 0;
+  while(i<=10){
+    diff=i/10;
+    print(diff)
+    DTLoc = DTParam[which(difficulty >= diff-0.01 & difficulty <= diff+0.01 & action_de_jeu > 2)]
+    
+    DTLoc$miseBin = ifelse(DTLoc$mise>4, 1, 0);
+    # DTLoc[,miseBin:= -1]; 
+    # DTLoc[mise > 4,miseBin := 1];
+    # DTLoc[mise < 4,miseBin := 0];
+    # DTLoc = DTLoc[miseBin != -1];
+    # 
+    if(nrow(DTLoc) > 30){
+       plot(x=DTLoc$resLisse, y=DTLoc$miseNorm, main=paste(diff,signif(unique(DTLoc$estDiff),digits=2)))
+      # 
+      # fit <- glm(DTLoc$miseNorm ~ DTLoc$resLisse);
+      # 
+      # 
+      # fitg <- glm(miseBin ~ resLisse, data = DTLoc, family = "binomial"(link = "logit"))
+      # sample = data.frame(resLisse=seq(0, 1, 0.05))
+      # newres = predict(fitg, newdata = sample, type = "response")
+      # points(x=sample$resLisse,y=newres,col="red")
+      # print(summary(fitg))
+      # abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")
+      # res[i+1] = signif(fit$coefficients[2],digits=2);
+      # 
+      # #print(unlist(summary(fit)));
+      # pv1[i+1] = echoPValue(unlist(summary(fitg))$coefficients7)
+      # pv2[i+1] = echoPValue(unlist(summary(fitg))$coefficients8)
+      
+      fit <- lm(DTLoc$miseNorm ~ DTLoc$resLisse);
+      abline(a =fit$coefficients[1], b=fit$coefficients[2], col="green")
+      print(summary(fit))
+      print(qqPlot(residuals(fit)))
+      pv1[i+1] = echoPValue(summary(fit)$coefficients[2,4]);
+      pv2[i+1] = echoPValue(shapiro.test(residuals(fit))$p.value);
+      res[i+1] =  signif(summary(fit)$r.squared,digits=2);
+      coef[i+1] =  signif(summary(fit)$coefficients[2,1],digits=2)
+      
+      
+      #print(echoPValue(summary(fit)$coefficients[,4]))
+      #print(summary(fit)$r.squared)
+      print("next")
+
+      
+      
+    }else{
+      res[i+1] = NA;
+      pv1[i+1] = NA;
+      pv2[i+1] = NA;
+      coef[i+1] = NA;
+    }
+    
+    nb[i+1] = nrow(DTLoc);
+    nb2[i+1] = length(unique(DTLoc$IDjoueur))
+    dObj[i+1] = DTLoc$estDiff[1];
+  
+    i=i+1
+  }
+  
+  resTable = data.table(NbObservations = nb);
+#  resTable[,NbObservations := nb];
+  resTable[,DiffObj := dObj];
+  resTable[,NbJoueurs := nb2];
+  resTable[,Coef := coef];
+  resTable[,R2 := res];
+  resTable[,pValueModele := pv1];
+  resTable[,normResidus := pv2];
+  
+
+  return(resTable)
+}
+  
+  
+  
   #=================== mise par rapport à la difficulté
   model <- lmer(DTLoc$mise ~ DTLoc$difficulty + (1 | DTLoc$IDjoueur))
   summary(model)
@@ -1231,26 +1377,34 @@ if(TEST){
   r.squaredGLMM(model)
   plot(DTLoc$erreurMise ~ DTLoc$action_de_jeu)
   
-  #=================== erreur mise selon profil du participant
-  model <- lmer(DTLoc$erreurMise ~ DTLoc$meanProfilJoueur + (1 | DTLoc$IDjoueur))
+  #=================== erreur mise selon profil de joueur de jeu vidéo du participant
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuVideo + (1 | DTLoc$IDjoueur))
+  model <- aov(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuVideo)
   summary(model) #nope
   r.squaredGLMM(model)
   
-  #=================== erreur mise selon profil gamer du participant
-  model <- lmer(DTLoc$erreurMise ~ DTLoc$meanProfilJoueur + (1 | DTLoc$IDjoueur))
-  summary(model)
-  r.squaredGLMM(model)
-  
-  #------------------ erreur mise par rapport à la difficulté (selon profil gamer du participant)
-  DTLocGamer <- DTLoc[meanProfilJoueur>=3]
+  #------------------ erreur mise par rapport à la difficulté (selon profil jeu vidéo gamer du participant)
+  DTLocGamer <- DTLoc[maxProfilJoueurJeuVideo>=3]
   model <- lmer(DTLocGamer$erreurMise ~ DTLocGamer$difficulty + (1 | DTLocGamer$IDjoueur))
   summary(model)
   r.squaredGLMM(model)
   
-  #------------------ erreur mise par rapport à la difficulté (selon profil non-gamer du participant)
-  DTLocNoGamer <- DTLoc[meanProfilJoueur<3]
+  #------------------ erreur mise par rapport à la difficulté (selon profil jeu vidéo non-gamer du participant)
+  DTLocNoGamer <- DTLoc[maxProfilJoueurJeuVideo<3]
   model <- lmer(DTLocNoGamer$erreurMise ~ DTLocNoGamer$difficulty + (1 | DTLocNoGamer$IDjoueur))
-  summary(model) #*, c'est déjà ça
+  summary(model) #***, mais effet ridicule et R2 léger
+  r.squaredGLMM(model)
+  
+  #=================== erreur mise selon profil de joueur de jeu de plateau du participant
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuPlateau + (1 | DTLoc$IDjoueur))
+  model <- aov(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuPlateau)
+  summary(model) #nope
+  r.squaredGLMM(model)
+  
+  #=================== erreur mise selon profil de joueur de jeu d'argent du participant
+  model <- lmer(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuArgent + (1 | DTLoc$IDjoueur))
+  model <- aov(DTLoc$erreurMise ~ DTLoc$maxProfilJoueurJeuArgent)
+  summary(model) #nope
   r.squaredGLMM(model)
   
   #=================== erreur mise selon profil risquophobe/risquophile du participant
