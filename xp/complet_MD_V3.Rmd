@@ -1250,7 +1250,8 @@ if(TEST){
   ggplot(DTL, aes(x=estDiff, y=evalDiff)) + 
     stat_summary(fun.y="mean", geom="bar") +
     stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
-             vjust = -0.5)
+             vjust = -0.5) +
+    geom_abline(intercept=-1, color = "red", size=1)
   
   #------------------ difficulté sensorielle
   DTLocS <- DTLoc[nom_du_jeu == "Sensoriel"]
