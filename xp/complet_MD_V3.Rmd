@@ -1231,10 +1231,42 @@ if(TEST){
   DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
   
   #=================== hard/easy effect
-  #------------------ difficulté logique
+  #------------------ tous les jeux
   maxEstDiff <- max(DTLoc$estDiff)
   minEstDiff <- min(DTLoc$estDiff)
-  lengthEstDiff <- maxEstDiff - minEstDiff
+  intervalEstDiff <- (maxEstDiff - minEstDiff)/10
+  
+  #------------------ difficulté logique
+  DTLocL <- DTLoc[nom_du_jeu == "Logique2"]
+  maxEstDiffL <- max(DTLocL$estDiff)
+  minEstDiffL <- min(DTLocL$estDiff)
+  intervalEstDiffL <- (maxEstDiffL - minEstDiffL)/10
+  
+  plot(DTLocL$evalDiff ~ minEstDiffL)
+  ggplot(DTLocL, aes(x=factor(estDiff), y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
+  
+  #------------------ difficulté sensorielle
+  DTLocS <- DTLoc[nom_du_jeu == "Sensoriel"]
+  maxEstDiffS <- max(DTLocS$estDiff)
+  minEstDiffS <- min(DTLocS$estDiff)
+  ggplot(DTLocS, aes(x=factor(estDiff), y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
+  
+  #------------------ difficulté motrice
+  DTLocM <- DTLoc[nom_du_jeu == "Motrice"]
+  maxEstDiffM <- max(DTLocM$estDiff)
+  minEstDiffM <- min(DTLocM$estDiff)
+  ggplot(DTLocM, aes(x=factor(estDiff), y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
+  
+  
   
   DTLocEvalDiffLogique <- DTLoc[c(nom_du_jeu == "Logique2",evalDiff)]
   
