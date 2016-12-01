@@ -31,10 +31,11 @@ output:
 library("xlsx")
 require(xlsx)
 require(plyr)
-require(likert)
+#require(likert)
 require(data.table)
 require(ggplot2)
 library(car)
+require(lme4)
 require(lmerTest)
 require(Matrix)
 library(usdm)
@@ -53,6 +54,8 @@ useLogique = TRUE
 removeTenFirst = FALSE
 
 removeOutliers = TRUE
+
+effetMixtes = TRUE
 
 plotLogit = TRUE
 plotDiffCurves = FALSE
@@ -421,11 +424,17 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   #On ajoute une colonne de la difficulte estimee, a partir d'un 
   #logit de la difficulte supposée sur l'échec constaté
   mylogit <- glm(perdant ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
-  print(summary(mylogit));
-  sample = data.frame(difficulty=DTLoc$difficulty);
-  DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
+  if(effetMixtes == TRUE){
+     mylogit <- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc);
+  }
   
-  if(trace){
+  print(summary(mylogit));
+  sample = data.frame(difficulty=DTLoc$difficulty, IDjoueur=DTLoc$IDjoueur);
+  DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
+  print(ranef(mylogit));
+  
+  #GUIGUI TODO : si lmer, tracer la courbe moyenne, et +- 1  ecart type
+  if(trace && effetMixtes == FALSE){
     sample = data.frame(difficulty=seq(0, 1, 0.05))
     newres = predict(mylogit, newdata = sample, type = "response")
     plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté objective (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
@@ -1129,6 +1138,32 @@ Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(u
 ```{r echo=FALSE}
 
 if(TEST){
+  
+  #hard easy guigui
+  DTParam <- DTL
+  res <- numeric(10)
+  nb <- numeric(10)
+  diffVec <- numeric(10)
+  i = 1;
+  while(i<=10){
+    diff=i/10;
+    DTLoc = DTParam[which(estDiff >= diff-0.1 & estDiff < diff+0.1)]
+    res[i] = mean(DTLoc$miseNorm);
+    nb[i] = nrow(DTLoc);
+    diffVec[i] = diff;
+    i=i+1
+    #print(shapiro.test(DTLoc$miseNorm));
+    #print(hist(DTLoc$miseNorm))
+  }
+  
+  print(res)
+  print(nb)
+  
+  testPlot = data.table(x=diffVec);
+  testPlot$y = res;
+  
+  plot(testPlot,ylim=c(0, 1),xlim=c(0, 1))
+  abline(a=1,b=-1)
   
   
   DTLoc <- DTS[action_de_jeu==8]
