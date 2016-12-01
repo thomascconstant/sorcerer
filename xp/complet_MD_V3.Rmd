@@ -1242,8 +1242,12 @@ if(TEST){
   minEstDiffL <- min(DTLocL$estDiff)
   intervalEstDiffL <- (maxEstDiffL - minEstDiffL)/10
   
-  plot(DTLocL$evalDiff ~ minEstDiffL)
   ggplot(DTLocL, aes(x=factor(estDiff), y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
+  
+  ggplot(DTL, aes(x=estDiff, y=evalDiff)) + 
     stat_summary(fun.y="mean", geom="bar") +
     stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
              vjust = -0.5)
@@ -1257,6 +1261,11 @@ if(TEST){
     stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
              vjust = -0.5)
   
+  ggplot(DTS, aes(x=estDiff, y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
+  
   #------------------ difficulté motrice
   DTLocM <- DTLoc[nom_du_jeu == "Motrice"]
   maxEstDiffM <- max(DTLocM$estDiff)
@@ -1266,6 +1275,10 @@ if(TEST){
     stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
              vjust = -0.5)
   
+  ggplot(DTM, aes(x=estDiff, y=evalDiff)) + 
+    stat_summary(fun.y="mean", geom="bar") +
+    stat_summary(aes(label=round(..y..,2)), fun.y=mean, geom="text", size=6,
+             vjust = -0.5)
   
   
   DTLocEvalDiffLogique <- DTLoc[c(nom_du_jeu == "Logique2",evalDiff)]
