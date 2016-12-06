@@ -442,9 +442,11 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   ggplot(DTLoc, aes(niveau, reorder(IDjoueur, niveau),color=factor(DTLoc$groupLevel)))+ 
     geom_point(alpha = 0.4, size = 3.5)
     #scale_color_manual(values=cbbPalette) 
-    
+    hist(DTLoc[round(estDiff,1)==0.4]$miseNorm)
+    hist(DTLoc[difficulty==0.4]$miseNorm)
   
   ggplot(data = DTLoc, aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
+  
   ggplot(data = DTLoc[groupLevel==3], aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
   ggplot(data = DTLoc[groupLevel==3], aes(x=difficulty, y=evalDiff)) + geom_boxplot(aes(group=difficulty))
   
