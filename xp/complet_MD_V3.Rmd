@@ -1164,6 +1164,12 @@ if(TEST){
   
   plot(testPlot,ylim=c(0, 1),xlim=c(0, 1))
   abline(a=1,b=-1)
+  plot(DTL$evalDiff)
+  
+  #-------- pour le Wilcox test
+  #2 valeurs : la mise observée (miseNorm) par rapport à la mise attendue sur un même niveau de difficulté
+  #Il faut donc renseigner pour chaque niveau de difficulté, la mise attendue, soit la droite tracée
+  #
   
   
   DTLoc <- DTS[action_de_jeu==8]
