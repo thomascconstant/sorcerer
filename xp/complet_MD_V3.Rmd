@@ -43,6 +43,8 @@ require(lattice)
 require(psychometric)
 require(MuMIn)
 require(pyramid)
+require(sjPlot)
+require(arm)
 
 ```
 
@@ -393,6 +395,24 @@ DTLoc <- DTGLoc[DTQLoc]
 ```{r setup, echo=FALSE}
 
 #---------------------------------- fonctions
+echoPValue <- function(pv){
+  
+  pv = signif(pv,digits=2)
+   
+  if(pv<0.001) {
+    return(paste(pv,"***"));
+  }else if(pv<0.01){ 
+    return(paste(pv,"**"));
+  }else  if(pv<0.05){ 
+    return(paste(pv,"*"));
+  }else if(pv<0.1){ 
+    return(paste(pv,"."));
+  }else{
+    return(paste(pv,":("));
+  }
+  
+  return("");
+}
 
 addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   
@@ -411,80 +431,186 @@ addVariables <- function(DTLoc,trace = FALSE,titre="noTitle"){
   #difficulte evaluee par le joueur : logit approach
   DTLoc[,miseBin := 0][mise >= 4, miseBin := 1]
   DTLoc[,evalDiffBin := 1][mise >= 4, evalDiffBin := 0]
-  
-  
-  #bidouille
-  diffLmer <- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc);
-  #niveau du joueur = - l'effet sur la difficulté
-  niveauJoueurLmer = - ranef(diffLmer)$IDjoueur; 
-  #colnames(niveauJoueurLmer) <- c("niveau")
-  DTLevel = data.table(IDjoueur=rownames(niveauJoueurLmer),niveau=niveauJoueurLmer);
-  setnames(DTLevel,"niveau.(Intercept)","niveau")
-  setkey(DTLoc,IDjoueur)
-  setkey(DTLevel,IDjoueur)
-  DTLoc <- DTLoc[DTLevel]
-  DTLoc <- DTLoc[order(niveau)]
-  
-  #KMEANS
-     
-  #groups = kmeans(DTLoc$niveau, 6)$cluster
-  #   wss <- numeric(13)
-  #   for (i in 2:15) wss[i] <- sum(kmeans(DTLoc$niveau, i)$withinss)
-  #   plot(1:15, wss, type="b", xlab="Number of Clusters",  ylab="Within groups sum of squares") 
-  
-  #hierarchical clustering
-  fit = hclust(dist(DTLoc$niveau), "ward.D2")
-  #plot(fit,hang=-1)
-  groups <- cutree(fit, k=4) 
-  DTLoc$groupLevel = groups;
 
-  #cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-  ggplot(DTLoc, aes(niveau, reorder(IDjoueur, niveau),color=factor(DTLoc$groupLevel)))+ 
-    geom_point(alpha = 0.4, size = 3.5)
-    #scale_color_manual(values=cbbPalette) 
-    hist(DTLoc[round(estDiff,1)==0.4]$miseNorm)
-    hist(DTLoc[difficulty==0.4]$miseNorm)
+  # plot(x=diff,y=res,xlim=c(0,1),ylim=c(0,1))
+  # abline(1,-1)
+  # for(i in 1:10){
+  #   lines(c(diff[i],diff[i]),c(confMin[i],confMax[i]))
+  # }
   
-  ggplot(data = DTLoc, aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
   
-  ggplot(data = DTLoc[groupLevel==3], aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
-  ggplot(data = DTLoc[groupLevel==3], aes(x=difficulty, y=evalDiff)) + geom_boxplot(aes(group=difficulty))
+  # #bidouille : On fait des groupes de joueurs mais en fait on s'en fout
   
-  ggplot()
+  # diffLmer <- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc);
+  # #niveau du joueur = - l'effet sur la difficulté
+  # niveauJoueurLmer = - ranef(diffLmer)$IDjoueur; 
+  # #colnames(niveauJoueurLmer) <- c("niveau")
+  # DTLevel = data.table(IDjoueur=rownames(niveauJoueurLmer),niveau=niveauJoueurLmer);
+  # setnames(DTLevel,"niveau.(Intercept)","niveau")
+  # setkey(DTLoc,IDjoueur)
+  # setkey(DTLevel,IDjoueur)
+  # DTLoc <- DTLoc[DTLevel]
+  # DTLoc <- DTLoc[order(niveau)]
+  # 
+  # #KMEANS
+  #    
+  # #groups = kmeans(DTLoc$niveau, 6)$cluster
+  # #   wss <- numeric(13)
+  # #   for (i in 2:15) wss[i] <- sum(kmeans(DTLoc$niveau, i)$withinss)
+  # #   plot(1:15, wss, type="b", xlab="Number of Clusters",  ylab="Within groups sum of squares") 
+  # 
+  # #hierarchical clustering
+  # fit = hclust(dist(DTLoc$niveau), "ward.D2")
+  # #plot(fit,hang=-1)
+  # groups <- cutree(fit, k=4) 
+  # DTLoc$groupLevel = groups;
+  # 
+  # #cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+  # ggplot(DTLoc, aes(niveau, reorder(IDjoueur, niveau),color=factor(DTLoc$groupLevel)))+ 
+  #   geom_point(alpha = 0.4, size = 3.5)
+  #   #scale_color_manual(values=cbbPalette) 
+  #   hist(DTLoc[round(estDiff,1)==0.4]$miseNorm)
+  #   hist(DTLoc[difficulty==0.4]$miseNorm)
+  # 
+  # ggplot(data = DTLoc, aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
+  # 
+  # ggplot(data = DTLoc[groupLevel==3], aes(x=estDiff, y=evalDiff)) + geom_boxplot(aes(group=round(estDiff,1)))
+  # ggplot(data = DTLoc[groupLevel==3], aes(x=difficulty, y=evalDiff)) + geom_boxplot(aes(group=difficulty))
   
-  mylogit <- glm(evalDiff ~ difficulty, data = DTLoc)
+ 
   
-  mylogit <- glm(evalDiffBin ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
-  print(summary(mylogit));
-  sample = data.frame(difficulty=DTLoc$difficulty);
-  DTLoc$evalDiff =  predict(mylogit, newdata = sample, type = "response");
   
-  if(trace){
-    sample = data.frame(difficulty=seq(0, 1, 0.05))
-    newres = predict(mylogit, newdata = sample, type = "response")
-    plot(DTLoc$difficulty, DTLoc$evalDiffBin, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté estimée (mise)",  col=rgb(0,100,0,100,maxColorValue=255))
-    points(data.frame(sample,newres), type="o")
-  }
+  #Difficultée évaluée par le joueur avec un logit sur la mise mais bon 
+  # mylogit <- glm(evalDiff ~ difficulty, data = DTLoc)
+  # 
+  # mylogit <- glm(evalDiffBin ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
+  # print(summary(mylogit));
+  # sample = data.frame(difficulty=DTLoc$difficulty);
+  # DTLoc$evalDiff =  predict(mylogit, newdata = sample, type = "response");
+  # 
+  # if(trace){
+  #   sample = data.frame(difficulty=seq(0, 1, 0.05))
+  #   newres = predict(mylogit, newdata = sample, type = "response")
+  #   plot(DTLoc$difficulty, DTLoc$evalDiffBin, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté estimée (mise)",  col=rgb(0,100,0,100,maxColorValue=255))
+  #   points(data.frame(sample,newres), type="o")
+  # }
   
   #On ajoute une colonne de la difficulte estimee, a partir d'un 
   #logit de la difficulte supposée sur l'échec constaté
   mylogit <- glm(perdant ~ difficulty, data = DTLoc, family = "binomial"(link = "logit"))
   if(effetMixtes == TRUE){
-     mylogit <- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc);
+     #mylogit <- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc);
+     mylogit <- glmer(perdant ~ difficulty + (1 | IDjoueur), data=DTLoc,family = "binomial"(link = "logit"));
+     sample = data.frame(difficulty=DTLoc$difficulty, IDjoueur=DTLoc$IDjoueur);
+     DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
+  
+  }else{
+    sample = data.frame(difficulty=DTLoc$difficulty);
+    DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
   }
   
   print(summary(mylogit));
-  sample = data.frame(difficulty=DTLoc$difficulty, IDjoueur=DTLoc$IDjoueur);
-  DTLoc$estDiff =  predict(mylogit, newdata = sample, type = "response");
-  print(ranef(mylogit));
   
-  #GUIGUI TODO : si lmer, tracer la courbe moyenne, et +- 1  ecart type
+  #sjp.glmer(mylogit, sort = "(Intercept)")
+  
+  niveauJoueurLmer = -ranef(mylogit)$IDjoueur; 
+  DTLevel = data.table(IDjoueur=rownames(niveauJoueurLmer),niveau=niveauJoueurLmer);
+  setnames(DTLevel,"niveau.(Intercept)","niveau")
+  DTLevel = DTLevel[order(abs(niveau))];
+  joueurMed = DTLevel[1]$IDjoueur
+  DTLevel = DTLevel[order(niveau)];
+  joueurMin = DTLevel[1]$IDjoueur
+  joueurMax = DTLevel[nrow(DTLevel)]$IDjoueur
+  
+  
+  for(i in 1:nrow(DTLevel)){
+    sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=DTLevel[i]$IDjoueur)
+    newres = predict(mylogit, newdata = sample, type = "response")
+    DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = DTLevel[i]$IDjoueur, estDiff = newres)
+    if(i==1)
+       p = ggplot(DT,aes(x=difficulty,y=estDiff)) + geom_path(alpha = 0.2) + xlim(0,1) + ylim(0,1)
+    else
+      p = p + geom_path(x=DT$difficulty,y=DT$estDiff, alpha = 0.2,size=1.2)
+  }
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMed)
+  newres = predict(mylogit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMed, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="blue",size=1.3)
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMin)
+  newres = predict(mylogit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMin, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="red",size=1.3)
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMax)
+  newres = predict(mylogit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMax, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="green",size=1.3)
+  
+  print(p)
+      
+      #GUIGUI TODO : si lmer, tracer la courbe moyenne, et +- 1  ecart type
   if(trace && effetMixtes == FALSE){
     sample = data.frame(difficulty=seq(0, 1, 0.05))
     newres = predict(mylogit, newdata = sample, type = "response")
     plot(DTLoc$difficulty, DTLoc$perdant, main=titre, xlab="Difficulté hypothétique",  ylab="Difficulté objective (estimée)",  col=rgb(0,100,0,100,maxColorValue=255))
     points(data.frame(sample,newres), type="o")
   }
+  
+  
+  #difficulté équilibrée ? normalement oui
+  p = ggplot(DTLoc,aes(x=estDiff)) + geom_histogram(col="black", fill="white")+xlim(0,1)
+    
+  print(p)
+  # print(hist(DTLoc$estDiff,breaks=30)
+  # abline(v=mean(DTLoc$estDiff),col = "blue", lwd = 2))
+  # print(p + p2) 
+  # 
+  
+  #Lien entre mise normalisée et difficultée estimée (hard / easy effect)
+  res = numeric(10)
+  nb = numeric(10)
+  diff = numeric(10)
+  test = numeric(10)
+  confMin = numeric(10)
+  confMax = numeric(10)
+  for(i in 1:10){
+    diffic = round(i/10,1)
+    print(diffic)
+    #res[i] = table(DTLoc[round(estDiff,1)==round(i/10,1)]$miseBin)["1"] /
+    #            table(DTLoc[round(estDiff,1)==round(i/10,1)]$miseBin)["0"]
+    #res[i] = mean(DTLoc[round(estDiff,1)==diffic]$miseNorm)
+    data = DTLoc[round(estDiff,1)==diffic]$miseNorm;
+    
+    diff[i] = NA
+    res[i] = NA
+    if(length(data) > 1){
+      result = try(wilcox.test(data,mu = 1-diffic,conf.int=T))
+      if (class(result) != "try-error"){
+        testWilly = wilcox.test(data,mu = 1-diffic,conf.int=T)
+        test[i] = echoPValue(testWilly$p.value)
+        res[i] = testWilly$estimate
+        confMin[i] = testWilly$conf.int[1]
+        confMax[i] = testWilly$conf.int[2]
+        nb[i] = length(data)
+        diff[i] = diffic
+      }
+    }
+  }
+  #plot(diff,res,log="y")
+  print(data.table(estDiff=diff,pval=test))
+  
+  DT = data.table(difficulty=diff,miseNorm=res)
+  p = ggplot(DT, aes(difficulty,miseNorm)) + 
+    geom_point(alpha = 0.4, size = 3.5) + 
+    xlim(0,1)+
+    ylim(0,1)+
+  geom_errorbar(aes(ymin=confMin, ymax=confMax), width=.01,color="red")  + 
+    geom_abline(intercept = 1, slope = -1, color="blue")
+  print(p)
+  
+  
   
   #erreur d'estimation de la difficulte par le joueur (exces de confiance ?)
   DTLoc$erreurDiffConfiance <- DTLoc$estDiff - DTLoc$evalDiff;
@@ -751,24 +877,7 @@ description <- function(DTLoc){
   print(p)
 }
 
-echoPValue <- function(pv){
-  
-  pv = signif(pv,digits=2)
-   
-  if(pv<0.001) {
-    return(paste(pv,"***"));
-  }else if(pv<0.01){ 
-    return(paste(pv,"**"));
-  }else  if(pv<0.05){ 
-    return(paste(pv,"*"));
-  }else if(pv<0.1){ 
-    return(paste(pv,"."));
-  }else{
-    return(paste(pv,":("));
-  }
-  
-  return("");
-}
+
 ```
 
 # Cadre des expérimentations pilotes
