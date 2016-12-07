@@ -388,7 +388,7 @@ DTGLoc <- as.data.table(dataG)
 #merge des deux tables en une troisième
 setkey(DTGLoc,IDjoueur)
 setkey(DTQLoc,IDjoueur)
-DTLoc <- DTGLoc[DTQLoc]
+DTAll <- DTGLoc[DTQLoc]
 
 ```
 
@@ -1368,11 +1368,17 @@ if(TEST){
   correl_dummy_df <- round(cor(dummy_df, use = "pair"), 2)
   
   
+  fit<- glmer(perdant ~ difficulty + sexe + (1 | IDjoueur), data=DTL,family="binomial"(link="logit"))
+  fit<- lmer(perdant ~ difficulty + (1 | IDjoueur), data=DTS)
+  fit<- glm(perdant ~ difficulty , data=DTL,family="binomial"(link="logit"))
+  fit<- glm(perdant ~ difficulty,data=DTL )
+  
+  
   #resumé
   summary(fit)
   #normality of residuals
   test <- residuals(fit);
-  hist(test,breaks=30)
+  hist(test,breaks=40)
   shapiro.test(test);
   qqPlot(residuals(fit))
   
