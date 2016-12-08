@@ -66,6 +66,10 @@ format.pval.stars <- function(pv){
   return("unable to format pvalue !!");
 }
 
+format.coef <- function(coef,p.val){
+  return(paste(signif(coef,digits=3),format.pval.stars(p.val)))
+}
+
 remove.na.cols <- function(DT){
   return(as.data.table(DT[,which(unlist(lapply(DT, function(x)!all(is.na(x))))),with=F]))
 }
@@ -215,44 +219,13 @@ for(i in 2:nrow(DTAll)){
 }
 
 DTAll$cumulDeltaMise = cumulDeltaMise;
-
-# #evaluating confidence as a damped over time sum of win and fails;
-# #each win and fail importance based on objective difficulty at that time
-# cur.confidence = 0;
-# lastID <- id[1];
-# est.confidence <- numeric(nrow(DTLoc))
-# est.confidence[1] = 0;
-# est.diff = DTAll.est.diff
-# 
-#   for(i in 2:nrow(DTLoc)){
-#     if(id[i] != lastID){
-#       resLisseCur = 0;
-#     }else{
-#       #confiance <- gagnant[i-1]*2-1
-#       if(gagnant[i-1]){
-#         confiance = diffObj[i-1];
-#       }else{
-#         confiance = -(1 - diffObj[i-1]);
-#       }
-#       resLisseCur <- alpha * resLisseCur + confiance;
-#     }
-#     lastID = id[i];
-#     res[i] = resLisseCur;
-#   }
-#   
-#   DTLoc$resLisseBase = res;
-#   DTLoc$resLisse = exp(DTLoc$resLisseBase) / (1+exp(DTLoc$resLisseBase));
-#   
-#   print(paste("Lissee:",toString(proc.time()[1]-temps)))
-#   temps <- proc.time()[1];
-
 ```
 
 # Removing Outliers
 
 ```{r removing.outliers.setup, echo=FALSE}
 #------------------------------------------------------
-#            REMOVING OUTLIERS SETUP
+#            OUTLIERS SETUP
 #------------------------------------------------------
 
 DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
@@ -288,7 +261,9 @@ plot.outliers <- function(DT,title){
 ```
 
 ```{r detect.outliers.bet.sd, echo=FALSE}
-# Bet standard dev
+#------------------------------------------------------
+#            OUTLIERS BET STD DEV
+#------------------------------------------------------
 DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
 DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
 DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
@@ -300,7 +275,9 @@ print(paste("Outliers :",toString(outliers$id)))
 ```
 
 ```{r detect.outliers.bet.mean, echo=FALSE}
-# Bet mean dev
+#------------------------------------------------------
+#            OUTLIERS BET MEAN
+#------------------------------------------------------
 DTDescM = DTM[,.(type="Moteur",var=mean(miseNorm)),by=IDjoueur]
 DTDescS = DTS[,.(type="Sensoriel",var=mean(miseNorm)),by=IDjoueur]
 DTDescL = DTL[,.(type="Logique",var=mean(miseNorm)),by=IDjoueur]
@@ -314,6 +291,9 @@ print(paste("Outliers :",toString(outliersLoc$id)))
 ```
 
 ```{r detect.outliers.win.sum, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS SUM OF WINS
+#------------------------------------------------------
 # Difficulty : win sum
 DTDescM = DTM[,.(type="Moteur",var=sum(gagnant)),by=IDjoueur]
 DTDescS = DTS[,.(type="Sensoriel",var=sum(gagnant)),by=IDjoueur]
@@ -325,8 +305,10 @@ outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
 outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
 print(paste("Outliers :",toString(outliersLoc$id)))
 ```
-
 ```{r detect.outliers.sheeps.saved, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS SAVED SHEEPS
+#------------------------------------------------------
 # Difficulty and strategy = saved sheeps
 DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
 DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
@@ -340,6 +322,9 @@ print(paste("Outliers :",toString(outliersLoc$id)))
 ```
 
 ```{r detect.outliers.dda.exploit, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS EXPLOIT DDA
+#------------------------------------------------------
 # DDA Exploit : Win/Fail delta sum max
 DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
 DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
@@ -353,13 +338,19 @@ print(paste("Outliers :",toString(outliersLoc$id)))
 ```
 
 ```{r detect.outliers.summary, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS SUMMARY
+#------------------------------------------------------
 print(paste("Total number of outliers: ",toString(nrow(unique(outliers,by="id")))))
 print(paste("Total number of outliers motor task: ",toString(nrow(unique(outliers[type=="Moteur"],by="id")))))
 print(paste("Total number of outliers perceptive task: ",toString(nrow(unique(outliers[type=="Logique"],by="id")))))
 print(paste("Total number of outliers logical task: ",toString(nrow(unique(outliers[type=="Sensoriel"],by="id")))))
 ```
 
-```{r remove.outlisers, echo=FALSE}
+```{r remove.outliers, echo=FALSE}
+#------------------------------------------------------
+#            REMOVING OUTLIERS FROM TABLES
+#------------------------------------------------------
 # removing all outliers
 DTM <- DTM[!IDjoueur %in% unlist(outliers[type=="Moteur"]$id)]
 DTS <- DTS[!IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id)]
@@ -369,3 +360,282 @@ DTAll <- rbind(DTAll,DTL)
 DTAll <- rbind(DTAll,DTM)
 DTAll <- rbind(DTAll,DTS)
 ```
+
+```{r modeling.difficulty.compute.utils, echo=FALSE}
+#------------------------------------------------------
+#            MODELING OBJECTIVE DIFFICULTY 
+#------------------------------------------------------
+#modeling difficulty as mixed effect linear model
+model.objective.diff <- function(DT){
+  return(glmer(perdant ~ difficulty + (1 | IDjoueur), data=DT,family = "binomial"(link = "logit")))
+  
+}
+
+add.diff.obj <- function (DT,fit){
+  sample = data.frame(difficulty=DT$difficulty, IDjoueur=DT$IDjoueur)
+  DT$obj.diff =  predict(fit, newdata = sample, type = "response")
+  return (DT)
+}
+
+get.levels <- function(DT,fit){
+  fit.ranef = ranef(fit)$IDjoueur
+  DTLevel <- data.table(IDjoueur=rownames(fit.ranef),niveau=-fit.ranef); # ! minus, cause it's a level
+  setnames(DTLevel,"niveau.(Intercept)","niveau")
+  return(DTLevel)
+}
+
+add.levels <- function(DT,fit){
+  DTLevel <- get.levels(DT,fit)
+  return(merge(DT,DTLevel,by="IDjoueur",all=T))
+} 
+```
+
+```{r modeling.difficulty.draw.utils, echo=FALSE}
+#------------------------------------------------------
+#         SHOWING OBJECTIVE DIFFICULTY 
+#------------------------------------------------------
+print.objective.diff.model <- function (DT,fit) {
+  fit.ranef = ranef(fit)$IDjoueur
+  fit.sum = unlist(summary(fit))
+  inter = fit.sum$coefficients1
+  beta.diff = fit.sum$coefficients2
+  inter.p.val = fit.sum$coefficients7
+  beta.diff.p.val = fit.sum$coefficients8
+  fit.r.value = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+  
+  print(table(DT$nom_du_jeu))
+  print("Player levels from ranef:")
+  print(summary(fit.ranef))
+  print(paste("Intercept:",format.coef(inter,inter.p.val)))
+  print(paste("Difficulty:",format.coef(beta.diff,beta.diff.p.val)))
+  print(paste("R2:",signif(fit.r.value,digits=3)))
+}
+
+plot.objective.diff.model.curves <- function (DT,fit) {
+
+  DTLevel <- get.levels(DT,fit)
+  
+  for(i in 1:nrow(DTLevel)){
+    sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=DTLevel[i]$IDjoueur)
+    newres = predict(fit, newdata = sample, type = "response")
+    DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = DTLevel[i]$IDjoueur, estDiff = newres)
+    if(i==1)
+      p = ggplot(DT,aes(x=difficulty,y=estDiff)) + geom_path(alpha = 0.2) + xlim(0,1) + ylim(0,1)
+    else
+      p = p + geom_path(x=DT$difficulty,y=DT$estDiff, alpha = 0.2,size=1.2)
+  }
+  
+  DTLevel = DTLevel[order(abs(niveau))];
+  joueurMed = DTLevel[1]$IDjoueur
+  #DTLevel = DTLevel[order(niveau)];
+  #joueurMin = DTLevel[1]$IDjoueur
+  #joueurMax = DTLevel[nrow(DTLevel)]$IDjoueur
+  level.sd = sd(DTLevel$niveau) 
+  level.mean = mean(DTLevel$niveau) 
+  DTLevel = DTLevel[order(abs(niveau - (level.mean - level.sd)))];
+  joueurMin = DTLevel[1]$IDjoueur
+  DTLevel = DTLevel[order(abs(niveau - (level.mean + level.sd)))];
+  joueurMax = DTLevel[1]$IDjoueur
+  
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMed)
+  newres = predict(fit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMed, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="blue",size=1.3)
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMin)
+  newres = predict(fit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMin, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="red",size=1.01)
+  
+  sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMax)
+  newres = predict(fit, newdata = sample, type = "response")
+  DT = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMax, estDiff = newres)
+  p = p + geom_path(x=DT$difficulty,y=DT$estDiff,color="red",size=1.01)
+  
+  print(p)
+}
+
+plot.objective.diff.curves <- function (DT) {
+ 
+  # DTPlayers = unique(DT$IDjoueur)
+  # p = ggplot()
+  # for(i in 1:length(DTPlayers)){
+  #   diff = DT[IDjoueur == DTPlayers[i]]$obj.diff
+  #   step = DT[IDjoueur == DTPlayers[i]]$action_de_jeu
+  #   df = data.frame(x1=nbSteps,y1=diff)
+  #   p<-p+geom_step(aes(x1,y1),df,alpha=0.4)
+  # }
+  
+  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_bin2d(binwidth=c(1,0.05))
+  print(p)
+}
+```
+
+##Modeling objective difficulty for motor task
+
+```{r modeling.difficulty.motor, echo=FALSE}
+#------------------------------------------------------
+#        MODELING OBJECTIVE DIFFICULTY MOTOR TASK
+#------------------------------------------------------
+  fit.diff.motor <- model.objective.diff(DTM)
+  DTM <- add.diff.obj(DTM,fit.diff.motor)
+  DTM <- add.levels(DTM,fit.diff.motor)
+  print.objective.diff.model(DTM,fit.diff.motor)
+  plot.objective.diff.model.curves(DTM,fit.diff.motor)
+  plot.objective.diff.curves(DTM)
+```
+
+##Modeling objective difficulty for sensory task
+
+```{r modeling.difficulty.sensory, echo=FALSE}
+#------------------------------------------------------
+#        MODELING OBJECTIVE DIFFICULTY SENSORY TASK
+#------------------------------------------------------
+  fit.diff.senso <- model.objective.diff(DTS)
+  DTS <- add.diff.obj(DTS,fit.diff.senso)
+  DTS <- add.levels(DTS,fit.diff.senso)
+  print.objective.diff.model(DTS,fit.diff.senso)
+  plot.objective.diff.model.curves(DTS,fit.diff.senso)
+  plot.objective.diff.curves(DTS)
+```
+##Modeling objective difficulty for logical task
+
+```{r modeling.difficulty.logical, echo=FALSE}
+#------------------------------------------------------
+#        MODELING OBJECTIVE DIFFICULTY LOGICAL TASK
+#------------------------------------------------------
+  fit.diff.logic <- model.objective.diff(DTL)
+  DTL <- add.diff.obj(DTL,fit.diff.logic)
+  DTL <- add.levels(DTL,fit.diff.logic)
+  print.objective.diff.model(DTL,fit.diff.logic)
+  plot.objective.diff.model.curves(DTL,fit.diff.logic)
+  plot.objective.diff.curves(DTL)
+```
+
+```{r modeling.difficulty.merge, echo=FALSE}  
+#------------------------------------------------------
+#       MERGE INTO DTALL
+#------------------------------------------------------
+DTAll <- data.table()
+DTAll <- rbind(DTAll,DTL)
+DTAll <- rbind(DTAll,DTM)
+DTAll <- rbind(DTAll,DTS)
+```
+
+```{r modeling.subjective.difficulty, echo=FALSE}   
+#------------------------------------------------------
+#        MODELING SUBJECTIVE DIFFICULTY 
+#------------------------------------------------------
+#evaluating confidence as a damped over time sum of win and fails;
+#each win and fail importance based on objective difficulty at that time
+id = DTAll$IDjoueur; # tmp vector faster to read
+cur.confidence = 0;
+cur.confidence.liss = 0;
+lastID <- id[1];
+est.confidence <- numeric(nrow(DTAll))
+est.confidence[1] = 0;
+obj.diff = DTAll$obj.diff
+alpha <- 0.9
+i = 1
+for(i in 2:nrow(DTAll)){
+  if(id[i] != lastID){
+    cur.confidence.liss = 0;
+  }else{
+    if(gagnant[i-1]){
+      cur.confidence = obj.diff[i-1];
+    }else{
+      cur.confidence = -(1 - obj.diff[i-1]);
+    }
+    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
+  }
+  lastID <- id[i];
+  est.confidence[i] <- cur.confidence.liss;
+}
+
+DTAll$est.confidence = est.confidence;
+DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+
+#update DTM DTS and DTL
+DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
+DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
+DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
+```
+
+```{r plot.subjective.difficulty, echo=FALSE}   
+#------------------------------------------------------
+#         SHOWING SUBJECTIVE DIFFICULTY 
+#------------------------------------------------------
+
+plot.subjective.difficulty <- function(DT){
+  
+  # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
+  subj.diff.med = numeric(10)
+  obj.diff.bin = numeric(10)
+  obj.diff.bin.cur = 0;
+  test.pvals = numeric(10)
+  conf.min = numeric(10)
+  conf.max = numeric(10)
+  nb.vals = numeric(10)
+  delta.obj.subj = numeric(10)
+  
+  for(i in 1:10){
+    obj.diff.bin.cur = round(i/10,1)
+    subj.diff = 1 - DT[round(obj.diff,1)==obj.diff.bin.cur]$miseNorm;
+    obj.diff.bin[i] = obj.diff.bin.cur
+    subj.diff.med[i] = NA
+    test.pvals[i] = NA
+    conf.min[i] = NA
+    conf.max[i] = NA
+    delta.obj.subj[i] = NA
+    nb.vals[i] = length(subj.diff)
+    if(nb.vals[i] > 1){
+      try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
+      if (class(try.res) != "try-error"){
+        test.pvals[i] = format.pval.stars(test.res$p.value)
+        subj.diff.med[i] = test.res$estimate
+        conf.min[i] = test.res$conf.int[1]
+        conf.max[i] = test.res$conf.int[2]
+        delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
+      }
+    }
+  }
+  
+  #print table of pvalues
+  print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
+  
+  DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med)
+  p = ggplot(DTPlot, aes(obj.diff,subj.diff)) +
+        geom_point(alpha = 0.4, size = 3.5) +
+        xlim(0,1)+
+        ylim(0,1)+
+        geom_errorbar(aes(ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        geom_abline(intercept = 0, slope = 1, color="blue")
+  print(p)
+}
+```
+
+## Subjective difficulty for Motor task
+
+```{r plot.subjective.difficulty.motor, echo=FALSE}
+plot.subjective.difficulty(DTM)
+```
+## Subjective difficulty for Sensory task
+
+```{r plot.subjective.difficulty.sensory, echo=FALSE}
+plot.subjective.difficulty(DTS)
+```
+## Subjective difficulty for Logical task
+
+```{r plot.subjective.difficulty.logical, echo=FALSE}
+plot.subjective.difficulty(DTL)
+```
+
+
+```{r modeling.difficulty.test, echo=FALSE}   
+
+DT = DTM
+
+
+```
+
