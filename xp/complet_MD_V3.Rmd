@@ -1293,6 +1293,60 @@ Il reste , **`r length(unique(DTM$IDjoueur))`** joueurs en moteur, **`r length(u
 
 if(TEST){
   
+  ##Influence of Playtime on Subjective Difficulty
+
+```{r modeling.difficulty.test, echo=FALSE} 
+# fit.playtime.on.bet <- function(DT){
+#   return(glm(error.subj.diff.mise~action_de_jeu,data = DT))
+# }
+# 
+# plot.playtime.on.bet <- function(DT,fit){
+#   df=data.frame(time=1:max(DT$action_de_jeu),bet.error=DT[,.(error.mean=mean(error.subj.diff.mise)),by=action_de_jeu]$error.mean)
+#   p <- ggplot(df,aes(x=time,y=bet.error))
+#   p <- p + geom_point()
+#   p <- p + geom_abline(intercept=fit$coefficients[1],slope=fit$coefficients[2])
+#   p <- p + ggtitle(DT[1]$nom_du_jeu) 
+#   print(p)  
+# }
+# 
+# fit <- fit.playtime.on.bet(DTM)
+# plot.playtime.on.bet(DTM,fit)
+# summary(fit)
+# 
+# fit <- fit.playtime.on.bet(DTL)
+# plot.playtime.on.bet(DTL,fit)
+# summary(fit)
+# 
+# fit <- fit.playtime.on.bet(DTS)
+# plot.playtime.on.bet(DTS,fit)
+# summary(fit)
+
+summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTM))
+summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTL))
+summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTS))
+
+  df=data.frame(time=1:max(DTAll$action_de_jeu))
+  p <- ggplot(df,aes(x=time))
+  fit <- glm(error.subj.diff.mise~action_de_jeu,data = DTM)
+  p <- p + geom_point(aes(y=DTM[,.(error=mean(error.subj.diff.mise)),by=action_de_jeu]$error),color="red")
+  
+  p <- p + geom_point(aes(y=DTL[,.(error=mean(error.subj.diff.mise)),by=action_de_jeu]$error),color="green")
+  p <- p + geom_point(aes(y=DTS[,.(error=mean(error.subj.diff.mise)),by=action_de_jeu]$error),color="blue")
+  p
+  plot(1:30,y=DTM[,.(sd=sd(error.subj.diff.mise),error=mean(error.subj.diff.mise)),by=action_de_jeu]$error)
+  plot(1:30,y=DTS[,.(sd=sd(error.subj.diff.mise),error=mean(error.subj.diff.mise)),by=action_de_jeu]$error)
+  plot(1:30,y=DTL[,.(sd=sd(error.subj.diff.mise),error=mean(error.subj.diff.mise)),by=action_de_jeu]$error)
+  DTL[,.(sd=sd(error.subj.diff.mise),error=mean(error.subj.diff.mise)),by=action_de_jeu]
+  
+  
+  summary(fit)
+  hist(residuals(fit))
+  plot(fit)
+  
+  DT = DTM
+  hoeffd(DTL$error.subj.diff.mise,DTL$action_de_jeu)
+  
+  
   #hard easy guigui
   DTParam <- DTL
   res <- numeric(10)
