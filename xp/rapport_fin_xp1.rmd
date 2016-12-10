@@ -505,7 +505,7 @@ plot.objective.diff.model.curves <- function (DT,fit) {
 }
 
 plot.objective.diff.density <- function (DT) {
-   p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_bin2d(binwidth=c(1,0.05))
+  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_bin2d(binwidth=c(1,0.05))
   print(p)
 }
 ```
@@ -766,12 +766,19 @@ plot.subjective.difficulty(DTS)
 plot.subjective.difficulty(DTL)
 ```
 
-#Influence of Playtime on Subjective Difficulty
+#Influence of Playtime on Subjective Difficulty Error
 
 ```{r platytime.subjective.difficulty, echo=FALSE} 
+plot.subjective.diff.error.density <- function (DT) {
+  p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.mise)) + geom_bin2d(binwidth=c(1,0.2))
+  print(p)
+}
 
+plot.subjective.diff.error.density(DTM)
 summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTM))
+plot.subjective.diff.error.density(DTS)
 summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTL))
+plot.subjective.diff.error.density(DTL)
 summary(glm(error.subj.diff.mise~action_de_jeu + obj.diff,data = DTS))
 
 
