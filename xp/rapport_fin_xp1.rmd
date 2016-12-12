@@ -716,18 +716,17 @@ test.profile <- function(Y,X,title){
   res <- paste(signif(test$estimate,digits=2),format.pval.stars(test$p.value))
   if(test$p.value < 0.1){
     print(paste(title,res))
-    print(test)
   }
-    
   return(res)
 }
 
 test.profile.binary <- function(A,B,title){
-  test <- wilcox.test(A,B,conf.int=T)
+  test <- wilcox.test(B,A,conf.int=T)
   res <- paste(signif(test$estimate,digits=2),format.pval.stars(test$p.value))
   if(test$p.value < 0.1){
+    res <- paste(res,paste("mean(A):",signif(mean(A),digit=2)))
+    res <- paste(res,paste("mean(B):",signif(mean(B),digit=2)))
     print(paste(title,res))
-    print(test)
   }
     
   return(res)
@@ -934,7 +933,11 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="m
 plot.subjective.diff.error.density(DTL[niveau.group=="good"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="good"]))
 ```
+
+
+
 ```{r test, echo=FALSE} 
+
 
 ```
 
