@@ -657,7 +657,7 @@ DTAll <- rbind(DTAll,DTS)
 #adding error between subjective difficulty and objecive difficulty
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
 DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
-DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
+DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
 
 #evaluating confidence as a damped over time sum of win and fails;
 #each win and fail importance based on objective difficulty at that time
@@ -793,7 +793,7 @@ self.eff.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$er
   
 ```
 
-We investigate the link between player's reported game habits, feeling of self efficacy, risk aversion and player's behavior in the different games. Feeling of self efficacy has a small link with performance on motor task (Kendal $\tau$=0.26, p<0.01) and logical task (Kendal $\tau$=0.17, p=0.053). Aversion to risk has a small link with performance on sensory (Kendal $\tau$=0.29, p<0.001) and logical task (Kendal $\tau$=0.27 p<0.01). In this experiment, female players tend to have a lower performance on motor (Kendal $\tau$=-0.4, p<0.001) and logical tasks (Kendal $\tau$=-0.25, p<0.01). Player's sex is also slightly related to the error between subjective and objective difficulty (Kendal $\tau$=-0.19, p=0.053) i.e. compared to male players, female players tend to underestimate logical task difficulty.
+OLD!! We investigate the link between player's reported game habits, feeling of self efficacy, risk aversion and player's behavior in the different games. Feeling of self efficacy shows a small link with performance on motor task (Kendal $\tau$=0.26, p<0.01) and logical task (Kendal $\tau$=0.17, p=0.053). Aversion to risk shows a small link with performance on sensory (Kendal $\tau$=0.29, p<0.001) and logical task (Kendal $\tau$=0.27 p<0.01). In this experiment, female players tend to have a lower performance on motor (Kendal $\tau$=-0.4, p<0.001) and logical tasks (Kendal $\tau$=-0.25, p<0.01). Player's sex is also slightly related to the error between subjective and objective difficulty (Kendal $\tau$=-0.19, p=0.053) i.e. compared to male players, female players tend to underestimate logical task difficulty.
 
 #Influence of Objective difficulty on Subjective Difficulty
 
@@ -805,17 +805,18 @@ We investigate the link between player's reported game habits, feeling of self e
 plot.subjective.difficulty <- function(DT){
   
   # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
-  subj.diff.med = numeric(10)
-  obj.diff.bin = numeric(10)
+  obj.diff.quants = quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  nb.bins = length(obj.diff.quants)-1
+  subj.diff.med = numeric(nb.bins)
+  obj.diff.bin = numeric(nb.bins)
   obj.diff.bin.cur = 0;
-  test.pvals = numeric(10)
-  conf.min = numeric(10)
-  conf.max = numeric(10)
-  nb.vals = numeric(10)
-  delta.obj.subj = numeric(10)
-  obj.diff.quants = quantile(DT$obj.diff, probs=(seq(0,1,0.1)))
+  test.pvals = numeric(nb.bins)
+  conf.min = numeric(nb.bins)
+  conf.max = numeric(nb.bins)
+  nb.vals = numeric(nb.bins)
+  delta.obj.subj = numeric(nb.bins)
   hist(DT$obj.diff)
-  for(i in 1:10){
+  for(i in 1:nb.bins){
     #obj.diff.bin.cur = round(i/10,1)
     #subj.diff = DT[round(obj.diff,1)==obj.diff.bin.cur]$subj.diff.mise
     obj.diff.bin.cur = obj.diff.quants[i+1]
@@ -830,8 +831,11 @@ plot.subjective.difficulty <- function(DT){
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
+        #print(test.res)
+        #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
-        subj.diff.med[i] = test.res$estimate
+        subj.diff.med[i] = mean(subj.diff)
+        #subj.diff.med[i] = test.res$estimate
         conf.min[i] = test.res$conf.int[1]
         conf.max[i] = test.res$conf.int[2]
         delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
@@ -844,7 +848,7 @@ plot.subjective.difficulty <- function(DT){
   
   DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med)
   p = ggplot(DTPlot, aes(obj.diff,subj.diff)) +
-        geom_point(alpha = 0.4, size = 3.5) +
+        geom_point(alpha = 1, size = 3) +
         xlim(0,1)+
         ylim(0,1)+
         geom_errorbar(aes(ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
