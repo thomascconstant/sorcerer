@@ -206,7 +206,7 @@ DTAll$risk.av = DTAll$risk.av/max(DTAll$risk.av)
 DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
 
-# clear non-use data
+# clear not used data
 DTAll <- DTAll[,c("jeuxFav","horodateur","prenomNom"):=NULL] #dont need them at all
 
 ```
