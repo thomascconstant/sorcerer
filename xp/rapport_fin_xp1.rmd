@@ -809,7 +809,7 @@ OLD!! We investigate the link between player's reported game habits, feeling of 
 plot.subjective.difficulty <- function(DT){
   
   # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
-  obj.diff.quants = quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  obj.diff.quants = seq(0,1,0.075)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
   nb.bins = length(obj.diff.quants)-1
   subj.diff.med = numeric(nb.bins)
   obj.diff.bin = numeric(nb.bins)
@@ -823,8 +823,11 @@ plot.subjective.difficulty <- function(DT){
   for(i in 1:nb.bins){
     #obj.diff.bin.cur = round(i/10,1)
     #subj.diff = DT[round(obj.diff,1)==obj.diff.bin.cur]$subj.diff.mise
-    obj.diff.bin.cur = obj.diff.quants[i+1]
-    subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
+    obj.diff.bin.cur = (obj.diff.quants[i] + obj.diff.quants[i+1])/2.0
+    #subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
+    DTLoc = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]
+    DTLoc = DTLoc[,.(mise.mean=mean(subj.diff.mise)),by=IDjoueur]
+    subj.diff = DTLoc$mise.mean
     obj.diff.bin[i] = obj.diff.bin.cur
     subj.diff.med[i] = NA
     test.pvals[i] = NA
@@ -838,8 +841,8 @@ plot.subjective.difficulty <- function(DT){
         #print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
-        subj.diff.med[i] = mean(subj.diff)
-        #subj.diff.med[i] = test.res$estimate
+        #subj.diff.med[i] = mean(subj.diff)
+        subj.diff.med[i] = test.res$estimate
         conf.min[i] = test.res$conf.int[1]
         conf.max[i] = test.res$conf.int[2]
         delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
@@ -859,6 +862,12 @@ plot.subjective.difficulty <- function(DT){
         geom_abline(intercept = 0, slope = 1, color="blue")
   print(p)
 }
+```
+
+##All tasks
+
+```{r plot.subjective.difficulty.all, echo=FALSE}
+plot.subjective.difficulty(DTAll)
 ```
 
 ##Motor task
