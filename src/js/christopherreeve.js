@@ -201,6 +201,7 @@ function recupMise(numeroMise) {
             if (miseValide && confianceValide) {
                 launchGame();
             } else if (miseValide) {
+                endTurn = true; //bloquer les cases
                 activateConfiance();
                 unblockConfiance();
             }
@@ -246,6 +247,7 @@ function recupConfiance() {
                 if (miseValide && confianceValide) {
                     launchGame();
                 } else if (confianceValide) {
+                    endTurn = true; //bloquer les cases
                     activateMise();
                     unblockMise();
                 }
