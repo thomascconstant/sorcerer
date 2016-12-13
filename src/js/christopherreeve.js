@@ -555,11 +555,9 @@ function win() {
             
         console.log(nbCasesToFind + "to go");
             
-        if (modeTest === false) {
-            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + nbCells + ";" + nbCasesToFind + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
-            console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
-        }
+        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + modeTest + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + nbCells + ";" + nbCasesToFind + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
             
         //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
         moutonsGagnes = 0;
@@ -652,11 +650,9 @@ function fail() {
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
         //document.getElementById("res").innerHTML = "Vous avez tué " +mise+" mouton(s). Choisissez votre mise pour relancer le jeu.";
 
-        if (modeTest === false) {
-            //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-            resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + nbCells + ";" + nbCasesToFind + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
-            console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
-        }
+        //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
+        resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + modeTest + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + nbCells + ";" + nbCasesToFind + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+        console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
         
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
         moutonsPerdus = 0;
