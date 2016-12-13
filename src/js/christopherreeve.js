@@ -172,80 +172,85 @@ function miseOuConfiance() {
 
 //récupérer mise
 function recupMise(numeroMise) {
-    mise = numeroMise;
-    console.log(mise + " de mise");
+    if (nbDeClics === 0) {
+        mise = numeroMise;
+        console.log(mise + " de mise");
 
-    //recharger l'animation
-    restartAnimateScoreMoutons();
-
-    //afficher mise
-    showMise();
-
-    //enregistrer mise dans csv
-    //enregistrerDonnees(0, mise);
-
-    //acter la mise du joueur pour déverouiller jeu
-    miseValide = true;
-    blockMise();
-
-    //cacher les boutons de mise
-    restartFadeInOutMise();
-    setTimeout(function erazeMise() {
-        launchFadeOutMise();
+        //recharger l'animation
         restartAnimateScoreMoutons();
-    }, 100);
-    setTimeout(function eraseZoneMise() {
-        document.getElementById("boutonsMise").style.display = "none";
-        //lancer récupération de confiance si non fait
-        if (miseValide && confianceValide) {
-            launchGame();
-        } else if (miseValide) {
-            activateConfiance();
-            unblockConfiance();
-        }
-    }, 490);
+
+        //afficher mise
+        showMise();
+
+        //enregistrer mise dans csv
+        //enregistrerDonnees(0, mise);
+
+        //acter la mise du joueur pour déverouiller jeu
+        miseValide = true;
+        blockMise();
+
+        //cacher les boutons de mise
+        restartFadeInOutMise();
+        setTimeout(function erazeMise() {
+            launchFadeOutMise();
+            restartAnimateScoreMoutons();
+        }, 100);
+        setTimeout(function eraseZoneMise() {
+            document.getElementById("boutonsMise").style.display = "none";
+            //lancer récupération de confiance si non fait
+            if (miseValide && confianceValide) {
+                launchGame();
+            } else if (miseValide) {
+                activateConfiance();
+                unblockConfiance();
+            }
+        }, 490);
+    }
+
 }
 
 //afficher confiance
 function afficherConfiance() {
-    var x = document.getElementById("echelleConfiance").value;
-    document.getElementById("affichageConfiance").innerHTML = "Vous estimez vos chances de gagner à :<br />" + x + "% (cliquez pour valider)";
-    confiance = x;
+    if (confianceValide === false) {
+        var x = document.getElementById("echelleConfiance").value;
+        document.getElementById("affichageConfiance").innerHTML = "Vous estimez vos chances de gagner à :<br />" + x + "% (cliquez pour valider)";
+        confiance = x;
+    }
 }
 
 //récupérer confiance
 function recupConfiance() {
-    //confiance = indiceConfiance;
+    if (nbDeClics === 0) {
+        if (isNaN(confiance)) {
+            document.getElementById("affichageFeedback").innerHTML = "Précisez à quel point vous êtes confiant dans votre capacité à gagner.";
+            document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
+        } else {
+            var x = document.getElementById("echelleConfiance").value;
+            confiance = x;
 
-    if (isNaN(confiance)) {
-        document.getElementById("affichageFeedback").innerHTML = "Précisez à quel point vous êtes confiant dans votre capacité à gagner.";
-        document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
-    } else {
-        var x = document.getElementById("echelleConfiance").value;
-        confiance = x;
+            console.log("le joueur est confiant à " + confiance + "%");
 
-        console.log("le joueur est confiant à " + confiance + "%");
+            //acter la confiance du joueur pour déverouiller jeu
+            confianceValide = true;
+            //blockConfiance();
 
-        //acter la confiance du joueur pour déverouiller jeu
-        confianceValide = true;
-        //blockConfiance();
-
-        //cacher les boutons de confiance
-        restartFadeInOutConfiance();
-        setTimeout(function erazeConfiance() {
-            launchFadeOutConfiance();
-            //restartAnimateScoreMoutons();
-        }, 100);
-        setTimeout(function eraseZoneConfiance() {
-            document.getElementById("boutonsConfiance").style.display = "none";
-            //lancer récupération de mise si non fait
-            if (miseValide && confianceValide) {
-                launchGame();
-            } else if (confianceValide) {
-                activateMise();
-                unblockMise();
-            }
-        }, 490);
+            //cacher les boutons de confiance
+            restartFadeInOutConfiance();
+            setTimeout(function erazeConfiance() {
+                launchFadeOutConfiance();
+                //restartAnimateScoreMoutons();
+            }, 100);
+            setTimeout(function eraseZoneConfiance() {
+                document.getElementById("boutonsConfiance").style.display = "none";
+                //lancer récupération de mise si non fait
+                if (miseValide && confianceValide) {
+                    launchGame();
+                } else if (confianceValide) {
+                    activateMise();
+                    unblockMise();
+                }
+            }, 490);
+        }
     }
     
 }
@@ -281,52 +286,48 @@ function unblockMise() {
 }
 
 function blockConfiance() {
-    //verrouiller boutons de confiance
-    document.getElementById("affichageConfiance").onclick = "";
-
-    /*document.getElementById("confiance1").onclick = "";
-    document.getElementById("confiance2").onclick = "";
-    document.getElementById("confiance3").onclick = "";
-    document.getElementById("confiance4").onclick = "";
-    document.getElementById("confiance5").onclick = "";*/
+    if (miseValide === false) {
+        //verrouiller boutons de confiance
+        document.getElementById("affichageConfiance").onclick = "";
+    }
 }
 
 function unblockConfiance() {
-    //déverrouiller boutons de sélection de confiance
-    document.getElementById("affichageConfiance").onclick = function () { recupConfiance(); };
-    
-    /*document.getElementById("confiance1").onclick = function () { recupConfiance(1); };
-    document.getElementById("confiance2").onclick = function () { recupConfiance(2); };
-    document.getElementById("confiance3").onclick = function () { recupConfiance(3); };
-    document.getElementById("confiance4").onclick = function () { recupConfiance(4); };
-    document.getElementById("confiance5").onclick = function () { recupConfiance(5); };*/
+    if (confianceValide === false) {
+        //déverrouiller boutons de sélection de confiance
+        document.getElementById("affichageConfiance").onclick = function () { recupConfiance(); };
+    }
 }
 
 function activateMise() {
-    //afficher message de choix de mise
-    document.getElementById("affichageFeedback").style.display = "block";
-    document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous de moutons sur vos chances de gagner ?";
-    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+    if (miseValide === false) {
+        //afficher message de choix de mise
+        document.getElementById("affichageFeedback").style.display = "block";
+        document.getElementById("affichageFeedback").innerHTML = "Combien misez-vous de moutons sur vos chances de gagner ?";
+        document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 
-    //afficher boutons de mise
-    document.getElementById("boutonsMise").style.display = "block";
-    launchFadeInMise();
+        //afficher boutons de mise
+        document.getElementById("boutonsMise").style.display = "block";
+        launchFadeInMise();
+    }
 }
 
 function activateConfiance() {
-    //afficher message de choix de confiance
-    document.getElementById("affichageFeedback").style.display = "block";
-    document.getElementById("affichageFeedback").innerHTML = "A quel point êtes-vous confiant dans votre capacité à gagner ?";
-    document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
+    if (confianceValide === false) {
+        //afficher message de choix de confiance
+        document.getElementById("affichageFeedback").style.display = "block";
+        document.getElementById("affichageFeedback").innerHTML = "A quel point êtes-vous confiant dans votre capacité à gagner ?";
+        document.getElementById("affichageFeedback").style.backgroundColor = "#03A9F4";
 
-    //remettre valeur du slider à 50
-    document.getElementById("echelleConfiance").value = 50;
-    var x = document.getElementById("echelleConfiance").value;
-    document.getElementById("affichageConfiance").innerHTML = "Vous estimez vos chances de gagner à :<br />" + x + "% (cliquez pour valider)";
+        //remettre valeur du slider à 50
+        document.getElementById("echelleConfiance").value = 50;
+        var x = document.getElementById("echelleConfiance").value;
+        document.getElementById("affichageConfiance").innerHTML = "Vous estimez vos chances de gagner à :<br />" + x + "% (cliquez pour valider)";
 
-    //afficher boutons de confiance
-    document.getElementById("boutonsConfiance").style.display = "block";
-    launchFadeInConfiance();
+        //afficher boutons de confiance
+        document.getElementById("boutonsConfiance").style.display = "block";
+        launchFadeInConfiance();
+    }
 }
 
 function showMise() {
