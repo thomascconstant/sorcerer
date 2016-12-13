@@ -406,7 +406,6 @@ function win(ijFind){
             //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
             resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + g_nbPerm + ";" + g_nb_coups + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
             console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
-            console.log(resultatJoueur);
 
             //Un tour de moins, reset de la mise, et du nbre de moutons gagnés
             moutonsGagnes = 0;
@@ -469,7 +468,6 @@ function fail(){
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
         resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + g_nbPerm + ";" + g_nb_coups + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
-        console.log(resultatJoueur);
 
         //Un tour de moins, reset de la mise, et du nbre de moutons perdus
         moutonsPerdus = 0;
