@@ -458,9 +458,11 @@ add.levels <- function(DT,fit){
 
 #TODO par groupe
 add.levels.groups<- function(DT){
-  fit = hclust(dist(DT$niveau), "ward.D2")
+  #fit = hclust(dist(DT$niveau), "ward.D2")
   #plot(fit,hang=-1)
-  groups <- cutree(fit, k=3) 
+  #groups <- cutree(fit, k=3) 
+  fit<-kmeans(DT$niveau,3)
+  groups<-fit$cluster
   DT$niveau.group = factor(groups)
   levels.order = DT[order(niveau),.(ordered.group=niveau.group),by=niveau.group]
   levels.factors = levels(factor(c("bad","medium","good"),levels=c("bad","medium","good"),ordered=T))
@@ -853,13 +855,20 @@ plot.subjective.difficulty <- function(DT){
   #print table of pvalues
   print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
   
+  #kernel smooth
+  subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.mise,bandwidth = 0.2)
+  DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
+  
   DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med)
-  p = ggplot(DTPlot, aes(obj.diff,subj.diff)) +
-        geom_point(alpha = 1, size = 3) +
+ 
+  p = ggplot() +
+ #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
+        geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3) +
         xlim(0,1)+
         ylim(0,1)+
-        geom_errorbar(aes(ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
         geom_abline(intercept = 0, slope = 1, color="blue")
+  
   print(p)
 }
 ```
