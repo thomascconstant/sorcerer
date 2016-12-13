@@ -725,7 +725,7 @@ function clickCase(x,y){
         return;*/
 
     //vérifier état de mise pour animation instruction de jeu
-    if (miseValide === false && confianceValide === false) {
+    if (miseValide === false || confianceValide === false) {
         document.getElementById("affichageFeedback").style.backgroundColor = "#F44336";
 
         setTimeout(function changerCouleur() {
