@@ -72,7 +72,7 @@ function init(){
     if(hideTarget) {
         document.getElementById("target").style.visibility = "hidden";
     }
-    document.getElementById("tableMise").style.visibility = "hidden";
+    document.getElementById("tableMise").style.visibility = "visible";
     
     //afficher mise ou confiance
     miseOuConfiance();
