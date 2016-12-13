@@ -458,9 +458,11 @@ add.levels <- function(DT,fit){
 
 #TODO par groupe
 add.levels.groups<- function(DT){
-  fit = hclust(dist(DT$niveau), "ward.D2")
+  #fit = hclust(dist(DT$niveau), "ward.D2")
   #plot(fit,hang=-1)
-  groups <- cutree(fit, k=3) 
+  #groups <- cutree(fit, k=3) 
+  fit<-kmeans(DT$niveau,3)
+  groups<-fit$cluster
   DT$niveau.group = factor(groups)
   levels.order = DT[order(niveau),.(ordered.group=niveau.group),by=niveau.group]
   levels.factors = levels(factor(c("bad","medium","good"),levels=c("bad","medium","good"),ordered=T))
