@@ -29,7 +29,7 @@ var mise = 0; //Combien le joueur a misé
 var confiance = 0; //Indice de confiance renseigné par le joueur
 
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
-var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
+var toursDeJeu = 10; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
 var resultatJoueur = [];
 
@@ -433,7 +433,6 @@ function stop() {
         //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
         resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + gameSpeed + ";" + nearMiss + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
         console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
-        console.log(resultatJoueur);
     }
     
     //modification de la difficulté (à décommenter pour nvelle courbe de diff)
@@ -704,7 +703,7 @@ function getPlayTimeAfter() {
     var playNowMs = playNow.getTime();
 
     playTimeAfter = playNowMs;
-    console.log(playTimeBefore + " fin tour");
+    console.log(playTimeAfter + " fin tour");
 
     getDifferencePlayTime();
 }
