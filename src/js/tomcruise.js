@@ -92,7 +92,7 @@ function miseOuConfiance() {
     //reset affichage mise
     document.getElementById("mise").innerHTML = mise;
 
-    if (miseFirst === 1) {
+    if (miseFirst === "1") {
         //activer les boutons de mise
         activateMise();
         unblockMise();

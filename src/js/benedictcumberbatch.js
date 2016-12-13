@@ -163,7 +163,7 @@ function goNew() {
 
 //lancement choix mise ou confiance en premier
 function miseOuConfiance() {
-    if (miseFirst === 1) {
+    if (miseFirst === "1") {
         //activer les boutons de mise
         activateMise();
         unblockMise();
