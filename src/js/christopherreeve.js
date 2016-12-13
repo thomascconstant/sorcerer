@@ -54,7 +54,7 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 var countDownToZero = false; //statut du compte à rebours
 
 var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
-console.log("Si 0 c'est la mise d'abord, t'as combien là ? " + miseFirst);
+console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + miseFirst);
 
 var score = 0; //Score actuel
 var mise = 0; //Combien le joueur a misé
