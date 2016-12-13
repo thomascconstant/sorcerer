@@ -130,7 +130,7 @@ function lancerJeu () {
         window.open("introbenedict.html",'_self',false);
     } else if (jeuMotriceTermine && jeuLogicTermine && jeuSensoTermine === null) {
         // open it in a new window / tab (depends on browser setting)
-        window.open("christopherreeve.html",'_self',false);
+        window.open("introchristopher.html", '_self', false);
     } else if (jeuSensoTermine && jeuLogicTermine && jeuMotriceTermine === null) {
         // open it in a new window / tab (depends on browser setting)
         window.open("introtom.html",'_self',false);
