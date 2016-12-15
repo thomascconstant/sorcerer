@@ -463,7 +463,7 @@ add.levels.groups<- function(DT){
   #fit = hclust(dist(DT$niveau), "ward.D2")
   #plot(fit,hang=-1)
   #groups <- cutree(fit, k=3) 
-  nbJoueur <- nrow(unique(DT,by="IDjoueur"))
+  nbJoueur <- nrow(unique(DT,by="niveau"))
   fit<-kmeans(DT$niveau,min(nbJoueur,3))
   groups<-fit$cluster
   DT$niveau.group = factor(groups)
