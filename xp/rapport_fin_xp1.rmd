@@ -740,6 +740,18 @@ test.profile.binary <- function(A,B,title){
     
   return(res)
 }
+
+test.profile.multigroups <- function(Y,X,title){
+  test <- kruskal.test(Y ~ X) 
+  res <- paste(format.pval.stars(test$p.value))
+  if(test$p.value < 0.1){
+    print(paste(title,res))
+  }
+    
+  return(res)
+}
+
+
 ```
 
 ##Objective level and player profile
@@ -813,11 +825,11 @@ pbg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.s
 ###In game level and subjective difficulty error
 
 ```{r echo=FALSE}
-niveau.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+niveau.group.on.error <- test.profile.multigroups(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error")
 
-niveau.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
-niveau.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
-niveau.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+niveau.group.on.error.m <- test.profile.multigroups(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.m")
+niveau.group.on.error.s <- test.profile.multigroups(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.s")
+niveau.group.on.error.l <- test.profile.multigroups(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.l")
 
 ```
 
