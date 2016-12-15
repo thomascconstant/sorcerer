@@ -1,8 +1,9 @@
 ---
 title: "Experiment with DDA"
-output: 
+output:
   html_document:
     theme: lumen
+  pdf_document: default
 ---
 ```{r global.infos, echo=FALSE}
 
@@ -141,7 +142,8 @@ plot.diff.curve <- function (DT,title){
 #------------------------------------------------------
 
 # Data from game trace
-fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt"
+fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
+#fileGameTrace = "./log_jeu_XP_PLAYTEST_RANDOM.txt" #résultats jeux playtests avec diff RANDOM
 DTGame <- read.csv(fileGameTrace,header=TRUE,sep=";")
 DTGame <- as.data.table(DTGame)
 DTGame <- set.empty.to.na(DTGame)
@@ -149,7 +151,8 @@ DTGame <- remove.na.cols(DTGame)
 DTGame <- remove.na.rows(DTGame)
 
 # Data from questionnaire
-fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv"
+fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
+#fileQuestions = "./log_questionnaire_XP_PLAYTEST_RANDOM_REWRITTEN.csv" #résultats questionnaires playtests avec diff RANDOM
 DTQuest <- read.csv(fileQuestions,header=TRUE,sep=";")
 DTQuest <- as.data.table(DTQuest)
 DTQuest <- set.empty.to.na(DTQuest)
@@ -435,7 +438,6 @@ DTAll <- rbind(DTAll,DTS)
 #modeling difficulty as mixed effect linear model
 model.objective.diff <- function(DT){
   return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "logit")))
-  
 }
 
 add.diff.obj <- function (DT,fit){
