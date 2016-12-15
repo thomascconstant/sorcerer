@@ -778,6 +778,14 @@ pvg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.s
 
 pbg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.board.games,"pbg.on.error")
 
+#Subjective difficulty and ingame level
+
+niveau.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+
+niveau.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+niveau.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+niveau.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
+
 #Subjective difficulty and sex
 
 sexe.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error")
@@ -963,9 +971,59 @@ plot.subjective.diff.error.density(DTL[niveau.group=="good"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="good"]))
 ```
 
+#Link between d(t-1) and error
 
+
+```{r previous.diff.and.error, echo=FALSE} 
+
+#Plot la courbe de diff pour un joueur
+plot.diff.curve.confidence <- function (DT,title){
+  if(nrow(DT) == 0)
+    return()
+  df <- data.frame(time=DT$action_de_jeu,
+                   difficulty=DT$difficulty,
+                   bet=DT$miseNorm)
+  p <- ggplot(df,aes(x=time)) 
+  p <- p + geom_step(aes(y=bet,colour="Bet"))
+  
+  if(length(DT$obj.diff) > 0)
+    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
+  else
+    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
+  
+  p <- p + geom_step(aes(y=DT$est.confidence.norm,colour="Estimated Confidence"))
+ 
+  p <- p + ylim(0, 1)
+  p <- p + scale_colour_manual(
+    values = c("Difficulty parameter" = "red",
+               "Objective Difficulty" = "red",
+               "Estimated Confidence" = "green",
+               "Bet" = "blue"))
+  p <- p  +  ggtitle(title);
+  print(p)  
+}
+
+plot.random.diff.curve.confidence<- function (DT,title){
+  player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"bad"))
+  player = sample(unique(DT[niveau.group == "medium"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"medium"))
+  player = sample(unique(DT[niveau.group == "good"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
+   
+}
+
+plot.random.diff.curve.confidence(DTM,"Motor")
+summary(glm(error.subj.diff.mise~est.confidence.norm,data = DTM))
+plot.random.diff.curve.confidence(DTS,"Sensory")
+summary(glm(error.subj.diff.mise~est.confidence.norm,data = DTS))
+plot.random.diff.curve.confidence(DTL,"Logical")
+summary(glm(error.subj.diff.mise~est.confidence.norm,data = DTL))
+
+```
 
 ```{r test, echo=FALSE} 
+
 
 
 ```
