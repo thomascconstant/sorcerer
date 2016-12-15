@@ -142,8 +142,8 @@ plot.diff.curve <- function (DT,title){
 #------------------------------------------------------
 
 # Data from game trace
-fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
-#fileGameTrace = "./log_jeu_XP_PLAYTEST_RANDOM.txt" #résultats jeux playtests avec diff RANDOM
+#fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
+fileGameTrace = "./log_jeu_XP_PLAYTEST_RANDOM.txt" #résultats jeux playtests avec diff RANDOM
 DTGame <- read.csv(fileGameTrace,header=TRUE,sep=";")
 DTGame <- as.data.table(DTGame)
 DTGame <- set.empty.to.na(DTGame)
@@ -151,8 +151,8 @@ DTGame <- remove.na.cols(DTGame)
 DTGame <- remove.na.rows(DTGame)
 
 # Data from questionnaire
-fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
-#fileQuestions = "./log_questionnaire_XP_PLAYTEST_RANDOM_REWRITTEN.csv" #résultats questionnaires playtests avec diff RANDOM
+#fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
+fileQuestions = "./log_questionnaire_XP_PLAYTEST_RANDOM_REWRITTEN.csv" #résultats questionnaires playtests avec diff RANDOM
 DTQuest <- read.csv(fileQuestions,header=TRUE,sep=";")
 DTQuest <- as.data.table(DTQuest)
 DTQuest <- set.empty.to.na(DTQuest)
@@ -463,7 +463,8 @@ add.levels.groups<- function(DT){
   #fit = hclust(dist(DT$niveau), "ward.D2")
   #plot(fit,hang=-1)
   #groups <- cutree(fit, k=3) 
-  fit<-kmeans(DT$niveau,3)
+  nbJoueur <- nrow(unique(DT,by="IDjoueur"))
+  fit<-kmeans(DT$niveau,min(nbJoueur,3))
   groups<-fit$cluster
   DT$niveau.group = factor(groups)
   levels.order = DT[order(niveau),.(ordered.group=niveau.group),by=niveau.group]
