@@ -953,9 +953,9 @@ function makeGameNoColors(width,nbCellsX,diffColor) {
 
     colorBase = colorBaseR;
 
-    var colorFindR = Math.floor(colorBaseR + 100 * diffColor);
-    var colorFindV = Math.floor(colorBaseV + 100 * diffColor);
-    var colorFindB = Math.floor(colorBaseB + 100 * diffColor);
+    var colorFindR = Math.floor(colorBaseR + max(20,100 * diffColor));
+    var colorFindV = Math.floor(colorBaseV + max(20,100 * diffColor));
+    var colorFindB = Math.floor(colorBaseB + max(20,100 * diffColor));
 
     colorTarget = colorFindB;
     colorCurrent = colorTarget;
