@@ -740,28 +740,53 @@ test.profile.binary <- function(A,B,title){
     
   return(res)
 }
+```
 
-#Objective level and player profile
+##Objective level and player profile
+
+### Playing video games in general and level for each task
+
+```{r echo=FALSE}
 pvg.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$play.video.games,"pvg.on.level.m")
 pvg.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$play.video.games,"pvg.on.level.s")
 pvg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$play.video.games,"pvg.on.level.l")
+```
 
+### Playing board games in general and level for each task
+
+```{r echo=FALSE}
 pbg.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$play.board.games,"pbg.on.level.m")
 pbg.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$play.board.games,"pbg.on.level.s")
 pbg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$play.board.games,"pbg.on.level.l")
+```
 
+### Self efficacy and level for each task
+
+```{r echo=FALSE}
 self.eff.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$self.eff,"self.eff.on.level.m")
 self.eff.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$self.eff,"self.eff.on.level.s")
 self.eff.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$self.eff,"self.eff.on.level.l")
+```
 
+### Risk aversion and level for each task
+
+```{r echo=FALSE}
 risk.av.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$risk.av,"risk.av.on.level.m")
 risk.av.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$risk.av,"risk.av.on.level.s")
 risk.av.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$risk.av,"risk.av.on.level.l")
+```
 
+### Age and level for each task
+
+```{r echo=FALSE}
 age.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$age,"age.on.level.m")
 age.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$age,"age.on.level.s")
 age.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$age,"age.on.level.l")
+```
 
+### Sex and level for each task
+
+```{r echo=FALSE}
 sexe.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$sexe,"sexe.on.level.m")
 sexe.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$sexe,"sexe.on.level.s")
 sexe.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$sexe,"sexe.on.level.l")
@@ -769,25 +794,36 @@ sexe.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by=
 sexe.on.level.m.2 <- test.profile.binary(unique(DTM[sexe==0],by="IDjoueur")$niveau, unique(DTM[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.m.2")
 sexe.on.level.s.2 <- test.profile.binary(unique(DTS[sexe==0],by="IDjoueur")$niveau, unique(DTS[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.s.2")
 sexe.on.level.l.2 <- test.profile.binary(unique(DTL[sexe==0],by="IDjoueur")$niveau, unique(DTL[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.l.2")
+```
 
+##Subjective difficulty and play habits
 
+###Playing video game in general and subjective difficulty error
 
-#Subjective difficulty and play habits
-
+```{r echo=FALSE}
 pvg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.video.games,"pvg.on.error")
+```
 
+###Playing board game in general and subjective difficulty error
+
+```{r echo=FALSE}
 pbg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.board.games,"pbg.on.error")
+```
 
-#Subjective difficulty and ingame level
+###In game level and subjective difficulty error
 
+```{r echo=FALSE}
 niveau.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
 
 niveau.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
 niveau.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
 niveau.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"pvg.on.error")
 
-#Subjective difficulty and sex
+```
 
+###Sex and subjective difficulty error
+
+```{r echo=FALSE}
 sexe.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error")
 
 sexe.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.m")
@@ -800,11 +836,19 @@ sexe.on.error.m.2 <- test.profile.binary(unique(DTM[sexe==0],by=c("IDjoueur","no
 sexe.on.error.s.2 <- test.profile.binary(unique(DTS[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.s.2")
 sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.l.2")
 
-#Subjective difficulty and risk aversion
+```
+
+###Risk aversion and subjective difficulty error
+
+```{r echo=FALSE}
 
 risk.av.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
 
-#Subjective difficulty and self efficacy
+```
+
+###Self efficacy and subjective difficulty error
+
+```{r echo=FALSE}
 
 self.eff.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
   
