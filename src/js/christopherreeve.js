@@ -1197,7 +1197,6 @@ function feedbackSonore() {
      var playNowMs = playNow.getTime();
 
      playTimeBefore = playNowMs;
-     console.log(playTimeBefore + " début tour");
  }
 
  function getPlayTimeAfter() {
@@ -1205,7 +1204,6 @@ function feedbackSonore() {
      var playNowMs = playNow.getTime();
 
      playTimeAfter = playNowMs;
-     console.log(playTimeAfter + " fin tour");
 
      getDifferencePlayTime();
  }

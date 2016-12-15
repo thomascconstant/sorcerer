@@ -951,7 +951,6 @@ function getPlayTimeBefore() {
     var playNowMs = playNow.getTime();
 
     playTimeBefore = playNowMs;
-    console.log(playTimeBefore + " début tour");
 }
 
 function getPlayTimeAfter() {
@@ -959,7 +958,6 @@ function getPlayTimeAfter() {
     var playNowMs = playNow.getTime();
 
     playTimeAfter = playNowMs;
-    console.log(playTimeAfter + " fin tour");
 
     getDifferencePlayTime();
 }
