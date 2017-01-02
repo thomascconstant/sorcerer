@@ -142,8 +142,8 @@ plot.diff.curve <- function (DT,title){
 #------------------------------------------------------
 
 # Data from game trace
-#fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
-fileGameTrace = "./log_jeu_XP_NOWELL.txt" #résultats jeux XP CN2 avec diff RANDOM
+fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
+#fileGameTrace = "./log_jeu_XP_NOWELL.txt" #résultats jeux XP CN2 avec diff RANDOM
 DTGame <- read.csv(fileGameTrace,header=TRUE,sep=";")
 DTGame <- as.data.table(DTGame)
 DTGame <- set.empty.to.na(DTGame)
@@ -152,8 +152,8 @@ DTGame <- remove.na.rows(DTGame)
 DTAll <- DTGame #pour n'avoir que les données tirées du jeu
 
 # Data from questionnaire
-#fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
-fileQuestions = "./log_questionnaire_XP_NOWELL.csv" #résultats questionnaire XP CN2 avec diff RANDOM
+fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
+#fileQuestions = "./log_questionnaire_XP_NOWELL.csv" #résultats questionnaire XP CN2 avec diff RANDOM
 DTQuest <- read.csv(fileQuestions,header=TRUE,sep=";")
 DTQuest <- as.data.table(DTQuest)
 DTQuest <- set.empty.to.na(DTQuest)
@@ -665,7 +665,7 @@ DTAll <- rbind(DTAll,DTS)
 #------------------------------------------------------
 #        MODELING SUBJECTIVE DIFFICULTY 
 #------------------------------------------------------
-#adding error between subjective difficulty and objecive difficulty
+#adding error between subjective difficulty and objective difficulty
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
 DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
 DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
@@ -1128,50 +1128,50 @@ plot.p(DTL,"Logical")
 summary(lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=DTL))
 
 ```
-```{r test, echo=FALSE} 
+```{r test2, echo=FALSE} 
 #------------------------------------------------------------------------
 #        MODELING SUBJECTIVE DIFFICULTY ON CONFIDENCE (NOT BET)
 #------------------------------------------------------------------------
-#adding error between subjective difficulty and objecive difficulty
-DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
-DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
-DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
-
-#evaluating confidence as a damped over time sum of win and fails;
-#each win and fail importance based on objective difficulty at that time
-id = DTAll$IDjoueur; # tmp vector faster to read
-cur.confidence = 0;
-cur.confidence.liss = 0;
-lastID <- id[1];
-est.confidence <- numeric(nrow(DTAll))
-est.confidence[1] = 0;
-obj.diff = DTAll$obj.diff
-alpha <- 0.9
-i = 1
-for(i in 2:nrow(DTAll)){
-  if(id[i] != lastID){
-    cur.confidence.liss = 0;
-  }else{
-    if(gagnant[i-1]){
-      cur.confidence = obj.diff[i-1];
-    }else{
-      cur.confidence = -(1 - obj.diff[i-1]);
-    }
-    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
-  }
-  lastID <- id[i];
-  est.confidence[i] <- cur.confidence.liss;
-}
-
-DTAll$est.confidence = est.confidence;
-DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
-
-#update DTM DTS and DTL
-DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
-DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
-DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
-
-####tests
-plot()
+# #adding error between subjective difficulty and objective difficulty
+# DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
+# DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
+# DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
+# 
+# #evaluating confidence as a damped over time sum of win and fails;
+# #each win and fail importance based on objective difficulty at that time
+# id = DTAll$IDjoueur; # tmp vector faster to read
+# cur.confidence = 0;
+# cur.confidence.liss = 0;
+# lastID <- id[1];
+# est.confidence <- numeric(nrow(DTAll))
+# est.confidence[1] = 0;
+# obj.diff = DTAll$obj.diff
+# alpha <- 0.9
+# i = 1
+# for(i in 2:nrow(DTAll)){
+#   if(id[i] != lastID){
+#     cur.confidence.liss = 0;
+#   }else{
+#     if(gagnant[i-1]){
+#       cur.confidence = obj.diff[i-1];
+#     }else{
+#       cur.confidence = -(1 - obj.diff[i-1]);
+#     }
+#     cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
+#   }
+#   lastID <- id[i];
+#   est.confidence[i] <- cur.confidence.liss;
+# }
+# 
+# DTAll$est.confidence = est.confidence;
+# DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+# 
+# #update DTM DTS and DTL
+# DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
+# DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
+# DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
+# 
+# ####tests
+# plot()
 
 ```
