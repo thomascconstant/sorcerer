@@ -359,19 +359,21 @@ plot.outliers <- function(DT,title){
 #------------------------------------------------------
 #            OUTLIERS BET STD DEV
 #------------------------------------------------------
-DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
-DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
-DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
-
-plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
-
-outliers = get.outliers(DTDescM,DTDescS,DTDescL)
-print(paste("Outliers :",toString(outliers$id)))
-
-DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
-DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
-DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
+# not useful for analysis based on CONFIDENCE SCALE
+# DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
+# DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
+# DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
+# 
+# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
+# 
+# outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+# print(paste("Outliers :",toString(outliers$id)))
+# 
+# DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
+# DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
+# DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
 ```
+
 ```{r detect.outliers.bet.sd, echo=FALSE}
 #------------------------------------------------------
 #            OUTLIERS CONFIDENCE SCALE STD DEV
@@ -706,9 +708,9 @@ DTAll <- rbind(DTAll,DTS)
 ```
 
 ```{r modeling.subjective.difficulty, echo=FALSE}   
-#------------------------------------------------------
-#        MODELING SUBJECTIVE DIFFICULTY 
-#------------------------------------------------------
+#------------------------------------------------------------------------
+#        MODELING SUBJECTIVE DIFFICULTY (based on BET)
+#------------------------------------------------------------------------
 #adding error between subjective difficulty and objective difficulty
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
 DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
@@ -1262,9 +1264,9 @@ summary(lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=D
 ```
 
 ```{r test2, echo=FALSE} 
-#------------------------------------------------------------------------
-#        MODELING SUBJECTIVE DIFFICULTY ON CONFIDENCE (NOT BET)
-#------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
+#        MODELING SUBJECTIVE DIFFICULTY (based on CONFIDENCE SCALE /!\ not bet)
+#------------------------------------------------------------------------------------------
 #adding error between subjective difficulty and objective difficulty
 DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
 DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
