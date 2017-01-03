@@ -114,7 +114,7 @@ remove.head.tail <- function(DT,nb,bHead=TRUE){
   return(DT)
 }
 
-#Plot la courbe de diff pour un joueur
+#Plot la courbe de diff pour un joueur avec mise (bet)
 plot.diff.curve <- function (DT,title){
   if(nrow(DT) == 0)
     return()
@@ -134,6 +134,30 @@ plot.diff.curve <- function (DT,title){
     values = c("Difficulty parameter" = "red",
                "Objective Difficulty" = "pink",
                "Bet" = "blue"))
+  p <- p  +  ggtitle(title);
+  print(p)  
+}
+
+#Plot la courbe de diff pour un joueur avec confiance (confidence scale)
+plot.diff.curve.confidence.scale <- function (DT,title){
+  if(nrow(DT) == 0)
+    return()
+  df <- data.frame(time=DT$action_de_jeu,
+                   difficulty=DT$difficulty,
+                   bet=DT$confianceNorm)
+  p <- ggplot(df,aes(x=time)) 
+  p <- p + geom_step(aes(y=bet,colour="Confidence scale"))
+  
+  if(length(DT$obj.diff) > 0)
+    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
+  else
+    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
+ 
+   p <- p + ylim(0, 1)
+  p <- p + scale_colour_manual(
+    values = c("Difficulty parameter" = "red",
+               "Objective Difficulty" = "pink",
+               "Confidence scale" = "blue"))
   p <- p  +  ggtitle(title);
   print(p)  
 }
@@ -347,6 +371,23 @@ print(paste("Outliers :",toString(outliers$id)))
 DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
 DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
 DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
+```
+```{r detect.outliers.bet.sd, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS CONFIDENCE SCALE STD DEV
+#------------------------------------------------------
+DTDescM = DTM[,.(type="Moteur",var=sd(confianceNorm)),by=IDjoueur]
+DTDescS = DTS[,.(type="Sensoriel",var=sd(confianceNorm)),by=IDjoueur]
+DTDescL = DTL[,.(type="Logique",var=sd(confianceNorm)),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Confidence Standard Dev");
+
+outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+print(paste("Outliers :",toString(outliers$id)))
+
+DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve.confidence.scale(.SD,"Outlier Confidence Sd Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve.confidence.scale(.SD,"Outlier Confidence Sd Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.confidence.scale(.SD,"Outlier Confidence Sd Logical Task");NULL},by=.(IDjoueur)]
 ```
 
 ```{r detect.outliers.win.sum, echo=FALSE}
