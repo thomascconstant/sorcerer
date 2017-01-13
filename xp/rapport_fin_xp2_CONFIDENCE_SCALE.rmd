@@ -1,5 +1,5 @@
 ---
-title: "Experiment with DDA"
+title: "Experiment with Random Difficulty"
 output:
   html_document:
     theme: lumen
