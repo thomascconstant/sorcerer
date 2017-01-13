@@ -783,7 +783,7 @@ text(bpEtudes, 0, round(counts, 1),cex=0.5,pos=3)
 #sexe des joueurs
 counts <- table(unique(DTM,by="IDjoueur")$sexe)
 bpSexe <- barplot(counts, main="Genre of players", horiz=FALSE,
-                    names.arg=c("Female", "Male"),
+                    names.arg=c("Male", "Female"),
                     legend.text = NULL, beside = TRUE,
                     axes = TRUE, axisnames = TRUE,
                     col = c("lightblue", "lightgreen"),  
