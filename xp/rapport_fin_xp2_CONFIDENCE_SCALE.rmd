@@ -1065,10 +1065,12 @@ plot.subjective.difficulty <- function(DT){
   DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med)
  
   p = ggplot() +
- #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
+        #geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
         geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3) +
         xlim(0,1)+
         ylim(0,1)+
+        xlab("Objective difficulty levels") +
+        ylab("Subjective difficulty levels") +
         geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
         geom_abline(intercept = 0, slope = 1, color="blue")
   
@@ -1080,24 +1082,28 @@ plot.subjective.difficulty <- function(DT){
 
 ```{r plot.subjective.difficulty.all, echo=FALSE}
 plot.subjective.difficulty(DTAll)
+#title(main="Results for all tasks")
 ```
 
 ##Motor task
 
 ```{r plot.subjective.difficulty.motor, echo=FALSE}
 plot.subjective.difficulty(DTM)
+#title(main="Results for Motor task")
 ```
 
 ##Sensory task
 
 ```{r plot.subjective.difficulty.sensory, echo=FALSE}
 plot.subjective.difficulty(DTS)
+#title(main="Results for Sensitive task")
 ```
 
 ##Logical task
 
 ```{r plot.subjective.difficulty.logical, echo=FALSE}
 plot.subjective.difficulty(DTL)
+#title(main="Results for Logical task")
 ```
 
 #Influence of Playtime on Subjective Difficulty Error
