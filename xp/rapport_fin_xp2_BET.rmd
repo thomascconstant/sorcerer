@@ -373,7 +373,7 @@ DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"
 DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
 ```
 
-```{r detect.outliers.bet.sd, echo=FALSE}
+```{r detect.outliers.confidence.sd, echo=FALSE}
 #------------------------------------------------------
 #            OUTLIERS CONFIDENCE SCALE STD DEV
 #------------------------------------------------------
