@@ -439,7 +439,7 @@ DTAll <- rbind(DTAll,DTS)
 #------------------------------------------------------
 #modeling difficulty as mixed effect linear model
 model.objective.diff <- function(DT){
-  return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "logit")))
+  return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "probit")))
 }
 
 add.diff.obj <- function (DT,fit){
@@ -549,6 +549,8 @@ add.levels.groups<- function(DT){
 #         SHOWING OBJECTIVE DIFFICULTY 
 #------------------------------------------------------
 print.objective.diff.model <- function (DT,fit) {
+  print(summary(fit))
+  
   fit.ranef = ranef(fit)$IDjoueur
   fit.sum = unlist(summary(fit))
   inter = fit.sum$coefficients1
@@ -557,8 +559,10 @@ print.objective.diff.model <- function (DT,fit) {
   inter.p.val = fit.sum$coefficients10
   beta.diff.p.val = fit.sum$coefficients11
   beta.time.p.val = fit.sum$coefficients12
-    fit.r.value = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+    fit.r.value.fix = r.squaredGLMM(fit)[1] #R2 for fixed effect model
+    fit.r.value.mix = r.squaredGLMM(fit)[2] #R2 for mixed effect model
   fit.cross.val = get.model.accuracy(DT)
+  fit.aic = AIC(fit)
   
   print(table(DT$nom_du_jeu))
   print("Player levels from ranef:")
@@ -566,8 +570,10 @@ print.objective.diff.model <- function (DT,fit) {
   print(paste("Intercept:",format.coef(inter,inter.p.val)))
   print(paste("Difficulty:",format.coef(beta.diff,beta.diff.p.val)))
   print(paste("Time:",format.coef(beta.time,beta.time.p.val)))
-  print(paste("R2:",signif(fit.r.value,digits=3)))
+  print(paste("R2 fixed:",signif(fit.r.value.fix,digits=2)))
+  print(paste("R2 mixed:",signif(fit.r.value.mix,digits=2)))
   print(paste("Cross Val:",signif(fit.cross.val,digits=2)))
+  print(paste("AIC:",signif(fit.aic,digits=2)))
 }
 
 plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=F) {
@@ -957,7 +963,7 @@ OLD!! We investigate the link between player's reported game habits, feeling of 
 plot.subjective.difficulty <- function(DT){
   
   # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
-  obj.diff.quants = seq(0,1,0.075)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
   nb.bins = length(obj.diff.quants)-1
   subj.diff.med = numeric(nb.bins)
   obj.diff.bin = numeric(nb.bins)
@@ -986,7 +992,7 @@ plot.subjective.difficulty <- function(DT){
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
-        #print(test.res)
+        print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
         #subj.diff.med[i] = mean(subj.diff)
