@@ -448,6 +448,26 @@ add.diff.obj <- function (DT,fit){
   return (DT)
 }
 
+#cross val difficulty model
+get.model.accuracy <- function(DT){
+  DT$cross.val.group = round(runif(nrow(DT),0.5,10.5))
+  totAccuracy <- 0
+  for(i in 1:10){
+    DTModel <-  DT[cross.val.group != i]
+    DTTest <- DT[cross.val.group == i]
+    fit <- model.objective.diff(DTModel)
+    newres = predict(fit, newdata = DTTest, type = "response")  
+    newres = round(newres)
+    accuracy = abs(newres - DTTest$perdant)
+    localAccu = table(accuracy)[[1]]/length(accuracy)
+    totAccuracy <-  totAccuracy + localAccu
+    #print(localAccu)
+  }
+  
+  totAccuracy = totAccuracy / 10
+  return (totAccuracy)
+}
+
 model.objective.diff.basic<- function(DT){
   #on divise par bins
   gameplay.diff.quants = quantile(DT$difficulty,probs = seq(0, 1, 0.025)) #seq(0,1,0.025)
@@ -537,7 +557,8 @@ print.objective.diff.model <- function (DT,fit) {
   inter.p.val = fit.sum$coefficients10
   beta.diff.p.val = fit.sum$coefficients11
   beta.time.p.val = fit.sum$coefficients12
-  fit.r.value = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+    fit.r.value = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+  fit.cross.val = get.model.accuracy(DT)
   
   print(table(DT$nom_du_jeu))
   print("Player levels from ranef:")
@@ -546,6 +567,7 @@ print.objective.diff.model <- function (DT,fit) {
   print(paste("Difficulty:",format.coef(beta.diff,beta.diff.p.val)))
   print(paste("Time:",format.coef(beta.time,beta.time.p.val)))
   print(paste("R2:",signif(fit.r.value,digits=3)))
+  print(paste("Cross Val:",signif(fit.cross.val,digits=2)))
 }
 
 plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=F) {
