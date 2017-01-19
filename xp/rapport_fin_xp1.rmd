@@ -439,7 +439,7 @@ DTAll <- rbind(DTAll,DTS)
 #------------------------------------------------------
 #modeling difficulty as mixed effect linear model
 model.objective.diff <- function(DT){
-  return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "probit")))
+  return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "logit")))
 }
 
 add.diff.obj <- function (DT,fit){
@@ -972,6 +972,7 @@ plot.subjective.difficulty <- function(DT){
   conf.min = numeric(nb.bins)
   conf.max = numeric(nb.bins)
   nb.vals = numeric(nb.bins)
+  shapes =  numeric(nb.bins)
   delta.obj.subj = numeric(nb.bins)
   hist(DT$obj.diff)
   for(i in 1:nb.bins){
@@ -988,13 +989,16 @@ plot.subjective.difficulty <- function(DT){
     conf.min[i] = NA
     conf.max[i] = NA
     delta.obj.subj[i] = NA
+    shapes[i] = 16
     nb.vals[i] = length(subj.diff)
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
-        print(test.res)
+        #print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
+        if(test.res$p.value < 0.05)
+          shapes[i] = 24
         #subj.diff.med[i] = mean(subj.diff)
         subj.diff.med[i] = test.res$estimate
         conf.min[i] = test.res$conf.int[1]
@@ -1011,15 +1015,16 @@ plot.subjective.difficulty <- function(DT){
   subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.mise,bandwidth = 0.2)
   DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
   
-  DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med)
+  DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med, shapes=shapes)
  
   p = ggplot() +
  #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
-        geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3) +
+        geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
         xlim(0,1)+
         ylim(0,1)+
         geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
-        geom_abline(intercept = 0, slope = 1, color="blue")
+        geom_abline(intercept = 0, slope = 1, color="blue") +
+        xlab("Objective Difficulty") + ylab("Subjective Difficulty")
   
   print(p)
 }
