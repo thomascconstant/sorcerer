@@ -576,14 +576,14 @@ print.objective.diff.model <- function (DT,fit) {
   print(paste("AIC:",signif(fit.aic,digits=2)))
 }
 
-plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=F) {
+plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T) {
 
   #DTLevel <- get.levels(DT,fit)
   DTLevel <- unique(DT,by="IDjoueur")
   if(groups){
-    DTLevel[niveau.group=="bad",group.color:=as.character("green")]
-    DTLevel[niveau.group=="medium",group.color:=as.character("yellow")]
-    DTLevel[niveau.group=="good",group.color:=as.character("cyan")]
+    DTLevel[niveau.group=="bad",group.color:=as.character("yellow")]
+    DTLevel[niveau.group=="medium",group.color:=as.character("cyan")]
+    DTLevel[niveau.group=="good",group.color:=as.character("green")]
   }else{
     DTLevel[niveau.group=="bad",group.color:=as.character("black")]
     DTLevel[niveau.group=="medium",group.color:=as.character("black")]
@@ -632,7 +632,7 @@ plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=F) {
   
   p <- p + theme(legend.position="none")
   
-  p <- p + xlab("Gameplay Variable") + ylab("Objective Difficulty")
+  p <- p + xlab("Difficulty Variable") + ylab("Objective Difficulty") + theme(text = element_text(size=20))
   
   print(p)
 }
@@ -666,13 +666,14 @@ plot.objective.diff.model.curves.time <- function (DT,fit) {
   print(p)
 }
 
+
 plot.objective.diff.density <- function (DT) {
   p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_bin2d(binwidth=c(1,0.05))
   print(p)
 }
 
 plot.objective.diff.smooth <- function (DT) {
-  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_point(alpha=0.5) + geom_smooth()
+  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_point(alpha=0.5) + geom_smooth() + xlab("Time (turns)") + ylab("Objective Difficulty") + theme(text = element_text(size=20))
   print(p)
 }
 ```
@@ -750,7 +751,7 @@ DTAll <- rbind(DTAll,DTS)
 #------------------------------------------------------
 #adding error between subjective difficulty and objective difficulty
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
-DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
+DTAll$error.subj.diff.mise = abs(DTAll$subj.diff.mise - DTAll$obj.diff)
 DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
 
 #evaluating confidence as a damped over time sum of win and fails;
@@ -960,7 +961,9 @@ OLD!! We investigate the link between player's reported game habits, feeling of 
 #     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY 
 #------------------------------------------------------
 
-plot.subjective.difficulty <- function(DT){
+plot.subjective.difficulty <- function(DT,selGroup){
+  
+  print(selGroup)
   
   # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
   obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
@@ -981,6 +984,8 @@ plot.subjective.difficulty <- function(DT){
     obj.diff.bin.cur = (obj.diff.quants[i] + obj.diff.quants[i+1])/2.0
     #subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
     DTLoc = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]
+    if(selGroup != "all")
+      DTLoc = DTLoc[niveau.group==selGroup]
     DTLoc = DTLoc[,.(mise.mean=mean(subj.diff.mise)),by=IDjoueur]
     subj.diff = DTLoc$mise.mean
     obj.diff.bin[i] = obj.diff.bin.cur
@@ -1024,7 +1029,7 @@ plot.subjective.difficulty <- function(DT){
         ylim(0,1)+
         geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
         geom_abline(intercept = 0, slope = 1, color="blue") +
-        xlab("Objective Difficulty") + ylab("Subjective Difficulty")
+        xlab("Objective Difficulty") + ylab("Subjective Difficulty") + theme(text = element_text(size=15))
   
   print(p)
 }
@@ -1033,32 +1038,41 @@ plot.subjective.difficulty <- function(DT){
 ##All tasks
 
 ```{r plot.subjective.difficulty.all, echo=FALSE}
-plot.subjective.difficulty(DTAll)
+plot.subjective.difficulty(DTAll,"all")
 ```
 
 ##Motor task
 
 ```{r plot.subjective.difficulty.motor, echo=FALSE}
-plot.subjective.difficulty(DTM)
+plot.subjective.difficulty(DTM,"all")
+plot.subjective.difficulty(DTM,"good")
+plot.subjective.difficulty(DTM,"medium")
+plot.subjective.difficulty(DTM,"bad")
 ```
 
 ##Sensory task
 
 ```{r plot.subjective.difficulty.sensory, echo=FALSE}
-plot.subjective.difficulty(DTS)
+plot.subjective.difficulty(DTS,"all")
+plot.subjective.difficulty(DTS,"good")
+plot.subjective.difficulty(DTS,"medium")
+plot.subjective.difficulty(DTS,"bad")
 ```
 
 ##Logical task
 
 ```{r plot.subjective.difficulty.logical, echo=FALSE}
-plot.subjective.difficulty(DTL)
+plot.subjective.difficulty(DTL,"all")
+plot.subjective.difficulty(DTL,"good")
+plot.subjective.difficulty(DTL,"medium")
+plot.subjective.difficulty(DTL,"bad")
 ```
 
 #Influence of Playtime on Subjective Difficulty Error
 
 ```{r platytime.subjective.difficulty.funcs, echo=FALSE} 
 plot.subjective.diff.error.density <- function (DT) {
-  p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.mise)) + geom_bin2d(binwidth=c(1,0.2))
+  p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.mise)) + geom_bin2d(binwidth=c(1,0.05))
   print(p)
 }
 ``` 
@@ -1066,10 +1080,7 @@ plot.subjective.diff.error.density <- function (DT) {
 ##For all groups, motor, sensitive and logical
 
 ```{r platytime.subjective.difficulty.all, echo=FALSE} 
-plot.subjective.diff.error.density <- function (DT) {
-  p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.mise)) + geom_bin2d(binwidth=c(1,0.2))
-  print(p)
-}
+
  
 
 plot.subjective.diff.error.density(DTM)
