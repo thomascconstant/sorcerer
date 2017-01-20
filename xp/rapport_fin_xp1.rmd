@@ -789,50 +789,6 @@ DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
 DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
 ```
 
-```{r modeling.subjective.difficulty.time, echo=FALSE}   
-#---------------------------------------------------------------------
-#        MODELING TIME INFLUENCE ON SUBJECTIVE DIFFICULTY 
-#---------------------------------------------------------------------
-#adding error between subjective difficulty and objective difficulty
-DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
-DTAll$error.subj.diff.mise.time = abs(DTAll$subj.diff.mise - DTAll$timeNorm)
-DTAll <- DTAll[,error.subj.diff.mise.time.mean:=mean(error.subj.diff.mise.time),by=IDjoueur]
-
-#evaluating confidence as a damped over time sum of win and fails;
-#each win and fail importance based on objective difficulty at that time
-id = DTAll$IDjoueur; # tmp vector faster to read
-cur.confidence = 0;
-cur.confidence.liss = 0;
-lastID <- id[1];
-est.confidence <- numeric(nrow(DTAll))
-est.confidence[1] = 0;
-timeNorm = DTAll$timeNorm
-alpha <- 0.9
-i = 1
-for(i in 2:nrow(DTAll)){
-  if(id[i] != lastID){
-    cur.confidence.liss = 0;
-  }else{
-    if(gagnant[i-1]){
-      cur.confidence = timeNorm[i-1];
-    }else{
-      cur.confidence = -(1 - timeNorm[i-1]);
-    }
-    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
-  }
-  lastID <- id[i];
-  est.confidence[i] <- cur.confidence.liss;
-}
-
-DTAll$est.confidence = est.confidence;
-DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
-
-#update DTM DTS and DTL
-DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
-DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
-DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
-```
-
 #Influence of Player Profiles
 
 ##Player profiles
@@ -1043,7 +999,7 @@ plot.subjective.difficulty <- function(DT,selGroup){
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
-        #print(test.res)
+        print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
         if(test.res$p.value < 0.05)
@@ -1112,118 +1068,6 @@ plot.subjective.difficulty(DTL,"medium")
 plot.subjective.difficulty(DTL,"bad")
 ```
 
-```{r plot.subjective.objective.difficulty.time, echo=FALSE}   
-#------------------------------------------------------
-#     SHOWING SUBJECTIVE VS TIME 
-#------------------------------------------------------
-
-plot.subjective.difficulty.time <- function(DT,selGroup){
-  
-  print(selGroup)
-  
-  # Lien entre mise normalisée et temps (learning effect)
-  timeNorm.quants = seq(0,1,1/16)#quantile(DT$timeNorm, probs=(seq(0,1,0.05)))
-  nb.bins = length(timeNorm.quants)-1
-  subj.diff.med = numeric(nb.bins)
-  timeNorm.bin = numeric(nb.bins)
-  timeNorm.bin.cur = 0;
-  test.pvals = numeric(nb.bins)
-  conf.min = numeric(nb.bins)
-  conf.max = numeric(nb.bins)
-  nb.vals = numeric(nb.bins)
-  shapes =  numeric(nb.bins)
-  delta.time.subj = numeric(nb.bins)
-  hist(DT$timeNorm)
-  for(i in 1:nb.bins){
-    #timeNorm.bin.cur = round(i/10,1)
-    #subj.diff = DT[round(obj.diff,1)==timeNorm.bin.cur]$subj.diff.mise
-    timeNorm.bin.cur = (timeNorm.quants[i] + timeNorm.quants[i+1])/2.0
-    #subj.diff = DT[timeNorm > timeNorm.quants[i] & timeNorm<=timeNorm.quants[i+1]]$subj.diff.mise
-    DTLoc = DT[timeNorm > timeNorm.quants[i] & timeNorm<=timeNorm.quants[i+1]]
-    if(selGroup != "all")
-      DTLoc = DTLoc[niveau.group==selGroup]
-    DTLoc = DTLoc[,.(mise.mean=mean(subj.diff.mise)),by=IDjoueur]
-    subj.diff = DTLoc$mise.mean
-    timeNorm.bin[i] = timeNorm.bin.cur
-    subj.diff.med[i] = NA
-    test.pvals[i] = NA
-    conf.min[i] = NA
-    conf.max[i] = NA
-    delta.time.subj[i] = NA
-    shapes[i] = 16
-    nb.vals[i] = length(subj.diff)
-    if(nb.vals[i] > 1){
-      try.res = try(test.res <- wilcox.test(subj.diff,mu = timeNorm.bin.cur,conf.int=T))
-      if (class(try.res) != "try-error"){
-        #print(test.res)
-        #hist(subj.diff)
-        test.pvals[i] = format.pval.stars(test.res$p.value)
-        if(test.res$p.value < 0.05)
-          shapes[i] = 24
-        #subj.diff.med[i] = mean(subj.diff)
-        subj.diff.med[i] = test.res$estimate
-        conf.min[i] = test.res$conf.int[1]
-        conf.max[i] = test.res$conf.int[2]
-        delta.time.subj[i] = signif(subj.diff.med[i] - timeNorm.bin.cur,digit=2)
-      }
-    }
-  }
-  
-  #print table of pvalues
-  print(data.table(timeNorm.bin=timeNorm.bin,delta.time.subj=delta.time.subj,n=nb.vals,pval=test.pvals))
-  
-  #kernel smooth
-  subj.diff.smooth <- ksmooth(x=DT$timeNorm,y=DT$subj.diff.mise,bandwidth = 0.2)
-  DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
-  
-  DTPlot = data.table(timeNorm=timeNorm.bin,subj.diff=subj.diff.med, shapes=shapes)
- 
-  p = ggplot() +
- #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
-        geom_point(aes(x=DTPlot$timeNorm,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
-        xlim(0,1)+
-        ylim(0,1)+
-        geom_errorbar(aes(x=DTPlot$timeNorm, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
-        geom_abline(intercept = 0, slope = 1, color="blue") +
-        xlab("Time") + ylab("Subjective Difficulty") + theme(text = element_text(size=15))
-  
-  print(p)
-}
-```
-
-##All tasks
-
-```{r plot.subjective.difficulty.time.all, echo=FALSE}
-plot.subjective.difficulty.time(DTAll,"all")
-```
-
-##Motor task
-
-```{r plot.subjective.difficulty.time.motor, echo=FALSE}
-plot.subjective.difficulty.time(DTM,"all")
-plot.subjective.difficulty.time(DTM,"good")
-plot.subjective.difficulty.time(DTM,"medium")
-plot.subjective.difficulty.time(DTM,"bad")
-```
-
-##Sensory task
-
-```{r plot.subjective.difficulty.time.sensory, echo=FALSE}
-plot.subjective.difficulty.time(DTS,"all")
-plot.subjective.difficulty.time(DTS,"good")
-plot.subjective.difficulty.time(DTS,"medium")
-plot.subjective.difficulty.time(DTS,"bad")
-```
-
-##Logical task
-
-```{r plot.subjective.difficulty.time.logical, echo=FALSE}
-plot.subjective.difficulty.time(DTL,"all")
-plot.subjective.difficulty.time(DTL,"good")
-plot.subjective.difficulty.time(DTL,"medium")
-plot.subjective.difficulty.time(DTL,"bad")
-```
-
 #Influence of Playtime on Subjective Difficulty Error
 
 ```{r platytime.subjective.difficulty.funcs, echo=FALSE} 
@@ -1231,14 +1075,86 @@ plot.subjective.diff.error.density <- function (DT) {
   p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.mise)) + geom_bin2d(binwidth=c(1,0.05))
   print(p)
 }
+
+plot.subj.obj.diff.with.time <- function(DT){
+  time.quants = seq(0,30,3)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  nb.bins = length(time.quants)-1
+  time.bin = numeric(nb.bins)
+  nb.vals = numeric(nb.bins)
+  error.diff = numeric(nb.bins)
+  # 
+  # obj.diff.bin.cur = 0;
+  test.pvals = numeric(nb.bins)
+  conf.min = numeric(nb.bins)
+  conf.max = numeric(nb.bins)
+subj.diff.mean = numeric(nb.bins)
+obj.diff.mean = numeric(nb.bins)
+  shapes =  numeric(nb.bins)
+  # delta.obj.subj = numeric(nb.bins)
+  # hist(DT$obj.diff)
+  for(i in 1:nb.bins){
+    time.bin.cur = (time.quants[i] + time.quants[i+1])/2.0
+    DTLoc = DT[action_de_jeu > time.quants[i] & action_de_jeu<=time.quants[i+1]]
+    time.bin[i] = time.bin.cur
+    subj.diff = DTLoc$subj.diff.mise
+    obj.diff = DTLoc$obj.diff
+    # subj.diff.med[i] = NA
+    test.pvals[i] = NA
+    conf.min[i] = NA
+    conf.max[i] = NA
+    error.diff[i] = NA
+    subj.diff.mean[i] = NA
+        obj.diff.mean[i] = NA
+    # delta.obj.subj[i] = NA
+    shapes[i] = 16
+    nb.vals[i] = length(subj.diff)
+    if(nb.vals[i] > 1){
+      try.res = try(test.res <- wilcox.test(subj.diff,obj.diff,conf.int=T, paired=T)) 
+      if (class(try.res) != "try-error"){
+        print(test.res)
+        #hist(subj.diff)
+        test.pvals[i] = format.pval.stars(test.res$p.value)
+        if(test.res$p.value < 0.05)
+          shapes[i] = 24
+        subj.diff.mean[i] = mean(subj.diff)
+        obj.diff.mean[i] = mean(obj.diff)
+        error.diff[i] = test.res$estimate
+        conf.min[i] = test.res$conf.int[1]
+        conf.max[i] = test.res$conf.int[2]
+        #delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
+      }
+    }
+  }
+  
+  #print table of pvalues
+  print(data.table(time.bin=time.bin,subj.diff.mean=subj.diff.mean,obj.diff.mean=obj.diff.mean,error.diff=error.diff,n=nb.vals,pval=test.pvals))
+ 
+  #kernel smooth
+  # subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.mise,bandwidth = 0.2)
+  # DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
+   
+   DTPlot = data.table(time=time.bin,error.diff=error.diff, shapes=shapes)
+   print(DTPlot)
+  # 
+  p = ggplot() +
+
+        geom_point(aes(x=DTPlot$time,y=DTPlot$error.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
+        xlim(0,30)+
+        #ylim(0,1)+
+        geom_errorbar(aes(x=DTPlot$time, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        geom_abline(intercept = 0, slope = 0, color="blue") +
+        xlab("Time") + ylab("Estimation Error") + theme(text = element_text(size=15))
+
+  print(p)
+}
+
+
+
 ``` 
 
 ##For all groups, motor, sensitive and logical
 
 ```{r platytime.subjective.difficulty.all, echo=FALSE} 
-
- 
-
 plot.subjective.diff.error.density(DTM)
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTM))
 plot.subjective.diff.error.density(DTS)
@@ -1246,7 +1162,9 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS))
 plot.subjective.diff.error.density(DTL)
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL))
 
-
+plot.subj.obj.diff.with.time(DTM)
+plot.subj.obj.diff.with.time(DTS)
+plot.subj.obj.diff.with.time(DTL)
 ``` 
 
 ##Per group, motor task
