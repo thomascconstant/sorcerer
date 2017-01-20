@@ -751,7 +751,7 @@ DTAll <- rbind(DTAll,DTS)
 #------------------------------------------------------
 #adding error between subjective difficulty and objective difficulty
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
-DTAll$error.subj.diff.mise = abs(DTAll$subj.diff.mise - DTAll$obj.diff)
+DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
 DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
 
 #evaluating confidence as a damped over time sum of win and fails;
@@ -1076,7 +1076,7 @@ plot.subjective.diff.error.density <- function (DT) {
   print(p)
 }
 
-plot.subj.obj.diff.with.time <- function(DT){
+plot.subj.obj.diff.with.time <- function(DT,selGroup,title){
   time.quants = seq(0,30,3)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
   nb.bins = length(time.quants)-1
   time.bin = numeric(nb.bins)
@@ -1095,6 +1095,8 @@ obj.diff.mean = numeric(nb.bins)
   for(i in 1:nb.bins){
     time.bin.cur = (time.quants[i] + time.quants[i+1])/2.0
     DTLoc = DT[action_de_jeu > time.quants[i] & action_de_jeu<=time.quants[i+1]]
+    if(selGroup != "all")
+      DTLoc = DTLoc[niveau.group==selGroup]
     time.bin[i] = time.bin.cur
     subj.diff = DTLoc$subj.diff.mise
     obj.diff = DTLoc$obj.diff
@@ -1111,7 +1113,7 @@ obj.diff.mean = numeric(nb.bins)
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,obj.diff,conf.int=T, paired=T)) 
       if (class(try.res) != "try-error"){
-        print(test.res)
+        #print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
         if(test.res$p.value < 0.05)
@@ -1136,7 +1138,7 @@ obj.diff.mean = numeric(nb.bins)
    DTPlot = data.table(time=time.bin,error.diff=error.diff, shapes=shapes)
    print(DTPlot)
   # 
-  p = ggplot() +
+  p = ggplot() + ggtitle(title) +
 
         geom_point(aes(x=DTPlot$time,y=DTPlot$error.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
         xlim(0,30)+
@@ -1162,20 +1164,40 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS))
 plot.subjective.diff.error.density(DTL)
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL))
 
-plot.subj.obj.diff.with.time(DTM)
-plot.subj.obj.diff.with.time(DTS)
-plot.subj.obj.diff.with.time(DTL)
+plot.subj.obj.diff.with.time(DTM,"all", "Motor, all groups")
+plot.subj.obj.diff.with.time(DTS,"all", "Sensory, all groups")
+plot.subj.obj.diff.with.time(DTL,"all", "Logical, all groups")
 ``` 
+
+##For all taks, per group
+
+```{r platytime.subjective.difficulty.all.tasks, echo=FALSE} 
+plot.subjective.diff.error.density(DTAll[niveau.group=="bad"])
+summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTAll[niveau.group=="bad"]))
+plot.subjective.diff.error.density(DTAll[niveau.group=="medium"])
+summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTAll[niveau.group=="medium"]))
+plot.subjective.diff.error.density(DTAll[niveau.group=="good"])
+summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTAll[niveau.group=="good"]))
+
+plot.subj.obj.diff.with.time(DTAll,"bad", "All tasks, bad")
+plot.subj.obj.diff.with.time(DTAll,"medium", "All tasks, medium")
+plot.subj.obj.diff.with.time(DTAll,"good", "All tasks, good")
+``` 
+
+
 
 ##Per group, motor task
 
 ```{r platytime.subjective.difficulty.group.motor, echo=FALSE} 
 plot.subjective.diff.error.density(DTM[niveau.group=="bad"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTM[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTM,"bad", "Motor, bad")
 plot.subjective.diff.error.density(DTM[niveau.group=="medium"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTM[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTM,"medium", "Motor, medium")
 plot.subjective.diff.error.density(DTM[niveau.group=="good"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTM[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTM,"good", "Motor, good")
 
 ``` 
 
@@ -1185,10 +1207,13 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTM[niveau.group=="g
 
 plot.subjective.diff.error.density(DTS[niveau.group=="bad"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTS,"bad", "Sensory, bad")
 plot.subjective.diff.error.density(DTS[niveau.group=="medium"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTS,"medium", "Sensory, medium")
 plot.subjective.diff.error.density(DTS[niveau.group=="good"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTS,"good", "Sensory, good")
 ``` 
 
 ##Per group, logical task
@@ -1196,10 +1221,13 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTS[niveau.group=="g
 ```{r platytime.subjective.difficulty.group.logical, echo=FALSE} 
 plot.subjective.diff.error.density(DTL[niveau.group=="bad"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTL,"bad", "Logical, bad")
 plot.subjective.diff.error.density(DTL[niveau.group=="medium"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTL,"medium", "Logical, medium")
 plot.subjective.diff.error.density(DTL[niveau.group=="good"])
 summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTL,"good", "Logical, good")
 ```
 
 #Link between d(t-1) and error
