@@ -961,7 +961,7 @@ OLD!! We investigate the link between player's reported game habits, feeling of 
 #     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY 
 #------------------------------------------------------
 
-plot.subjective.difficulty <- function(DT,selGroup){
+plot.subjective.difficulty <- function(DT,selGroup,title){
   
   print(selGroup)
   
@@ -999,7 +999,7 @@ plot.subjective.difficulty <- function(DT,selGroup){
     if(nb.vals[i] > 1){
       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
-        print(test.res)
+        #print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
         if(test.res$p.value < 0.05)
@@ -1022,7 +1022,7 @@ plot.subjective.difficulty <- function(DT,selGroup){
   
   DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med, shapes=shapes)
  
-  p = ggplot() +
+  p = ggplot() + ggtitle(title) +
  #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
         geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
         xlim(0,1)+
@@ -1038,34 +1038,37 @@ plot.subjective.difficulty <- function(DT,selGroup){
 ##All tasks
 
 ```{r plot.subjective.difficulty.all, echo=FALSE}
-plot.subjective.difficulty(DTAll,"all")
+plot.subjective.difficulty(DTAll,"all", "All tasks, all groups")
+plot.subjective.difficulty(DTAll,"good", "All tasks, good")
+plot.subjective.difficulty(DTAll,"medium", "All tasks, medium")
+plot.subjective.difficulty(DTAll,"bad", "All tasks, bad")
 ```
 
 ##Motor task
 
 ```{r plot.subjective.difficulty.motor, echo=FALSE}
-plot.subjective.difficulty(DTM,"all")
-plot.subjective.difficulty(DTM,"good")
-plot.subjective.difficulty(DTM,"medium")
-plot.subjective.difficulty(DTM,"bad")
+plot.subjective.difficulty(DTM,"all", "Motor, all")
+plot.subjective.difficulty(DTM,"good", "Motor, good")
+plot.subjective.difficulty(DTM,"medium", "Motor, medium")
+plot.subjective.difficulty(DTM,"bad", "Motor, bad")
 ```
 
 ##Sensory task
 
 ```{r plot.subjective.difficulty.sensory, echo=FALSE}
-plot.subjective.difficulty(DTS,"all")
-plot.subjective.difficulty(DTS,"good")
-plot.subjective.difficulty(DTS,"medium")
-plot.subjective.difficulty(DTS,"bad")
+plot.subjective.difficulty(DTS,"all","Sensory, all")
+plot.subjective.difficulty(DTS,"good","Sensory, good")
+plot.subjective.difficulty(DTS,"medium","Sensory, medium")
+plot.subjective.difficulty(DTS,"bad","Sensory, bad")
 ```
 
 ##Logical task
 
 ```{r plot.subjective.difficulty.logical, echo=FALSE}
-plot.subjective.difficulty(DTL,"all")
-plot.subjective.difficulty(DTL,"good")
-plot.subjective.difficulty(DTL,"medium")
-plot.subjective.difficulty(DTL,"bad")
+plot.subjective.difficulty(DTL,"all","Logical, all")
+plot.subjective.difficulty(DTL,"good","Logical, good")
+plot.subjective.difficulty(DTL,"medium","Logical, medium")
+plot.subjective.difficulty(DTL,"bad","Logical, bad")
 ```
 
 #Influence of Playtime on Subjective Difficulty Error
