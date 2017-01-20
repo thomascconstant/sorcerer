@@ -1145,7 +1145,7 @@ obj.diff.mean = numeric(nb.bins)
 
         geom_point(aes(x=DTPlot$time,y=DTPlot$error.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
         xlim(0,30)+
-        #ylim(0,1)+
+        ylim(-0.4,0.2)+
         geom_errorbar(aes(x=DTPlot$time, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
         geom_abline(intercept = 0, slope = 0, color="blue") +
         xlab("Time") + ylab("Estimation Error") + theme(text = element_text(size=15))
