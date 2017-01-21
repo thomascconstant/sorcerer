@@ -19,3 +19,5 @@ xp/.Rhistory
 *.Rhistory
 xp/.RData
 *.Rhistory
+build/sorcerer/.vs/config/applicationhost.config
+build/sorcerer/.vs/sorcerer/v15/.suo
