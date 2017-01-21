@@ -795,12 +795,108 @@ DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
 
 ```{r show.player.profiles, echo=FALSE} 
 
-hist(unique(DTM,by="IDjoueur")$age,breaks=30,main="Age of players")
-hist(unique(DTM,by="IDjoueur")$sexe,main="Sex of players")
-hist(unique(DTM,by="IDjoueur")$play.video.games,main="Playing Video Games")
-hist(unique(DTM,by="IDjoueur")$play.board.games,main="Playing Board Games")
-hist(unique(DTM,by="IDjoueur")$self.eff,main="Self efficacy")
-hist(unique(DTM,by="IDjoueur")$risk.av,main="Risk aversion")
+#OLD REPRESENTATION
+# hist(unique(DTM,by="IDjoueur")$age,breaks=30,main="Age of players")
+# hist(unique(DTM,by="IDjoueur")$sexe,main="Sex of players")
+# hist(unique(DTM,by="IDjoueur")$play.video.games,main="Playing Video Games")
+# hist(unique(DTM,by="IDjoueur")$play.board.games,main="Playing Board Games")
+# hist(unique(DTM,by="IDjoueur")$self.eff,main="Self efficacy")
+# hist(unique(DTM,by="IDjoueur")$risk.av,main="Risk aversion")
+
+#âge des participants
+counts <- table(unique(DTAll,by="IDjoueur")$age)
+bpAge <- barplot(counts, 
+              col = c("lightblue", "lightgreen"),
+              xlab="Age",  
+              ylab="Distribution by participants", 
+              ylim = c(0, 15))
+text(bpAge, 0, round(counts, 1),cex=0.5,pos=3)
+
+#niveau d'étude
+precounts <- unique(DTAll,by="IDjoueur")$niveauEtude
+counts <- table(factor(precounts,levels=1:9))
+bpEtudes <- barplot(counts, main="Certificate levels", horiz=FALSE,
+                    names.arg=c("None", "BEPC", "BEP/CAP", "BAC", "BAC+2", "BAC+3", "BAC+4", "BAC+5", "BAC+8"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    xlab="Certificate levels",  
+                    ylab="Distribution by participants",
+                    xlim = c(0, 10),
+                    ylim = c(0, 35),
+                    cex.names=0.8)
+text(bpEtudes, 0, round(counts, 1),cex=0.5,pos=3)
+
+#sexe des joueurs
+counts <- table(unique(DTAll,by="IDjoueur")$sexe)
+bpSexe <- barplot(counts, main="Genre of players", horiz=FALSE,
+                    names.arg=c("Male", "Female"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    col = c("lightblue", "lightgreen"),  
+                    xlab="Genre of players",  
+                    ylab="Distribution by participants",
+                    xlim = c(0, 3),
+                    ylim = c(0, 60),
+                    cex.names=1)
+text(bpSexe, 0, round(counts, 1),cex=0.8,pos=3)
+
+#joueurs de jeux vidéo
+counts <- table(unique(DTAll,by="IDjoueur")$play.video.games)
+bpVideoGames <- barplot(counts, main="Playing Video Games", horiz=FALSE,
+                    names.arg=c("Never", "Almost never", "Monthly", "Weekly", "Daily"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    #col = c("lightblue", "lightgreen"),  
+                    xlab="Playing Video Games",  
+                    ylab="Distribution by participants",
+                    xlim = c(0, 6),
+                    ylim = c(0, 50),
+                    cex.names=1)
+text(bpVideoGames, 0, round(counts, 1),cex=0.8,pos=3)
+
+#joueurs de jeux de société
+counts <- table(unique(DTAll,by="IDjoueur")$play.board.games)
+bpBoardGames <- barplot(counts, main="Playing Board Games", horiz=FALSE,
+                    names.arg=c("Never", "Almost never", "Monthly", "Weekly", "Daily"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    #col = c("lightblue", "lightgreen"),  
+                    xlab="Playing Board Games",  
+                    ylab="Distribution by participants",
+                    xlim = c(0, 6),
+                    ylim = c(0, 35),
+                    cex.names=1)
+text(bpBoardGames, 0, round(counts, 1),cex=0.8,pos=3)
+
+#sentiment d'auto-efficacité
+#counts <- table(unique(DTM,by="IDjoueur")$self.eff)
+counts <- table(exclude = "0", unique(DTAll,by="IDjoueur")$self.eff) #ne garder que les joueurs de jeux vidéo (donc                                                                        self.eff > 0)
+bpSelfEff <- barplot(counts, main="Self-efficacy in video games", horiz=FALSE,
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    #col = c("lightblue", "lightgreen"),  
+                    xlab="Self-efficacy in video games",  
+                    ylab="Distribution by video games players",
+                    #xlim = c(0, 30),
+                    ylim = c(0, 8),
+                    cex.names=0.8)
+text(bpSelfEff, 0, round(counts, 1),cex=0.8,pos=3)
+legend("topright", legend = "From 0.5 as Medium to 1 as Strong")
+
+#aversion au risque
+counts <- table(unique(DTAll,by="IDjoueur")$risk.av)
+bpRiskAver <- barplot(counts, main="Risk aversion", horiz=FALSE,
+                    names.arg=c("Very highly risk loving", "Highly risk loving", "Risk loving", "Risk neutral", "Slightly risk averse", "Risk averse", "Very risk averse", "Highly risk averse", "stay in bed"),
+                    legend.text = NULL, beside = TRUE,
+                    axes = TRUE, axisnames = TRUE,
+                    #col = c("lightblue", "lightgreen"),  
+                    xlab="Risk aversion",  
+                    ylab="Distribution by participants",
+                    xlim = c(0, 10),
+                    ylim = c(0, 20),
+                    cex.names=0.9)
+text(bpRiskAver, 0, round(counts, 1),cex=0.8,pos=3)
+
 ```
 
 ##Influence of Player Profiles
