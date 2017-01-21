@@ -170,8 +170,8 @@ plot.diff.curve.confidence.scale <- function (DT,title){
 #------------------------------------------------------
 
 # Data from game trace
-fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
-#fileGameTrace = "./log_jeu_XP_NOWELL.txt" #résultats jeux XP CN2 avec diff RANDOM
+#fileGameTrace = "./log_thomas_XPFINALES_WEEK2.txt" #résultats jeux XP CN2 avec diff DDA
+fileGameTrace = "./log_jeu_XP_NOWELL.txt" #résultats jeux XP CN2 avec diff RANDOM
 DTGame <- read.csv(fileGameTrace,header=TRUE,sep=";")
 DTGame <- as.data.table(DTGame)
 DTGame <- set.empty.to.na(DTGame)
@@ -180,8 +180,8 @@ DTGame <- remove.na.rows(DTGame)
 DTAll <- DTGame #pour n'avoir que les données tirées du jeu
 
 # Data from questionnaire
-fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
-#fileQuestions = "./log_questionnaire_XP_NOWELL.csv" #résultats questionnaire XP CN2 avec diff RANDOM
+#fileQuestions = "./log_questionnaire_XP_WEEK2_REWRITED.csv" #résultats questionnaire XP CN2 avec diff DDA
+fileQuestions = "./log_questionnaire_XP_NOWELL.csv" #résultats questionnaire XP CN2 avec diff RANDOM
 DTQuest <- read.csv(fileQuestions,header=TRUE,sep=";")
 DTQuest <- as.data.table(DTQuest)
 DTQuest <- set.empty.to.na(DTQuest)
