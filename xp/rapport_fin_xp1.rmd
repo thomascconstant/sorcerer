@@ -672,8 +672,10 @@ plot.objective.diff.density <- function (DT) {
   print(p)
 }
 
-plot.objective.diff.smooth <- function (DT) {
-  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_point(alpha=0.5) + geom_smooth() + xlab("Time (turns)") + ylab("Objective Difficulty") + theme(text = element_text(size=20))
+plot.objective.diff.smooth <- function (DT,selGroup,title) {
+  if(selGroup != "all")
+      DT = DT[niveau.group==selGroup]
+  p <- ggplot(DT, aes(action_de_jeu, obj.diff)) + geom_point(alpha=0.5) + geom_smooth() + xlab("Time (turns)") + ylab("Objective Difficulty") + theme(text = element_text(size=20)) + ggtitle(title)
   print(p)
 }
 ```
@@ -694,7 +696,10 @@ plot.objective.diff.smooth <- function (DT) {
   plot.objective.diff.model.curves(DTM,fit.diff.motor,1)
   plot.objective.diff.model.curves.time(DTM,fit.diff.motor)
   plot.objective.diff.density(DTM)
-  plot.objective.diff.smooth(DTM)
+  plot.objective.diff.smooth(DTM,"all", "motor all")
+  plot.objective.diff.smooth(DTM,"bad", "motor bad")
+  plot.objective.diff.smooth(DTM,"medium", "motor medium")
+  plot.objective.diff.smooth(DTM,"good", "motor good")
 ```
 
 ##Modeling objective difficulty for sensory task
@@ -713,7 +718,11 @@ plot.objective.diff.smooth <- function (DT) {
   plot.objective.diff.model.curves(DTS,fit.diff.senso,1)
   plot.objective.diff.model.curves.time(DTS,fit.diff.senso)
   plot.objective.diff.density(DTS)
-  plot.objective.diff.smooth(DTS)
+  
+  plot.objective.diff.smooth(DTS,"all", "sensory all")
+  plot.objective.diff.smooth(DTS,"bad", "sensory bad")
+  plot.objective.diff.smooth(DTS,"medium", "sensory medium")
+  plot.objective.diff.smooth(DTS,"good", "sensory good")
 ```
 
 ##Modeling objective difficulty for logical task
@@ -732,7 +741,10 @@ plot.objective.diff.smooth <- function (DT) {
   plot.objective.diff.model.curves(DTL,fit.diff.logic,1)
   plot.objective.diff.model.curves.time(DTL,fit.diff.logic)
   plot.objective.diff.density(DTL)
-  plot.objective.diff.smooth(DTL)
+  plot.objective.diff.smooth(DTL,"all", "logical all")
+  plot.objective.diff.smooth(DTL,"bad", "logical bad")
+  plot.objective.diff.smooth(DTL,"medium", "logical medium")
+  plot.objective.diff.smooth(DTL,"good", "logical good")
 ```
 
 ```{r modeling.difficulty.merge, echo=FALSE}  
