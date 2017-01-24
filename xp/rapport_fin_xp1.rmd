@@ -189,24 +189,24 @@ DTAll$play.money.games = pmax(DTAll$profilJoueur7)
 DTAll$play.money.games = DTAll$play.money.games / max(DTAll$play.money.games)
 
 DTAll <- DTAll[,c("profilJoueur1","profilJoueur2","profilJoueur3","profilJoueur4",
-                   "profilJoueur5","profilJoueur6","profilJoueur7","profilJoueur8"):=NULL] #dont need them anymore
+                   "profilJoueur5","profilJoueur6","profilJoueur7"):=NULL] #dont need them anymore
 
 # feeling of self efficacy
 cols.self.eff <- c("autoEffJoueur1","autoEffJoueur2","autoEffJoueur3","autoEffJoueur4",
                    "autoEffJoueur5","autoEffJoueur6","autoEffJoueur7","autoEffJoueur8",
                    "autoEffJoueur9","autoEffJoueur10")
 DTAll = DTAll[, self.eff := rowSums(.SD,na.rm=TRUE), .SDcols = cols.self.eff]
-DTAll$self.eff = DTAll$self.eff/max(DTAll$self.eff)
+DTAll$self.eff = DTAll$self.eff/10
+DTAll[profilJoueur8==0,self.eff := NA] #NA tout ceux qui ne jouaient pas au jeu vidéo 
 DTAll <- DTAll[,c("autoEffJoueur1","autoEffJoueur2","autoEffJoueur3","autoEffJoueur4",
                    "autoEffJoueur5","autoEffJoueur6","autoEffJoueur7","autoEffJoueur8",
-                   "autoEffJoueur9","autoEffJoueur10"):=NULL] #dont need them anymore
+                   "autoEffJoueur9","autoEffJoueur10","profilJoueur8"):=NULL] #dont need them anymore
 
 # risk aversion
-
 cols.risk.av <- c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10")
 DTAll = DTAll[, risk.av := rowSums(.SD,na.rm=TRUE), .SDcols = cols.risk.av]
-DTAll$risk.av = DTAll$risk.av/max(DTAll$risk.av)
+DTAll$risk.av = DTAll$risk.av/10
 DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
 
@@ -882,7 +882,7 @@ text(bpBoardGames, 0, round(counts, 1),cex=0.8,pos=3)
 
 #sentiment d'auto-efficacité
 #counts <- table(unique(DTM,by="IDjoueur")$self.eff)
-counts <- table(exclude = "0", unique(DTAll,by="IDjoueur")$self.eff) #ne garder que les joueurs de jeux vidéo (donc                                                                        self.eff > 0)
+counts <- table(exclude = NA, unique(DTAll,by="IDjoueur")$self.eff) #ne garder que les joueurs de jeux vidéo (donc                                                                        self.eff > 0)
 bpSelfEff <- barplot(counts, main="Self-efficacy in video games", horiz=FALSE,
                     legend.text = NULL, beside = TRUE,
                     axes = TRUE, axisnames = TRUE,
@@ -914,9 +914,14 @@ text(bpRiskAver, 0, round(counts, 1),cex=0.8,pos=3)
 ##Influence of Player Profiles
 
 ```{r player.model.subjective.difficulty, echo=FALSE} 
+#si X est continu
 test.profile <- function(Y,X,title){
   test <- cor.test(Y,X, method="kendall")
+  DT <- data.table(x=X,y=Y)
+  p <- ggplot(DT,aes(x, y)) + geom_point(alpha=0.5)
+  print(p)
   res <- paste(signif(test$estimate,digits=2),format.pval.stars(test$p.value))
+  print(test)
   if(test$p.value < 0.1){
     print(paste(title,res))
   }
@@ -924,7 +929,13 @@ test.profile <- function(Y,X,title){
 }
 
 test.profile.binary <- function(A,B,title){
+  DTA <- data.table(gp="A",val=A)
+  DTB <- data.table(gp="B",val=B)
+  DT <- rbind(DTA,DTB)
+  p <- ggplot(DT,aes(gp, val)) + geom_point(alpha=0.5)
+  print(p)
   test <- wilcox.test(B,A,conf.int=T)
+  print(test)
   res <- paste(signif(test$estimate,digits=2),format.pval.stars(test$p.value))
   if(test$p.value < 0.1){
     res <- paste(res,paste("mean(A):",signif(mean(A),digit=2)))
@@ -935,6 +946,7 @@ test.profile.binary <- function(A,B,title){
   return(res)
 }
 
+#si X est un label, comparaison entre groupes
 test.profile.multigroups <- function(Y,X,title){
   test <- kruskal.test(Y ~ X) 
   res <- paste(format.pval.stars(test$p.value))
@@ -1025,6 +1037,14 @@ niveau.group.on.error.m <- test.profile.multigroups(unique(DTM,by=c("IDjoueur","
 niveau.group.on.error.s <- test.profile.multigroups(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.s")
 niveau.group.on.error.l <- test.profile.multigroups(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.l")
 
+
+niveau.group.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error")
+
+niveau.group.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.m")
+niveau.group.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.s")
+niveau.group.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.l")
+
+
 ```
 
 ###Sex and subjective difficulty error
@@ -1049,6 +1069,10 @@ sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","no
 ```{r echo=FALSE}
 
 risk.av.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+
 
 ```
 
@@ -1057,6 +1081,9 @@ risk.av.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$err
 ```{r echo=FALSE}
 
 self.eff.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
   
 ```
 
@@ -1123,6 +1150,13 @@ plot.subjective.difficulty <- function(DT,selGroup,title){
   
   #print table of pvalues
   print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
+  
+  #summary
+  print("mean and sd of nb players per bin")
+  DTNbVals = data.table(nb = nb.vals, pval=test.pvals)
+  print(DTNbVals[!is.na(pval)])
+  print(signif(mean(DTNbVals[!is.na(pval)]$nb),digits=3))
+  print(signif(sd(DTNbVals[!is.na(pval)]$nb),digits=3))
   
   #kernel smooth
   subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.mise,bandwidth = 0.2)
