@@ -811,6 +811,9 @@ DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
 ##Player profiles
 
 ```{r show.player.profiles, echo=FALSE} 
+#------------------------------------------------------
+#        SHOWING PLAYERS' PROFILES
+#------------------------------------------------------
 
 #OLD REPRESENTATION
 # hist(unique(DTM,by="IDjoueur")$age,breaks=30,main="Age of players")
@@ -918,7 +921,11 @@ text(bpRiskAver, 0, round(counts, 1),cex=0.8,pos=3)
 
 ##Influence of Player Profiles
 
-```{r player.model.subjective.difficulty, echo=FALSE} 
+```{r player.model.subjective.difficulty, echo=FALSE}
+#------------------------------------------------------
+#        INFLUENCE OF PLAYERS' PROFILES 
+#------------------------------------------------------
+
 #si X est continu
 test.profile <- function(Y,X,title){
   test <- cor.test(Y,X, method="kendall")
@@ -970,6 +977,10 @@ test.profile.multigroups <- function(Y,X,title){
 ### Playing video games in general and level for each task
 
 ```{r echo=FALSE}
+#---------------------------------------------------------------------
+#        INFLUENCE OF VIDEO GAME EXPERTISE ON PLAYERS' PERFORMANCE
+#---------------------------------------------------------------------
+
 pvg.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$play.video.games,"pvg.on.level.m")
 pvg.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$play.video.games,"pvg.on.level.s")
 pvg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$play.video.games,"pvg.on.level.l")
@@ -978,6 +989,10 @@ pvg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="
 ### Playing board games in general and level for each task
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF BOARD GAME EXPERTISE ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+
 pbg.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$play.board.games,"pbg.on.level.m")
 pbg.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$play.board.games,"pbg.on.level.s")
 pbg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$play.board.games,"pbg.on.level.l")
@@ -986,6 +1001,10 @@ pbg.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="
 ### Self efficacy and level for each task
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF SELF-EFFICACY ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+
 self.eff.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$self.eff,"self.eff.on.level.m")
 self.eff.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$self.eff,"self.eff.on.level.s")
 self.eff.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$self.eff,"self.eff.on.level.l")
@@ -994,6 +1013,10 @@ self.eff.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL
 ### Risk aversion and level for each task
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF RISK AVERSION ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+
 risk.av.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$risk.av,"risk.av.on.level.m")
 risk.av.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$risk.av,"risk.av.on.level.s")
 risk.av.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$risk.av,"risk.av.on.level.l")
@@ -1002,6 +1025,10 @@ risk.av.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,
 ### Age and level for each task
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF AGE AND LEVEL ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+
 age.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$age,"age.on.level.m")
 age.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$age,"age.on.level.s")
 age.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$age,"age.on.level.l")
@@ -1010,6 +1037,10 @@ age.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="
 ### Sex and level for each task
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF SEX AND LEVEL ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+
 sexe.on.level.m <- test.profile(unique(DTM,by="IDjoueur")$niveau, unique(DTM,by="IDjoueur")$sexe,"sexe.on.level.m")
 sexe.on.level.s <- test.profile(unique(DTS,by="IDjoueur")$niveau, unique(DTS,by="IDjoueur")$sexe,"sexe.on.level.s")
 sexe.on.level.l <- test.profile(unique(DTL,by="IDjoueur")$niveau, unique(DTL,by="IDjoueur")$sexe,"sexe.on.level.l")
@@ -1024,18 +1055,36 @@ sexe.on.level.l.2 <- test.profile.binary(unique(DTL[sexe==0],by="IDjoueur")$nive
 ###Playing video game in general and subjective difficulty error
 
 ```{r echo=FALSE}
+#------------------------------------------------------------------------------------------------
+#        INFLUENCE OF PLAYERS' PROFILES ON PLAYERS' DIFFICULTY ESTIMATION (BASED ON BET)
+#------------------------------------------------------------------------------------------------
+
+#ATTENTION, CACUL BASE SUR LA MISE : error.subj.diff.mise.mean
+
+#--------------------------------------------------------------------------------------------
+#        INFLUENCE OF VIDEO GAME EXPERTISE ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#--------------------------------------------------------------------------------------------
+
 pvg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.video.games,"pvg.on.error")
 ```
 
 ###Playing board game in general and subjective difficulty error
 
 ```{r echo=FALSE}
+#--------------------------------------------------------------------------------------------
+#        INFLUENCE OF BOARD GAME EXPERTISE ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#--------------------------------------------------------------------------------------------
+
 pbg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.board.games,"pbg.on.error")
 ```
 
 ###In game level and subjective difficulty error
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------------------
+#        INFLUENCE OF IN GAME LEVEL ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#----------------------------------------------------------------------------------
+
 niveau.group.on.error <- test.profile.multigroups(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error")
 
 niveau.group.on.error.m <- test.profile.multigroups(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.m")
@@ -1049,12 +1098,15 @@ niveau.group.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu")
 niveau.group.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.s")
 niveau.group.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.l")
 
-
 ```
 
 ###Sex and subjective difficulty error
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------------------
+#        INFLUENCE OF SEX AND LEVEL ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#----------------------------------------------------------------------------------
+
 sexe.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error")
 
 sexe.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.m")
@@ -1072,6 +1124,9 @@ sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","no
 ###Risk aversion and subjective difficulty error
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------------------
+#        INFLUENCE OF RISK AVERSION ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#----------------------------------------------------------------------------------
 
 risk.av.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
 risk.av.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
@@ -1084,6 +1139,9 @@ risk.av.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error
 ###Self efficacy and subjective difficulty error
 
 ```{r echo=FALSE}
+#----------------------------------------------------------------------------------
+#        INFLUENCE OF SELF EFFICACY ON PLAYERS' DIFFICULTY ESTIMATION (BET)
+#----------------------------------------------------------------------------------
 
 self.eff.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
 self.eff.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
@@ -1092,14 +1150,14 @@ self.eff.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$erro
   
 ```
 
-OLD!! We investigate the link between player's reported game habits, feeling of self efficacy, risk aversion and player's behavior in the different games. Feeling of self efficacy shows a small link with performance on motor task (Kendal $\tau$=0.26, p<0.01) and logical task (Kendal $\tau$=0.17, p=0.053). Aversion to risk shows a small link with performance on sensory (Kendal $\tau$=0.29, p<0.001) and logical task (Kendal $\tau$=0.27 p<0.01). In this experiment, female players tend to have a lower performance on motor (Kendal $\tau$=-0.4, p<0.001) and logical tasks (Kendal $\tau$=-0.25, p<0.01). Player's sex is also slightly related to the error between subjective and objective difficulty (Kendal $\tau$=-0.19, p=0.053) i.e. compared to male players, female players tend to underestimate logical task difficulty.
+<!-- OLD!! We investigate the link between player's reported game habits, feeling of self efficacy, risk aversion and player's behavior in the different games. Feeling of self efficacy shows a small link with performance on motor task (Kendal $\tau$=0.26, p<0.01) and logical task (Kendal $\tau$=0.17, p=0.053). Aversion to risk shows a small link with performance on sensory (Kendal $\tau$=0.29, p<0.001) and logical task (Kendal $\tau$=0.27 p<0.01). In this experiment, female players tend to have a lower performance on motor (Kendal $\tau$=-0.4, p<0.001) and logical tasks (Kendal $\tau$=-0.25, p<0.01). Player's sex is also slightly related to the error between subjective and objective difficulty (Kendal $\tau$=-0.19, p=0.053) i.e. compared to male players, female players tend to underestimate logical task difficulty. -->
 
 #Influence of Objective difficulty on Subjective Difficulty
 
-```{r plot.subjective.objective.difficulty, echo=FALSE}   
-#------------------------------------------------------
-#     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY 
-#------------------------------------------------------
+```{r plot.subjective.objective.difficulty.bet, echo=FALSE}   
+#------------------------------------------------------------------------
+#     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY (BET APPROACH)
+#------------------------------------------------------------------------
 
 plot.subjective.difficulty <- function(DT,selGroup,title){
   
@@ -1184,7 +1242,7 @@ plot.subjective.difficulty <- function(DT,selGroup,title){
 
 ##All tasks
 
-```{r plot.subjective.difficulty.all, echo=FALSE}
+```{r plot.subjective.difficulty.all.bet, echo=FALSE}
 plot.subjective.difficulty(DTAll,"all", "All tasks, all groups")
 plot.subjective.difficulty(DTAll,"good", "All tasks, good")
 plot.subjective.difficulty(DTAll,"medium", "All tasks, medium")
@@ -1431,7 +1489,7 @@ summary(glm(error.subj.diff.mise~est.confidence.norm,data = DTL))
 
 ```
 
-```{r test, echo=FALSE} 
+```{r test.trucs, echo=FALSE} 
 p <- lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=DTAll)
 summary(p)
 
@@ -1480,108 +1538,20 @@ summary(lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=D
 
 ```
 
-```{r test2, echo=FALSE} 
-#------------------------------------------------------------------------
-#       MODELING SUBJECTIVE DIFFICULTY ON CONFIDENCE (NOT BET)
-#------------------------------------------------------------------------
-#adding error between subjective difficulty and objective difficulty
-DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
-DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
-DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
+####CONFIDENCE SCALE APPROACH
 
-#evaluating confidence as a damped over time sum of win and fails;
-#each win and fail importance based on objective difficulty at that time
-id = DTAll$IDjoueur; # tmp vector faster to read
-cur.confidence = 0;
-cur.confidence.liss = 0;
-lastID <- id[1];
-est.confidence <- numeric(nrow(DTAll))
-est.confidence[1] = 0;
-obj.diff = DTAll$obj.diff
-alpha <- 0.9
-i = 1
-for(i in 2:nrow(DTAll)){
-  if(id[i] != lastID){
-    cur.confidence.liss = 0;
-  }else{
-    if(gagnant[i-1]){
-      cur.confidence = obj.diff[i-1];
-    }else{
-      cur.confidence = -(1 - obj.diff[i-1]);
-    }
-    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
-  }
-  lastID <- id[i];
-  est.confidence[i] <- cur.confidence.liss;
-}
-
-DTAll$est.confidence = est.confidence;
-DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
-
-#update DTM DTS and DTL
-DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
-DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
-DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
-
-####tests
-p <- lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTAll)
-summary(p)
-
-plot.p <- function (DT,title){
-  if(nrow(DT) == 0)
-    return()
-  df <- data.frame(time=DT$action_de_jeu,
-                   difficulty=DT$difficulty,
-                   confidence=DT$confianceNorm)
-  p <- ggplot(df,aes(x=time)) 
-  p <- p + geom_step(aes(y=confidence,colour="Ranked Confidence"))
-  
-  if(length(DT$obj.diff) > 0)
-    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
-  else
-    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
-  
-  p <- p + geom_step(aes(y=DT$est.confidence.norm,colour="Estimated Confidence"))
- 
-  p <- p + ylim(0, 1)
-  p <- p + scale_colour_manual(
-    values = c("Difficulty parameter" = "red",
-               "Objective Difficulty" = "red",
-               "Estimated Confidence" = "green",
-               "Ranked Confidence" = "blue"))
-  p <- p  +  ggtitle(title);
-  print(p)  
-}
-
-plot.p <- function (DT,title){
-  player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)
-  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"bad"))
-  player = sample(unique(DT[niveau.group == "medium"],by="IDjoueur")$IDjoueur,1)
-  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"medium"))
-  player = sample(unique(DT[niveau.group == "good"],by="IDjoueur")$IDjoueur,1)
-  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
-   
-}
-
-plot.p(DTM,"Motor")
-summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTM))
-plot.p(DTS,"Sensory")
-summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTS))
-plot.p(DTL,"Logical")
-summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTL))
-
-```
+#Influence of Objective difficulty on Subjective Difficulty
 
 ```{r plot.subjective.objective.difficulty.confidence.scale, echo=FALSE}   
-#--------------------------------------------------------------------------------------
-#     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY (CONFIDENCE SCALE APPROACH) 
-#--------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY (CONFIDENCE SCALE APPROACH)
+#-------------------------------------------------------------------------------------
 
 plot.subjective.difficulty <- function(DT,selGroup,title){
   
   print(selGroup)
   
-  # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
+  # Lien entre confiance normalisée et difficultée estimée (hard / easy effect)
   obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
   nb.bins = length(obj.diff.quants)-1
   subj.diff.med = numeric(nb.bins)
@@ -1693,3 +1663,581 @@ plot.subjective.difficulty(DTL,"good","Logical, good")
 plot.subjective.difficulty(DTL,"medium","Logical, medium")
 plot.subjective.difficulty(DTL,"bad","Logical, bad")
 ```
+
+#Influence of Playtime on Subjective Difficulty Error
+
+```{r platytime.subjective.difficulty.funcs.confidence.scale, echo=FALSE} 
+plot.subjective.diff.error.density <- function (DT) {
+  p <- ggplot(DT, aes(action_de_jeu, error.subj.diff.confiance)) + geom_bin2d(binwidth=c(1,0.05))
+  print(p)
+}
+
+plot.subj.obj.diff.with.time <- function(DT,selGroup,title){
+  time.quants = seq(0,30,3)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  nb.bins = length(time.quants)-1
+  time.bin = numeric(nb.bins)
+  nb.vals = numeric(nb.bins)
+  error.diff = numeric(nb.bins)
+  # 
+  # obj.diff.bin.cur = 0;
+  test.pvals = numeric(nb.bins)
+  conf.min = numeric(nb.bins)
+  conf.max = numeric(nb.bins)
+  subj.diff.mean = numeric(nb.bins)
+  obj.diff.mean = numeric(nb.bins)
+  shapes =  numeric(nb.bins)
+  # delta.obj.subj = numeric(nb.bins)
+  # hist(DT$obj.diff)
+  for(i in 1:nb.bins){
+    time.bin.cur = (time.quants[i] + time.quants[i+1])/2.0
+    DTLoc = DT[action_de_jeu > time.quants[i] & action_de_jeu<=time.quants[i+1]]
+    if(selGroup != "all")
+      DTLoc = DTLoc[niveau.group==selGroup]
+    time.bin[i] = time.bin.cur
+    subj.diff = DTLoc$subj.diff.confiance
+    obj.diff = DTLoc$obj.diff
+    # subj.diff.med[i] = NA
+    test.pvals[i] = NA
+    conf.min[i] = NA
+    conf.max[i] = NA
+    error.diff[i] = NA
+    subj.diff.mean[i] = NA
+        obj.diff.mean[i] = NA
+    # delta.obj.subj[i] = NA
+    shapes[i] = 16
+    nb.vals[i] = length(subj.diff)
+    if(nb.vals[i] > 1){
+      try.res = try(test.res <- wilcox.test(subj.diff,obj.diff,conf.int=T, paired=T)) 
+      if (class(try.res) != "try-error"){
+        #print(test.res)
+        #hist(subj.diff)
+        test.pvals[i] = format.pval.stars(test.res$p.value)
+        if(test.res$p.value < 0.05)
+          shapes[i] = 24
+        subj.diff.mean[i] = mean(subj.diff)
+        obj.diff.mean[i] = mean(obj.diff)
+        error.diff[i] = test.res$estimate
+        conf.min[i] = test.res$conf.int[1]
+        conf.max[i] = test.res$conf.int[2]
+        #delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
+      }
+    }
+  }
+  
+  #print table of pvalues
+  print(data.table(time.bin=time.bin,subj.diff.mean=subj.diff.mean,obj.diff.mean=obj.diff.mean,error.diff=error.diff,n=nb.vals,pval=test.pvals))
+ 
+  #kernel smooth
+  # subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.mise,bandwidth = 0.2)
+  # DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
+   
+   DTPlot = data.table(time=time.bin,error.diff=error.diff, shapes=shapes)
+   print(DTPlot)
+  # 
+  p = ggplot() + ggtitle(title) +
+
+        geom_point(aes(x=DTPlot$time,y=DTPlot$error.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
+        xlim(0,30)+
+        ylim(-0.4,0.2)+
+        geom_errorbar(aes(x=DTPlot$time, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        geom_abline(intercept = 0, slope = 0, color="blue") +
+        xlab("Time") + ylab("Estimation Error") + theme(text = element_text(size=15))
+
+  print(p)
+}
+
+
+
+``` 
+
+##For all groups, motor, sensitive and logical
+
+```{r platytime.subjective.difficulty.all.confidence.scale, echo=FALSE} 
+plot.subjective.diff.error.density(DTM)
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM))
+plot.subjective.diff.error.density(DTS)
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS))
+plot.subjective.diff.error.density(DTL)
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL))
+
+plot.subj.obj.diff.with.time(DTM,"all", "Motor, all groups")
+plot.subj.obj.diff.with.time(DTS,"all", "Sensory, all groups")
+plot.subj.obj.diff.with.time(DTL,"all", "Logical, all groups")
+``` 
+
+##For all taks, per group
+
+```{r platytime.subjective.difficulty.all.tasks.confidence.scale, echo=FALSE} 
+plot.subjective.diff.error.density(DTAll[niveau.group=="bad"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTAll[niveau.group=="bad"]))
+plot.subjective.diff.error.density(DTAll[niveau.group=="medium"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTAll[niveau.group=="medium"]))
+plot.subjective.diff.error.density(DTAll[niveau.group=="good"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTAll[niveau.group=="good"]))
+
+plot.subj.obj.diff.with.time(DTAll,"bad", "All tasks, bad")
+plot.subj.obj.diff.with.time(DTAll,"medium", "All tasks, medium")
+plot.subj.obj.diff.with.time(DTAll,"good", "All tasks, good")
+``` 
+
+
+
+##Per group, motor task
+
+```{r platytime.subjective.difficulty.group.motor.confidence.scale, echo=FALSE} 
+plot.subjective.diff.error.density(DTM[niveau.group=="bad"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTM,"bad", "Motor, bad")
+plot.subjective.diff.error.density(DTM[niveau.group=="medium"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTM,"medium", "Motor, medium")
+plot.subjective.diff.error.density(DTM[niveau.group=="good"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTM,"good", "Motor, good")
+
+``` 
+
+##Per group, sensory task
+
+```{r platytime.subjective.difficulty.group.sensory.confidence.scale, echo=FALSE} 
+
+plot.subjective.diff.error.density(DTS[niveau.group=="bad"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTS,"bad", "Sensory, bad")
+plot.subjective.diff.error.density(DTS[niveau.group=="medium"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTS,"medium", "Sensory, medium")
+plot.subjective.diff.error.density(DTS[niveau.group=="good"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTS,"good", "Sensory, good")
+``` 
+
+##Per group, logical task
+
+```{r platytime.subjective.difficulty.group.logical.confidence.scale, echo=FALSE} 
+plot.subjective.diff.error.density(DTL[niveau.group=="bad"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="bad"]))
+plot.subj.obj.diff.with.time(DTL,"bad", "Logical, bad")
+plot.subjective.diff.error.density(DTL[niveau.group=="medium"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="medium"]))
+plot.subj.obj.diff.with.time(DTL,"medium", "Logical, medium")
+plot.subjective.diff.error.density(DTL[niveau.group=="good"])
+summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="good"]))
+plot.subj.obj.diff.with.time(DTL,"good", "Logical, good")
+```
+
+
+#Link between d(t-1) and error
+
+```{r previous.diff.and.error.confidence.scale, echo=FALSE} 
+
+#Plot la courbe de diff pour un joueur
+plot.diff.curve.confidence <- function (DT,title){
+  if(nrow(DT) == 0)
+    return()
+  df <- data.frame(time=DT$action_de_jeu,
+                   difficulty=DT$difficulty,
+                   confiance=DT$confianceNorm)
+  p <- ggplot(df,aes(x=time)) 
+  p <- p + geom_step(aes(y=confiance,colour="Confiance"))
+  
+  if(length(DT$obj.diff) > 0)
+    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
+  else
+    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
+  
+  p <- p + geom_step(aes(y=DT$est.confidence.norm,colour="Estimated Confidence"))
+ 
+  p <- p + ylim(0, 1)
+  p <- p + scale_colour_manual(
+    values = c("Difficulty parameter" = "red",
+               "Objective Difficulty" = "red",
+               "Estimated Confidence" = "green",
+               "Confiance" = "blue"))
+  p <- p  +  ggtitle(title);
+  print(p)  
+}
+
+plot.random.diff.curve.confidence<- function (DT,title){
+  player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"bad"))
+  player = sample(unique(DT[niveau.group == "medium"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"medium"))
+  player = sample(unique(DT[niveau.group == "good"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
+   
+}
+
+plot.random.diff.curve.confidence(DTM,"Motor")
+summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTM))
+plot.random.diff.curve.confidence(DTS,"Sensory")
+summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTS))
+plot.random.diff.curve.confidence(DTL,"Logical")
+summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTL))
+
+```
+
+```{r test, echo=FALSE} 
+p <- lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTAll)
+summary(p)
+
+plot.p <- function (DT,title){
+  if(nrow(DT) == 0)
+    return()
+  df <- data.frame(time=DT$action_de_jeu,
+                   difficulty=DT$difficulty,
+                   confiance=DT$confianceNorm)
+  p <- ggplot(df,aes(x=time)) 
+  p <- p + geom_step(aes(y=confiance,colour="Confiance"))
+  
+  if(length(DT$obj.diff) > 0)
+    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
+  else
+    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
+  
+  p <- p + geom_step(aes(y=DT$est.confidence.norm,colour="Estimated Confidence"))
+ 
+  p <- p + ylim(0, 1)
+  p <- p + scale_colour_manual(
+    values = c("Difficulty parameter" = "red",
+               "Objective Difficulty" = "red",
+               "Estimated Confidence" = "green",
+               "Confiance" = "blue"))
+  p <- p  +  ggtitle(title);
+  print(p)  
+}
+
+plot.p <- function (DT,title){
+  player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"bad"))
+  player = sample(unique(DT[niveau.group == "medium"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"medium"))
+  player = sample(unique(DT[niveau.group == "good"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
+   
+}
+
+plot.p(DTM,"Motor")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTM))
+plot.p(DTS,"Sensory")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTS))
+plot.p(DTL,"Logical")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTL))
+
+```
+
+```{r test2, echo=FALSE} 
+#-------------------------------------------------------------------------------------
+#       MODELING SUBJECTIVE DIFFICULTY ON CONFIDENCE (CONFIDENCE SCALE APPROACH)
+#-------------------------------------------------------------------------------------
+
+#adding error between subjective difficulty and objective difficulty
+DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
+DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
+DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
+
+#evaluating confidence as a damped over time sum of win and fails;
+#each win and fail importance based on objective difficulty at that time
+id = DTAll$IDjoueur; # tmp vector faster to read
+cur.confidence = 0;
+cur.confidence.liss = 0;
+lastID <- id[1];
+est.confidence <- numeric(nrow(DTAll))
+est.confidence[1] = 0;
+obj.diff = DTAll$obj.diff
+alpha <- 0.9
+i = 1
+for(i in 2:nrow(DTAll)){
+  if(id[i] != lastID){
+    cur.confidence.liss = 0;
+  }else{
+    if(gagnant[i-1]){
+      cur.confidence = obj.diff[i-1];
+    }else{
+      cur.confidence = -(1 - obj.diff[i-1]);
+    }
+    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
+  }
+  lastID <- id[i];
+  est.confidence[i] <- cur.confidence.liss;
+}
+
+DTAll$est.confidence = est.confidence;
+DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+
+#update DTM DTS and DTL
+DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
+DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
+DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
+
+####tests
+p <- lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTAll)
+summary(p)
+
+plot.p <- function (DT,title){
+  if(nrow(DT) == 0)
+    return()
+  df <- data.frame(time=DT$action_de_jeu,
+                   difficulty=DT$difficulty,
+                   confidence=DT$confianceNorm)
+  p <- ggplot(df,aes(x=time)) 
+  p <- p + geom_step(aes(y=confidence,colour="Ranked Confidence"))
+  
+  if(length(DT$obj.diff) > 0)
+    p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
+  else
+    p <- p + geom_step(aes(y=difficulty,colour="Difficulty parameter"))
+  
+  p <- p + geom_step(aes(y=DT$est.confidence.norm,colour="Estimated Confidence"))
+ 
+  p <- p + ylim(0, 1)
+  p <- p + scale_colour_manual(
+    values = c("Difficulty parameter" = "red",
+               "Objective Difficulty" = "red",
+               "Estimated Confidence" = "green",
+               "Ranked Confidence" = "blue"))
+  p <- p  +  ggtitle(title);
+  print(p)  
+}
+
+plot.p <- function (DT,title){
+  player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"bad"))
+  player = sample(unique(DT[niveau.group == "medium"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"medium"))
+  player = sample(unique(DT[niveau.group == "good"],by="IDjoueur")$IDjoueur,1)
+  plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
+   
+}
+
+plot.p(DTM,"Motor")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTM))
+plot.p(DTS,"Sensory")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTS))
+plot.p(DTL,"Logical")
+summary(lmer(error.subj.diff.confiance ~ est.confidence.norm + (1 | IDjoueur), data=DTL))
+
+```
+
+##Subjective difficulty and play habits
+
+###Playing video game in general and subjective difficulty error
+
+```{r echo=FALSE}
+#-----------------------------------------------------------------------------------------------------------
+#        INFLUENCE OF PLAYERS' PROFILES ON PLAYERS' DIFFICULTY ESTIMATION (BASED ON CONFIDENCE SCALE)
+#-----------------------------------------------------------------------------------------------------------
+
+#ATTENTION, CACUL BASE SUR L'ECHELLE DE CONFIANCE : error.subj.diff.confiance.mean
+
+#--------------------------------------------------------------------------------------------------------
+#        INFLUENCE OF VIDEO GAME EXPERTISE ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#--------------------------------------------------------------------------------------------------------
+
+pvg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.video.games,"pvg.on.error")
+```
+
+###Playing board game in general and subjective difficulty error
+
+```{r echo=FALSE}
+#--------------------------------------------------------------------------------------------------------
+#        INFLUENCE OF BOARD GAME EXPERTISE ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#--------------------------------------------------------------------------------------------------------
+
+pbg.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$play.board.games,"pbg.on.error")
+```
+
+###In game level and subjective difficulty error
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------------------------------
+#        INFLUENCE OF IN GAME LEVEL ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#----------------------------------------------------------------------------------------------
+
+niveau.group.on.error <- test.profile.multigroups(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error")
+
+niveau.group.on.error.m <- test.profile.multigroups(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.m")
+niveau.group.on.error.s <- test.profile.multigroups(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.s")
+niveau.group.on.error.l <- test.profile.multigroups(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau.group,"niveau.group.on.error.l")
+
+
+niveau.group.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error")
+
+niveau.group.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.m")
+niveau.group.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.s")
+niveau.group.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,"niveau.group.on.error.l")
+
+```
+
+###Sex and subjective difficulty error
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------------------------------
+#        INFLUENCE OF SEX AND LEVEL ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#----------------------------------------------------------------------------------------------
+
+sexe.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error")
+
+sexe.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.m")
+sexe.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.s")
+sexe.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.l")
+
+sexe.on.error.2 <- test.profile.binary(unique(DTAll[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.2")
+
+sexe.on.error.m.2 <- test.profile.binary(unique(DTM[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.m.2")
+sexe.on.error.s.2 <- test.profile.binary(unique(DTS[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.s.2")
+sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.l.2")
+
+```
+
+###Risk aversion and subjective difficulty error
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------------------------------
+#        INFLUENCE OF RISK AVERSION ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#----------------------------------------------------------------------------------------------
+
+risk.av.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+risk.av.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$risk.av,"risk.av.on.error")
+
+
+```
+
+###Self efficacy and subjective difficulty error
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------------------------------
+#        INFLUENCE OF SELF EFFICACY ON PLAYERS' DIFFICULTY ESTIMATION (CONFIDENCE SCALE)
+#----------------------------------------------------------------------------------------------
+
+self.eff.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+self.eff.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
+  
+```
+
+
+# ```{r plot.subjective.objective.difficulty.confidence.scale, echo=FALSE}   
+# #--------------------------------------------------------------------------------------
+# #     SHOWING SUBJECTIVE VS OBJECTIVE DIFFICULTY (CONFIDENCE SCALE APPROACH) 
+# #--------------------------------------------------------------------------------------
+# 
+# plot.subjective.difficulty <- function(DT,selGroup,title){
+#   
+#   print(selGroup)
+#   
+#   # Lien entre mise normalisée et difficultée estimée (hard / easy effect)
+#   obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+#   nb.bins = length(obj.diff.quants)-1
+#   subj.diff.med = numeric(nb.bins)
+#   obj.diff.bin = numeric(nb.bins)
+#   obj.diff.bin.cur = 0;
+#   test.pvals = numeric(nb.bins)
+#   conf.min = numeric(nb.bins)
+#   conf.max = numeric(nb.bins)
+#   nb.vals = numeric(nb.bins)
+#   shapes =  numeric(nb.bins)
+#   delta.obj.subj = numeric(nb.bins)
+#   hist(DT$obj.diff)
+#   for(i in 1:nb.bins){
+#     #obj.diff.bin.cur = round(i/10,1)
+#     #subj.diff = DT[round(obj.diff,1)==obj.diff.bin.cur]$subj.diff.mise
+#     obj.diff.bin.cur = (obj.diff.quants[i] + obj.diff.quants[i+1])/2.0
+#     #subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
+#     DTLoc = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]
+#     if(selGroup != "all")
+#       DTLoc = DTLoc[niveau.group==selGroup]
+#     DTLoc = DTLoc[,.(confiance.mean=mean(subj.diff.confiance)),by=IDjoueur]
+#     subj.diff = DTLoc$confiance.mean
+#     obj.diff.bin[i] = obj.diff.bin.cur
+#     subj.diff.med[i] = NA
+#     test.pvals[i] = NA
+#     conf.min[i] = NA
+#     conf.max[i] = NA
+#     delta.obj.subj[i] = NA
+#     shapes[i] = 16
+#     nb.vals[i] = length(subj.diff)
+#     if(nb.vals[i] > 1){
+#       try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
+#       if (class(try.res) != "try-error"){
+#         #print(test.res)
+#         #hist(subj.diff)
+#         test.pvals[i] = format.pval.stars(test.res$p.value)
+#         if(test.res$p.value < 0.05)
+#           shapes[i] = 24
+#         #subj.diff.med[i] = mean(subj.diff)
+#         subj.diff.med[i] = test.res$estimate
+#         conf.min[i] = test.res$conf.int[1]
+#         conf.max[i] = test.res$conf.int[2]
+#         delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
+#       }
+#     }
+#   }
+#   
+#   #print table of pvalues
+#   print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
+#   
+#   #summary
+#   print("mean and sd of nb players per bin")
+#   DTNbVals = data.table(nb = nb.vals, pval=test.pvals)
+#   print(DTNbVals[!is.na(pval)])
+#   print(signif(mean(DTNbVals[!is.na(pval)]$nb),digits=3))
+#   print(signif(sd(DTNbVals[!is.na(pval)]$nb),digits=3))
+#   
+#   #kernel smooth
+#   subj.diff.smooth <- ksmooth(x=DT$obj.diff,y=DT$subj.diff.confiance,bandwidth = 0.2)
+#   DTSmooth = data.table(x=subj.diff.smooth$x,y=subj.diff.smooth$y)
+#   
+#   DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med, shapes=shapes)
+#  
+#   p = ggplot() + ggtitle(title) +
+#  #       geom_line(aes(x=DTPouet$x,y=DTPouet$y))+
+#         geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
+#         xlim(0,1)+
+#         ylim(0,1)+
+#         geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+#         geom_abline(intercept = 0, slope = 1, color="blue") +
+#         xlab("Objective Difficulty") + ylab("Subjective Difficulty") + theme(text = element_text(size=15))
+#   
+#   print(p)
+# }
+# ```
+
+##All tasks
+
+# ```{r plot.subjective.difficulty.all.confidence.scale, echo=FALSE}
+# plot.subjective.difficulty(DTAll,"all", "All tasks, all groups")
+# plot.subjective.difficulty(DTAll,"good", "All tasks, good")
+# plot.subjective.difficulty(DTAll,"medium", "All tasks, medium")
+# plot.subjective.difficulty(DTAll,"bad", "All tasks, bad")
+# ```
+
+##Motor task
+
+# ```{r plot.subjective.difficulty.motor.confidence.scale, echo=FALSE}
+# plot.subjective.difficulty(DTM,"all", "Motor, all")
+# plot.subjective.difficulty(DTM,"good", "Motor, good")
+# plot.subjective.difficulty(DTM,"medium", "Motor, medium")
+# plot.subjective.difficulty(DTM,"bad", "Motor, bad")
+# ```
+
+##Sensory task
+
+# ```{r plot.subjective.difficulty.sensory.confidence.scale, echo=FALSE}
+# plot.subjective.difficulty(DTS,"all","Sensory, all")
+# plot.subjective.difficulty(DTS,"good","Sensory, good")
+# plot.subjective.difficulty(DTS,"medium","Sensory, medium")
+# plot.subjective.difficulty(DTS,"bad","Sensory, bad")
+# ```
+
+##Logical task
+
+# ```{r plot.subjective.difficulty.logical.confidence.scale, echo=FALSE}
+# plot.subjective.difficulty(DTL,"all","Logical, all")
+# plot.subjective.difficulty(DTL,"good","Logical, good")
+# plot.subjective.difficulty(DTL,"medium","Logical, medium")
+# plot.subjective.difficulty(DTL,"bad","Logical, bad")
+# ```
