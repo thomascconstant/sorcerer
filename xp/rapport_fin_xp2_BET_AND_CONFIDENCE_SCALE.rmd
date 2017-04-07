@@ -1540,6 +1540,8 @@ summary(lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=D
 
 ####CONFIDENCE SCALE APPROACH
 
+!!!!Ici commence l'approche basée sur l'échelle de confiance!!!!
+
 #Influence of Objective difficulty on Subjective Difficulty
 
 ```{r plot.subjective.objective.difficulty.confidence.scale, echo=FALSE}   
