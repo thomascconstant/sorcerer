@@ -241,6 +241,15 @@ DTAll$risk.av = DTAll$risk.av/10
 DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
 
+# Printing data from players
+DTQuestLit <- subset(DTQuest, select=c("IDjoueur","sexe", "profilJoueur8"))
+p <- nrow(DTQuestLit[profilJoueur8==1])
+cat("Nombre de participants se déclarant comme joueurs : ", p)
+#===#
+p <- DTQuestLit[ which( DTQuestLit$profilJoueur8 == 1 & DTQuestLit$sexe == 1) , ]
+p <- nrow(p[profilJoueur8==1])
+cat("Nombre de femmes se déclarant comme joueuses : ", p)
+
 # clear not used data
 DTAll <- DTAll[,c("jeuxFav","horodateur","prenomNom"):=NULL] #dont need them at all
 

@@ -197,7 +197,7 @@ cols.self.eff <- c("autoEffJoueur1","autoEffJoueur2","autoEffJoueur3","autoEffJo
                    "autoEffJoueur9","autoEffJoueur10")
 DTAll = DTAll[, self.eff := rowSums(.SD,na.rm=TRUE), .SDcols = cols.self.eff]
 DTAll$self.eff = DTAll$self.eff/10
-DTAll[profilJoueur8==0,self.eff := NA] #NA tout ceux qui ne jouaient pas au jeu vidéo 
+DTAll[profilJoueur8==0,self.eff := NA] #NA tout ceux qui ne jouaient pas au jeu vidéo
 DTAll <- DTAll[,c("autoEffJoueur1","autoEffJoueur2","autoEffJoueur3","autoEffJoueur4",
                    "autoEffJoueur5","autoEffJoueur6","autoEffJoueur7","autoEffJoueur8",
                    "autoEffJoueur9","autoEffJoueur10","profilJoueur8"):=NULL] #dont need them anymore
@@ -209,6 +209,15 @@ DTAll = DTAll[, risk.av := rowSums(.SD,na.rm=TRUE), .SDcols = cols.risk.av]
 DTAll$risk.av = DTAll$risk.av/10
 DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
+
+# Printing data from players
+DTQuestLit <- subset(DTQuest, select=c("IDjoueur","sexe", "profilJoueur8"))
+p <- nrow(DTQuestLit[profilJoueur8==1])
+cat("Nombre de participants se déclarant comme joueurs : ", p)
+#===#
+p <- DTQuestLit[ which( DTQuestLit$profilJoueur8 == 1 & DTQuestLit$sexe == 1) , ]
+p <- nrow(p[profilJoueur8==1])
+cat("Nombre de femmes se déclarant comme joueuses : ", p)
 
 # clear not used data
 DTAll <- DTAll[,c("jeuxFav","horodateur","prenomNom"):=NULL] #dont need them at all
