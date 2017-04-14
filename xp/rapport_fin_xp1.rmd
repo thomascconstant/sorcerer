@@ -1384,6 +1384,55 @@ summary(glm(error.subj.diff.mise~timeNorm + obj.diff,data = DTL[niveau.group=="g
 plot.subj.obj.diff.with.time(DTL,"good", "Logical, good")
 ```
 
+
+#Players level analysis
+
+```{r players.level.analysis.functions, echo=FALSE} 
+level.between.games <- function(DT){
+  
+  
+  
+}
+
+level.gamer.profile <- function(DT){
+  p <- ggplot(DT, aes(x=play.video.games, y=niveau)) + geom_point(alpha=0.1)
+  print(p)  
+  
+  
+  DT$play.video.games.group = 0
+  DT[play.video.games > 0.6 , play.video.games.group := 1]
+  
+  DT = DT[,.(niveau=mean(niveau),play.video.games=mean(play.video.games)),by=.(play.video.games.group,IDjoueur)]
+  
+  
+  
+  res = DT[,.(nb=nrow(.SD)),by=play.video.games.group]
+  print(res)
+  
+  #chisq.test(x=DT$play.video.games.group,y=DT$niveau.group)
+  
+  #print(wilcox.test(DT[play.video.games.group == 0]$niveau, mu=0, conf.int=T))
+  #print(wilcox.test(DT[play.video.games.group == 1]$niveau, mu=0, conf.int=T))
+  
+  print(wilcox.test(DT[play.video.games.group == 0]$niveau,DT[play.video.games.group == 1]$niveau, conf.int=T))
+  
+  p = ggplot(DT, aes(factor(play.video.games.group), niveau)) + geom_boxplot()
+  print(p)
+  
+}
+
+```
+
+```{r players.level.analysis, echo=FALSE} 
+level.gamer.profile(DTM)
+level.gamer.profile(DTS)
+level.gamer.profile(DTL)
+
+
+  
+
+```
+
 #Link between d(t-1) and error
 
 
