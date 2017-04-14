@@ -774,6 +774,7 @@ DTAll <- rbind(DTAll,DTS)
 DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
 DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
 DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
+DTAll <- DTAll[,subj.diff.mise.mean:=mean(subj.diff.mise),by=IDjoueur]
 
 #evaluating confidence as a damped over time sum of win and fails;
 #each win and fail importance based on objective difficulty at that time
@@ -1094,6 +1095,32 @@ self.eff.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$erro
 self.eff.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
 self.eff.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
   
+```
+
+
+###Self efficacy (from subj diff, not quest.) and subjective difficulty error
+
+```{r echo=FALSE}
+#ggplot(DTM, aes(group=mise,x=mise, y=error.subj.diff.mise)) + 
+#  geom_boxplot(outlier.shape=NA) +
+#  geom_jitter(position=position_jitter(width=.3, height=0, alpha=0.2))
+
+
+self.eff.subj.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+self.eff.subj.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,unique(DTM,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+self.eff.subj.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,unique(DTS,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.Oerror")
+self.eff.subj.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,unique(DTL,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+
+```
+###Self efficacy (from subj diff, not quest.) and player level
+
+```{r echo=FALSE}
+self.eff.subj.on.error <- test.profile(unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$niveau,unique(DTAll,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+
+self.eff.subj.on.error <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$niveau,unique(DTM,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+self.eff.subj.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$niveau,unique(DTS,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.Oerror")
+self.eff.subj.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$niveau,unique(DTL,by=c("IDjoueur","nom_du_jeu"))$subj.diff.mise.mean,"self.eff.subj.on.error")
+
 ```
 
 OLD!! We investigate the link between player's reported game habits, feeling of self efficacy, risk aversion and player's behavior in the different games. Feeling of self efficacy shows a small link with performance on motor task (Kendal $\tau$=0.26, p<0.01) and logical task (Kendal $\tau$=0.17, p=0.053). Aversion to risk shows a small link with performance on sensory (Kendal $\tau$=0.29, p<0.001) and logical task (Kendal $\tau$=0.27 p<0.01). In this experiment, female players tend to have a lower performance on motor (Kendal $\tau$=-0.4, p<0.001) and logical tasks (Kendal $\tau$=-0.25, p<0.01). Player's sex is also slightly related to the error between subjective and objective difficulty (Kendal $\tau$=-0.19, p=0.053) i.e. compared to male players, female players tend to underestimate logical task difficulty.
