@@ -249,6 +249,11 @@ cat("Nombre de participants se déclarant comme joueurs : ", p)
 p <- DTQuestLit[ which( DTQuestLit$profilJoueur8 == 1 & DTQuestLit$sexe == 1) , ]
 p <- nrow(p[profilJoueur8==1])
 cat("Nombre de femmes se déclarant comme joueuses : ", p)
+#===#
+DTQuestAge <- subset(DTQuest, select=c("age"))
+prout <- as.numeric(DTQuestAge$age)
+p <- median(DTQuestAge$age, na.rm = T)
+cat("Age médian des joueurs : ", p)
 
 # clear not used data
 DTAll <- DTAll[,c("jeuxFav","horodateur","prenomNom"):=NULL] #dont need them at all
