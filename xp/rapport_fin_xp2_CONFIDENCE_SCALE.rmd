@@ -242,6 +242,10 @@ DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
 
 # Printing data from players
+DTQuestLit <- subset(DTQuest, select=c("IDjoueur"))
+p <- nrow(DTQuestLit)
+cat("Nombre de participants à l'expérimentation : ", p)
+#===#
 DTQuestLit <- subset(DTQuest, select=c("IDjoueur","sexe", "profilJoueur8"))
 p <- nrow(DTQuestLit[profilJoueur8==1])
 cat("Nombre de participants se déclarant comme joueurs : ", p)
