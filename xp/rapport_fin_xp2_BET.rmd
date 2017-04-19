@@ -242,6 +242,10 @@ DTAll <- DTAll[,c("loterie1","loterie2","loterie3","loterie4","loterie5",
                   "loterie6","loterie7","loterie8","loterie9","loterie10"):=NULL] #dont need them anymore
 
 # Printing data from players
+DTQuestLit <- subset(DTQuest, select=c("IDjoueur"))
+p <- nrow(DTQuestLit)
+cat("Nombre de participants à l'expérimentation : ", p)
+#===#
 DTQuestLit <- subset(DTQuest, select=c("IDjoueur","sexe", "profilJoueur8"))
 p <- nrow(DTQuestLit[profilJoueur8==1])
 cat("Nombre de participants se déclarant comme joueurs : ", p)
@@ -471,6 +475,7 @@ print(paste("Total number of outliers logical task: ",toString(nrow(unique(outli
 DTM <- DTM[!IDjoueur %in% unlist(outliers[type=="Moteur"]$id)]
 DTS <- DTS[!IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id)]
 DTL <- DTL[!IDjoueur %in% unlist(outliers[type=="Logique"]$id)]
+
 DTAll <- data.table()
 DTAll <- rbind(DTAll,DTL)
 DTAll <- rbind(DTAll,DTM)
@@ -479,147 +484,149 @@ DTAll <- rbind(DTAll,DTS)
 
 # Removing Outliers based on CONFIDENCE SCALE
 
-```{r removing.outliers.setup.cs, echo=FALSE}
-#------------------------------------------------------
-#            OUTLIERS SETUP
-#------------------------------------------------------
+non nécessaire sur ce fichier !!
 
-DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
-DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
-DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
-
-
-get.outliers <- function(DTDescMLoc,DTDescSLoc,DTDescLLoc){
-  outliersM <- boxplot.stats(DTDescMLoc$var)$out
-  outliersS <- boxplot.stats(DTDescSLoc$var)$out
-  outliersL <- boxplot.stats(DTDescLLoc$var)$out
-  
-  outliers = data.table(type=character(0),id=character(0))
-  setkey(outliers,id)
-  if(length(outliersM) > 0)
-    outliers = merge(outliers,data.table(id=DTDescMLoc[var %in% outliersM]$IDjoueur,type="Moteur"),by=c("id","type"),all=TRUE)
-  if(length(outliersS) > 0)
-    outliers = merge(outliers,data.table(id=DTDescSLoc[var %in% outliersS]$IDjoueur,type="Sensoriel"),by=c("id","type"),all=TRUE)
-  if(length(outliersL) > 0)
-    outliers = merge(outliers,data.table(id=DTDescLLoc[var %in% outliersL]$IDjoueur,type="Logique"),by=c("id","type"),all=TRUE)
-    
-  return(outliers)
-}
-
-plot.outliers <- function(DT,title){
-  p <- ggplot(DT, 
-            aes(type,var)) + 
-            xlab("Difficulty Type") + 
-            ylab(title)
-  p <- p + geom_boxplot() + geom_point(shape=1) 
-  print(p)
-}
-```
-
-```{r detect.outliers.cs.sd, echo=FALSE}
-#------------------------------------------------------
-#            OUTLIERS CS STD DEV
-#------------------------------------------------------
-DTDescM = DTM[,.(type="Moteur",var=sd(confianceNorm)),by=IDjoueur]
-DTDescS = DTS[,.(type="Sensoriel",var=sd(confianceNorm)),by=IDjoueur]
-DTDescL = DTL[,.(type="Logique",var=sd(confianceNorm)),by=IDjoueur]
-
-plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS Standard Dev");
-
-outliers = get.outliers(DTDescM,DTDescS,DTDescL)
-print(paste("Outliers CS STANDARD DEVIATION:",toString(outliers$id)))
-
-DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Motor Task");NULL},by=.(IDjoueur)]
-DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Sensory Task");NULL},by=.(IDjoueur)]
-DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Logical Task");NULL},by=.(IDjoueur)]
-```
-
-```{r detect.outliers.win.sum.cs, echo=FALSE}
-#------------------------------------------------------
-#            OUTLIERS SUM OF WINS
-#------------------------------------------------------
-# Difficulty : win sum
-
-# DTDescM = DTM[,.(type="Moteur",var=sum(gagnant)),by=IDjoueur]
-# DTDescS = DTS[,.(type="Sensoriel",var=sum(gagnant)),by=IDjoueur]
-# DTDescL = DTL[,.(type="Logique",var=sum(gagnant)),by=IDjoueur]
+# ```{r removing.outliers.setup.cs, echo=FALSE}
+# #------------------------------------------------------
+# #            OUTLIERS SETUP
+# #------------------------------------------------------
 # 
-# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win Sum");
+# DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
+# DTL <- DTAll[which(DTAll$nom_du_jeu=="Logique2"),]
+# DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
 # 
-# outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-# outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-# print(paste("Outliers :",toString(outliersLoc$id)))
 # 
-# DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Motor Task");NULL},by=.(IDjoueur)]
-# DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Sensory Task");NULL},by=.(IDjoueur)]
-# DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Logical Task");NULL},by=.(IDjoueur)]
-
-```
-
-```{r detect.outliers.sheeps.saved.cs, echo=FALSE}
- #------------------------------------------------------
- #            OUTLIERS SAVED SHEEPS
- #------------------------------------------------------
- # Difficulty and strategy = saved sheeps
- # DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
- # DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
- # DTDescL = DTL[,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
- # 
- # plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
- # 
- # outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
- # outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
- # print(paste("Outliers CS SAVED SHEEPS:",toString(outliersLoc$id)))
- # 
- # DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Score Motor Task");NULL},by=.(IDjoueur)]
- # DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Score Sensory Task");NULL},by=.(IDjoueur)]
- # DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Score Logical Task");NULL},by=.(IDjoueur)]
- # 
-```
-
-```{r detect.outliers.dda.exploit.cs, echo=FALSE}
-#------------------------------------------------------
-#            OUTLIERS EXPLOIT DDA
-#------------------------------------------------------
-# DDA Exploit : Win/Fail delta sum max
-# DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
-# DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
-# DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
+# get.outliers <- function(DTDescMLoc,DTDescSLoc,DTDescLLoc){
+#   outliersM <- boxplot.stats(DTDescMLoc$var)$out
+#   outliersS <- boxplot.stats(DTDescSLoc$var)$out
+#   outliersL <- boxplot.stats(DTDescLLoc$var)$out
+#   
+#   outliers = data.table(type=character(0),id=character(0))
+#   setkey(outliers,id)
+#   if(length(outliersM) > 0)
+#     outliers = merge(outliers,data.table(id=DTDescMLoc[var %in% outliersM]$IDjoueur,type="Moteur"),by=c("id","type"),all=TRUE)
+#   if(length(outliersS) > 0)
+#     outliers = merge(outliers,data.table(id=DTDescSLoc[var %in% outliersS]$IDjoueur,type="Sensoriel"),by=c("id","type"),all=TRUE)
+#   if(length(outliersL) > 0)
+#     outliers = merge(outliers,data.table(id=DTDescLLoc[var %in% outliersL]$IDjoueur,type="Logique"),by=c("id","type"),all=TRUE)
+#     
+#   return(outliers)
+# }
 # 
-# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
+# plot.outliers <- function(DT,title){
+#   p <- ggplot(DT, 
+#             aes(type,var)) + 
+#             xlab("Difficulty Type") + 
+#             ylab(title)
+#   p <- p + geom_boxplot() + geom_point(shape=1) 
+#   print(p)
+# }
+# ```
 # 
-# outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-# outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-# print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
+# ```{r detect.outliers.cs.sd, echo=FALSE}
+# #------------------------------------------------------
+# #            OUTLIERS CS STD DEV
+# #------------------------------------------------------
+# DTDescM = DTM[,.(type="Moteur",var=sd(confianceNorm)),by=IDjoueur]
+# DTDescS = DTS[,.(type="Sensoriel",var=sd(confianceNorm)),by=IDjoueur]
+# DTDescL = DTL[,.(type="Logique",var=sd(confianceNorm)),by=IDjoueur]
 # 
-# DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
-# DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
-# DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
-```
-
-```{r detect.outliers.summary.cs, echo=FALSE}
-#------------------------------------------------------
-#            OUTLIERS SUMMARY
-#------------------------------------------------------
-print(paste("Total number of outliers: ",toString(nrow(unique(outliers,by="id")))))
-print(paste("Total number of outliers motor task: ",toString(nrow(unique(outliers[type=="Moteur"],by="id")))))
-print(paste("Total number of outliers perceptive task: ",toString(nrow(unique(outliers[type=="Logique"],by="id")))))
-print(paste("Total number of outliers logical task: ",toString(nrow(unique(outliers[type=="Sensoriel"],by="id")))))
-```
-
-```{r remove.outliers.cs, echo=FALSE}
-#------------------------------------------------------
-#            REMOVING OUTLIERS FROM TABLES
-#------------------------------------------------------
-# removing all outliers and creating a new file only for Confidence Scale Outliers
-DTM <- DTM[!IDjoueur %in% unlist(outliers[type=="Moteur"]$id)]
-DTS <- DTS[!IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id)]
-DTL <- DTL[!IDjoueur %in% unlist(outliers[type=="Logique"]$id)]
-DTConfidenceScale <- data.table()
-DTConfidenceScale <- rbind(DTConfidenceScale,DTL)
-DTConfidenceScale <- rbind(DTConfidenceScale,DTM)
-DTConfidenceScale <- rbind(DTConfidenceScale,DTS)
-```
+# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS Standard Dev");
+# 
+# outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+# print(paste("Outliers CS STANDARD DEVIATION:",toString(outliers$id)))
+# 
+# DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Motor Task");NULL},by=.(IDjoueur)]
+# DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Sensory Task");NULL},by=.(IDjoueur)]
+# DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Logical Task");NULL},by=.(IDjoueur)]
+# ```
+# 
+# ```{r detect.outliers.win.sum.cs, echo=FALSE}
+# #------------------------------------------------------
+# #            OUTLIERS SUM OF WINS
+# #------------------------------------------------------
+# # Difficulty : win sum
+# 
+# # DTDescM = DTM[,.(type="Moteur",var=sum(gagnant)),by=IDjoueur]
+# # DTDescS = DTS[,.(type="Sensoriel",var=sum(gagnant)),by=IDjoueur]
+# # DTDescL = DTL[,.(type="Logique",var=sum(gagnant)),by=IDjoueur]
+# # 
+# # plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win Sum");
+# # 
+# # outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+# # outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+# # print(paste("Outliers :",toString(outliersLoc$id)))
+# # 
+# # DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Motor Task");NULL},by=.(IDjoueur)]
+# # DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Sensory Task");NULL},by=.(IDjoueur)]
+# # DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Logical Task");NULL},by=.(IDjoueur)]
+# 
+# ```
+# 
+# ```{r detect.outliers.sheeps.saved.cs, echo=FALSE}
+#  #------------------------------------------------------
+#  #            OUTLIERS SAVED SHEEPS
+#  #------------------------------------------------------
+#  # Difficulty and strategy = saved sheeps
+#  # DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
+#  # DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
+#  # DTDescL = DTL[,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
+#  # 
+#  # plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
+#  # 
+#  # outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+#  # outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+#  # print(paste("Outliers CS SAVED SHEEPS:",toString(outliersLoc$id)))
+#  # 
+#  # DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Score Motor Task");NULL},by=.(IDjoueur)]
+#  # DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Score Sensory Task");NULL},by=.(IDjoueur)]
+#  # DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Score Logical Task");NULL},by=.(IDjoueur)]
+#  # 
+# ```
+# 
+# ```{r detect.outliers.dda.exploit.cs, echo=FALSE}
+# #------------------------------------------------------
+# #            OUTLIERS EXPLOIT DDA
+# #------------------------------------------------------
+# # DDA Exploit : Win/Fail delta sum max
+# # DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
+# # DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
+# # DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
+# # 
+# # plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
+# # 
+# # outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+# # outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+# # print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
+# # 
+# # DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
+# # DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
+# # DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
+# ```
+# 
+# ```{r detect.outliers.summary.cs, echo=FALSE}
+# #------------------------------------------------------
+# #            OUTLIERS SUMMARY
+# #------------------------------------------------------
+# print(paste("Total number of outliers: ",toString(nrow(unique(outliers,by="id")))))
+# print(paste("Total number of outliers motor task: ",toString(nrow(unique(outliers[type=="Moteur"],by="id")))))
+# print(paste("Total number of outliers perceptive task: ",toString(nrow(unique(outliers[type=="Logique"],by="id")))))
+# print(paste("Total number of outliers logical task: ",toString(nrow(unique(outliers[type=="Sensoriel"],by="id")))))
+# ```
+# 
+# ```{r remove.outliers.cs, echo=FALSE}
+# #------------------------------------------------------
+# #            REMOVING OUTLIERS FROM TABLES
+# #------------------------------------------------------
+# # removing all outliers and creating a new file only for Confidence Scale Outliers
+# DTM <- DTM[!IDjoueur %in% unlist(outliers[type=="Moteur"]$id)]
+# DTS <- DTS[!IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id)]
+# DTL <- DTL[!IDjoueur %in% unlist(outliers[type=="Logique"]$id)]
+# DTConfidenceScale <- data.table()
+# DTConfidenceScale <- rbind(DTConfidenceScale,DTL)
+# DTConfidenceScale <- rbind(DTConfidenceScale,DTM)
+# DTConfidenceScale <- rbind(DTConfidenceScale,DTS)
+# ```
 
 # Modeling difficulties
 
