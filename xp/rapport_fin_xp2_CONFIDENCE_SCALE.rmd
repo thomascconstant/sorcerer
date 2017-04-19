@@ -544,65 +544,65 @@ DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.cs(.SD,
 
 ```{r detect.outliers.win.sum.cs, echo=FALSE}
 #------------------------------------------------------
-#            OUTLIERS SUM OF WINS
+#           OUTLIERS SUM OF WINS
 #------------------------------------------------------
-# Difficulty : win sum
+#Difficulty : win sum
 
-# DTDescM = DTM[,.(type="Moteur",var=sum(gagnant)),by=IDjoueur]
-# DTDescS = DTS[,.(type="Sensoriel",var=sum(gagnant)),by=IDjoueur]
-# DTDescL = DTL[,.(type="Logique",var=sum(gagnant)),by=IDjoueur]
-# 
-# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win Sum");
-# 
-# outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-# outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-# print(paste("Outliers :",toString(outliersLoc$id)))
-# 
-# DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Motor Task");NULL},by=.(IDjoueur)]
-# DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Sensory Task");NULL},by=.(IDjoueur)]
-# DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Logical Task");NULL},by=.(IDjoueur)]
+DTDescM = DTM[,.(type="Moteur",var=sum(gagnant)),by=IDjoueur]
+DTDescS = DTS[,.(type="Sensoriel",var=sum(gagnant)),by=IDjoueur]
+DTDescL = DTL[,.(type="Logique",var=sum(gagnant)),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win Sum");
+
+outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+print(paste("Outliers :",toString(outliersLoc$id)))
+
+DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Win Sum Logical Task");NULL},by=.(IDjoueur)]
 
 ```
 
 ```{r detect.outliers.sheeps.saved.cs, echo=FALSE}
  #------------------------------------------------------
- #            OUTLIERS SAVED SHEEPS
+ #           OUTLIERS SAVED SHEEPS
  #------------------------------------------------------
- # Difficulty and strategy = saved sheeps
- # DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
- # DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
- # DTDescL = DTL[,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
- # 
- # plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
- # 
- # outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
- # outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
- # print(paste("Outliers CS SAVED SHEEPS:",toString(outliersLoc$id)))
- # 
- # DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Score Motor Task");NULL},by=.(IDjoueur)]
- # DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Score Sensory Task");NULL},by=.(IDjoueur)]
- # DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Score Logical Task");NULL},by=.(IDjoueur)]
- # 
+ #Difficulty and strategy = saved sheeps
+ DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
+ DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
+ DTDescL = DTL[,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
+
+ plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
+
+ outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+ outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+ print(paste("Outliers CS SAVED SHEEPS:",toString(outliersLoc$id)))
+
+ DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Score Motor Task");NULL},by=.(IDjoueur)]
+ DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Score Sensory Task");NULL},by=.(IDjoueur)]
+ DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Score Logical Task");NULL},by=.(IDjoueur)]
+
 ```
 
 ```{r detect.outliers.dda.exploit.cs, echo=FALSE}
 #------------------------------------------------------
-#            OUTLIERS EXPLOIT DDA
+#           OUTLIERS EXPLOIT DDA
 #------------------------------------------------------
-# DDA Exploit : Win/Fail delta sum max
-# DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
-# DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
-# DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
-# 
-# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
-# 
-# outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-# outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-# print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
-# 
-# DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
-# DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
-# DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
+#DDA Exploit : Win/Fail delta sum max
+DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
+DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
+DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
+
+outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
+
+DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
 ```
 
 ```{r detect.outliers.summary.cs, echo=FALSE}

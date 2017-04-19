@@ -1745,7 +1745,4 @@ summary(lmer(error.subj.diff.mise ~ est.confidence.norm + (1 | IDjoueur), data=D
 
 ```
 
-####CONFIDENCE SCALE APPROACH
-
-VOIR AUTRE FICHIER
 
