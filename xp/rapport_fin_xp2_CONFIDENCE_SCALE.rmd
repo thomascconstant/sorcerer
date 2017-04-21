@@ -971,10 +971,10 @@ DTConfidenceScale <- rbind(DTConfidenceScale,DTS)
 #        MODELING SUBJECTIVE DIFFICULTY 
 #------------------------------------------------------
 #adding error between subjective difficulty and objective difficulty based on BET
-DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
-DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
-DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
-DTConfidenceScale <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
+# DTAll$subj.diff.mise = 1 - DTAll$miseNorm;
+# DTAll$error.subj.diff.mise = DTAll$subj.diff.mise - DTAll$obj.diff
+# DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
+# DTConfidenceScale <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
 
 #adding error between subjective difficulty and objective difficulty based on CONFIDENCE SCALE
 DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
@@ -1590,6 +1590,9 @@ plot.diff.curve.confidence <- function (DT,title){
   p <- p  +  ggtitle(title);
   print(p)  
 }
+
+#plot(p)
+#abline(35.076, 2.745, col = 'red')
 
 plot.random.diff.curve.confidence<- function (DT,title){
   player = sample(unique(DT[niveau.group == "bad"],by="IDjoueur")$IDjoueur,1)

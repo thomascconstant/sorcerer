@@ -970,10 +970,10 @@ DTAll <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueu
 DTConfidenceScale <- DTAll[,error.subj.diff.mise.mean:=mean(error.subj.diff.mise),by=IDjoueur]
 
 #adding error between subjective difficulty and objective difficulty based on CONFIDENCE SCALE
-DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
-DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
-DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
-DTConfidenceScale <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
+# DTAll$subj.diff.confiance = 1 - DTAll$confianceNorm;
+# DTAll$error.subj.diff.confiance = DTAll$subj.diff.confiance - DTAll$obj.diff
+# DTAll <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
+# DTConfidenceScale <- DTAll[,error.subj.diff.confiance.mean:=mean(error.subj.diff.confiance),by=IDjoueur]
 
 #evaluating confidence as a damped over time sum of win and fails;
 #each win and fail importance based on objective difficulty at that time
