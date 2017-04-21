@@ -542,6 +542,24 @@ DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve.cs(.S
 DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Sd Logical Task");NULL},by=.(IDjoueur)]
 ```
 
+```{r detect.outliers.cs.null, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS CS NULL
+#------------------------------------------------------
+DTDescM = DTM[,.(type="Moteur",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+DTDescS = DTS[,.(type="Sensoriel",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+DTDescL = DTL[,.(type="Logique",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS null");
+
+outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+print(paste("Outliers CS NULL:",toString(outliers$id)))
+
+DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Null Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Null Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve.cs(.SD,"Outlier CS Null Logical Task");NULL},by=.(IDjoueur)]
+```
+
 ```{r detect.outliers.win.sum.cs, echo=FALSE}
 #------------------------------------------------------
 #           OUTLIERS SUM OF WINS
@@ -590,19 +608,19 @@ DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,
 #           OUTLIERS EXPLOIT DDA
 #------------------------------------------------------
 #DDA Exploit : Win/Fail delta sum max
-DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
-DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
-DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
-
-plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
-
-outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
-
-DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
-DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
-DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
+# DTDescM = DTM[,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
+# DTDescS = DTS[,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
+# DTDescL = DTL[,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
+# 
+# plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Win/Fail delta sum max");
+# 
+# outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+# outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+# print(paste("Outliers CS EXPLOIT DDA:",toString(outliersLoc$id)))
+# 
+# DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
+# DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
+# DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
 ```
 
 ```{r detect.outliers.summary.cs, echo=FALSE}
@@ -1570,9 +1588,12 @@ plot.diff.curve.confidence <- function (DT,title){
     return()
   df <- data.frame(time=DT$action_de_jeu,
                    difficulty=DT$difficulty,
-                   confiance=DT$confianceNorm)
+                   confiance=DT$confianceNorm,
+                   gagnant=DT$gagnant)
   p <- ggplot(df,aes(x=time)) 
   p <- p + geom_step(aes(y=confiance,colour="Confiance"))
+  
+  p <- p + geom_step(aes(y=gagnant,colour="Gagnant"))
   
   if(length(DT$obj.diff) > 0)
     p <- p + geom_step(aes(y=DT$obj.diff,colour="Objective Difficulty"))
@@ -1586,7 +1607,8 @@ plot.diff.curve.confidence <- function (DT,title){
     values = c("Difficulty parameter" = "red",
                "Objective Difficulty" = "red",
                "Estimated Confidence" = "green",
-               "Confiance" = "blue"))
+               "Confiance" = "blue",
+               "Gagnant" = "black"))
   p <- p  +  ggtitle(title);
   print(p)  
 }
@@ -1682,7 +1704,8 @@ lastID <- id[1];
 est.confidence <- numeric(nrow(DTAll))
 est.confidence[1] = 0;
 obj.diff = DTAll$obj.diff
-alpha <- 0.9
+gagnant = DTAll$gagnant; # tmp vector faster to read
+alpha <- 0.6
 i = 1
 for(i in 2:nrow(DTAll)){
   if(id[i] != lastID){
@@ -1693,7 +1716,7 @@ for(i in 2:nrow(DTAll)){
     }else{
       cur.confidence = -(1 - obj.diff[i-1]);
     }
-    cur.confidence.liss <- alpha * cur.confidence.liss + cur.confidence;
+    cur.confidence.liss <- alpha * cur.confidence.liss + (1-alpha) * cur.confidence;
   }
   lastID <- id[i];
   est.confidence[i] <- cur.confidence.liss;
