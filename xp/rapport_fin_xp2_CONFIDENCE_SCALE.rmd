@@ -1822,11 +1822,11 @@ sexe.on.error.m <- test.profile(unique(DTM,by=c("IDjoueur","nom_du_jeu"))$error.
 sexe.on.error.s <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.s")
 sexe.on.error.l <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$sexe,"sexe.on.error.l")
 
-sexe.on.error.2 <- test.profile.binary(unique(DTAll[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.2")
+sexe.on.error.2 <- test.profile.binary(unique(DTAll[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTAll[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean,"sexe.on.error.2")
 
-sexe.on.error.m.2 <- test.profile.binary(unique(DTM[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.m.2")
-sexe.on.error.s.2 <- test.profile.binary(unique(DTS[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.s.2")
-sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.mise.mean,"sexe.on.error.l.2")
+sexe.on.error.m.2 <- test.profile.binary(unique(DTM[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTM[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean,"sexe.on.error.m.2")
+sexe.on.error.s.2 <- test.profile.binary(unique(DTS[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTS[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean,"sexe.on.error.s.2")
+sexe.on.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL[sexe==1],by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean,"sexe.on.error.l.2")
 
 ```
 
