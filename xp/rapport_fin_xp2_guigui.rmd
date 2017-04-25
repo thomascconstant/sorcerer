@@ -140,12 +140,17 @@ plot.diff.curve <- function (DT,title){
 }
 ```
 
-```{r globals.variables, include = FALSE}
+```{r globals.variables, echo = FALSE}
 #------------------------------------------------------
 #                  GLOBAL VARIABLES
 #------------------------------------------------------
-g.ignore.confidence.scale.outilers <- FALSE
-g.use.confiance <- FALSE
+g.ignore.confidence.scale.outilers <- TRUE
+p <- g.ignore.confidence.scale.outilers
+cat("Ignorer les outliers relatifs à l'utilisation de l'échelle de confiance : ", p)
+
+g.use.confiance <- TRUE
+p <- g.use.confiance
+cat("Résultats basés sur la l'échelle de confiance : ", g.use.confiance)
 ```
 
 ```{r data.loading, echo=FALSE}
@@ -1080,9 +1085,6 @@ sexe.on.level.m.2 <- test.profile.binary(unique(DTM[sexe==0],by="IDjoueur")$nive
 sexe.on.level.s.2 <- test.profile.binary(unique(DTS[sexe==0],by="IDjoueur")$niveau, unique(DTS[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.s.2")
 sexe.on.level.l.2 <- test.profile.binary(unique(DTL[sexe==0],by="IDjoueur")$niveau, unique(DTL[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.l.2")
 ```
-
-####CONFIDENCE SCALE APPROACH
-For Bet approach, see the other file.
 
 
 #Influence of Objective difficulty on Subjective Difficulty
