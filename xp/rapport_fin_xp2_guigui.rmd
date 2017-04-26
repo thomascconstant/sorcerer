@@ -1421,13 +1421,24 @@ plot.random.diff.curve.confidence<- function (DT,title){
 
 plot.random.diff.curve.confidence(DTM,"Motor")
 #summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTM))
-test.profile(DTM$error.subj.diff.mise,DTM$est.confidence.norm,"DTM")
+p <- test.profile(DTM$error.subj.diff.confiance,DTM$est.confidence.norm,"DTM")
+cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
+p <- test.profile(DTM$error.subj.diff.confiance,DTM$confianceNorm,"DTM")
+cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
+
 plot.random.diff.curve.confidence(DTS,"Sensory")
 #summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTS))
-test.profile(DTS$error.subj.diff.mise,DTS$est.confidence.norm,"DTS")
+p <- test.profile(DTS$error.subj.diff.confiance,DTS$est.confidence.norm,"DTS")
+cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
+p <- test.profile(DTS$error.subj.diff.confiance,DTS$confianceNorm,"DTS")
+cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
+
 plot.random.diff.curve.confidence(DTL,"Logical")
 #summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTL))
-test.profile(DTL$error.subj.diff.mise,DTL$est.confidence.norm,"DTL")
+p <- test.profile(DTL$error.subj.diff.confiance,DTL$est.confidence.norm,"DTL")
+cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
+p <- test.profile(DTL$error.subj.diff.confiance,DTL$confianceNorm,"DTL")
+cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
 
 #test.profile(DTL$error.subj.diff.mise,DTL$nbFail,"DTL")
 
