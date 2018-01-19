@@ -831,7 +831,7 @@ for(i in 2:nrow(DTAll)){
 
 
 DTAll$est.confidence = est.confidence;
-DTAll$est.confidence.norm = est.confidence#exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));#est.confidence
 
 DTConfidenceScale$est.confidence = est.confidence;
 DTConfidenceScale$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
