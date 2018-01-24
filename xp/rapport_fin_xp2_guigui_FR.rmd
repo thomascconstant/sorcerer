@@ -812,7 +812,7 @@ est.confidence <- numeric(nrow(DTAll))
 est.confidence[1] = 0;
 alpha <- 3
 beta <- 0.6 #min modif on win or lose
-maxConf <- 9 #confiance max avant normalisation (3 ca veut dire que si on perd 3 fois à diff 0 on a perdu confirance)
+maxConf <- 9 #confiance max avant normalisation (3 ca veut dire que si on perd 3 fois à diff 0 on a perdu confiance)
 i = 1
 for(i in 2:nrow(DTAll)){
   if(id[i] != id[i-1] || game[i] != game[i-1]){
