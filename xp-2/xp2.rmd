@@ -144,7 +144,7 @@ plot.diff.curve <- function (DT,title){
 #------------------------------------------------------
 #                  GLOBAL VARIABLES
 #------------------------------------------------------
-g.ignore.confidence.scale.outilers <- FALSE
+g.ignore.confidence.scale.outilers <- TRUE
 p <- g.ignore.confidence.scale.outilers
 cat("Ignorer les outliers relatifs à l'utilisation de l'échelle de confiance : ", p)
 
@@ -374,19 +374,21 @@ DTAll$cumulDeltaMise = cumulDeltaMise;
  #------------------------------------------------------
  #            OUTLIERS BET STD DEV
  #------------------------------------------------------
- DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
- DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
- DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
+if (g.ignore.confidence.scale.outilers == TRUE) {
+  DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
+  DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
+  DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
  
- if(g.short.version == FALSE)
-   plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
+  if(g.short.version == FALSE)
+     plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
  
- outliers = get.outliers(DTDescM,DTDescS,DTDescL)
- print(paste("Outliers BET STANDARD DEVIATION:",toString(outliers$id)))
+  outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+  print(paste("Outliers BET STANDARD DEVIATION:",toString(outliers$id)))
  
- DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
- DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
- DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
+  DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
+  DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
+  DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
+} 
 ```
  
 ```{r detect.outliers.win.sum, echo=FALSE}
