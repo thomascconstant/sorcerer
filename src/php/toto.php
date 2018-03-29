@@ -30,6 +30,9 @@ function enregistrer($data) {
     $dest .= $_REQUEST["id"];
     $dest .= ".csv";
     
+	$date = date('Y-m-d H:i:s:v');
+	$data = $date.';'.$data;
+	
     $handle = fopen($dest, "a");
     fwrite($handle, $data);
     fclose($handle);
