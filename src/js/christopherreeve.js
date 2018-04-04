@@ -20,7 +20,7 @@ var modeTest = true;
 var activateModeTest = false;
 var overideTestMode = false; //Outrepasser le mode test si var = true, pour ne pas avoir les tours de chauffe
 var toursTest = 3; //Nbre de tours d'entraînement pour le joueur
-var toursDeJeu = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
+var toursDeJeu = 20; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = false
 var tours = 30; //Nombre de tours restants, variable à modifier pour augmenter ou réduire le temps de jeu si overideTestMode = true
 var modeFinDePartie = false; //Permet de bloquer le jeu pour voir les résultats du dernier tour
 
