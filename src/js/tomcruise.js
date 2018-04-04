@@ -36,7 +36,8 @@ var resultatJoueur = [];
 var winState = false; //statut du joueur, false pour perdant
 var actionDeJeu = 0; //Suivi du nombre d'action de jeu que réalise le joueur
 
-var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
+//var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
+var miseFirst = "1";
 console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + miseFirst);
 
 var moutonsGagnes = 0;
@@ -136,8 +137,9 @@ function recupMise(numeroMise) {
         if (miseValide && confianceValide) {
             launchGame();
         } else if (miseValide) {
-            activateConfiance();
+            //activateConfiance();
             unblockConfiance();
+            recupConfiance();
         }
     }, 490);
 }

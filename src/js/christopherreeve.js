@@ -53,7 +53,8 @@ var moutonRipAffiche = false; //vérifier affichage du mouton mort
 
 var countDownToZero = false; //statut du compte à rebours
 
-var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
+//var miseFirst = localStorage.getItem("miseOuConfiance"); //si 1, mise en premier ; sinon, confiance en premier
+var miseFirst = "1";
 console.log("Si 1 c'est la mise d'abord, t'as combien là ? " + miseFirst);
 
 var score = 0; //Score actuel
@@ -202,8 +203,9 @@ function recupMise(numeroMise) {
                 launchGame();
             } else if (miseValide) {
                 endTurn = true; //bloquer les cases
-                activateConfiance();
+                //activateConfiance();
                 unblockConfiance();
+                recupConfiance();
             }
         }, 490);
     }
@@ -1435,7 +1437,7 @@ function launchModeTest() {
         }
 
         if (tours === 0) {
-				
+			
 			//Fin du mode DDA, on passe en random
 			diffModel.setMode(diffModel.MODE_DDA);
 				
