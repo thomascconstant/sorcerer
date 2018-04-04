@@ -6,3 +6,8 @@ function readStyle(elt,prop)
 		prop = 0;
 	return prop;
 }
+
+function getDateTime(){
+    return moment().format('YYYY-MM-DD HH:mm:ss:SSS');
+}
+

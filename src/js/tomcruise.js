@@ -55,6 +55,7 @@ var differencePlayTime = 0.0;
 var phpFile = "php/toto.php"; // version locale, à commenter pour la version en ligne
 //var phpFile = "../sorcerer/php/toto.php"; // à décommenter pour la version en ligne
 
+
 function init(){
     diffModel.setStepInCurve(0);
     diffModel.setMode(diffModel.MODE_DDA); //le changement du mode de difficulté se fait aussi dans le code associé au mode test
@@ -432,7 +433,7 @@ function stop() {
     tours--;
     
     //On sauve le resultat pour cet essai dans une variable, ne sera transféré dans csv que lorsque le jeu est terminé (fin de partie)
-    resultatJoueur += nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + modeTest + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + gameSpeed + ";" + nearMiss + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
+    resultatJoueur += getDateTime() + ";" + nomJoueur + ";" + IDjoueur + ";" + connexionJoueur + ";" + nomDuJeu + ";" + modeTest + ";" + miseFirst + ";" + actionDeJeu + ";" + differencePlayTime + ";" + mise + ";" + confiance + ";" + diffModel.currentDiff.toFixed(2) + ";" + gameSpeed + ";" + nearMiss + ";" + compteurMoutonsGagnes + ";" + compteurMoutonsPerdus + ";" + score + ";" + winState + ";" + "\n";
     console.log("saved current diff : " + diffModel.currentDiff.toFixed(2));
     
     //modification de la difficulté (à décommenter pour nvelle courbe de diff)

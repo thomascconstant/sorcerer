@@ -30,8 +30,17 @@ function enregistrer($data) {
     $dest .= $_REQUEST["id"];
     $dest .= ".csv";
     
-	$date = date('Y-m-d H:i:s:v');
-	$data = $date.';'.$data;
+	/*$date = date('Y-m-d H:i:s:v');
+	
+	//On le rajoute a chaque début de ligne
+	$data_array = explode("\n",$data);
+	for($i=0;$i<count($data_array);$i++){
+		if(!empty($data_array[$i])){
+			$data_array[$i] = $date.';'.$data_array[$i];
+		}	
+	}
+		
+	$data = implode("\n",$data_array);*/
 	
     $handle = fopen($dest, "a");
     fwrite($handle, $data);

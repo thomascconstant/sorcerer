@@ -16,7 +16,7 @@ while (false !== ($filename = readdir($dh))) {
 
 $filename = "../data/data_" . date("ymd_his").".csv";
 $handle = fopen($filename,"w");
-fwrite($handle, "nom_du_joueur;IDjoueur;heure_connexion_joueur;nom_du_jeu;modeTest;mise_first_1;action_de_jeu;duree_tour_ms;mise;confiance;difficulty;gameDiff;near_miss;moutons_sauves;moutons_tues;score;gagnant");
+fwrite($handle, "timestamp;nom_du_joueur;IDjoueur;heure_connexion_joueur;nom_du_jeu;modeTest;mise_first_1;action_de_jeu;duree_tour_ms;mise;confiance;difficulty;gameDiff;near_miss;moutons_sauves;moutons_tues;score;gagnant");
 fwrite($handle,"\n");
 fwrite($handle,$data);
 fclose($handle);
