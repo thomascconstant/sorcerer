@@ -148,11 +148,11 @@ g.ignore.confidence.scale.outilers <- TRUE
 p <- g.ignore.confidence.scale.outilers
 cat("Ignorer les outliers relatifs à l'utilisation de l'échelle de confiance : ", p)
 
-g.use.confiance <- TRUE
+g.use.confiance <- FALSE
 p <- g.use.confiance
 cat("Résultats basés sur la l'échelle de confiance : ", g.use.confiance)
 
-g.short.version <- TRUE
+g.short.version <- FALSE
 cat("Version courte : ", g.short.version)
 ```
 
@@ -1379,9 +1379,9 @@ if(g.short.version == FALSE){
   plot.subjective.diff.error.density(DTAll[niveau.group=="good"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTAll[niveau.group=="good"]))
   
-  plot.subj.obj.diff.with.time(DTAll,"bad", "All tasks, bad")
-  plot.subj.obj.diff.with.time(DTAll,"medium", "All tasks, medium")
-  plot.subj.obj.diff.with.time(DTAll,"good", "All tasks, good")
+  plot.subj.obj.diff.with.time(DTAll,"bad", "bad", "All tasks, bad")
+  plot.subj.obj.diff.with.time(DTAll,"medium", "medium", "All tasks, medium")
+  plot.subj.obj.diff.with.time(DTAll,"good", "good", "All tasks, good")
 }
 ``` 
 
@@ -1392,13 +1392,13 @@ if(g.short.version == FALSE){
 if(g.short.version == FALSE){
   plot.subjective.diff.error.density(DTM[niveau.group=="bad"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="bad"]))
-  plot.subj.obj.diff.with.time(DTM,"bad", "Motor, bad")
+  plot.subj.obj.diff.with.time(DTM,"bad", "bad", "Motor, bad")
   plot.subjective.diff.error.density(DTM[niveau.group=="medium"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="medium"]))
-  plot.subj.obj.diff.with.time(DTM,"medium", "Motor, medium")
+  plot.subj.obj.diff.with.time(DTM,"medium", "medium", "Motor, medium")
   plot.subjective.diff.error.density(DTM[niveau.group=="good"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTM[niveau.group=="good"]))
-  plot.subj.obj.diff.with.time(DTM,"good", "Motor, good")
+  plot.subj.obj.diff.with.time(DTM,"good", "good", "Motor, good")
 }
 
 ``` 
@@ -1409,13 +1409,13 @@ if(g.short.version == FALSE){
 if(g.short.version == FALSE){
   plot.subjective.diff.error.density(DTS[niveau.group=="bad"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="bad"]))
-  plot.subj.obj.diff.with.time(DTS,"bad", "Sensory, bad")
+  plot.subj.obj.diff.with.time(DTS,"bad", "bad", "Sensory, bad")
   plot.subjective.diff.error.density(DTS[niveau.group=="medium"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="medium"]))
-  plot.subj.obj.diff.with.time(DTS,"medium", "Sensory, medium")
+  plot.subj.obj.diff.with.time(DTS,"medium", "medium", "Sensory, medium")
   plot.subjective.diff.error.density(DTS[niveau.group=="good"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTS[niveau.group=="good"]))
-  plot.subj.obj.diff.with.time(DTS,"good", "Sensory, good")
+  plot.subj.obj.diff.with.time(DTS,"good", "good", "Sensory, good")
 }
 ``` 
 
@@ -1425,13 +1425,13 @@ if(g.short.version == FALSE){
 if(g.short.version == FALSE){
   plot.subjective.diff.error.density(DTL[niveau.group=="bad"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="bad"]))
-  plot.subj.obj.diff.with.time(DTL,"bad", "Logical, bad")
+  plot.subj.obj.diff.with.time(DTL,"bad", "bad", "Logical, bad")
   plot.subjective.diff.error.density(DTL[niveau.group=="medium"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="medium"]))
-  plot.subj.obj.diff.with.time(DTL,"medium", "Logical, medium")
+  plot.subj.obj.diff.with.time(DTL,"medium", "medium", "Logical, medium")
   plot.subjective.diff.error.density(DTL[niveau.group=="good"])
   summary(glm(error.subj.diff.confiance~timeNorm + obj.diff,data = DTL[niveau.group=="good"]))
-  plot.subj.obj.diff.with.time(DTL,"good", "Logical, good")
+  plot.subj.obj.diff.with.time(DTL,"good", "good", "Logical, good")
 }
 ```
 
