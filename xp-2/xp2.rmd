@@ -1658,3 +1658,23 @@ self.eff.on.error <- test.profile(unique(DTS,by=c("IDjoueur","nom_du_jeu"))$erro
 self.eff.on.error <- test.profile(unique(DTL,by=c("IDjoueur","nom_du_jeu"))$error.subj.diff.confiance.mean, unique(DTL,by=c("IDjoueur","nom_du_jeu"))$self.eff,"self.eff.on.error")
   
 ```
+###median time of play turn
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------------------------------
+#        VARIATION OF PLAY TIME (for one turn)
+#----------------------------------------------------------------------------------------------
+
+mean(DTAll$duree_tour_ms)
+mean(DTM$duree_tour_ms)
+mean(DTL$duree_tour_ms)
+mean(DTS$duree_tour_ms)
+
+median(DTAll$duree_tour_ms)
+median(DTM$duree_tour_ms)
+median(DTL$duree_tour_ms)
+median(DTS$duree_tour_ms)
+
+cor(DTL$gagnant,DTAll$duree_tour_ms, method = c("kendall"))
+  
+```
