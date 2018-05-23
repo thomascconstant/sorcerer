@@ -609,8 +609,8 @@ print.objective.diff.model <- function (DT,fit) {
   inter.p.val = fit.sum$coefficients10
   beta.diff.p.val = fit.sum$coefficients11
   beta.time.p.val = fit.sum$coefficients12
-    fit.r.value.fix = r.squaredGLMM(fit)[1] #R2 for fixed effect model
-    fit.r.value.mix = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+  fit.r.value.fix = r.squaredGLMM(fit)[1] #R2 for fixed effect model
+  fit.r.value.mix = r.squaredGLMM(fit)[2] #R2 for mixed effect model
   fit.cross.val = get.model.accuracy(DT)
   fit.aic = AIC(fit)
   
@@ -1127,21 +1127,22 @@ if(g.short.version == FALSE){
 
 plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
   
-  print(selGroup)
-  
   # Lien entre confiance normalisée et difficultée estimée (hard / easy effect)
-  obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  obj.diff.quants = seq(0,1,1/16) #quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
   nb.bins = length(obj.diff.quants)-1
-  subj.diff.med = numeric(nb.bins)
+  subj.diff.med.rnd = numeric(nb.bins)
+  subj.diff.med.dda = numeric(nb.bins)
   obj.diff.bin = numeric(nb.bins)
   obj.diff.bin.cur = 0;
   test.pvals = numeric(nb.bins)
   conf.min = numeric(nb.bins)
   conf.max = numeric(nb.bins)
-  nb.vals = numeric(nb.bins)
-  shapes =  numeric(nb.bins)
+  nb.vals.rnd = numeric(nb.bins)
+  nb.vals.dda = numeric(nb.bins)
+  shapes.rnd =  numeric(nb.bins)
+  shapes.dda =  numeric(nb.bins)
   delta.obj.subj = numeric(nb.bins)
-  hist(DT$obj.diff)
+  subj.diff.delta.rnd.dda = numeric(nb.bins)
   
   for(i in 1:nb.bins){
     #obj.diff.bin.cur = round(i/10,1)
@@ -1149,60 +1150,153 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
     obj.diff.bin.cur = (obj.diff.quants[i] + obj.diff.quants[i+1])/2.0
     #subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
     DTLoc = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]
-    if(selGroup != "all")
-      DTLoc = DTLoc[niveau.group==selGroup]
-    if(useConfiance)
-      DTLoc = DTLoc[,.(subj.diff.mean=mean(subj.diff.confiance)),by=IDjoueur]
-    else
-      DTLoc = DTLoc[,.(subj.diff.mean=mean(subj.diff.mise)),by=IDjoueur]
     
-    subj.diff = DTLoc$subj.diff.mean
+    if(selGroup != "all")
+      DTLoc = DDTLoc=DTLoc[niveau.group==selGroup]
+    
+    if(useConfiance)
+      DTLoc = DTLoc[,.(random_diff,subj.diff.mean=mean(subj.diff.confiance)),by=IDjoueur]
+    else
+      DTLoc = DTLoc[,.(random_diff,subj.diff.mean=mean(subj.diff.mise)),by=IDjoueur]
+    
+    
+
+    subj.diff.rnd = DTLoc[random_diff==1]$subj.diff.mean
+    subj.diff.dda = DTLoc[random_diff==0]$subj.diff.mean
+    
     obj.diff.bin[i] = obj.diff.bin.cur
-    subj.diff.med[i] = NA
+    
+    subj.diff.med.dda[i] = NA
+    subj.diff.med.rnd[i] = NA
+    
     test.pvals[i] = NA
     conf.min[i] = NA
     conf.max[i] = NA
-    delta.obj.subj[i] = NA
-    shapes[i] = 16
-    nb.vals[i] = length(subj.diff)
-    if(nb.vals[i] > 1){
-      try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
+    
+    shapes.rnd[i] = 1
+    shapes.dda[i] = 2
+    nb.vals.rnd[i] = length(subj.diff.rnd)
+    nb.vals.dda[i] = length(subj.diff.dda)
+    
+    if(nb.vals.rnd[i] > 10)
+      subj.diff.med.rnd[i] = mean(subj.diff.rnd)
+    if(nb.vals.dda[i] > 10)
+      subj.diff.med.dda[i] = mean(subj.diff.dda)
+    
+    if(nb.vals.rnd[i] > 10 && nb.vals.dda[i] > 10){
+      try.res = try(test.res <- wilcox.test(x=subj.diff.rnd,y=subj.diff.dda,conf.int=T,paired=FALSE))
       if (class(try.res) != "try-error"){
         #print(test.res)
         #hist(subj.diff)
         test.pvals[i] = format.pval.stars(test.res$p.value)
-        if(test.res$p.value < 0.05)
-          shapes[i] = 24
-        #subj.diff.med[i] = mean(subj.diff)
-        subj.diff.med[i] = test.res$estimate
+        
+        if(test.res$p.value < 0.05){
+          shapes.rnd[i] = 16
+          shapes.dda[i] = 17
+        }
+        
+        subj.diff.delta.rnd.dda[i] = test.res$estimate
         conf.min[i] = test.res$conf.int[1]
         conf.max[i] = test.res$conf.int[2]
-        delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
       }
     }
   }
-  
-  #print table of pvalues
-  print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
-  
-  #summary
-  print("mean and sd of nb players per bin")
-  DTNbVals = data.table(nb = nb.vals, pval=test.pvals)
-  print(DTNbVals[!is.na(pval)])
-  print(signif(mean(DTNbVals[!is.na(pval)]$nb),digits=3))
-  print(signif(sd(DTNbVals[!is.na(pval)]$nb),digits=3))
-  
-  DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med, shapes=shapes)
- 
+
+  i=1#print table of pvalues
+  print(data.table(obj.diff.bin=obj.diff.bin,subj.diff.delta.rnd.dda=subj.diff.delta.rnd.dda,n.rnd=nb.vals.rnd,n.dda=nb.vals.dda,pval=test.pvals))
+
+  DTPlotRnd = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd)
+  DTPlotDda = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda)
+
   p = ggplot() + ggtitle(title) +
-        geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
+        geom_point(aes(x=DTPlotRnd$obj.diff,y=DTPlotRnd$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd$shapes) +
+        geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotDda$subj.diff),alpha = 1, size = 3, shape=DTPlotDda$shapes) +
         xlim(0,1)+
         ylim(0,1)+
-        geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
         geom_abline(intercept = 0, slope = 1, color="blue") +
         xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
-  
+
   print(p)
+  
+  # print(selGroup)
+  # 
+  # # Lien entre confiance normalisée et difficultée estimée (hard / easy effect)
+  # obj.diff.quants = seq(0,1,1/16)#quantile(DT$obj.diff, probs=(seq(0,1,0.05)))
+  # nb.bins = length(obj.diff.quants)-1
+  # subj.diff.med = numeric(nb.bins)
+  # obj.diff.bin = numeric(nb.bins)
+  # obj.diff.bin.cur = 0;
+  # test.pvals = numeric(nb.bins)
+  # conf.min = numeric(nb.bins)
+  # conf.max = numeric(nb.bins)
+  # nb.vals = numeric(nb.bins)
+  # shapes =  numeric(nb.bins)
+  # delta.obj.subj = numeric(nb.bins)
+  # hist(DT$obj.diff)
+  # 
+  # for(i in 1:nb.bins){
+  #   #obj.diff.bin.cur = round(i/10,1)
+  #   #subj.diff = DT[round(obj.diff,1)==obj.diff.bin.cur]$subj.diff.mise
+  #   obj.diff.bin.cur = (obj.diff.quants[i] + obj.diff.quants[i+1])/2.0
+  #   #subj.diff = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]$subj.diff.mise
+  #   DTLoc = DT[obj.diff > obj.diff.quants[i] & obj.diff<=obj.diff.quants[i+1]]
+  #   if(selGroup != "all")
+  #     DTLoc = DTLoc[niveau.group==selGroup]
+  #   if(useConfiance)
+  #     DTLoc = DTLoc[,.(subj.diff.mean=mean(subj.diff.confiance)),by=IDjoueur]
+  #   else
+  #     DTLoc = DTLoc[,.(subj.diff.mean=mean(subj.diff.mise)),by=IDjoueur]
+  #   
+  #   subj.diff = DTLoc$subj.diff.mean
+  #   obj.diff.bin[i] = obj.diff.bin.cur
+  #   subj.diff.med[i] = NA
+  #   test.pvals[i] = NA
+  #   conf.min[i] = NA
+  #   conf.max[i] = NA
+  #   delta.obj.subj[i] = NA
+  #   shapes[i] = 16
+  #   nb.vals[i] = length(subj.diff)
+  #   if(nb.vals[i] > 1){
+  #     try.res = try(test.res <- wilcox.test(subj.diff,mu = obj.diff.bin.cur,conf.int=T))
+  #     if (class(try.res) != "try-error"){
+  #       #print(test.res)
+  #       #hist(subj.diff)
+  #       test.pvals[i] = format.pval.stars(test.res$p.value)
+  #       if(test.res$p.value < 0.05)
+  #         shapes[i] = 24
+  #       #subj.diff.med[i] = mean(subj.diff)
+  #       subj.diff.med[i] = test.res$estimate
+  #       conf.min[i] = test.res$conf.int[1]
+  #       conf.max[i] = test.res$conf.int[2]
+  #       delta.obj.subj[i] = signif(subj.diff.med[i] - obj.diff.bin.cur,digit=2)
+  #     }
+  #   }
+  # }
+  # 
+  # #print table of pvalues
+  # print(data.table(obj.diff.bin=obj.diff.bin,delta.obj.subj=delta.obj.subj,n=nb.vals,pval=test.pvals))
+  # 
+  # #summary
+  # print("mean and sd of nb players per bin")
+  # DTNbVals = data.table(nb = nb.vals, pval=test.pvals)
+  # print(DTNbVals[!is.na(pval)])
+  # print(signif(mean(DTNbVals[!is.na(pval)]$nb),digits=3))
+  # print(signif(sd(DTNbVals[!is.na(pval)]$nb),digits=3))
+  # 
+  # DTPlot = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med, shapes=shapes)
+  # 
+  # p = ggplot() + ggtitle(title) +
+  #       geom_point(aes(x=DTPlot$obj.diff,y=DTPlot$subj.diff),alpha = 1, size = 3, shape=DTPlot$shapes) +
+  #       xlim(0,1)+
+  #       ylim(0,1)+
+  #       geom_errorbar(aes(x=DTPlot$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+  #       geom_abline(intercept = 0, slope = 1, color="blue") +
+  #       xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
+  # 
+  # print(p)
+  
+  
 }
 ```
 
@@ -1214,16 +1308,6 @@ if(g.short.version == FALSE){
   plot.subjective.difficulty(DTAll,"good", "All tasks, good",g.use.confiance)
   plot.subjective.difficulty(DTAll,"medium", "All tasks, medium",g.use.confiance)
   plot.subjective.difficulty(DTAll,"bad", "All tasks, bad",g.use.confiance)
-}
-```
-##All tasks with bet
-
-```{r plot.subjective.difficulty.all.confidence.scale.2, echo=FALSE}
-plot.subjective.difficulty(DTAll,"all", "All tasks, all groups",g.use.confiance == FALSE)
-if(g.short.version == FALSE){
-  plot.subjective.difficulty(DTAll,"good", "All tasks, good",g.use.confiance == FALSE)
-  plot.subjective.difficulty(DTAll,"medium", "All tasks, medium",g.use.confiance == FALSE)
-  plot.subjective.difficulty(DTAll,"bad", "All tasks, bad",g.use.confiance == FALSE)
 }
 ```
 
