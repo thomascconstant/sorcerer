@@ -819,7 +819,7 @@ reward = 0;
 cur.confidence.liss = 0;
 est.confidence <- numeric(nrow(DTAll))
 est.confidence[1] = 0;
-alpha <- 0.5 #Vitesse de variation de la confiance
+alpha <- 5.0 #Vitesse de variation de la confiance
 beta <- 0.6 #min modif on win or lose
 maxConf <- 4 #confiance max avant normalisation (qu'elle se barre pas dans des extremes, meme si la normalisation rattrappe, elle bougera plus)
 i = 1
@@ -843,6 +843,7 @@ DTAll$est.confidence = est.confidence;
 
 #Normalisation : max à 6, presque max à 3, 0 devient 0.5. 
 DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+
 
 #update DTM DTS and DTL
 DTM <- DTAll[which(DTAll$nom_du_jeu=="Motrice"),]
