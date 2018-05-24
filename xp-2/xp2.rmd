@@ -819,7 +819,7 @@ reward = 0;
 cur.confidence.liss = 0;
 est.confidence <- numeric(nrow(DTAll))
 est.confidence[1] = 0;
-alpha <- 5.0 #Vitesse de variation de la confiance
+alpha <- 7.0 #Vitesse de variation de la confiance
 beta <- 0.6 #min modif on win or lose
 maxConf <- 4 #confiance max avant normalisation (qu'elle se barre pas dans des extremes, meme si la normalisation rattrappe, elle bougera plus)
 i = 1
@@ -828,12 +828,14 @@ for(i in 2:nrow(DTAll)){
     cur.confidence.liss <- 0;
   }else{
     if(gagnant[i-1]){
-      reward = max(beta,obj.diff[i-1]);
+      #reward = max(beta,obj.diff[i-1]);
+      cur.confidence.liss <- 0
     }else{
-      reward = -max(beta,1 - obj.diff[i-1]);
+      #reward = -max(beta,1 - obj.diff[i-1]);
+      cur.confidence.liss <- cur.confidence.liss + 1
     }
-    cur.confidence.liss <-  cur.confidence.liss + alpha * reward; #évolution de la confiance
-    cur.confidence.liss = sign(cur.confidence.liss) * min(maxConf,abs(cur.confidence.liss)) #on ne dépasse pas le max
+    #cur.confidence.liss <-  cur.confidence.liss + alpha * reward; #évolution de la confiance
+    #cur.confidence.liss = sign(cur.confidence.liss) * min(maxConf,abs(cur.confidence.liss)) #on ne dépasse pas le max
   }
   est.confidence[i] <- cur.confidence.liss;
 }
@@ -842,7 +844,8 @@ for(i in 2:nrow(DTAll)){
 DTAll$est.confidence = est.confidence;
 
 #Normalisation : max à 6, presque max à 3, 0 devient 0.5. 
-DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+#DTAll$est.confidence.norm = exp(DTAll$est.confidence) / (1+exp(DTAll$est.confidence));
+DTAll$est.confidence.norm = DTAll$est.confidence;
 
 
 #update DTM DTS and DTL
@@ -1495,16 +1498,34 @@ plot.random.diff.curve.confidence<- function (DT,title){
   plot.diff.curve.confidence(DT[IDjoueur == player],paste(title,"good"))
 }
 
+
+#Impact du tour précédent sur la confiance
+DTAll$gagnant_last <- data.table::shift(DTAll$gagnant, n=1, fill=NA, type="lag")
+pas.confiant = DTAll[gagnant_last == 0]$error.subj.diff.mise
+super.confiant = DTAll[gagnant_last == 1]$error.subj.diff.mise
+testPlot <- as.data.table(rbind(cbind(values=pas.confiant,group=1),cbind(values=super.confiant,group=2)))
+print(boxplot(values~group,data=testPlot))
+
+
+
+
 plot.random.diff.curve.confidence(DTAll,"All")
 #summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTM))
 p <- test.profile(DTAll[action_de_jeu > 10]$error.subj.diff.mise,DTAll[action_de_jeu > 10]$est.confidence.norm,"DT")
 cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
 
-pas.confiant = DTAll[est.confidence.norm < 0.1]$error.subj.diff.mise
-super.confiant = DTAll[est.confidence.norm > 0.9]$error.subj.diff.mise
+plot(DTAll[action_de_jeu > 10]$error.subj.diff.mise,DTAll[action_de_jeu > 10]$est.confidence.norm)
+
+
+pas.confiant = DTAll[est.confidence.norm < 0.2]$error.subj.diff.mise
+super.confiant = DTAll[est.confidence.norm > 0.8]$error.subj.diff.mise
 var.test(pas.confiant,super.confiant)
 cat("SD des pas confiants :", sd(pas.confiant));
 cat("SD des super confiants :", sd(super.confiant));
+
+testPlot <- as.data.table(rbind(cbind(values=pas.confiant,group=1),cbind(values=super.confiant,group=2)))
+print(boxplot(values~group,data=testPlot))
+t <- wilcox.test(x=pas.confiant,y=super.confiant,paired=FALSE,,conf.int=T)
 
 #p <- test.profile(DTM$error.subj.diff.confiance,DTM$est.confidence.norm,"DTM")
 #cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
@@ -1515,11 +1536,19 @@ plot.random.diff.curve.confidence(DTM,"Motor")
 p <- test.profile(DTM$error.subj.diff.mise,DTM$est.confidence.norm,"DTM")
 cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
 
-pas.confiant = DTM[est.confidence.norm < 0.25]$error.subj.diff.mise
-super.confiant = DTM[est.confidence.norm > 0.75]$error.subj.diff.mise
+plot(DTM$error.subj.diff.mise,DTM$est.confidence.norm)
+
+
+pas.confiant = DTM[est.confidence.norm < 0.20]$error.subj.diff.mise
+super.confiant = DTM[est.confidence.norm > 0.8]$error.subj.diff.mise
 var.test(pas.confiant,super.confiant)
 cat("SD des pas confiants :", sd(pas.confiant));
 cat("SD des super confiants :", sd(super.confiant));
+
+testPlot <- as.data.table(rbind(cbind(values=pas.confiant,group=1),cbind(values=super.confiant,group=2)))
+print(boxplot(values~group,data=testPlot))
+
+
 
 #p <- test.profile(DTM$error.subj.diff.confiance,DTM$est.confidence.norm,"DTM")
 #cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
@@ -1528,11 +1557,14 @@ plot.random.diff.curve.confidence(DTS,"Sensory")
 #summary(glm(error.subj.diff.confiance~est.confidence.norm,data = DTS))
 p <- test.profile(DTS$error.subj.diff.mise,DTS$est.confidence.norm,"DTS")
 
-pas.confiant = DTS[est.confidence.norm < 0.25]$error.subj.diff.mise
-super.confiant = DTS[est.confidence.norm > 0.75]$error.subj.diff.mise
+pas.confiant = DTS[est.confidence.norm < 0.2]$error.subj.diff.mise
+super.confiant = DTS[est.confidence.norm > 0.8]$error.subj.diff.mise
 var.test(pas.confiant,super.confiant)
 cat("SD des pas confiants :", sd(pas.confiant));
 cat("SD des super confiants :", sd(super.confiant));
+
+testPlot <- as.data.table(rbind(cbind(values=pas.confiant,group=1),cbind(values=super.confiant,group=2)))
+print(boxplot(values~group,data=testPlot))
 
 cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
 #p <- test.profile(DTS$error.subj.diff.confiance,DTS$est.confidence.norm,"DTS")
@@ -1543,11 +1575,15 @@ plot.random.diff.curve.confidence(DTL,"Logical")
 p <- test.profile(DTL$error.subj.diff.mise,DTL$est.confidence.norm,"DTL")
 cat("Résultat test Kendall erreur basée sur mise avec confiance estimée :", p)
 
-pas.confiant = DTL[est.confidence.norm < 0.25]$error.subj.diff.mise
-super.confiant = DTL[est.confidence.norm > 0.75]$error.subj.diff.mise
+pas.confiant = DTL[est.confidence.norm < 0.2]$error.subj.diff.mise
+super.confiant = DTL[est.confidence.norm > 0.8]$error.subj.diff.mise
 var.test(pas.confiant,super.confiant)
 cat("SD des pas confiants :", sd(pas.confiant));
 cat("SD des super confiants :", sd(super.confiant));
+
+testPlot <- as.data.table(rbind(cbind(values=pas.confiant,group=1),cbind(values=super.confiant,group=2)))
+print(boxplot(values~group,data=testPlot))
+wilcox.test(x=pas.confiant,y=super.confiant,paired=FALSE)
 
 #p <- test.profile(DTL$error.subj.diff.confiance,DTL$est.confidence.norm,"DTL")
 #cat("Résultat test Kendall erreur basée sur échelle de confiance avec confiance estimée :", p)
