@@ -3,6 +3,7 @@ title: "Perception of difficulty with Random Curve"
 output:
   html_document:
     theme: lumen
+  word_document: default
   pdf_document: default
 ---
 ```{r global.infos, echo=FALSE}
@@ -152,8 +153,11 @@ g.use.confiance <- FALSE
 p <- g.use.confiance
 cat("Résultats basés sur la l'échelle de confiance : ", g.use.confiance)
 
-g.short.version <- TRUE
+g.short.version <- FALSE
 cat("Version courte : ", g.short.version)
+
+g.withplayerprofiles.version <- TRUE
+cat("Avec analyse des profils de joueurs : ", g.withplayerprofiles.version)
 ```
 
 ```{r data.loading, echo=FALSE}
@@ -873,7 +877,7 @@ DTS <- DTAll[which(DTAll$nom_du_jeu=="Sensoriel"),]
 #        SHOWING PLAYERS' PROFILES
 #------------------------------------------------------
 
-if(g.short.version == FALSE){
+if(g.short.version == FALSE && g.withplayerprofiles.version == TRUE){
 
   #OLD REPRESENTATION
   # hist(unique(DTM,by="IDjoueur")$age,breaks=30,main="Age of players")
