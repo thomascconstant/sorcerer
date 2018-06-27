@@ -191,11 +191,22 @@ DTGame <- merge(DTGameXp2,DTGameXp1, all=TRUE) #pour n'avoir que les données tir
 
 # Data from questionnaire
 fileQuestions = "data/xp2_questionnaire.csv"
-DTQuest <- read.csv(fileQuestions,header=TRUE,sep=";")
-DTQuest <- as.data.table(DTQuest)
-DTQuest <- set.empty.to.na(DTQuest)
-DTQuest <- remove.na.cols(DTQuest)
-DTQuest <- remove.na.rows(DTQuest)
+DTQuestXp2 <- read.csv(fileQuestions,header=TRUE,sep=";")
+DTQuestXp2 <- as.data.table(DTQuestXp2)
+DTQuestXp2 <- set.empty.to.na(DTQuestXp2)
+DTQuestXp2 <- remove.na.cols(DTQuestXp2)
+DTQuestXp2 <- remove.na.rows(DTQuestXp2)
+#DTQuestXp2$random_diff=1;
+
+fileQuestions = "data/xp1_questionnaire.csv"
+DTQuestXp1 <- read.csv(fileQuestions,header=TRUE,sep=";")
+DTQuestXp1 <- as.data.table(DTQuestXp1)
+DTQuestXp1 <- set.empty.to.na(DTQuestXp1)
+DTQuestXp1 <- remove.na.cols(DTQuestXp1)
+DTQuestXp1 <- remove.na.rows(DTQuestXp1)
+#DTQuestXp1$random_diff=0;
+
+DTQuest <- merge(DTQuestXp2,DTQuestXp1, all=TRUE) #pour n'avoir que les données tirées du questionnaire
 
 # Merging tables into one
 setkey(DTGame,IDjoueur)
