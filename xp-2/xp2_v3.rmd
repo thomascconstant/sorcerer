@@ -548,7 +548,17 @@ if(g.ignore.confidence.scale.outilers){
 #------------------------------------------------------
 #modeling difficulty as mixed effect linear model
 model.objective.diff <- function(DT){
-  return(glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), data=DT,family = "binomial"(link = "logit")))
+  model <- glmer(perdant ~ difficulty + timeNorm + (1 | IDjoueur), DT,family = "binomial"(link = "logit"))
+  
+  #On met ici le vrai nom de la variable passée en argument genre DTM ou DTL car sinon, quand
+  #on calcule le r2 du modele, il doit accéder aux datas. Et dans le modèle, il a stoqué DTM, qui
+  #est une variable locale à cette fonction. Et donc il ne la retrouve pas et plante. Donc on va 
+  #chercher le nom de la variable et on le met de force. An oter que c'est le meme soucis pour ce qu'il
+  #y a dans formula mais on a pas touché 
+  #https://stackoverflow.com/questions/14275664/how-to-use-lmer-inside-a-function
+  dtname <- as.name(deparse(substitute(DT)))
+  model@call$data <- dtname
+  return(model)
 }
 
 add.diff.obj <- function (DT,fit){
@@ -624,8 +634,8 @@ print.objective.diff.model <- function (DT,fit) {
   inter.p.val = fit.sum$coefficients10
   beta.diff.p.val = fit.sum$coefficients11
   beta.time.p.val = fit.sum$coefficients12
-  fit.r.value.fix = r.squaredGLMM(fit)[1] #R2 for fixed effect model
-  fit.r.value.mix = r.squaredGLMM(fit)[2] #R2 for mixed effect model
+  fit.r.value.fix = r.squaredGLMM(fit)[1,1] #R2 for fixed effect model. MuMIn 1.41.0 resultat en matrice. 
+  fit.r.value.mix = r.squaredGLMM(fit)[1,2] #R2 for mixed effect model  MuMIn 1.41.0 resultat en matrice. 
   fit.cross.val = get.model.accuracy(DT)
   fit.aic = AIC(fit)
   
