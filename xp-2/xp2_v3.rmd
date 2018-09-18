@@ -153,11 +153,14 @@ g.use.confiance <- FALSE
 p <- g.use.confiance
 cat("Résultats basés sur la l'échelle de confiance : ", g.use.confiance)
 
-g.short.version <- FALSE
+g.short.version <- TRUE
 cat("Version courte : ", g.short.version)
 
 g.withplayerprofiles.version <- TRUE
 cat("Avec analyse des profils de joueurs : ", g.withplayerprofiles.version)
+
+g.useRandomDiff = TRUE
+g.useDDADiff = TRUE
 ```
 
 ```{r data.loading, echo=FALSE}
@@ -166,26 +169,37 @@ cat("Avec analyse des profils de joueurs : ", g.withplayerprofiles.version)
 #------------------------------------------------------
 
 # Data from game trace
-fileGameTrace = "data/xp2_game.csv" 
-DTGameXp2 <- read.csv(fileGameTrace,header=TRUE,sep=";")
-DTGameXp2 <- as.data.table(DTGameXp2)
-DTGameXp2 <- set.empty.to.na(DTGameXp2)
-DTGameXp2 <- remove.na.cols(DTGameXp2)
-DTGameXp2 <- remove.na.rows(DTGameXp2)
-DTGameXp2[,gameDiff:=NULL] #que dans xp2 et inutilisé
-DTGameXp2[,near_miss:=NULL] #que dans xp2 et inutilisé
-DTGameXp2 <- subset(DTGameXp2, modeTest!=1) #on enleve les tours de chauffe (marqués dans cette xp)
-DTGameXp2 <- subset(DTGameXp2, action_de_jeu!=1) # Removing the first turn (where difficulty == 0)
-DTGameXp2[,modeTest:=NULL] #plus utile
-DTGameXp2$random_diff=1;
 
-fileGameTrace =  "data/xp1_game_week2.txt" #résultats jeux XP CN2 avec diff DDA
-DTGameXp1 <- read.csv(fileGameTrace,header=TRUE,sep=";")
-DTGameXp1 <- as.data.table(DTGameXp1)
-DTGameXp1 <- set.empty.to.na(DTGameXp1)
-DTGameXp1 <- remove.na.cols(DTGameXp1)
-DTGameXp1 <- remove.na.rows(DTGameXp1)
-DTGameXp1$random_diff=0;
+
+  fileGameTrace = "data/xp2_game.csv" 
+  DTGameXp2 <- read.csv(fileGameTrace,header=TRUE,sep=";")
+  DTGameXp2 <- as.data.table(DTGameXp2)
+  DTGameXp2 <- set.empty.to.na(DTGameXp2)
+  DTGameXp2 <- remove.na.cols(DTGameXp2)
+  DTGameXp2 <- remove.na.rows(DTGameXp2)
+  DTGameXp2[,gameDiff:=NULL] #que dans xp2 et inutilisé
+  DTGameXp2[,near_miss:=NULL] #que dans xp2 et inutilisé
+  DTGameXp2 <- subset(DTGameXp2, modeTest!=1) #on enleve les tours de chauffe (marqués dans cette xp)
+  DTGameXp2 <- subset(DTGameXp2, action_de_jeu!=1) # Removing the first turn (where difficulty == 0)
+  DTGameXp2[,modeTest:=NULL] #plus utile
+  DTGameXp2$random_diff=1
+  
+if(g.useRandomDiff == FALSE){
+  DTGameXp2 = DTGameXp2[FALSE]
+}
+
+  fileGameTrace =  "data/xp1_game_week2.txt" #résultats jeux XP CN2 avec diff DDA
+  DTGameXp1 <- read.csv(fileGameTrace,header=TRUE,sep=";")
+  DTGameXp1 <- as.data.table(DTGameXp1)
+  DTGameXp1 <- set.empty.to.na(DTGameXp1)
+  DTGameXp1 <- remove.na.cols(DTGameXp1)
+  DTGameXp1 <- remove.na.rows(DTGameXp1)
+  DTGameXp1$random_diff=0;
+
+  
+if(g.useDDADiff == FALSE){
+  DTGameXp1 = DTGameXp1[FALSE]
+}
 
 DTGame <- merge(DTGameXp2,DTGameXp1, all=TRUE) #pour n'avoir que les données tirées du jeu
 
@@ -575,7 +589,7 @@ get.model.accuracy <- function(DT){
     DTModel <-  DT[cross.val.group != i]
     DTTest <- DT[cross.val.group == i]
     fit <- model.objective.diff(DTModel)
-    newres = predict(fit, newdata = DTTest, type = "response")  
+    newres = predict(fit, newdata = DTTest, type = "response", allow.new.levels=T)  
     newres = round(newres)
     accuracy = abs(newres - DTTest$perdant)
     localAccu = table(accuracy)[[1]]/length(accuracy)
@@ -651,9 +665,8 @@ print.objective.diff.model <- function (DT,fit) {
   print(paste("AIC:",signif(fit.aic,digits=2)))
 }
 
-plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, randomDiff=1) {
+plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement="") {
 
-  DT = DT[random_diff == randomDiff ]
   #DTLevel <- get.levels(DT,fit)
   DTLevel <- unique(DT,by="IDjoueur")
   if(groups){
@@ -708,11 +721,9 @@ plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, randomDiff
   
   p <- p + theme(legend.position="none")
   
-  typeXp = "(random)"
-  if(randomDiff == 0)
-    typeXp = "(dda)"
+
   lab = paste("Objective Difficulty at t=",time)
-  lab = paste(lab,typeXp,' ')
+  lab <- paste(lab,complement,' ')
   
   p <- p + xlab("Difficulty Variable") + ylab(lab) + theme(text = element_text(size=20))
   
@@ -765,13 +776,34 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
 #------------------------------------------------------
 #        MODELING OBJECTIVE DIFFICULTY MOTOR TASK
 #------------------------------------------------------
+  DTMXp1 <- DTM[random_diff == 0]
+  DTMXp2 <- DTM[random_diff == 1]
+
+  #Les deux xp
   fit.diff.motor <- model.objective.diff(DTM)
   DTM <- add.diff.obj(DTM,fit.diff.motor)
   DTM <- add.levels(DTM,fit.diff.motor)
   DTM <- add.levels.groups(DTM)
   print.objective.diff.model(DTM,fit.diff.motor)
-  plot.objective.diff.model.curves(DTM,fit.diff.motor,0,T,0)
-  plot.objective.diff.model.curves(DTM,fit.diff.motor,0,T,1)
+  plot.objective.diff.model.curves(DTM,fit.diff.motor,0,T,"all")
+  
+  #xp1
+  fit.diff.motor.Xp1 <- model.objective.diff(DTMXp1)
+  DTMXp1 <- add.diff.obj(DTMXp1,fit.diff.motor.Xp1)
+  DTMXp1 <- add.levels(DTMXp1,fit.diff.motor.Xp1)
+  DTMXp1 <- add.levels.groups(DTMXp1)
+  print.objective.diff.model(DTMXp1,fit.diff.motor.Xp1)
+  plot.objective.diff.model.curves(DTMXp1,fit.diff.motor.Xp1,0,T,"DDA")
+  
+  #xp2
+  fit.diff.motor.Xp2 <- model.objective.diff(DTMXp2)
+  DTMXp2 <- add.diff.obj(DTMXp2,fit.diff.motor.Xp2)
+  DTMXp2 <- add.levels(DTMXp2,fit.diff.motor.Xp2)
+  DTMXp2 <- add.levels.groups(DTMXp2)
+  print.objective.diff.model(DTMXp2,fit.diff.motor.Xp2)
+  plot.objective.diff.model.curves(DTMXp2,fit.diff.motor.Xp2,0,T,"Random")
+  
+  
   if(g.short.version == FALSE){
     plot.objective.diff.model.curves(DTM,fit.diff.motor,1)
     plot.objective.diff.model.curves.time(DTM,fit.diff.motor)
@@ -790,13 +822,33 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
 #------------------------------------------------------
 #        MODELING OBJECTIVE DIFFICULTY SENSORY TASK
 #------------------------------------------------------
+  DTSXp1 <- DTS[random_diff == 0]
+  DTSXp2 <- DTS[random_diff == 1]
+
+  #Les deux xp
   fit.diff.senso <- model.objective.diff(DTS)
   DTS <- add.diff.obj(DTS,fit.diff.senso)
   DTS <- add.levels(DTS,fit.diff.senso)
   DTS <- add.levels.groups(DTS)
   print.objective.diff.model(DTS,fit.diff.senso)
-  plot.objective.diff.model.curves(DTS,fit.diff.senso,0,T,0)
-  plot.objective.diff.model.curves(DTS,fit.diff.senso,0,T,1)
+  plot.objective.diff.model.curves(DTS,fit.diff.senso,0,T,"all")
+  
+  #xp1
+  fit.diff.senso.Xp1 <- model.objective.diff(DTSXp1)
+  DTSXp1 <- add.diff.obj(DTSXp1,fit.diff.senso.Xp1)
+  DTSXp1 <- add.levels(DTSXp1,fit.diff.senso.Xp1)
+  DTSXp1 <- add.levels.groups(DTSXp1)
+  print.objective.diff.model(DTSXp1,fit.diff.senso.Xp1)
+  plot.objective.diff.model.curves(DTSXp1,fit.diff.senso.Xp1,0,T,"DDA")
+  
+  #xp2
+  fit.diff.senso.Xp2 <- model.objective.diff(DTSXp2)
+  DTSXp2 <- add.diff.obj(DTSXp2,fit.diff.senso.Xp2)
+  DTSXp2 <- add.levels(DTSXp2,fit.diff.senso.Xp2)
+  DTSXp2 <- add.levels.groups(DTSXp2)
+  print.objective.diff.model(DTSXp2,fit.diff.senso.Xp2)
+  plot.objective.diff.model.curves(DTSXp2,fit.diff.senso.Xp2,0,T,"Random")
+  
   if(g.short.version == FALSE){
     plot.objective.diff.model.curves(DTS,fit.diff.senso,1)
     plot.objective.diff.model.curves.time(DTS,fit.diff.senso)
@@ -814,13 +866,33 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
 #------------------------------------------------------
 #        MODELING OBJECTIVE DIFFICULTY LOGICAL TASK
 #------------------------------------------------------
+  DTLXp1 <- DTL[random_diff == 0]
+  DTLXp2 <- DTL[random_diff == 1]
+
+  #Les deux xp
   fit.diff.logic <- model.objective.diff(DTL)
   DTL <- add.diff.obj(DTL,fit.diff.logic)
   DTL <- add.levels(DTL,fit.diff.logic)
   DTL <- add.levels.groups(DTL)
   print.objective.diff.model(DTL,fit.diff.logic)
-  plot.objective.diff.model.curves(DTL,fit.diff.logic,0,T,0)
-  plot.objective.diff.model.curves(DTL,fit.diff.logic,0,T,1)
+  plot.objective.diff.model.curves(DTL,fit.diff.logic,0,T,"all")
+  
+  #xp1
+  fit.diff.logic.Xp1 <- model.objective.diff(DTLXp1)
+  DTLXp1 <- add.diff.obj(DTLXp1,fit.diff.logic.Xp1)
+  DTLXp1 <- add.levels(DTLXp1,fit.diff.logic.Xp1)
+  DTLXp1 <- add.levels.groups(DTLXp1)
+  print.objective.diff.model(DTLXp1,fit.diff.logic.Xp1)
+  plot.objective.diff.model.curves(DTLXp1,fit.diff.logic.Xp1,0,T,"DDA")
+  
+  #xp2
+  fit.diff.logic.Xp2 <- model.objective.diff(DTLXp2)
+  DTLXp2 <- add.diff.obj(DTLXp2,fit.diff.logic.Xp2)
+  DTLXp2 <- add.levels(DTLXp2,fit.diff.logic.Xp2)
+  DTLXp2 <- add.levels.groups(DTLXp2)
+  print.objective.diff.model(DTLXp2,fit.diff.logic.Xp2)
+  plot.objective.diff.model.curves(DTLXp2,fit.diff.logic.Xp2,0,T,"Random")
+  
   if(g.short.version == FALSE){
     plot.objective.diff.model.curves(DTL,fit.diff.logic,1)
     plot.objective.diff.model.curves.time(DTL,fit.diff.logic)
@@ -1169,13 +1241,23 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
   subj.diff.med.dda = numeric(nb.bins)
   obj.diff.bin = numeric(nb.bins)
   obj.diff.bin.cur = 0;
-  test.pvals = numeric(nb.bins)
+  
+  test.dda.not.rnd.pvals = numeric(nb.bins)
+  test.dda.wrong.pvals = numeric(nb.bins)
+  test.rnd.wrong.pvals = numeric(nb.bins)
+  
+  shapes.rnd.dda.not.rnd =  numeric(nb.bins)
+  shapes.dda.dda.not.rnd =  numeric(nb.bins)
+  shapes.rnd.wrong =  numeric(nb.bins)
+  shapes.dda.wrong =  numeric(nb.bins)
+  
+  
+  
   conf.min = numeric(nb.bins)
   conf.max = numeric(nb.bins)
   nb.vals.rnd = numeric(nb.bins)
   nb.vals.dda = numeric(nb.bins)
-  shapes.rnd =  numeric(nb.bins)
-  shapes.dda =  numeric(nb.bins)
+  
   delta.obj.subj = numeric(nb.bins)
   subj.diff.delta.rnd.dda = numeric(nb.bins)
   
@@ -1204,48 +1286,109 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
     subj.diff.med.dda[i] = NA
     subj.diff.med.rnd[i] = NA
     
-    test.pvals[i] = NA
+    test.dda.not.rnd.pvals[i] = NA
+    test.dda.wrong.pvals[i] = NA
+    test.rnd.wrong.pvals[i] = NA
+    
+  
+    
+    
     conf.min[i] = NA
     conf.max[i] = NA
     
-    shapes.rnd[i] = 1
-    shapes.dda[i] = 2
+
+    shapes.rnd.dda.not.rnd[i] = 1
+    shapes.dda.dda.not.rnd[i] =  2
+    shapes.rnd.wrong[i] =  1
+    shapes.dda.wrong[i] =  2
+    
     nb.vals.rnd[i] = length(subj.diff.rnd)
     nb.vals.dda[i] = length(subj.diff.dda)
     
-    if(nb.vals.rnd[i] > 10)
-      subj.diff.med.rnd[i] = mean(subj.diff.rnd)
-    if(nb.vals.dda[i] > 10)
-      subj.diff.med.dda[i] = mean(subj.diff.dda)
+    #if(nb.vals.rnd[i] > 10)
+    #  subj.diff.med.rnd[i] = mean(subj.diff.rnd)
+    #if(nb.vals.dda[i] > 10)
+    #  subj.diff.med.dda[i] = mean(subj.diff.dda)
+    subj.diff.med.rnd[i] = NA
+    subj.diff.med.dda[i] = NA
     
-    if(nb.vals.rnd[i] > 10 && nb.vals.dda[i] > 10){
-      try.res = try(test.res <- wilcox.test(x=subj.diff.rnd,y=subj.diff.dda,conf.int=T,paired=FALSE))
+    #if(nb.vals.rnd[i] > 10 && nb.vals.dda[i] > 10){
+    if(nb.vals.rnd[i] > 20 && nb.vals.dda[i] > 20){
+      
+      
+      #Difference entre RND subj et objective difficulty
+      try.res = try(test.res <-  wilcox.test(subj.diff.rnd,mu=obj.diff.bin.cur,conf.int=T))
       if (class(try.res) != "try-error"){
         #print(test.res)
         #hist(subj.diff)
-        test.pvals[i] = format.pval.stars(test.res$p.value)
+        test.rnd.wrong.pvals[i] = format.pval.stars(test.res$p.value)
+        subj.diff.med.rnd[i] = test.res$estimate
         
-        if(test.res$p.value < 0.05){
-          shapes.rnd[i] = 16
-          shapes.dda[i] = 17
+        if(test.res$p.value <= 0.01){
+          shapes.rnd.wrong[i] = 16
         }
-        
-        subj.diff.delta.rnd.dda[i] = test.res$estimate
-        conf.min[i] = test.res$conf.int[1]
-        conf.max[i] = test.res$conf.int[2]
       }
+      
+      #Difference entre DDA subj et objective difficulty
+      try.res = try(test.res <- wilcox.test(subj.diff.dda,mu=obj.diff.bin.cur,conf.int=T))
+      if (class(try.res) != "try-error"){
+        #print(test.res)
+        #hist(subj.diff)
+        test.dda.wrong.pvals[i] = format.pval.stars(test.res$p.value)
+        subj.diff.med.dda[i] = test.res$estimate
+        
+        if(test.res$p.value <= 0.01){
+          shapes.dda.wrong[i] = 17
+        }
+      }
+      
+      #difference entre DDa et RANDOM
+      if(! is.na(subj.diff.med.rnd[i]) & !is.na(subj.diff.med.dda[i]))
+      {
+        try.res = try(test.res <- wilcox.test(x=subj.diff.rnd,y=subj.diff.dda,conf.int=T,paired=FALSE))
+        if (class(try.res) != "try-error"){
+          #print(test.res)
+          #hist(subj.diff)
+          test.dda.not.rnd.pvals[i] = format.pval.stars(test.res$p.value)
+          
+          if(test.res$p.value <= 0.01){
+            shapes.rnd.dda.not.rnd[i] = 16
+            shapes.dda.dda.not.rnd[i] = 17
+          }
+          
+          subj.diff.delta.rnd.dda[i] = test.res$estimate
+        }
+      }
+      
+      
+      
+      
     }
   }
 
   i=1#print table of pvalues
-  print(data.table(obj.diff.bin=obj.diff.bin,subj.diff.delta.rnd.dda=subj.diff.delta.rnd.dda,n.rnd=nb.vals.rnd,n.dda=nb.vals.dda,pval=test.pvals))
+  print(data.table(obj.diff.bin=obj.diff.bin,subj.diff.delta.rnd.dda=subj.diff.delta.rnd.dda,n.rnd=nb.vals.rnd,n.dda=nb.vals.dda,pval=test.dda.not.rnd.pvals, shapesdda=shapes.dda.dda.not.rnd, shapesrnd=shapes.rnd.dda.not.rnd))
 
-  DTPlotRnd = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd)
-  DTPlotDda = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda)
+  DTPlotRnd = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.dda.not.rnd)
+  DTPlotDda = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.dda.not.rnd)
 
-  p = ggplot() + ggtitle(title) +
+  p = ggplot() + ggtitle(paste(title,"RND vs DDA"," ")) +
         geom_point(aes(x=DTPlotRnd$obj.diff,y=DTPlotRnd$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd$shapes) +
         geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotDda$subj.diff),alpha = 1, size = 3, shape=DTPlotDda$shapes) +
+        xlim(0,1)+
+        ylim(0,1)+
+        #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+        #geom_abline(intercept = 0, slope = 1, color="blue") +
+        xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
+
+  print(p)
+  
+  DTPlotRnd2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.wrong)
+  DTPlotDda2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.wrong)
+  
+  p = ggplot() + ggtitle(paste(title,"RND et DDA VS OBJ"," ")) +
+        geom_point(aes(x=DTPlotRnd2$obj.diff,y=DTPlotRnd2$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd2$shapes) +
+        geom_point(aes(x=DTPlotDda2$obj.diff,y=DTPlotDda2$subj.diff),alpha = 1, size = 3, shape=DTPlotDda2$shapes) +
         xlim(0,1)+
         ylim(0,1)+
         #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
