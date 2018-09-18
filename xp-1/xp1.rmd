@@ -172,6 +172,9 @@ DTAll <- merge(DTGame,DTQuest, all.x=TRUE)
 #         ADDING VARIABLES FOR QUESTIONNAIRE
 #------------------------------------------------------
 
+#ON TRIE DTALL CORRECTEMENT
+DTAll = DTAll[order(nom_du_jeu,IDjoueur,action_de_jeu)]
+
 # how much playing video games in general
 DTAll$play.video.games = pmax(DTAll$profilJoueur2,
                               DTAll$profilJoueur3,
@@ -426,6 +429,7 @@ print(paste("Total number of outliers: ",toString(nrow(unique(outliers,by="id"))
 print(paste("Total number of outliers motor task: ",toString(nrow(unique(outliers[type=="Moteur"],by="id")))))
 print(paste("Total number of outliers perceptive task: ",toString(nrow(unique(outliers[type=="Logique"],by="id")))))
 print(paste("Total number of outliers logical task: ",toString(nrow(unique(outliers[type=="Sensoriel"],by="id")))))
+print(paste("Outliers: ",toString(unique(outliers$id))))
 ```
 
 ```{r remove.outliers, echo=FALSE}

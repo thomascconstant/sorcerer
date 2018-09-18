@@ -301,6 +301,10 @@ DTAll <- DTAll[,c("jeuxFav","horodateur","prenomNom"):=NULL] #dont need them at 
 #         ADDING SIMPLE VARIABLES FOR GAME TRACES
 #------------------------------------------------------
 
+#ON TRIE DTALL CORRECTEMENT
+DTAll = DTAll[order(nom_du_jeu,IDjoueur,action_de_jeu)]
+
+
 DTAll$perdant <- 1-DTAll$gagnant # if the player did fail on that try
 DTAll$miseNorm <- DTAll$mise / 7 # normalize bet
 DTAll$timeNorm <- DTAll$action_de_jeu / max(DTAll$action_de_jeu) #normalise, to compare
@@ -412,22 +416,24 @@ DTAll$cumulDeltaMise = cumulDeltaMise;
  #------------------------------------------------------
  #            OUTLIERS BET STD DEV
  #------------------------------------------------------
-if (g.ignore.confidence.scale.outilers == TRUE) {
-  DTDescM = DTM[,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
-  DTDescS = DTS[,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
-  DTDescL = DTL[,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
+
+DTDescM = DTM[random_diff==0,.(type="Moteur",var=sd(miseNorm)),by=IDjoueur]
+DTDescS = DTS[random_diff==0,.(type="Sensoriel",var=sd(miseNorm)),by=IDjoueur]
+DTDescL = DTL[random_diff==0,.(type="Logique",var=sd(miseNorm)),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
+
+outliers = get.outliers(DTDescM,DTDescS,DTDescL)
+print(paste("Outliers BET STANDARD DEVIATION:",toString(outliers$id)))
+print(paste("Outliers BET STANDARD DEVIATIONtype :",toString(outliers$type)))
+
+DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
  
-  if(g.short.version == FALSE)
-     plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Bet Standard Dev");
- 
-  outliers = get.outliers(DTDescM,DTDescS,DTDescL)
-  print(paste("Outliers BET STANDARD DEVIATION:",toString(outliers$id)))
- 
-  DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Motor Task");NULL},by=.(IDjoueur)]
-  DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Sensory Task");NULL},by=.(IDjoueur)]
-  DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Bet Sd Logical Task");NULL},by=.(IDjoueur)]
-} 
 ```
+ 
+
  
 ```{r detect.outliers.win.sum, echo=FALSE}
  #------------------------------------------------------
@@ -456,12 +462,11 @@ if (g.ignore.confidence.scale.outilers == TRUE) {
  #            OUTLIERS SAVED SHEEPS
  #------------------------------------------------------
  # Difficulty and strategy = saved sheeps
- DTDescM = DTM[,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
- DTDescS = DTS[,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
- DTDescL = DTL[,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
+ DTDescM = DTM[random_diff==0,.(type="Moteur",var=max(moutons_sauves)),by=IDjoueur]
+ DTDescS = DTS[random_diff==0,.(type="Sensoriel",var=max(moutons_sauves)),by=IDjoueur]
+ DTDescL = DTL[random_diff==0,.(type="Logique",var=max(moutons_sauves)),by=IDjoueur]
  
- if(g.short.version == FALSE)
-   plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
+ plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "Saved sheeps");
  
  outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
  if(exists("outliers")){
@@ -477,50 +482,71 @@ if (g.ignore.confidence.scale.outilers == TRUE) {
  DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Score Logical Task");NULL},by=.(IDjoueur)]
  
 ```
+
+```{r detect.outliers.dda.exploit, echo=FALSE}
+#------------------------------------------------------
+#            OUTLIERS EXPLOIT DDA
+#------------------------------------------------------
+# DDA Exploit : Win/Fail delta sum max
+DTDescM = DTM[random_diff==0,.(type="Moteur",var=max(cumulDeltaMise)),by=IDjoueur]
+DTDescS = DTS[random_diff==0,.(type="Sensoriel",var=max(cumulDeltaMise)),by=IDjoueur]
+DTDescL = DTL[random_diff==0,.(type="Logique",var=max(cumulDeltaMise)),by=IDjoueur]
+
+plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "cumulDeltaMise");
+
+outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+print(paste("Outliers :",toString(outliersLoc$id)))
+print(paste("Outliers type :",toString(outliersLoc$type)))
+
+DTM[IDjoueur %in% unlist(outliersLoc[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Motor Task");NULL},by=.(IDjoueur)]
+DTS[IDjoueur %in% unlist(outliersLoc[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Sensory Task");NULL},by=.(IDjoueur)]
+DTL[IDjoueur %in% unlist(outliersLoc[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier Delta Bet Logical Task");NULL},by=.(IDjoueur)]
+```
  
 ```{r detect.outliers.cs.sd, echo=FALSE}
 #------------------------------------------------------
 #            OUTLIERS CS STD DEV
 #------------------------------------------------------
-if(g.ignore.confidence.scale.outilers){
-  DTDescM = DTM[,.(type="Moteur",var=sd(confianceNorm)),by=IDjoueur]
-  DTDescS = DTS[,.(type="Sensoriel",var=sd(confianceNorm)),by=IDjoueur]
-  DTDescL = DTL[,.(type="Logique",var=sd(confianceNorm)),by=IDjoueur]
-  
-  if(g.short.version == FALSE)
-    plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS Standard Dev");
-  
-  outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-  outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-  
-  print(paste("Outliers CS STANDARD DEVIATION:",toString(outliers$id)))
-  
-  DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Motor Task");NULL},by=.(IDjoueur)]
-  DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Sensory Task");NULL},by=.(IDjoueur)]
-  DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Logical Task");NULL},by=.(IDjoueur)]  
-}
+# if(g.ignore.confidence.scale.outilers){
+#   DTDescM = DTM[,.(type="Moteur",var=sd(confianceNorm)),by=IDjoueur]
+#   DTDescS = DTS[,.(type="Sensoriel",var=sd(confianceNorm)),by=IDjoueur]
+#   DTDescL = DTL[,.(type="Logique",var=sd(confianceNorm)),by=IDjoueur]
+#   
+#   if(g.short.version == FALSE)
+#     plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS Standard Dev");
+#   
+#   outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+#   outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+#   
+#   print(paste("Outliers CS STANDARD DEVIATION:",toString(outliers$id)))
+#   
+#   DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Motor Task");NULL},by=.(IDjoueur)]
+#   DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Sensory Task");NULL},by=.(IDjoueur)]
+#   DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier CS Sd Logical Task");NULL},by=.(IDjoueur)]  
+# }
 ```
 
 ```{r detect.outliers.cs.null, echo=FALSE}
 #------------------------------------------------------
 #            OUTLIERS CS NULL
 #------------------------------------------------------
-if(g.ignore.confidence.scale.outilers){
-  DTDescM = DTM[,.(type="Moteur",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
-  DTDescS = DTS[,.(type="Sensoriel",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
-  DTDescL = DTL[,.(type="Logique",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
-  
-  if(g.short.version == FALSE)
-    plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS null");
-  
-  outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
-  outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
-  print(paste("Outliers CS NULL:",toString(outliers$id)))
-  
-  DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Motor Task");NULL},by=.(IDjoueur)]
-  DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Sensory Task");NULL},by=.(IDjoueur)]
-  DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Logical Task");NULL},by=.(IDjoueur)]
-}
+# if(g.ignore.confidence.scale.outilers){
+#   DTDescM = DTM[,.(type="Moteur",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+#   DTDescS = DTS[,.(type="Sensoriel",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+#   DTDescL = DTL[,.(type="Logique",var=(sum(confianceNorm!=confianceNorm[1])>0)*1),by=IDjoueur]
+#   
+#   if(g.short.version == FALSE)
+#     plot.outliers(rbind(DTDescM,rbind(DTDescL,DTDescS)), "CS null");
+#   
+#   outliersLoc = get.outliers(DTDescM,DTDescS,DTDescL)
+#   outliers = merge(outliers,outliersLoc,by=c("id","type"),all=TRUE)
+#   print(paste("Outliers CS NULL:",toString(outliers$id)))
+#   
+#   DTM[IDjoueur %in% unlist(outliers[type=="Moteur"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Motor Task");NULL},by=.(IDjoueur)]
+#   DTS[IDjoueur %in% unlist(outliers[type=="Sensoriel"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Sensory Task");NULL},by=.(IDjoueur)]
+#   DTL[IDjoueur %in% unlist(outliers[type=="Logique"]$id) ,{plot.diff.curve(.SD,"Outlier CS Null Logical Task");NULL},by=.(IDjoueur)]
+# }
 ``` 
  
  
@@ -533,6 +559,7 @@ if(g.ignore.confidence.scale.outilers){
  print(paste("- total number of outliers motor task: ",toString(nrow(unique(outliers[type=="Moteur"],by="id")))))
  print(paste("- total number of outliers perceptive task: ",toString(nrow(unique(outliers[type=="Logique"],by="id")))))
  print(paste("- total number of outliers logical task: ",toString(nrow(unique(outliers[type=="Sensoriel"],by="id")))))
+ print(paste("Outliers: ",toString(unique(outliers$id))))
 ```
  
 ```{r remove.outliers, echo=FALSE}
@@ -1272,9 +1299,9 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
       DTLoc = DDTLoc=DTLoc[niveau.group==selGroup]
     
     if(useConfiance)
-      DTLoc = DTLoc[,.(random_diff,subj.diff.mean=mean(subj.diff.confiance)),by=IDjoueur]
+      DTLoc = DTLoc[,.(random_diff=mean(random_diff),subj.diff.mean=mean(subj.diff.confiance)),by=IDjoueur]
     else
-      DTLoc = DTLoc[,.(random_diff,subj.diff.mean=mean(subj.diff.mise)),by=IDjoueur]
+      DTLoc = DTLoc[,.(random_diff=mean(random_diff),subj.diff.mean=mean(subj.diff.mise)),by=IDjoueur]
     
     
 
@@ -1299,8 +1326,8 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
 
     shapes.rnd.dda.not.rnd[i] = 1
     shapes.dda.dda.not.rnd[i] =  2
-    shapes.rnd.wrong[i] =  1
-    shapes.dda.wrong[i] =  2
+    shapes.rnd.wrong[i] =  32
+    shapes.dda.wrong[i] =  32
     
     nb.vals.rnd[i] = length(subj.diff.rnd)
     nb.vals.dda[i] = length(subj.diff.dda)
@@ -1312,8 +1339,8 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
     subj.diff.med.rnd[i] = NA
     subj.diff.med.dda[i] = NA
     
-    #if(nb.vals.rnd[i] > 10 && nb.vals.dda[i] > 10){
-    if(nb.vals.rnd[i] > 20 && nb.vals.dda[i] > 20){
+    #if(nb.vals.rnd[i] > 10 & nb.vals.dda[i] > 10){
+    if(nb.vals.rnd[i] >= 10 & nb.vals.dda[i] >= 10){
       
       
       #Difference entre RND subj et objective difficulty
@@ -1324,8 +1351,8 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
         test.rnd.wrong.pvals[i] = format.pval.stars(test.res$p.value)
         subj.diff.med.rnd[i] = test.res$estimate
         
-        if(test.res$p.value <= 0.01){
-          shapes.rnd.wrong[i] = 16
+        if(test.res$p.value < 0.05){
+          shapes.rnd.wrong[i] = 0
         }
       }
       
@@ -1337,13 +1364,13 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
         test.dda.wrong.pvals[i] = format.pval.stars(test.res$p.value)
         subj.diff.med.dda[i] = test.res$estimate
         
-        if(test.res$p.value <= 0.01){
-          shapes.dda.wrong[i] = 17
+        if(test.res$p.value < 0.05){
+          shapes.dda.wrong[i] = 5
         }
       }
       
-      #difference entre DDa et RANDOM
-      if(! is.na(subj.diff.med.rnd[i]) & !is.na(subj.diff.med.dda[i]))
+      #difference entre DDA et RANDOM
+      if(!is.na(subj.diff.med.rnd[i]) & !is.na(subj.diff.med.dda[i]))
       {
         try.res = try(test.res <- wilcox.test(x=subj.diff.rnd,y=subj.diff.dda,conf.int=T,paired=FALSE))
         if (class(try.res) != "try-error"){
@@ -1351,7 +1378,7 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
           #hist(subj.diff)
           test.dda.not.rnd.pvals[i] = format.pval.stars(test.res$p.value)
           
-          if(test.res$p.value <= 0.01){
+          if(test.res$p.value < 0.05){
             shapes.rnd.dda.not.rnd[i] = 16
             shapes.dda.dda.not.rnd[i] = 17
           }
@@ -1369,33 +1396,41 @@ plot.subjective.difficulty <- function(DT,selGroup,title,useConfiance){
   i=1#print table of pvalues
   print(data.table(obj.diff.bin=obj.diff.bin,subj.diff.delta.rnd.dda=subj.diff.delta.rnd.dda,n.rnd=nb.vals.rnd,n.dda=nb.vals.dda,pval=test.dda.not.rnd.pvals, shapesdda=shapes.dda.dda.not.rnd, shapesrnd=shapes.rnd.dda.not.rnd))
 
-  DTPlotRnd = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.dda.not.rnd)
-  DTPlotDda = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.dda.not.rnd)
+  DTPlotRnd = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.dda.not.rnd, shapes.confidence = shapes.rnd.wrong)
+  DTPlotDda = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.dda.not.rnd, shapes.confidence = shapes.dda.wrong)
+  
+  #title = paste(title,"RND vs DDA"," ")
 
-  p = ggplot() + ggtitle(paste(title,"RND vs DDA"," ")) +
-        geom_point(aes(x=DTPlotRnd$obj.diff,y=DTPlotRnd$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd$shapes) +
-        geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotDda$subj.diff),alpha = 1, size = 3, shape=DTPlotDda$shapes) +
+  p = ggplot()  +
+        geom_abline(intercept = 0, slope = 1, color="blue")  + 
+        geom_point(aes(x=DTPlotRnd$obj.diff,y=DTPlotRnd$subj.diff),alpha = 1, size = 2, shape=DTPlotRnd$shapes) +
+        geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotDda$subj.diff),alpha = 1, size = 2, shape=DTPlotDda$shapes) +
+        geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotDda$subj.diff),alpha = 1, size = 4, shape=DTPlotDda$shapes.confidence, color=rgb(1,0.1,0.1)) +
+        geom_point(aes(x=DTPlotDda$obj.diff,y=DTPlotRnd$subj.diff),alpha = 1, size = 4, shape=DTPlotRnd$shapes.confidence, color=rgb(1,0.1,0.1)) +
         xlim(0,1)+
         ylim(0,1)+
         #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
-        #geom_abline(intercept = 0, slope = 1, color="blue") +
-        xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
+       
+        theme(axis.title.x=element_blank(),axis.title.y=element_blank())
 
-  print(p)
+  ggsave(paste(title,".png",""), dpi=1200, width=11, height=7, device="png", units="cm")
   
-  DTPlotRnd2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.wrong)
-  DTPlotDda2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.wrong)
+  p = p + ggtitle(title) + xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
+   print(p)
   
-  p = ggplot() + ggtitle(paste(title,"RND et DDA VS OBJ"," ")) +
-        geom_point(aes(x=DTPlotRnd2$obj.diff,y=DTPlotRnd2$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd2$shapes) +
-        geom_point(aes(x=DTPlotDda2$obj.diff,y=DTPlotDda2$subj.diff),alpha = 1, size = 3, shape=DTPlotDda2$shapes) +
-        xlim(0,1)+
-        ylim(0,1)+
-        #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
-        geom_abline(intercept = 0, slope = 1, color="blue") +
-        xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
-
-  print(p)
+  # DTPlotRnd2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.rnd, shapes=shapes.rnd.wrong)
+  # DTPlotDda2 = data.table(obj.diff=obj.diff.bin,subj.diff=subj.diff.med.dda, shapes=shapes.dda.wrong)
+  # 
+  # p = ggplot() + ggtitle(paste(title,"RND et DDA VS OBJ"," ")) +
+  #       geom_point(aes(x=DTPlotRnd2$obj.diff,y=DTPlotRnd2$subj.diff),alpha = 1, size = 3, shape=DTPlotRnd2$shapes) +
+  #       geom_point(aes(x=DTPlotDda2$obj.diff,y=DTPlotDda2$subj.diff),alpha = 1, size = 3, shape=DTPlotDda2$shapes) +
+  #       xlim(0,1)+
+  #       ylim(0,1)+
+  #       #geom_errorbar(aes(x=DTPlotRnd$obj.diff, ymin=conf.min, ymax=conf.max), width=.01,color="red")  +
+  #       geom_abline(intercept = 0, slope = 1, color="blue") +
+  #       xlab("Difficulté objective") + ylab("Difficulté subjective") + theme(text = element_text(size=15))
+  # 
+  # print(p)
   
   # print(selGroup)
   # 
