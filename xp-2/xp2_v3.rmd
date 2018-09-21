@@ -692,7 +692,7 @@ print.objective.diff.model <- function (DT,fit) {
   print(paste("AIC:",signif(fit.aic,digits=2)))
 }
 
-plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement="") {
+plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement="",title="title") {
 
   #DTLevel <- get.levels(DT,fit)
   DTLevel <- unique(DT,by="IDjoueur")
@@ -716,7 +716,7 @@ plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement
     if(i==1){
       p = ggplot(DT,aes(x=difficulty,y=estDiff)) + geom_path(alpha = 0.2,colour=DT$group.color) + xlim(0,1) + ylim(0,1)
     } else {
-      p = p + geom_path(x=DT$difficulty,y=DT$estDiff, alpha = 0.2,size=1,colour=DT$group.color)
+      p = p + geom_path(x=DT$difficulty,y=DT$estDiff, alpha = 0.2,size=0.3,colour=DT$group.color)
     }
   }
   
@@ -734,19 +734,26 @@ plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement
   sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMed, timeNorm=time)
   newres = predict(fit, newdata = sample, type = "response")
   DTDraw = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMed, estDiff = newres)
-  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="blue",size=1.3,linetype="dashed")
+  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="blue",size=0.6,linetype="dashed")
   
   sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMin, timeNorm=time)
   newres = predict(fit, newdata = sample, type = "response")
   DTDraw = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMin, estDiff = newres)
-  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="red",size=1.01,linetype="dashed")
+  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="red",size=0.5,linetype="dashed")
   
   sample = data.frame(difficulty=seq(0, 1, 0.05),IDjoueur=joueurMax, timeNorm=time)
   newres = predict(fit, newdata = sample, type = "response")
   DTDraw = data.table(difficulty=seq(0, 1, 0.05),IDjoueur = joueurMax, estDiff = newres)
-  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="red",size=1.01,linetype="dashed")
+  p = p + geom_path(x=DTDraw$difficulty,y=DTDraw$estDiff,colour="red",size=0.5,linetype="dashed")
+  
+  p <- p + theme(axis.title.x=element_blank(),axis.title.y=element_blank())
   
   p <- p + theme(legend.position="none")
+  
+  title = paste(title,complement,"_")
+  filename = paste(title,".png","")
+  
+  ggsave(filename, dpi=1200, width=11, height=7, device="png", units="cm")
   
 
   lab = paste("Objective Difficulty at t=",time)
@@ -754,6 +761,7 @@ plot.objective.diff.model.curves <- function (DT,fit,time=1,groups=T, complement
   
   p <- p + xlab("Difficulty Variable") + ylab(lab) + theme(text = element_text(size=20))
   
+  #p = p + ggtitle(title) + xlab("Paramètre de difficulté") + ylab("Difficulté objective") + theme(text = element_text(size=15))
   print(p)
 }
 
@@ -812,7 +820,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTM <- add.levels(DTM,fit.diff.motor)
   DTM <- add.levels.groups(DTM)
   print.objective.diff.model(DTM,fit.diff.motor)
-  plot.objective.diff.model.curves(DTM,fit.diff.motor,0,T,"all")
+  plot.objective.diff.model.curves(DTM,fit.diff.motor,0,T,"all","motor")
   
   #xp1
   fit.diff.motor.Xp1 <- model.objective.diff(DTMXp1)
@@ -820,7 +828,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTMXp1 <- add.levels(DTMXp1,fit.diff.motor.Xp1)
   DTMXp1 <- add.levels.groups(DTMXp1)
   print.objective.diff.model(DTMXp1,fit.diff.motor.Xp1)
-  plot.objective.diff.model.curves(DTMXp1,fit.diff.motor.Xp1,0,T,"DDA")
+  plot.objective.diff.model.curves(DTMXp1,fit.diff.motor.Xp1,0,T,"DDA","motor")
   
   #xp2
   fit.diff.motor.Xp2 <- model.objective.diff(DTMXp2)
@@ -828,7 +836,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTMXp2 <- add.levels(DTMXp2,fit.diff.motor.Xp2)
   DTMXp2 <- add.levels.groups(DTMXp2)
   print.objective.diff.model(DTMXp2,fit.diff.motor.Xp2)
-  plot.objective.diff.model.curves(DTMXp2,fit.diff.motor.Xp2,0,T,"Random")
+  plot.objective.diff.model.curves(DTMXp2,fit.diff.motor.Xp2,0,T,"Random","motor")
   
   
   if(g.short.version == FALSE){
@@ -858,7 +866,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTS <- add.levels(DTS,fit.diff.senso)
   DTS <- add.levels.groups(DTS)
   print.objective.diff.model(DTS,fit.diff.senso)
-  plot.objective.diff.model.curves(DTS,fit.diff.senso,0,T,"all")
+  plot.objective.diff.model.curves(DTS,fit.diff.senso,0,T,"all","sensory")
   
   #xp1
   fit.diff.senso.Xp1 <- model.objective.diff(DTSXp1)
@@ -866,7 +874,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTSXp1 <- add.levels(DTSXp1,fit.diff.senso.Xp1)
   DTSXp1 <- add.levels.groups(DTSXp1)
   print.objective.diff.model(DTSXp1,fit.diff.senso.Xp1)
-  plot.objective.diff.model.curves(DTSXp1,fit.diff.senso.Xp1,0,T,"DDA")
+  plot.objective.diff.model.curves(DTSXp1,fit.diff.senso.Xp1,0,T,"DDA","sensory")
   
   #xp2
   fit.diff.senso.Xp2 <- model.objective.diff(DTSXp2)
@@ -874,7 +882,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTSXp2 <- add.levels(DTSXp2,fit.diff.senso.Xp2)
   DTSXp2 <- add.levels.groups(DTSXp2)
   print.objective.diff.model(DTSXp2,fit.diff.senso.Xp2)
-  plot.objective.diff.model.curves(DTSXp2,fit.diff.senso.Xp2,0,T,"Random")
+  plot.objective.diff.model.curves(DTSXp2,fit.diff.senso.Xp2,0,T,"Random","sensory")
   
   if(g.short.version == FALSE){
     plot.objective.diff.model.curves(DTS,fit.diff.senso,1)
@@ -902,7 +910,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTL <- add.levels(DTL,fit.diff.logic)
   DTL <- add.levels.groups(DTL)
   print.objective.diff.model(DTL,fit.diff.logic)
-  plot.objective.diff.model.curves(DTL,fit.diff.logic,0,T,"all")
+  plot.objective.diff.model.curves(DTL,fit.diff.logic,0,T,"all","logical")
   
   #xp1
   fit.diff.logic.Xp1 <- model.objective.diff(DTLXp1)
@@ -910,7 +918,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTLXp1 <- add.levels(DTLXp1,fit.diff.logic.Xp1)
   DTLXp1 <- add.levels.groups(DTLXp1)
   print.objective.diff.model(DTLXp1,fit.diff.logic.Xp1)
-  plot.objective.diff.model.curves(DTLXp1,fit.diff.logic.Xp1,0,T,"DDA")
+  plot.objective.diff.model.curves(DTLXp1,fit.diff.logic.Xp1,0,T,"DDA","logical")
   
   #xp2
   fit.diff.logic.Xp2 <- model.objective.diff(DTLXp2)
@@ -918,7 +926,7 @@ plot.objective.diff.smooth <- function (DT,selGroup,title) {
   DTLXp2 <- add.levels(DTLXp2,fit.diff.logic.Xp2)
   DTLXp2 <- add.levels.groups(DTLXp2)
   print.objective.diff.model(DTLXp2,fit.diff.logic.Xp2)
-  plot.objective.diff.model.curves(DTLXp2,fit.diff.logic.Xp2,0,T,"Random")
+  plot.objective.diff.model.curves(DTLXp2,fit.diff.logic.Xp2,0,T,"Random","logical")
   
   if(g.short.version == FALSE){
     plot.objective.diff.model.curves(DTL,fit.diff.logic,1)
