@@ -153,7 +153,7 @@ g.use.confiance <- FALSE
 p <- g.use.confiance
 cat("Résultats basés sur la l'échelle de confiance : ", g.use.confiance)
 
-g.short.version <- TRUE
+g.short.version <- FALSE
 cat("Version courte : ", g.short.version)
 
 g.withplayerprofiles.version <- TRUE
@@ -1258,6 +1258,102 @@ if(g.short.version == FALSE){
   sexe.on.level.l.2 <- test.profile.binary(unique(DTL[sexe==0],by="IDjoueur")$niveau, unique(DTL[sexe==1],by="IDjoueur")$niveau,"sexe.on.level.l.2")
 }
 ```
+
+
+
+
+
+
+##Sub diff error and player profile
+
+### Playing video games in general and Sub diff error for each task
+
+```{r echo=FALSE}
+#---------------------------------------------------------------------
+#        INFLUENCE OF VIDEO GAME EXPERTISE ON PLAYERS' PERFORMANCE
+#---------------------------------------------------------------------
+if(g.short.version == FALSE){
+  pvg.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$play.video.games,"pvg.on.subj.diff.error.m")
+  pvg.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$play.video.games,"pvg.on.subj.diff.error.s")
+  pvg.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$play.video.games,"pvg.on.subj.diff.error.l")
+}
+```
+
+### Playing board games in general and Sub diff error for each task
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF BOARD GAME EXPERTISE ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+if(g.short.version == FALSE){
+  pbg.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$play.board.games,"pbg.on.subj.diff.error.m")
+  pbg.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$play.board.games,"pbg.on.subj.diff.error.s")
+  pbg.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$play.board.games,"pbg.on.subj.diff.error.l")
+}
+```
+
+### Self efficacy and Sub diff error for each task
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF SELF-EFFICACY ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+if(g.short.version == FALSE){
+  self.eff.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$self.eff,"self.eff.on.subj.diff.error.m")
+  self.eff.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$self.eff,"self.eff.on.subj.diff.error.s")
+  self.eff.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$self.eff,"self.eff.on.subj.diff.error.l")
+}
+```
+
+### Risk aversion and Sub diff error for each task
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF RISK AVERSION ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+if(g.short.version == FALSE){
+  risk.av.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$risk.av,"risk.av.on.subj.diff.error.m")
+  risk.av.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$risk.av,"risk.av.on.subj.diff.error.s")
+  risk.av.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$risk.av,"risk.av.on.subj.diff.error.l")
+}
+```
+
+### Age and Sub diff error for each task
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF AGE AND subj.diff.error ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+if(g.short.version == FALSE){
+  age.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$age,"age.on.subj.diff.error.m")
+  age.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$age,"age.on.subj.diff.error.s")
+  age.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$age,"age.on.subj.diff.error.l")
+}
+```
+
+### Sex and Sub diff error for each task
+
+```{r echo=FALSE}
+#----------------------------------------------------------------------
+#        INFLUENCE OF SEX AND subj.diff.error ON PLAYERS' PERFORMANCE
+#----------------------------------------------------------------------
+if(g.short.version == FALSE){
+  sexe.on.subj.diff.error.m <- test.profile(unique(DTM,by="IDjoueur")$error.subj.diff.mise, unique(DTM,by="IDjoueur")$sexe,"sexe.on.subj.diff.error.m")
+  sexe.on.subj.diff.error.s <- test.profile(unique(DTS,by="IDjoueur")$error.subj.diff.mise, unique(DTS,by="IDjoueur")$sexe,"sexe.on.subj.diff.error.s")
+  sexe.on.subj.diff.error.l <- test.profile(unique(DTL,by="IDjoueur")$error.subj.diff.mise, unique(DTL,by="IDjoueur")$sexe,"sexe.on.subj.diff.error.l")
+  
+  sexe.on.subj.diff.error.m.2 <- test.profile.binary(unique(DTM[sexe==0],by="IDjoueur")$error.subj.diff.mise, unique(DTM[sexe==1],by="IDjoueur")$error.subj.diff.mise,"sexe.on.subj.diff.error.m.2")
+  sexe.on.subj.diff.error.s.2 <- test.profile.binary(unique(DTS[sexe==0],by="IDjoueur")$error.subj.diff.mise, unique(DTS[sexe==1],by="IDjoueur")$error.subj.diff.mise,"sexe.on.subj.diff.error.s.2")
+  sexe.on.subj.diff.error.l.2 <- test.profile.binary(unique(DTL[sexe==0],by="IDjoueur")$error.subj.diff.mise, unique(DTL[sexe==1],by="IDjoueur")$error.subj.diff.mise,"sexe.on.subj.diff.error.l.2")
+}
+```
+
+
+
+
+
+
+
 
 
 #Influence of Objective difficulty on Subjective Difficulty
