@@ -29,6 +29,9 @@ function enregistrer($data) {
     $dest = "../data/data"; // à commenter pour la version en ligne
     $dest .= $_REQUEST["id"];
     $dest .= ".csv";
+
+    $date = date('Y-m-d H:i:s:v');
+    $data = $date.';'.$data;
     
 	/*$date = date('Y-m-d H:i:s:v');
 	
